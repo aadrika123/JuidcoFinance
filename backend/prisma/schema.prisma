@@ -10,29 +10,136 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+//// Primary Accounting Code
+model account_code {
+  id          Int      @id @default(autoincrement())
+  major_head  String
+  minor_head  String
+  detail_code String
+  description String
+  remark      String?
+  created_at  DateTime @default(now()) @map("created_at")
+  updated_at  DateTime @updatedAt @map("updated_at")
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+//// Function Code
+model function_code {
+  id               Int      @id @default(autoincrement())
+  group            String
+  description_code String
+  cost_center      String
+  description      String
+  remark           String?
+  created_at       DateTime @default(now()) @map("created_at")
+  updated_at       DateTime @updatedAt @map("updated_at")
 }
 
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+//// Municipality Code
+model municipality_code {
+  id            Int      @id @default(autoincrement())
+  ulbs          String
+  district      String
+  state_code    String
+  district_code String
+  category      String
+  code          String
+  remark        String?
+  created_at    DateTime @default(now()) @map("created_at")
+  updated_at    DateTime @updatedAt @map("updated_at")
+}
+
+/// BankMaster
+model bank_master {
+  id                  Int      @id @default(autoincrement())
+  bank_name           String
+  ifsc_code           String
+  branch              String
+  micr_code           String
+  branch_address      String
+  branch_city         String
+  branch_state        String
+  branch_district     String
+  email               String
+  contact_no          String
+  contact_person_name String
+  created_at          DateTime @default(now()) @map("created_at")
+  updated_at          DateTime @updatedAt @map("updated_at")
+}
+
+///// Vendor Master
+
+model vendor_master {
+  id               Int         @id @default(autoincrement())
+  vendor_type      vendor_type @relation(fields: [vendor_type_id], references: [id])
+  vendor_type_id   Int
+  vendor_no        String
+  name             String
+  mobile_no        String
+  comm_address     String
+  tin_no           String
+  pan_no           String
+  bank_name        String
+  ifsc_code        String
+  department       department  @relation(fields: [department_id], references: [id])
+  department_id    Int
+  email            String
+  office_address   String
+  gst_no           String
+  aadhar_no        String
+  bank_account_no  String
+  bank_branch_name String
+  authorized_date  DateTime? // Use DateTime? for nullable date fields
+  is_authorized    Boolean     @default(false)
+  created_at       DateTime    @default(now()) @map("created_at")
+  updated_at       DateTime    @updatedAt @map("updated_at")
+}
+
+//// Vendor Type
+model vendor_type {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  vendors    vendor_master[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+//// Cheque Book Entry
+model cheque_book_entry {
+  id                      Int      @id @default(autoincrement())
+  date                    DateTime
+  bank_name               String
+  bank_account_no         String
+  cheque_no_from          String
+  employee                employee @relation(fields: [employee_id], references: [id])
+  employee_id             Int
+  bank_branch             String
+  page_count              String
+  cheque_no_to            String
+  issuer_name             String
+  cheque_book_return      Boolean
+  cheque_book_return_date DateTime
+  remarks                 String?
+  created_at              DateTime @default(now()) @map("created_at")
+  updated_at              DateTime @updatedAt @map("updated_at")
+}
+
+/// Department
+model department {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  vendors    vendor_master[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+/// Employee
+model employee {
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  email               String
+  cheque_book_entries cheque_book_entry[]
+  created_at          DateTime            @default(now()) @map("created_at")
+  updated_at          DateTime            @updatedAt @map("updated_at")
 }

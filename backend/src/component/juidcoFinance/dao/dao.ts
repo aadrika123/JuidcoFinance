@@ -10,11 +10,8 @@ class Dao {
 
   add = async () => {
     try {
-      const newArtist = await prisma.user.create({
-        data: {
-          name: 'Osinachi Kalu',
-          email: 'sinach22122@sinachmusic.com',
-        },
+      const newArtist = await prisma.account_code.create({
+        data: {},
       })
       return newArtist;
     } catch (error: any) {

@@ -47,17 +47,7 @@ class Controller {
             catch (error) {
                 (0, sendResponse_1.sendAndLogResponse)(error.code, 409, res, false);
             }
-            // return res.json(`Hello you are in add function ${JSON.stringify(data)}`);
         });
-        // sendAndLogResponse = async (
-        //   json: any,
-        //   responseCode: number,
-        //   res: Response
-        // )=> {
-        //   const size = Buffer.byteLength(JSON.stringify(json));
-        //   // this.logger.debug("Response Size: " + size + " bytes");
-        //   res.status(responseCode).json(json);
-        // };
     }
 }
 exports.default = Controller;
