@@ -14,6 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dao_1 = __importDefault(require("../dao/dao"));
 const sendResponse_1 = require("../../../util/sendResponse");
+/**
+ * | Author- Sanjiv Kumar
+ * | Created On- 20-01-2024
+ * | Created for- Controller
+ * | Comman apiId- 01
+ */
 class Controller {
     constructor() {
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -42,10 +48,10 @@ class Controller {
             try {
                 let dao = new dao_1.default();
                 let data = yield dao.add();
-                (0, sendResponse_1.sendAndLogResponse)(data, 200, res);
+                (0, sendResponse_1.sendResponse)(true, "Data Found Successfully!!", data, 200, "GET", "0101", "1.0", res);
             }
             catch (error) {
-                (0, sendResponse_1.sendAndLogResponse)(error.code, 409, res, false);
+                (0, sendResponse_1.sendResponse)(false, error.message, error.code, 200, "GET", "0101", "1.0", res);
             }
         });
     }

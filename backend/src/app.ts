@@ -1,15 +1,12 @@
-"use strict";
-
-import Router from "./component/juidcoFinance/route/router";
 import express from "express";
 import dotenv from 'dotenv';
+import FinanceRoute from "./component/juidcoFinance/router";
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 
-/// ROUTER ///
-const router = new Router();
-router.configure(app);
+/// JUIDCO_FINANCE ///
+new FinanceRoute(app);
 
 export default app;

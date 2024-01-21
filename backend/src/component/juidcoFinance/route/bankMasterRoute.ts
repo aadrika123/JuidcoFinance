@@ -1,0 +1,19 @@
+import express from "express";
+import BankMasterController from "../controller/bankMasterController";
+
+/**
+ * | Route - 03
+ */
+
+class BankMasterRoute {
+  private bankMasterController: BankMasterController;
+  constructor() {
+    this.bankMasterController = new BankMasterController();
+  }
+
+  configure(app: express.Application): void {
+    app.route(`/api/v1/bank-master/create`).post(this.bankMasterController.create); //0301
+  }
+}
+
+export default BankMasterRoute;

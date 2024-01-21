@@ -11,18 +11,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-class Dao {
+class FunCodeDao {
     constructor() {
-        this.add = () => __awaiter(this, void 0, void 0, function* () {
+        // Get limited function codes
+        this.get = () => __awaiter(this, void 0, void 0, function* () {
             try {
-                // const newArtist = await prisma.account_code.create({})
-                return true;
+                return yield prisma.function_code.findMany({
+                    skip: 1,
+                    take: 10,
+                    where: {
+                        group: {
+                            contains: "10",
+                        },
+                    },
+                });
             }
             catch (error) {
                 throw error;
             }
         });
-        ///////////
+        //////
     }
 }
-exports.default = Dao;
+exports.default = FunCodeDao;

@@ -12,14 +12,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendAndLogResponse = void 0;
+exports.sendResponse = void 0;
 const errorCodes_1 = __importDefault(require("./errorCodes"));
-const sendAndLogResponse = (json, responseCode, res, status) => __awaiter(void 0, void 0, void 0, function* () {
-    const size = Buffer.byteLength(JSON.stringify(json));
-    // this.logger.debug("Response Size: " + size + " bytes");
+/**
+ * | Response Msg Version with apiMetaData
+ */
+const sendResponse = (status, message, resData, responseCode, action, apiId, version, res, deviceId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!status) {
-        json = errorCodes_1.default[json];
+        resData = errorCodes_1.default[resData];
     }
-    return res.status(responseCode).json(json);
+    const jsonRes = {
+        status,
+        message,
+        "meta-data": {
+            apiId,
+            version,
+            responseTime: responseTime(res),
+            action,
+            deviceId,
+        },
+        data: resData,
+    };
+    return res.status(responseCode).json(jsonRes);
 });
-exports.sendAndLogResponse = sendAndLogResponse;
+exports.sendResponse = sendResponse;
+// export const responseTime = (req:Request, res:Response, next: NextFunction): void=>{
+//   const startTime = process.hrtime();
+//   // let totalTimeInMs;
+//   res.on('finish', ()=>{
+//     const totalTime = process.hrtime(startTime);
+//      const totalTimeInMs = totalTime[0] * 1000 + totalTime[1] / 1e6;
+//      res.locals.responseTime = totalTimeInMs;
+//      console.log("first",res.locals.responseTime)
+//   });
+//   next();
+//   // return totalTimeInMs;
+// }
+const responseTime = (res) => {
+    const startTime = process.hrtime();
+    return new Promise((resolve) => {
+        res.on('finish', () => {
+            const totalTime = process.hrtime(startTime);
+            const totalTimeInMs = totalTime[0] * 1000 + totalTime[1] / 1e6;
+            resolve(totalTimeInMs);
+        });
+    });
+};

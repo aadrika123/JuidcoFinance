@@ -2,10 +2,16 @@
 
 import { Request, Response } from "express";
 import Dao from "../dao/dao";
-import {sendAndLogResponse} from "../../../util/sendResponse"
+import {sendResponse} from "../../../util/sendResponse"
 import errorCodes from "../../../util/errorCodes";
 import { Prisma } from '@prisma/client'
 
+/**
+ * | Author- Sanjiv Kumar
+ * | Created On- 20-01-2024 
+ * | Created for- Controller
+ * | Comman apiId- 01
+ */
 
 class Controller {
   create = async (req: Request, res: Response): Promise<Response> => {
@@ -43,9 +49,10 @@ class Controller {
       let dao = new Dao();
       let data = await dao.add();
 
-     sendAndLogResponse(data, 200, res);
+       sendResponse(true, "Data Found Successfully!!", data, 200, "GET", "0101", "1.0", res);
     }catch(error: any){
-      sendAndLogResponse(error.code, 409, res, false);
+       sendResponse(false, error.message, error.code, 200, "GET", "0101", "1.0", res);
+
     }
   };
 }

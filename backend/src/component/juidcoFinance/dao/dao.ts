@@ -10,10 +10,8 @@ class Dao {
 
   add = async () => {
     try {
-      const newArtist = await prisma.account_code.create({
-        data: {},
-      })
-      return newArtist;
+      // const newArtist = await prisma.account_code.create({})
+      return true;
     } catch (error: any) {
       throw error;
     }
