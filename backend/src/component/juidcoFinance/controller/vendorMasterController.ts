@@ -16,7 +16,7 @@ class VendorMasterController {
     this.vendorMasterDao = new VendorMasterDao();
   }
 
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { error } = vendorMasterValidation.validate(req.body);
       if (error)
@@ -32,7 +32,7 @@ class VendorMasterController {
         );
 
       const data = await this.vendorMasterDao.store(req);
-      sendResponse(
+      return sendResponse(
         true,
         "Vendor Data added successfully",
         data,
@@ -43,7 +43,7 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      sendResponse(
+      return sendResponse(
         false,
         error.message,
         "error.code",
@@ -56,10 +56,10 @@ class VendorMasterController {
     }
   };
 
-  get = async (req:Request, res: Response) => {
+  get = async (req: Request, res: Response): Promise<Response> => {
     try {
       const data = await this.vendorMasterDao.get();
-      sendResponse(
+      return sendResponse(
         true,
         "Vendor Data fetched successfully",
         data,
@@ -70,7 +70,7 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      sendResponse(
+      return sendResponse(
         false,
         error.message,
         "error.code",

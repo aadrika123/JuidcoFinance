@@ -29,19 +29,19 @@ class VendorMasterController {
                 if (error)
                     return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0701", "1.0", res);
                 const data = yield this.vendorMasterDao.store(req);
-                (0, sendResponse_1.sendResponse)(true, "Vendor Data added successfully", data, 200, "POST", "0701", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, "Vendor Data added successfully", data, 200, "POST", "0701", "1.0", res);
             }
             catch (error) {
-                (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0701", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0701", "1.0", res);
             }
         });
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.vendorMasterDao.get();
-                (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
             }
             catch (error) {
-                (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0702", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0702", "1.0", res);
             }
         });
         this.vendorMasterDao = new vendorMasterDao_1.default();
