@@ -36,7 +36,34 @@ class BankMasterDao {
         this.get = () => __awaiter(this, void 0, void 0, function* () {
             return yield prisma.bank_master.findMany({
                 skip: 0,
-                take: 10
+                take: 10,
+            });
+        });
+        // Get single bank details
+        this.getById = (id) => __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.bank_master.findUnique({ where: { id } });
+        });
+        // Update bank details
+        this.update = (req) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.body.id;
+            const requestData = {
+                bank_name: req.body.bankName,
+                ifsc_code: req.body.ifscCode,
+                branch: req.body.branch,
+                micr_code: req.body.micrCode,
+                branch_address: req.body.branchAddress,
+                branch_city: req.body.branchCity,
+                branch_state: req.body.branchState,
+                branch_district: req.body.branchDistrict,
+                email: req.body.email,
+                contact_no: req.body.contactNo,
+                contact_person_name: req.body.contactPersonName,
+            };
+            return yield prisma.bank_master.update({
+                where: {
+                    id,
+                },
+                data: requestData,
             });
         });
         //////

@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export const bankMasterValidation = Joi.object({
+    id: Joi.number(),
     bankName: Joi.string().required(),
     ifscCode: Joi.string().required(),
     branch: Joi.string().required(),

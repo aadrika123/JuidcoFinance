@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bankMasterValidation = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.bankMasterValidation = joi_1.default.object({
+    id: joi_1.default.number(),
     bankName: joi_1.default.string().required(),
     ifscCode: joi_1.default.string().required(),
     branch: joi_1.default.string().required(),
