@@ -29,7 +29,7 @@ class FunCodeController {
                 return (0, sendResponse_1.sendResponse)(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 200, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0201", "1.0", res);
             }
         });
         this.funCodeDao = new functionCodeDao_1.default();

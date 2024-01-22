@@ -17,10 +17,10 @@ class MuncipalityCodeController {
   }
 
   // Muncipality Code Controller
-  getMuncipalityCode = async (req: Request, res: Response) => {
+  getMuncipalityCode = async (req: Request, res: Response): Promise<Response>  => {
     try {
       const data = await this.muncipalityCodeDao.get();
-      sendResponse(
+     return sendResponse(
         true,
         "Muncipality Code Fetched successfully.",
         data,
@@ -31,11 +31,11 @@ class MuncipalityCodeController {
         res
       );
     } catch (error: any) {
-      sendResponse(
+     return sendResponse(
         false,
         error.message,
         error.code,
-        200,
+        500,
         "GET",
         "0301",
         "1.0",

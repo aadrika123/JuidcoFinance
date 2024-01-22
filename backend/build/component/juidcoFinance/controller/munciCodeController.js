@@ -26,10 +26,10 @@ class MuncipalityCodeController {
         this.getMuncipalityCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.muncipalityCodeDao.get();
-                (0, sendResponse_1.sendResponse)(true, "Muncipality Code Fetched successfully.", data, 200, "GET", "0301", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, "Muncipality Code Fetched successfully.", data, 200, "GET", "0301", "1.0", res);
             }
             catch (error) {
-                (0, sendResponse_1.sendResponse)(false, error.message, error.code, 200, "GET", "0301", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0301", "1.0", res);
             }
         });
         this.muncipalityCodeDao = new munciCodeDao_1.default();
