@@ -1,5 +1,6 @@
 "use strict";
 
+import { baseUrl } from "../../../util/common";
 import FunCodeController from "../controller/funCodeController";
 import express from "express";
 
@@ -14,7 +15,7 @@ class FunCodeRoute {
   }
 
   configure(app: express.Application): void {
-    app.route(`/api/v1/get-fun-code`).get(this.funCodeController.getFunCode);  //0201
+    app.route(`${baseUrl}/get-fun-code`).get(this.funCodeController.getFunCode);  //0201
   }
 }
 
