@@ -10,7 +10,6 @@ class FunCodeDao {
 
   // Get limited function codes
   get = async () => {
-    try {
       return await prisma.function_code.findMany({
         skip: 1,
         take: 10,
@@ -20,9 +19,6 @@ class FunCodeDao {
           },
         },
       });
-    } catch (error: any) {
-      throw error;
-    }
   };
 }
 

@@ -1,5 +1,4 @@
 import express from "express";
-import Router from "./route/router";
 import FunCodeRoute from "./route/funCodeRoute";
 import BankMasterRoute from "./route/bankMasterRoute";
 
@@ -20,14 +19,12 @@ import BankMasterRoute from "./route/bankMasterRoute";
  */
 
 class FinanceRoute {
-  private router: Router;
   private funCodeRoute: FunCodeRoute;
   private bankMasterRoute: BankMasterRoute;
 
   constructor(app: express.Application) {
-    /// ROUTER ///
-    this.router = new Router();
-    this.router.configure(app); // 01
+    /// ACCOUNTING_CODE_ROUTER ///
+                    // 01
 
     /// FUNCTION_CODE_ROUTER ///
     this.funCodeRoute = new FunCodeRoute();

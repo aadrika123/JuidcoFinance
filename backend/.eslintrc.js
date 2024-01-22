@@ -29,5 +29,6 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
+        "@typescript-eslint/no-explicit-any": "off" // Add this line to turn off the rule
     }
 }

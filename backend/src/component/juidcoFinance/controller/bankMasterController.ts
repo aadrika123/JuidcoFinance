@@ -16,7 +16,7 @@ class BankMasterController {
 
   create = async (req: Request, res: Response) => {
     try {
-      const { error, value } = bankMasterValidation.validate({
+      const { error } = bankMasterValidation.validate({
         username: "abc",
         birth_year: 1994,
       });
@@ -33,7 +33,7 @@ class BankMasterController {
           res
         );
 
-      const data: any = [];
+      const data: [] = [];
       return sendResponse(
         true,
         "Bank Master Found Successfully!!",
