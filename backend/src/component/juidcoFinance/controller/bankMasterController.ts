@@ -33,13 +33,14 @@ class BankMasterController {
           res
         );
 
-      const data = this.bankMasterDao.store(req.body);
+
+      const data = await this.bankMasterDao.store(req);
       return sendResponse(
         true,
         "Bank Master created Successfully!!",
         data,
-        200,
-        "GET",
+        201,
+        "POST",
         "0401",
         "1.0",
         res
@@ -49,8 +50,8 @@ class BankMasterController {
         false,
         error.message,
         error.code,
-        200,
-        "GET",
+        500,
+        "POST",
         "0401",
         "1.0",
         res

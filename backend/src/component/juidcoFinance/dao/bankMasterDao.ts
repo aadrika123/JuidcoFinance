@@ -24,6 +24,7 @@ class BankMasterDao {
       contact_no: req.body.contactNo,
       contact_person_name: req.body.contactPersonName,
     };
+
     return await prisma.bank_master.create({
       data: requestData,
     });

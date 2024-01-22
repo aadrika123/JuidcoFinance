@@ -29,11 +29,11 @@ class BankMasterController {
                 const { error } = bankMasterValidation_1.bankMasterValidation.validate(req.body);
                 if (error)
                     return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0401", "1.0", res);
-                const data = this.bankMasterDao.store(req.body);
-                return (0, sendResponse_1.sendResponse)(true, "Bank Master created Successfully!!", data, 200, "GET", "0401", "1.0", res);
+                const data = yield this.bankMasterDao.store(req);
+                return (0, sendResponse_1.sendResponse)(true, "Bank Master created Successfully!!", data, 201, "POST", "0401", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 200, "GET", "0401", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "POST", "0401", "1.0", res);
             }
         });
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
