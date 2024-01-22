@@ -7,6 +7,7 @@ const funCodeRoute_1 = __importDefault(require("./route/funCodeRoute"));
 const bankMasterRoute_1 = __importDefault(require("./route/bankMasterRoute"));
 const accountCodeRoute_1 = __importDefault(require("./route/accountCodeRoute"));
 const munciCodeRoute_1 = __importDefault(require("./route/munciCodeRoute"));
+const vendorMasterRoute_1 = __importDefault(require("./route/vendorMasterRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,6 +37,9 @@ class FinanceRoute {
         /// BANK_MASTER_ROUTE ///
         this.bankMasterRoute = new bankMasterRoute_1.default();
         this.bankMasterRoute.configure(app); //04
+        // VENDOR_MASTER_ROUTE ///
+        this.vendorMasterRoute = new vendorMasterRoute_1.default();
+        this.vendorMasterRoute.configure(app); //07)
     }
 }
 exports.default = FinanceRoute;

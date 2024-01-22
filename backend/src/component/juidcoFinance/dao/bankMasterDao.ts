@@ -31,12 +31,12 @@ class BankMasterDao {
   };
 
   // Get limited bank master
-  get = async() =>{
+  get = async () => {
     return await prisma.bank_master.findMany({
-        skip:0,
-        take:10
-    })
-  }
+      skip: 0,
+      take: 10,
+    });
+  };
 }
 
 export default BankMasterDao;

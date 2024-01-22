@@ -28,5 +28,23 @@ interface BankRequestData {
   contact_no: string;
   contact_person_name: string;
 }
+interface VendorRequestData {
+  vendor_type_id: number;
+  vendor_no: string;
+  name: string;
+  mobile_no: string;
+  comm_address: string;
+  tin_no: string;
+  pan_no: string;
+  bank_name: string;
+  ifsc_code: string;
+  department_id: number;
+  email: string;
+  office_address: string;
+  gst_no: string;
+  aadhar_no: string;
+  bank_account_no: string;
+  bank_branch_name: string;
+}
 
-export type { CandidateType, ApiResponse, BankRequestData };
+export type { CandidateType, ApiResponse, BankRequestData, VendorRequestData };

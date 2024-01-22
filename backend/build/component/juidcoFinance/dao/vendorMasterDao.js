@@ -9,37 +9,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
+const client_1 = require(".prisma/client");
 const prisma = new client_1.PrismaClient();
-class BankMasterDao {
+class VendorMasterDao {
     constructor() {
-        // store bank details in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
             const requestData = {
+                vendor_type_id: req.body.vendorTypeId,
+                vendor_no: req.body.vendorNo,
+                name: req.body.name,
+                mobile_no: req.body.mobileNo,
+                comm_address: req.body.commAddress,
+                tin_no: req.body.tinNo,
+                pan_no: req.body.panNo,
                 bank_name: req.body.bankName,
                 ifsc_code: req.body.ifscCode,
-                branch: req.body.branch,
-                micr_code: req.body.micrCode,
-                branch_address: req.body.branchAddress,
-                branch_city: req.body.branchCity,
-                branch_state: req.body.branchState,
-                branch_district: req.body.branchDistrict,
+                department_id: req.body.departmentId,
                 email: req.body.email,
-                contact_no: req.body.contactNo,
-                contact_person_name: req.body.contactPersonName,
+                office_address: req.body.officeAddress,
+                gst_no: req.body.gstNo,
+                aadhar_no: req.body.aadharNo,
+                bank_account_no: req.body.bankAccountNo,
+                bank_branch_name: req.body.bankBranchName,
             };
-            return yield prisma.bank_master.create({
+            return yield prisma.vendor_master.create({
                 data: requestData,
             });
         });
-        // Get limited bank master
         this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.bank_master.findMany({
+            return yield prisma.vendor_master.findMany({
                 skip: 0,
-                take: 10,
+                take: 9,
             });
         });
-        //////
     }
 }
-exports.default = BankMasterDao;
+exports.default = VendorMasterDao;

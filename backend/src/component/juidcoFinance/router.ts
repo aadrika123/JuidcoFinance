@@ -3,6 +3,7 @@ import FunCodeRoute from "./route/funCodeRoute";
 import BankMasterRoute from "./route/bankMasterRoute";
 import AccountCodeRoute from "./route/accountCodeRoute";
 import MuncipalityCodeRoute from "./route/munciCodeRoute";
+import VendorMasterRoute from "./route/vendorMasterRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ class FinanceRoute {
   private funCodeRoute: FunCodeRoute;
   private muncipalityCodeRoute: MuncipalityCodeRoute;
   private bankMasterRoute: BankMasterRoute;
+  private vendorMasterRoute: VendorMasterRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -42,6 +44,10 @@ class FinanceRoute {
     /// BANK_MASTER_ROUTE ///
     this.bankMasterRoute = new BankMasterRoute();
     this.bankMasterRoute.configure(app); //04
+
+    // VENDOR_MASTER_ROUTE ///
+    this.vendorMasterRoute = new VendorMasterRoute();
+    this.vendorMasterRoute.configure(app); //07)
   }
 }
 

@@ -13,3 +13,4 @@ export const bankMasterValidation = Joi.object({
     contactNo: Joi.string().required(),
     contactPersonName: Joi.string().required()
 });
+
