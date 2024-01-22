@@ -8,7 +8,7 @@ import errorCodes from "./errorCodes";
 export const sendResponse = async (
   status: boolean,
   message: string,
-  resData: any,
+  resData: unknown,
   responseCode: number,
   action: string,
   apiId: string,
