@@ -36,7 +36,7 @@ class BankMasterController {
       const data: any = [];
       return sendResponse(
         true,
-        "Data Found Successfully!!",
+        "Bank Master Found Successfully!!",
         data,
         200,
         "GET",

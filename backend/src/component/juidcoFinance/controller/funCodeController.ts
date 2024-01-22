@@ -23,7 +23,7 @@ class FunCodeController {
     try {
       const data = await this.funCodeDao.get();
 
-      return sendResponse(true, "Data Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
+      return sendResponse(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
     } catch (error: any) {
       return sendResponse(false, error.message, error.code, 200, "GET", "0201", "1.0", res);
     }
