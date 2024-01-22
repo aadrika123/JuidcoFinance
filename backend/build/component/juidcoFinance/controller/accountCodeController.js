@@ -13,26 +13,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
-const functionCodeDao_1 = __importDefault(require("../dao/functionCodeDao"));
+const accountingCodeDao_1 = __importDefault(require("../dao/accountingCodeDao"));
 /**
- * | Author- Sanjiv Kumar
- * | Created On- 20-01-2024
- * | Created for- Function Code Controller
- * | Common apiId- 02
+ * | Author- Krish Vishwakarma
+ * | Created On- 22-01-2024
+ * | Created for- Account Code Controller
+ * | Comman apiId- 01
  */
-class FunCodeController {
+class AccountCodeController {
     constructor() {
-        // Get limited Function Codes
-        this.getFunCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getAccountCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.funCodeDao.get();
+                const data = yield this.accountCodeDao.get();
                 return (0, sendResponse_1.sendResponse)(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
             }
             catch (error) {
                 return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 200, "GET", "0201", "1.0", res);
             }
         });
-        this.funCodeDao = new functionCodeDao_1.default();
+        this.accountCodeDao = new accountingCodeDao_1.default();
     }
 }
-exports.default = FunCodeController;
+exports.default = AccountCodeController;

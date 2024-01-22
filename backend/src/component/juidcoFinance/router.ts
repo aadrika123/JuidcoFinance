@@ -1,6 +1,8 @@
 import express from "express";
 import FunCodeRoute from "./route/funCodeRoute";
 import BankMasterRoute from "./route/bankMasterRoute";
+import AccountCodeRoute from "./route/accountCodeRoute";
+import MuncipalityCodeRoute from "./route/munciCodeRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -19,16 +21,23 @@ import BankMasterRoute from "./route/bankMasterRoute";
  */
 
 class FinanceRoute {
+  private accountCodeRoute: AccountCodeRoute;
   private funCodeRoute: FunCodeRoute;
+  private muncipalityCodeRoute: MuncipalityCodeRoute;
   private bankMasterRoute: BankMasterRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
-                    // 01
+    this.accountCodeRoute = new AccountCodeRoute();
+    this.accountCodeRoute.configure(app); // 01
 
     /// FUNCTION_CODE_ROUTER ///
     this.funCodeRoute = new FunCodeRoute();
     this.funCodeRoute.configure(app); // 02
+
+    //  MUNCIPALITY_CODE_ROUTER ///
+    this.muncipalityCodeRoute = new MuncipalityCodeRoute();
+    this.muncipalityCodeRoute.configure(app); // 03
 
     /// BANK_MASTER_ROUTE ///
     this.bankMasterRoute = new BankMasterRoute();
