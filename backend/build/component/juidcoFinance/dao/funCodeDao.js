@@ -15,20 +15,15 @@ class FunCodeDao {
     constructor() {
         // Get limited function codes
         this.get = () => __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield prisma.function_code.findMany({
-                    skip: 1,
-                    take: 10,
-                    where: {
-                        group: {
-                            contains: "10",
-                        },
+            return yield prisma.function_code.findMany({
+                skip: 1,
+                take: 10,
+                where: {
+                    group: {
+                        contains: "10",
                     },
-                });
-            }
-            catch (error) {
-                throw error;
-            }
+                },
+            });
         });
         //////
     }

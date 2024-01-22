@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const router_1 = __importDefault(require("./route/router"));
 const funCodeRoute_1 = __importDefault(require("./route/funCodeRoute"));
 const bankMasterRoute_1 = __importDefault(require("./route/bankMasterRoute"));
 /*
@@ -23,9 +22,8 @@ const bankMasterRoute_1 = __importDefault(require("./route/bankMasterRoute"));
  */
 class FinanceRoute {
     constructor(app) {
-        /// ROUTER ///
-        this.router = new router_1.default();
-        this.router.configure(app); // 01
+        /// ACCOUNTING_CODE_ROUTER ///
+        // 01
         /// FUNCTION_CODE_ROUTER ///
         this.funCodeRoute = new funCodeRoute_1.default();
         this.funCodeRoute.configure(app); // 02

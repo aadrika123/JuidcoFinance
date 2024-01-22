@@ -1,6 +1,6 @@
 import express from "express";
 import BankMasterController from "../controller/bankMasterController";
-
+import {baseUrl} from "../../../util/comman"
 /**
  * | Route - 03
  */
@@ -12,7 +12,7 @@ class BankMasterRoute {
   }
 
   configure(app: express.Application): void {
-    app.route(`/api/v1/bank-master/create`).post(this.bankMasterController.create); //0301
+    app.route(`${baseUrl}/bank-master/create`).post(this.bankMasterController.create); //0301
   }
 }
 

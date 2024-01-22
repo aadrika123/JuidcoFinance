@@ -26,7 +26,7 @@ class FunCodeController {
         this.getFunCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.funCodeDao.get();
-                return (0, sendResponse_1.sendResponse)(true, "Data Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
             }
             catch (error) {
                 return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 200, "GET", "0201", "1.0", res);
