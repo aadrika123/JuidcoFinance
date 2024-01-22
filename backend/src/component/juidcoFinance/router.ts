@@ -56,7 +56,6 @@ class FinanceRoute {
     /// DEPARTMENT_ROUTE ///
     this.departmentRoute = new DepartmentRoute();
     this.departmentRoute.configure(app)  // 06
-    this.bankMasterRoute.configure(app); //04
 
     // VENDOR_MASTER_ROUTE ///
     this.vendorMasterRoute = new VendorMasterRoute();
