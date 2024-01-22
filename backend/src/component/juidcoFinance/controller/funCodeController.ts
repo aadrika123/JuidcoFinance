@@ -8,7 +8,7 @@ import FunCodeDao from "../dao/funCodeDao";
  * | Author- Sanjiv Kumar
  * | Created On- 20-01-2024 
  * | Created for- Function Code Controller
- * | Comman apiId- 02
+ * | Common apiId- 02
  */
 
 class FunCodeController {

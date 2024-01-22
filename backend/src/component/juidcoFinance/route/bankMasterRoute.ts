@@ -2,7 +2,7 @@ import express from "express";
 import BankMasterController from "../controller/bankMasterController";
 import {baseUrl} from "../../../util/common"
 /**
- * | Route - 03
+ * | Route - 04
  */
 
 class BankMasterRoute {
@@ -12,7 +12,8 @@ class BankMasterRoute {
   }
 
   configure(app: express.Application): void {
-    app.route(`${baseUrl}/bank-master/create`).post(this.bankMasterController.create); //0301
+    app.route(`${baseUrl}/bank-master/create`).post(this.bankMasterController.create); //0401
+    app.route(`${baseUrl}/bank-master/get-all`).get(this.bankMasterController.get); //0402
   }
 }
 

@@ -29,7 +29,7 @@ class FinanceRoute {
         this.funCodeRoute.configure(app); // 02
         /// BANK_MASTER_ROUTE ///
         this.bankMasterRoute = new bankMasterRoute_1.default();
-        this.bankMasterRoute.configure(app); //03
+        this.bankMasterRoute.configure(app); //04
     }
 }
 exports.default = FinanceRoute;

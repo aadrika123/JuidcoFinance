@@ -32,7 +32,7 @@ class FinanceRoute {
 
     /// BANK_MASTER_ROUTE ///
     this.bankMasterRoute = new BankMasterRoute();
-    this.bankMasterRoute.configure(app); //03
+    this.bankMasterRoute.configure(app); //04
   }
 }
 
