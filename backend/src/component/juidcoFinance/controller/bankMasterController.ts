@@ -120,7 +120,7 @@ class BankMasterController {
   update = async (req: Request, res: Response):Promise<Response> => {
     try {
       const { error } = bankMasterValidation.validate(req.body);
-
+ 
       if (error)
         return sendResponse(
           false,

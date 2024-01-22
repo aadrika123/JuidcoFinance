@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export const vendorMasterValidation = Joi.object({
+  id: Joi.number(),
   vendorTypeId: Joi.number().required(),
   vendorNo: Joi.string().required(),
   name: Joi.string().required(),

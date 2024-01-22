@@ -11,9 +11,15 @@ class VendorMasterRoute {
     }
     configure(app) {
         app
-            .route(`${common_1.baseUrl}/create-vendor-master`)
+            .route(`${common_1.baseUrl}/vendor-master/create`)
             .post(this.vendorMasterController.create); // 0701
-        app.route(`${common_1.baseUrl}/get-vendor-master`).get(this.vendorMasterController.get); //0702
+        app.route(`${common_1.baseUrl}/vendor-master`).get(this.vendorMasterController.get); //0702
+        app
+            .route(`${common_1.baseUrl}/vendor-master/:vendorId`)
+            .get(this.vendorMasterController.getById); // 0703
+        app
+            .route(`${common_1.baseUrl}/vendor-master/update`)
+            .post(this.vendorMasterController.update); // 0704
     }
 }
 exports.default = VendorMasterRoute;
