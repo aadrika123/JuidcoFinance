@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { SidebarLinksProps } from "@/types/types";
+import { SidebarLinksProps } from "@/utils/types/types";
 
 export const sidebarLinks: SidebarLinksProps = {
   modules: [
@@ -40,7 +40,7 @@ export const sidebarLinks: SidebarLinksProps = {
             },
             {
               moduleName: "Cheque Book Entry",
-              path: "/chequebook",
+              path: "/chequebook-master",
             },
           ],
         },
