@@ -12,26 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const departmentDao_1 = __importDefault(require("../dao/departmentDao"));
 const sendResponse_1 = require("../../../util/sendResponse");
-const accountingCodeDao_1 = __importDefault(require("../dao/accountingCodeDao"));
 /**
- * | Author- Krish Vishwakarma
+ * | Author- Sanjiv Kumar
  * | Created On- 22-01-2024
- * | Created for- Account Code Controller
- * | Comman apiId- 01
+ * | Created for- Department Controller
+ * | Common apiId- 06
  */
-class AccountCodeController {
+class DepartmentController {
     constructor() {
-        this.getAccountCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        // Get all Departments
+        this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.accountCodeDao.get();
-                return (0, sendResponse_1.sendResponse)(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
+                const data = yield this.departmentDao.get();
+                return (0, sendResponse_1.sendResponse)(true, "Departments Found Successfully!!", data, 200, "GET", "0601", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0601", "1.0", res);
             }
         });
-        this.accountCodeDao = new accountingCodeDao_1.default();
+        this.departmentDao = new departmentDao_1.default();
     }
 }
-exports.default = AccountCodeController;
+exports.default = DepartmentController;

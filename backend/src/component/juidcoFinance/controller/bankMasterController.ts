@@ -17,7 +17,7 @@ class BankMasterController {
   }
 
   // Create
-  create = async (req: Request, res: Response) => {
+  create = async (req: Request, res: Response) :Promise<Response> => {
     try {
       const { error } = bankMasterValidation.validate(req.body);
 
@@ -59,7 +59,7 @@ class BankMasterController {
   };
 
   // Get limited bank list
-  get = async (req: Request, res: Response) => {
+  get = async (req: Request, res: Response):Promise<Response> => {
     try {
       const data = await this.bankMasterDao.get();
 
@@ -88,7 +88,7 @@ class BankMasterController {
   };
 
   // Get single bank details by Id
-  getById = async (req: Request, res: Response) => {
+  getById = async (req: Request, res: Response):Promise<Response> => {
     try {
       const id: number = Number(req.params.bankId);
       const data = await this.bankMasterDao.getById(id);
@@ -117,7 +117,7 @@ class BankMasterController {
   };
 
   // Update bank details by Id
-  update = async (req: Request, res: Response) => {
+  update = async (req: Request, res: Response):Promise<Response> => {
     try {
       const { error } = bankMasterValidation.validate(req.body);
 

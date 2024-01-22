@@ -13,25 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
-const accountingCodeDao_1 = __importDefault(require("../dao/accountingCodeDao"));
+const vendorTypeDao_1 = __importDefault(require("../dao/vendorTypeDao"));
 /**
- * | Author- Krish Vishwakarma
+ * | Author- Sanjiv Kumar
  * | Created On- 22-01-2024
- * | Created for- Account Code Controller
- * | Comman apiId- 01
+ * | Created for- Vendor Type Controller
+ * | Common apiId- 05
  */
-class AccountCodeController {
+class VendorTypeController {
     constructor() {
-        this.getAccountCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        // Get all vendor Types
+        this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.accountCodeDao.get();
-                return (0, sendResponse_1.sendResponse)(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
+                const data = yield this.vendorTypeDao.get();
+                return (0, sendResponse_1.sendResponse)(true, "Vendor Type Found Successfully!!", data, 200, "GET", "0501", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0501", "1.0", res);
             }
         });
-        this.accountCodeDao = new accountingCodeDao_1.default();
+        this.vendorTypeDao = new vendorTypeDao_1.default();
     }
 }
-exports.default = AccountCodeController;
+exports.default = VendorTypeController;

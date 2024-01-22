@@ -37,7 +37,7 @@ class FunCodeController {
         false,
         error.message,
         error.code,
-        200,
+        500,
         "GET",
         "0201",
         "1.0",
