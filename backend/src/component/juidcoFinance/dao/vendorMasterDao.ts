@@ -64,12 +64,14 @@ class VendorMasterDao {
       query.where = {
         OR: [
           {
-            bank_name: {
-              equals: search,
-              mode: "insensitive",
+            vendor_type: {
+              name: {
+                equals: search,
+                mode: "insensitive",
+              },
             },
           },
-          { ifsc_code: { equals: search, mode: "insensitive" } }
+          { name: { equals: search, mode: "insensitive" } },
         ],
       }
     }
