@@ -15,7 +15,13 @@ class VendorTypeDao {
     constructor() {
         // Get all vendor type
         this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return prisma.vendor_type.findMany();
+            const query = {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            };
+            return prisma.vendor_types.findMany(query);
         });
     }
 }

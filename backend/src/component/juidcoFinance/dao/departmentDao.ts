@@ -4,7 +4,12 @@ const prisma = new PrismaClient();
 
 class DepartmentDao {
 get = async () => {
-    return prisma.department.findMany();
+    return prisma.departments.findMany({
+        select:{
+            id:true, 
+            name:true
+        }
+    });
 }
 }
 

@@ -14,7 +14,12 @@ const prisma = new client_1.PrismaClient();
 class DepartmentDao {
     constructor() {
         this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return prisma.department.findMany();
+            return prisma.departments.findMany({
+                select: {
+                    id: true,
+                    name: true
+                }
+            });
         });
     }
 }

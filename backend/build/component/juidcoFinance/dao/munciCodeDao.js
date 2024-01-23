@@ -19,10 +19,19 @@ class MuncipalityCodeDao {
             const query = {
                 skip: (page - 1) * limit,
                 take: limit,
+                select: {
+                    id: true,
+                    ulbs: true,
+                    district: true,
+                    state_code: true,
+                    district_code: true,
+                    category: true,
+                    code: true,
+                },
             };
             const [data, count] = yield prisma.$transaction([
-                prisma.municipality_code.findMany(query),
-                prisma.municipality_code.count(),
+                prisma.municipality_codes.findMany(query),
+                prisma.municipality_codes.count(),
             ]);
             return {
                 currentPage: page,

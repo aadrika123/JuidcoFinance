@@ -29,7 +29,7 @@ class VendorMasterController {
                 const { error } = vendorMasterValidation_1.vendorMasterValidation.validate(req.body);
                 if (error)
                     return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0701", "1.0", res);
-                const data = yield this.vendorMasterDao.store(req);
+                const data = yield this.vendorMasterDao.update(req);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Data added successfully", data, 200, "POST", "0701", "1.0", res);
             }
             catch (error) {
@@ -39,7 +39,7 @@ class VendorMasterController {
         // get all vendor
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
+                const data = yield this.vendorMasterDao.get(req);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
             }
             catch (error) {
@@ -68,6 +68,16 @@ class VendorMasterController {
             }
             catch (error) {
                 return (0, sendResponse_1.sendResponse)(false, "Vendor updated successfully", error.message, 500, "PATCH", "0704", "1.0", res);
+            }
+        });
+        // Search bank list
+        this.search = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield this.vendorMasterDao.search(req);
+                return (0, sendResponse_1.sendResponse)(true, "Vendor List Found Successfully!!", data, 200, "GET", "0705", "1.0", res);
+            }
+            catch (error) {
+                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0705", "1.0", res);
             }
         });
         this.vendorMasterDao = new vendorMasterDao_1.default();

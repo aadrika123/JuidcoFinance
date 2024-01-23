@@ -47,7 +47,7 @@ class FinanceRoute {
         this.departmentRoute.configure(app); // 06
         // VENDOR_MASTER_ROUTE ///
         this.vendorMasterRoute = new vendorMasterRoute_1.default();
-        this.vendorMasterRoute.configure(app); //07)
+        this.vendorMasterRoute.configure(app); //07
     }
 }
 exports.default = FinanceRoute;

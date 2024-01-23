@@ -18,10 +18,17 @@ class FunctionCodeDao {
             const query = {
                 skip: (page - 1) * limit,
                 take: limit,
+                select: {
+                    id: true,
+                    group: true,
+                    description_code: true,
+                    cost_center: true,
+                    description: true,
+                },
             };
             const [data, count] = yield prisma.$transaction([
-                prisma.function_code.findMany(query),
-                prisma.function_code.count(),
+                prisma.function_codes.findMany(query),
+                prisma.function_codes.count(),
             ]);
             return {
                 currentPage: page,
