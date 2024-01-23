@@ -20,7 +20,7 @@ class FunCodeController {
   // Get limited Function Codes
   getFunCode = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.funCodeDao.get();
+      const data = await this.funCodeDao.get(Number(req.query.page), Number(req.query.limit));
 
       return sendResponse(
         true,

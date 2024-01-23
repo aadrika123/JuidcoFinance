@@ -57,10 +57,14 @@ class VendorMasterController {
     }
   };
 
+<<<<<<< HEAD
   // get all vendor
+=======
+  // Get vendor master list
+>>>>>>> 312253492f4af18a25d73b22258c75cd6bfcc443
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.vendorMasterDao.get();
+      const data = await this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
       return sendResponse(
         true,
         "Vendor Data fetched successfully",
