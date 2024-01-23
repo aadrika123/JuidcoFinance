@@ -14,24 +14,8 @@ const prisma = new client_1.PrismaClient();
 class VendorTypeDao {
     constructor() {
         // Get all vendor type
-        this.get = (page, limit) => __awaiter(this, void 0, void 0, function* () {
-            const query = {
-                skip: (page - 1) * limit,
-                take: limit,
-            };
-            const [data, count] = yield prisma.$transaction([
-                prisma.vendor_type.findMany(query),
-                prisma.vendor_type.count(),
-            ]);
-            return {
-                currentPage: page,
-                count,
-                totalPage: Math.ceil(count / limit),
-                data,
-            };
-            // const apiResponse = new ApiFeatures(prisma.vendor_type.findMany()).pagination(page, limit);
-            // return await apiResponse.query;
-            // return prisma.vendor_type.findMany();
+        this.get = () => __awaiter(this, void 0, void 0, function* () {
+            return prisma.vendor_type.findMany();
         });
     }
 }

@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { BankRequestData } from "../../../util/types";
 
 const prisma = new PrismaClient();
@@ -75,6 +75,43 @@ class BankMasterDao {
       },
       data: requestData,
     });
+  };
+
+  // Search bank details
+  search = async (req: Request) => {
+    const page: number = Number(req.query.page);
+    const limit: number = Number(req.query.limit);
+    const search: string = String(req.query.search);
+
+    const query: Prisma.bank_masterFindManyArgs = {
+      skip: (page - 1) * limit,
+      take: limit,
+      where: {
+        OR: [
+          {
+            bank_name: {
+              equals: search,
+              mode: "insensitive",
+            },
+          },
+          { ifsc_code: { equals: search, mode: "insensitive" } },
+          { contact_person_name: { equals: search, mode: "insensitive" } },
+        ],
+      },
+    };
+
+    const [data, count] = await prisma.$transaction([
+      prisma.bank_master.findMany(query),
+      prisma.bank_master.count({
+        where: query.where,
+      }),
+    ]);
+    return {
+      currentPage: page,
+      count,
+      totalPage: Math.ceil(count / limit),
+      data,
+    };
   };
 }
 

@@ -76,6 +76,40 @@ class BankMasterDao {
                 data: requestData,
             });
         });
+        // Search bank details
+        this.search = (req) => __awaiter(this, void 0, void 0, function* () {
+            const page = Number(req.query.page);
+            const limit = Number(req.query.limit);
+            const search = String(req.query.search);
+            const query = {
+                skip: (page - 1) * limit,
+                take: limit,
+                where: {
+                    OR: [
+                        {
+                            bank_name: {
+                                equals: search,
+                                mode: "insensitive",
+                            },
+                        },
+                        { ifsc_code: { equals: search, mode: "insensitive" } },
+                        { contact_person_name: { equals: search, mode: "insensitive" } },
+                    ],
+                },
+            };
+            const [data, count] = yield prisma.$transaction([
+                prisma.bank_master.findMany(query),
+                prisma.bank_master.count({
+                    where: query.where,
+                }),
+            ]);
+            return {
+                currentPage: page,
+                count,
+                totalPage: Math.ceil(count / limit),
+                data,
+            };
+        });
         //////
     }
 }

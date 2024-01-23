@@ -14,11 +14,21 @@ const prisma = new client_1.PrismaClient();
 // -> Belongs to Chart of Accounts
 class FunctionCodeDao {
     constructor() {
-        this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.function_code.findMany({
-                skip: 0,
-                take: 9,
-            });
+        this.get = (page, limit) => __awaiter(this, void 0, void 0, function* () {
+            const query = {
+                skip: (page - 1) * limit,
+                take: limit,
+            };
+            const [data, count] = yield prisma.$transaction([
+                prisma.function_code.findMany(query),
+                prisma.function_code.count(),
+            ]);
+            return {
+                currentPage: page,
+                count,
+                totalPage: Math.ceil(count / limit),
+                data,
+            };
         });
     }
 }

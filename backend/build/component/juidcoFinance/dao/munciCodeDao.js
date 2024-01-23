@@ -14,11 +14,22 @@ const prisma = new client_1.PrismaClient();
 // -> Belongs to Chart of Accounts
 class MuncipalityCodeDao {
     constructor() {
-        this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.municipality_code.findMany({
-                skip: 0,
-                take: 9,
-            });
+        // Get limited muncipilaty code
+        this.get = (page, limit) => __awaiter(this, void 0, void 0, function* () {
+            const query = {
+                skip: (page - 1) * limit,
+                take: limit,
+            };
+            const [data, count] = yield prisma.$transaction([
+                prisma.municipality_code.findMany(query),
+                prisma.municipality_code.count(),
+            ]);
+            return {
+                currentPage: page,
+                count,
+                totalPage: Math.ceil(count / limit),
+                data,
+            };
         });
     }
 }

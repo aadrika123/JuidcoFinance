@@ -23,6 +23,7 @@ const vendorMasterValidation_1 = require("../requests/vendorMasterValidation");
  */
 class VendorMasterController {
     constructor() {
+        // Add vendor master
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { error } = vendorMasterValidation_1.vendorMasterValidation.validate(req.body);
@@ -35,9 +36,10 @@ class VendorMasterController {
                 return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0701", "1.0", res);
             }
         });
+        // Get vendor master list
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.vendorMasterDao.get();
+                const data = yield this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
             }
             catch (error) {

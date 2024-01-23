@@ -36,11 +36,22 @@ class VendorMasterDao {
                 data: requestData,
             });
         });
-        this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.vendor_master.findMany({
-                skip: 0,
-                take: 9,
-            });
+        // Get vendor master list
+        this.get = (page, limit) => __awaiter(this, void 0, void 0, function* () {
+            const query = {
+                skip: (page - 1) * limit,
+                take: limit,
+            };
+            const [data, count] = yield prisma.$transaction([
+                prisma.vendor_master.findMany(query),
+                prisma.vendor_master.count(),
+            ]);
+            return {
+                currentPage: page,
+                count,
+                totalPage: Math.ceil(count / limit),
+                data,
+            };
         });
     }
 }
