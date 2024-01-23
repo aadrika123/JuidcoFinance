@@ -36,7 +36,7 @@ class VendorMasterDao {
                 data: requestData,
             });
         });
-        // Get vendor master list
+        // get all vendor data
         this.get = (page, limit) => __awaiter(this, void 0, void 0, function* () {
             const query = {
                 skip: (page - 1) * limit,
@@ -52,6 +52,38 @@ class VendorMasterDao {
                 totalPage: Math.ceil(count / limit),
                 data,
             };
+        });
+        //get single vendor data by ID
+        this.getById = (id) => __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.vendor_master.findUnique({ where: { id } });
+        });
+        //update vendor master data
+        this.update = (req) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.body.id;
+            const requestData = {
+                vendor_type_id: req.body.vendorTypeId,
+                vendor_no: req.body.vendorNo,
+                name: req.body.name,
+                mobile_no: req.body.mobileNo,
+                comm_address: req.body.commAddress,
+                tin_no: req.body.tinNo,
+                pan_no: req.body.panNo,
+                bank_name: req.body.bankName,
+                ifsc_code: req.body.ifscCode,
+                department_id: req.body.departmentId,
+                email: req.body.email,
+                office_address: req.body.officeAddress,
+                gst_no: req.body.gstNo,
+                aadhar_no: req.body.aadharNo,
+                bank_account_no: req.body.bankAccountNo,
+                bank_branch_name: req.body.bankBranchName,
+            };
+            return yield prisma.vendor_master.update({
+                where: {
+                    id,
+                },
+                data: requestData,
+            });
         });
     }
 }

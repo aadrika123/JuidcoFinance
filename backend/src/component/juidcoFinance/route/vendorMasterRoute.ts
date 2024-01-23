@@ -11,11 +11,18 @@ class VendorMasterRoute {
 
   configure(app: express.Application): void {
     app
-      .route(`${baseUrl}/create-vendor-master`)
+      .route(`${baseUrl}/vendor-master/create`)
       .post(this.vendorMasterController.create); // 0701
+
+    app.route(`${baseUrl}/vendor-master`).get(this.vendorMasterController.get); //0702
+
     app
-      .route(`${baseUrl}/get-vendor-master`)
-      .get(this.vendorMasterController.get); //0702
+      .route(`${baseUrl}/vendor-master/:vendorId`)
+      .get(this.vendorMasterController.getById); // 0703
+
+    app
+      .route(`${baseUrl}/vendor-master/update`)
+      .post(this.vendorMasterController.update); // 0704
   }
 }
 

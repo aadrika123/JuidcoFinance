@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.vendorMasterValidation = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.vendorMasterValidation = joi_1.default.object({
+    id: joi_1.default.number(),
     vendorTypeId: joi_1.default.number().required(),
     vendorNo: joi_1.default.string().required(),
     name: joi_1.default.string().required(),

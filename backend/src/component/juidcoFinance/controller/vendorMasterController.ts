@@ -16,7 +16,7 @@ class VendorMasterController {
     this.vendorMasterDao = new VendorMasterDao();
   }
 
-  // Add vendor master
+  // create a new Vendor
   create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { error } = vendorMasterValidation.validate(req.body);
@@ -57,7 +57,7 @@ class VendorMasterController {
     }
   };
 
-  // Get vendor master list
+  // get all vendor
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
       const data = await this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
@@ -79,6 +79,78 @@ class VendorMasterController {
         500,
         "GET",
         "0702",
+        "1.0",
+        res
+      );
+    }
+  };
+
+  // get vendor by ID
+  getById = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const id: number = Number(req.params.vendorId);
+      const data = await this.vendorMasterDao.getById(id);
+      return sendResponse(
+        true,
+        "Vendor find successfully",
+        data,
+        200,
+        "GET",
+        "0703",
+        "1.0",
+        res
+      );
+    } catch (error: any) {
+      return sendResponse(
+        false,
+        error.message,
+        "error.code",
+        500,
+        "GET",
+        "0703",
+        "1.0",
+        res
+      );
+    }
+  };
+
+  // update vendor information
+  update = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { error } = vendorMasterValidation.validate(req.body);
+
+      if (error)
+        return sendResponse(
+          false,
+          error.message,
+          "error.code",
+          403,
+          "PATCH",
+          "0704",
+          "1.0",
+          res
+        );
+
+      const data = await this.vendorMasterDao.store(req);
+
+      return sendResponse(
+        true,
+        "Vendor updated successfully",
+        data,
+        200,
+        "PATCH",
+        "0704",
+        "1.0",
+        res
+      );
+    } catch (error: any) {
+      return sendResponse(
+        false,
+        "Vendor updated successfully",
+        error.message,
+        500,
+        "PATCH",
+        "0704",
         "1.0",
         res
       );
