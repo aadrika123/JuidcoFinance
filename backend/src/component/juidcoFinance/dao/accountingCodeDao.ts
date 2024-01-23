@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
@@ -21,12 +22,8 @@ class AccountingCodeDao {
       prisma.account_codes.findMany(query),
       prisma.account_codes.count(),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+
+    return generateRes(data, count, page, limit );
   };
 }
 

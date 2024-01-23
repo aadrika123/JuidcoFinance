@@ -17,10 +17,29 @@ class MuncipalityCodeController {
   }
 
   // Muncipality Code Controller
-  getMuncipalityCode = async (req: Request, res: Response): Promise<Response>  => {
+  getMuncipalityCode = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
-      const data = await this.muncipalityCodeDao.get(Number(req.query.page), Number(req.query.limit));
-     return sendResponse(
+      const data = await this.muncipalityCodeDao.get(
+        Number(req.query.page),
+        Number(req.query.limit)
+      );
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Muncipality Code Not Found",
+          data,
+          404,
+          "GET",
+          "0301",
+          "1.0",
+          res
+        );
+
+      return sendResponse(
         true,
         "Muncipality Code Fetched successfully.",
         data,
@@ -31,7 +50,7 @@ class MuncipalityCodeController {
         res
       );
     } catch (error: any) {
-     return sendResponse(
+      return sendResponse(
         false,
         error.message,
         error.code,

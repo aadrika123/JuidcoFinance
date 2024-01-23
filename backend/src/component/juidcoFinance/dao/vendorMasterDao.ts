@@ -1,6 +1,7 @@
 import { Request } from "express";
 import type { VendorRequestData } from "../../../util/types";
 import { PrismaClient, Prisma } from ".prisma/client";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
@@ -80,12 +81,8 @@ class VendorMasterDao {
       prisma.vendor_masters.findMany(query),
       prisma.vendor_masters.count(),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+
+    return generateRes(data, count, page, limit );
   };
 
   //get single vendor data by ID
@@ -125,7 +122,8 @@ class VendorMasterDao {
         updated_at: true,
       },
     };
-    return await prisma.vendor_masters.findFirst(query);
+    const data = await prisma.vendor_masters.findFirst(query);
+    return generateRes(data);
   };
 
   //update vendor master data
@@ -207,12 +205,8 @@ class VendorMasterDao {
         where: query.where,
       }),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+
+    return generateRes(data, count, page, limit );
   };
 }
 

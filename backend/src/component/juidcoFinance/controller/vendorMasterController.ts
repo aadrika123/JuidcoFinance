@@ -32,7 +32,7 @@ class VendorMasterController {
           res
         );
 
-      const data = await this.vendorMasterDao.update(req);
+      const data = await this.vendorMasterDao.store(req);
       return sendResponse(
         true,
         "Vendor Data added successfully",
@@ -61,6 +61,19 @@ class VendorMasterController {
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
       const data = await this.vendorMasterDao.get(req);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor Data Not Found",
+          data,
+          404,
+          "GET",
+          "0702",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Vendor Data fetched successfully",
@@ -90,6 +103,19 @@ class VendorMasterController {
     try {
       const id: number = Number(req.params.vendorId);
       const data = await this.vendorMasterDao.getById(id);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor Not Found",
+          data,
+          404,
+          "GET",
+          "0703",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Vendor find successfully",
@@ -131,7 +157,7 @@ class VendorMasterController {
           res
         );
 
-      const data = await this.vendorMasterDao.store(req);
+      const data = await this.vendorMasterDao.update(req);
 
       return sendResponse(
         true,
@@ -158,10 +184,21 @@ class VendorMasterController {
   };
 
   // Search bank list
-  search = async (req: Request, res: Response) : Promise<Response> => {
-    try{
-
+  search = async (req: Request, res: Response): Promise<Response> => {
+    try {
       const data = await this.vendorMasterDao.search(req);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor List Not Found!!",
+          data,
+          404,
+          "GET",
+          "0705",
+          "1.0",
+          res
+        );
 
       return sendResponse(
         true,
@@ -173,7 +210,7 @@ class VendorMasterController {
         "1.0",
         res
       );
-    }catch(error: any){
+    } catch (error: any) {
       return sendResponse(
         false,
         error.message,
@@ -185,7 +222,7 @@ class VendorMasterController {
         res
       );
     }
-  }
+  };
 }
 
 export default VendorMasterController;

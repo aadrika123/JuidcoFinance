@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { BankRequestData } from "../../../util/types";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
@@ -65,12 +66,7 @@ class BankMasterDao {
       prisma.bank_masters.findMany(query),
       prisma.bank_masters.count({where: query.where}),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+    return generateRes(data, count, page, limit);
   };
 
   // Get single bank details
@@ -92,7 +88,8 @@ class BankMasterDao {
         contact_person_name: true,
       },
     };
-    return await prisma.bank_masters.findFirst(query);
+    const data = await prisma.bank_masters.findFirst(query);
+    return generateRes(data);
   };
 
   // Update bank details
@@ -153,12 +150,7 @@ class BankMasterDao {
         where: query.where,
       }),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+    return generateRes(data, count, page, limit);
   };
 }
 

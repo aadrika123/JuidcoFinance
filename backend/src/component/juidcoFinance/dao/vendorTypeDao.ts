@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 class VendorTypeDao {
@@ -10,7 +11,8 @@ class VendorTypeDao {
         name: true,
       },
     };
-    return prisma.vendor_types.findMany(query);
+    const data = prisma.vendor_types.findMany(query);
+    return generateRes(data);
   };
 }
 

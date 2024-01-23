@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
@@ -23,12 +24,8 @@ class MuncipalityCodeDao {
       prisma.municipality_codes.findMany(query),
       prisma.municipality_codes.count(),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+
+    return generateRes(data, count, page, limit );
   };
 }
 

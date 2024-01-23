@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const generateRes_1 = require("../../../util/generateRes");
 const prisma = new client_1.PrismaClient();
 class BankMasterDao {
     constructor() {
@@ -64,12 +65,7 @@ class BankMasterDao {
                 prisma.bank_masters.findMany(query),
                 prisma.bank_masters.count({ where: query.where }),
             ]);
-            return {
-                currentPage: page,
-                count,
-                totalPage: Math.ceil(count / limit),
-                data,
-            };
+            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
         // Get single bank details
         this.getById = (id) => __awaiter(this, void 0, void 0, function* () {
@@ -90,7 +86,8 @@ class BankMasterDao {
                     contact_person_name: true,
                 },
             };
-            return yield prisma.bank_masters.findFirst(query);
+            const data = yield prisma.bank_masters.findFirst(query);
+            return (0, generateRes_1.generateRes)(data);
         });
         // Update bank details
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
@@ -147,12 +144,7 @@ class BankMasterDao {
                     where: query.where,
                 }),
             ]);
-            return {
-                currentPage: page,
-                count,
-                totalPage: Math.ceil(count / limit),
-                data,
-            };
+            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
         //////
     }

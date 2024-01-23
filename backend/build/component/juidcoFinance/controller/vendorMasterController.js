@@ -29,7 +29,7 @@ class VendorMasterController {
                 const { error } = vendorMasterValidation_1.vendorMasterValidation.validate(req.body);
                 if (error)
                     return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0701", "1.0", res);
-                const data = yield this.vendorMasterDao.update(req);
+                const data = yield this.vendorMasterDao.store(req);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Data added successfully", data, 200, "POST", "0701", "1.0", res);
             }
             catch (error) {
@@ -40,6 +40,8 @@ class VendorMasterController {
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.vendorMasterDao.get(req);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Vendor Data Not Found", data, 404, "GET", "0702", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
             }
             catch (error) {
@@ -51,6 +53,8 @@ class VendorMasterController {
             try {
                 const id = Number(req.params.vendorId);
                 const data = yield this.vendorMasterDao.getById(id);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Vendor Not Found", data, 404, "GET", "0703", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor find successfully", data, 200, "GET", "0703", "1.0", res);
             }
             catch (error) {
@@ -63,7 +67,7 @@ class VendorMasterController {
                 const { error } = vendorMasterValidation_1.vendorMasterValidation.validate(req.body);
                 if (error)
                     return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 403, "PATCH", "0704", "1.0", res);
-                const data = yield this.vendorMasterDao.store(req);
+                const data = yield this.vendorMasterDao.update(req);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor updated successfully", data, 200, "PATCH", "0704", "1.0", res);
             }
             catch (error) {
@@ -74,6 +78,8 @@ class VendorMasterController {
         this.search = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.vendorMasterDao.search(req);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Vendor List Not Found!!", data, 404, "GET", "0705", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor List Found Successfully!!", data, 200, "GET", "0705", "1.0", res);
             }
             catch (error) {

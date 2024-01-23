@@ -20,6 +20,18 @@ class VendorTypeController {
     try {
       const data = await this.vendorTypeDao.get();
 
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor Type Not Found!!",
+          data,
+          404,
+          "GET",
+          "0501",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Vendor Type Found Successfully!!",

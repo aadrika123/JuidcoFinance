@@ -1,15 +1,17 @@
 import { PrismaClient } from "@prisma/client";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
 class DepartmentDao {
 get = async () => {
-    return prisma.departments.findMany({
+    const data = prisma.departments.findMany({
         select:{
             id:true, 
             name:true
         }
     });
+    return generateRes(data);
 }
 }
 

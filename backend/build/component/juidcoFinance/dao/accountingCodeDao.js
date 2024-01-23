@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const generateRes_1 = require("../../../util/generateRes");
 const prisma = new client_1.PrismaClient();
 // -> Belongs to Chart of Accounts
 class AccountingCodeDao {
@@ -31,12 +32,7 @@ class AccountingCodeDao {
                 prisma.account_codes.findMany(query),
                 prisma.account_codes.count(),
             ]);
-            return {
-                currentPage: page,
-                count,
-                totalPage: Math.ceil(count / limit),
-                data,
-            };
+            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
     }
 }

@@ -40,6 +40,8 @@ class BankMasterController {
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.bankMasterDao.get(req);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Bank Master Not Found!!", data, 404, "GET", "0402", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Bank Master Found Successfully!!", data, 200, "GET", "0402", "1.0", res);
             }
             catch (error) {
@@ -51,6 +53,8 @@ class BankMasterController {
             try {
                 const id = Number(req.params.bankId);
                 const data = yield this.bankMasterDao.getById(id);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Bank Master Not Found!!", data, 404, "GET", "0403", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Bank Master Found Successfully!!", data, 200, "GET", "0403", "1.0", res);
             }
             catch (error) {
@@ -74,6 +78,8 @@ class BankMasterController {
         this.search = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.bankMasterDao.search(req);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Bank Master Not Found!!", data, 404, "GET", "0405", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Bank Master Found Successfully!!", data, 200, "GET", "0405", "1.0", res);
             }
             catch (error) {

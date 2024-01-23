@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require(".prisma/client");
+const generateRes_1 = require("../../../util/generateRes");
 const prisma = new client_1.PrismaClient();
 class VendorMasterDao {
     constructor() {
@@ -68,12 +69,14 @@ class VendorMasterDao {
                 query.where = {
                     OR: [
                         {
-                            bank_name: {
-                                equals: search,
-                                mode: "insensitive",
+                            vendor_type: {
+                                name: {
+                                    equals: search,
+                                    mode: "insensitive",
+                                },
                             },
                         },
-                        { ifsc_code: { equals: search, mode: "insensitive" } }
+                        { name: { equals: search, mode: "insensitive" } },
                     ],
                 };
             }
@@ -81,12 +84,7 @@ class VendorMasterDao {
                 prisma.vendor_masters.findMany(query),
                 prisma.vendor_masters.count(),
             ]);
-            return {
-                currentPage: page,
-                count,
-                totalPage: Math.ceil(count / limit),
-                data,
-            };
+            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
         //get single vendor data by ID
         this.getById = (id) => __awaiter(this, void 0, void 0, function* () {
@@ -125,7 +123,8 @@ class VendorMasterDao {
                     updated_at: true,
                 },
             };
-            return yield prisma.vendor_masters.findFirst(query);
+            const data = yield prisma.vendor_masters.findFirst(query);
+            return (0, generateRes_1.generateRes)(data);
         });
         //update vendor master data
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
@@ -201,12 +200,7 @@ class VendorMasterDao {
                     where: query.where,
                 }),
             ]);
-            return {
-                currentPage: page,
-                count,
-                totalPage: Math.ceil(count / limit),
-                data,
-            };
+            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
     }
 }

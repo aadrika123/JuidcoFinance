@@ -26,6 +26,8 @@ class MuncipalityCodeController {
         this.getMuncipalityCode = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.muncipalityCodeDao.get(Number(req.query.page), Number(req.query.limit));
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Muncipality Code Not Found", data, 404, "GET", "0301", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Muncipality Code Fetched successfully.", data, 200, "GET", "0301", "1.0", res);
             }
             catch (error) {
