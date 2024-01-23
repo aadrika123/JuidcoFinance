@@ -31,11 +31,21 @@ class VendorMasterDao {
   };
 
   // get all vendor data
-  get = async () => {
-    return await prisma.vendor_master.findMany({
-      skip: 0,
-      take: 9,
-    });
+  get = async (page:number, limit:number) => {
+    const query = {
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+    const [data, count] = await prisma.$transaction([
+      prisma.vendor_master.findMany(query),
+      prisma.vendor_master.count(),
+    ]);
+    return {
+      currentPage: page,
+      count,
+      totalPage: Math.ceil(count / limit),
+      data,
+    };
   };
 
   //get single vendor data by ID

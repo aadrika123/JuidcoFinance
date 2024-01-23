@@ -39,7 +39,7 @@ class VendorMasterController {
         // get all vendor
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.vendorMasterDao.get();
+                const data = yield this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
             }
             catch (error) {
