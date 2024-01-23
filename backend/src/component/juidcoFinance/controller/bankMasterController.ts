@@ -61,7 +61,7 @@ class BankMasterController {
   // Get limited bank list
   get = async (req: Request, res: Response):Promise<Response> => {
     try {
-      const data = await this.bankMasterDao.get();
+      const data = await this.bankMasterDao.get(Number(req.query.page), Number(req.query.limit));
 
       return sendResponse(
         true,

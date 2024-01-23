@@ -13,7 +13,9 @@ class VendorMasterRoute {
         app
             .route(`${common_1.baseUrl}/create-vendor-master`)
             .post(this.vendorMasterController.create); // 0701
-        app.route(`${common_1.baseUrl}/get-vendor-master`).get(this.vendorMasterController.get); //0702
+        app
+            .route(`${common_1.baseUrl}/get-vendor-master`)
+            .get(this.vendorMasterController.get); //0702
     }
 }
 exports.default = VendorMasterRoute;

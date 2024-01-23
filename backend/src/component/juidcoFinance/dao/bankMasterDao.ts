@@ -31,11 +31,21 @@ class BankMasterDao {
   };
 
   // Get limited bank master
-  get = async () => {
-    return await prisma.bank_master.findMany({
-      skip: 0,
-      take: 10,
-    });
+  get = async (page: number, limit: number) => {
+    const query = {
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+    const [data, count] = await prisma.$transaction([
+      prisma.bank_master.findMany(query),
+      prisma.bank_master.count(),
+    ]);
+    return {
+      currentPage: page,
+      count,
+      totalPage: Math.ceil(count / limit),
+      data,
+    };
   };
 
   // Get single bank details

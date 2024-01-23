@@ -39,7 +39,7 @@ class BankMasterController {
         // Get limited bank list
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.bankMasterDao.get();
+                const data = yield this.bankMasterDao.get(Number(req.query.page), Number(req.query.limit));
                 return (0, sendResponse_1.sendResponse)(true, "Bank Master Found Successfully!!", data, 200, "GET", "0402", "1.0", res);
             }
             catch (error) {

@@ -19,7 +19,7 @@ class MuncipalityCodeController {
   // Muncipality Code Controller
   getMuncipalityCode = async (req: Request, res: Response): Promise<Response>  => {
     try {
-      const data = await this.muncipalityCodeDao.get();
+      const data = await this.muncipalityCodeDao.get(Number(req.query.page), Number(req.query.limit));
      return sendResponse(
         true,
         "Muncipality Code Fetched successfully.",

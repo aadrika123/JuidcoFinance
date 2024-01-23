@@ -16,6 +16,7 @@ class VendorMasterController {
     this.vendorMasterDao = new VendorMasterDao();
   }
 
+  // Add vendor master
   create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { error } = vendorMasterValidation.validate(req.body);
@@ -56,9 +57,10 @@ class VendorMasterController {
     }
   };
 
+  // Get vendor master list
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.vendorMasterDao.get();
+      const data = await this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
       return sendResponse(
         true,
         "Vendor Data fetched successfully",

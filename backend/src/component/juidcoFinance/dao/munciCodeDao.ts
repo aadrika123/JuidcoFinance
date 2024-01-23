@@ -4,11 +4,23 @@ const prisma = new PrismaClient();
 
 // -> Belongs to Chart of Accounts
 class MuncipalityCodeDao {
-  get = async () => {
-    return await prisma.municipality_code.findMany({
-      skip: 0,
-      take: 9,
-    });
+
+  // Get limited muncipilaty code
+  get = async (page:number, limit: number) => {
+    const query = {
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+    const [data, count] = await prisma.$transaction([
+      prisma.municipality_code.findMany(query),
+      prisma.municipality_code.count(),
+    ]);
+    return {
+      currentPage: page,
+      count,
+      totalPage: Math.ceil(count / limit),
+      data,
+    };
   };
 }
 

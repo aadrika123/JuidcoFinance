@@ -4,11 +4,23 @@ const prisma = new PrismaClient();
 
 // -> Belongs to Chart of Accounts
 class AccountingCodeDao {
-  get = async () => {
-    return await prisma.account_code.findMany({
-      skip: 0,
-      take: 9,
-    });
+
+  // Get limitted accounting codes
+  get = async (page:number, limit:number) => {
+    const query = {
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+    const [data, count] = await prisma.$transaction([
+      prisma.account_code.findMany(query),
+      prisma.account_code.count(),
+    ]);
+    return {
+      currentPage: page,
+      count,
+      totalPage: Math.ceil(count / limit),
+      data,
+    };
   };
 }
 
