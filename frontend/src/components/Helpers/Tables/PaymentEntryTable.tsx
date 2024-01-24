@@ -5,12 +5,11 @@ import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
-const ChequebooksTable: React.FC = () => {
-  const chequebookData = useSelector(
-    (state: RootState) => state.chequebookDetails.chequebookDetails
+const PaymentEntryTable: React.FC = () => {
+  const paymentEntryData = useSelector(
+    (state: RootState) => state.paymentDetails.paymentDetails
   );
 
-  console.log(chequebookData);
   return (
     <>
       <div className="overflow-x-auto border-[2px] border-zinc-400">
@@ -25,64 +24,47 @@ const ChequebooksTable: React.FC = () => {
               </th>
               <th className="border border-zinc-400  font-medium">
                 <div className="flex gap-2">
-                  <span>Date</span>
+                  <span>Payment No</span>
                 </div>
               </th>
 
               <th className="border border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Bank Branch</span>
+                  <span>Payment Name</span>
                 </div>
               </th>
 
               <th className="border  border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Bank Name</span>
+                  <span>Payment Type</span>
                 </div>
               </th>
 
               <th className="border   border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Bank Account Number</span>
+                  <span>Amount</span>
                 </div>
               </th>
 
               <th className="border   border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Cheque Number from</span>
+                  <span>Ledger Code</span>
                 </div>
               </th>
 
               <th className="border   border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Cheque Number To</span>
+                  <span>Budget Name</span>
                 </div>
               </th>
 
-              <th className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Employee Name</span>
-                </div>
-              </th>
-
-              <th className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Issuer Name</span>
-                </div>
-              </th>
-
-              <th className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Remarks</span>
-                </div>
-              </th>
-
+              
     
               <th className="border  border-zinc-400  font-medium">
                 <div className="flex gap-2">
                   <span>View / Edit / Print </span>
                   <span>
-                    <svg
+                  <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="19"
                       height="19"
@@ -117,65 +99,44 @@ const ChequebooksTable: React.FC = () => {
             </tr>
           </thead>
           <tbody className="">
-            {chequebookData?.map((d, index: number) => (
+            {paymentEntryData?.map((d, index: number) => (
               <tr key={index} className="border border-zinc-400 text-secondary">
                 {/* ID */}
                 <td className="border border-zinc-400">{d?.id}</td>
 
                 {/* Date */}
-                <td className="border border-zinc-400">{d?.date}</td>
+                <td className="border border-zinc-400">{d?.paymentNo}</td>
 
                 {/*  Bank Branch */}
                 <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">{d?.bank_branch}</div>
+                  <div className="flex justify-center">{d?.paymentName}</div>
                 </td>
 
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.bank_name}</div>
+                    <div className="flex justify-center">{d?.paymentType}</div>
                   </div>
                 </td>
 
                 {/* account number */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.bank_account_number}</div>
+                    <div className="flex justify-center">{d?.amount}</div>
                   </div>
                 </td>
 
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.cheque_no_from}</div>
+                    <div className="flex justify-center">{d?.ledgerCode}</div>
                   </div>
                 </td>
 
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.cheque_no_to}</div>
-                  </div>
-                </td>
-
-                {/* Bank Name */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.employee_name}</div>
-                  </div>
-                </td>
-
-                {/* Bank Name */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.issuer_name}</div>
-                  </div>
-                </td>
-
-                {/* Bank Name */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.remarks}</div>
+                    <div className="flex justify-center">{d?.budgetName}</div>
                   </div>
                 </td>
 
@@ -185,7 +146,7 @@ const ChequebooksTable: React.FC = () => {
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
 
-                  <Link href={`/chequebook-master/view/${d.id}`}>
+                  <Link href={`/direct-payment-entry/view/${d.id}`}>
                       <div className="flex justify-center opacity-90">
                       
                     
@@ -228,4 +189,4 @@ const ChequebooksTable: React.FC = () => {
   );
 };
 
-export default ChequebooksTable;
+export default PaymentEntryTable;

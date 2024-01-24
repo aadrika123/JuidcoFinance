@@ -267,21 +267,21 @@ const Table = () => {
                         <path
                           d="M5.13409 13.9453H3.66926C3.28076 13.9453 2.90817 13.7909 2.63346 13.5162C2.35875 13.2415 2.20442 12.8689 2.20442 12.4804V8.81835C2.20442 8.42985 2.35875 8.05727 2.63346 7.78256C2.90817 7.50785 3.28076 7.35352 3.66926 7.35352H15.3879C15.7764 7.35352 16.149 7.50785 16.4237 7.78256C16.6985 8.05727 16.8528 8.42985 16.8528 8.81835V12.4804C16.8528 12.8689 16.6985 13.2415 16.4237 13.5162C16.149 13.7909 15.7764 13.9453 15.3879 13.9453H13.9231"
                           stroke="white"
-                          stroke-width="1.7578"
+                          strokeWidth="1.7578"
                           stroke-linecap="round"
                           stroke-linejoin="round"
                         />
                         <path
                           d="M13.9232 11.0155H5.1342V16.8748H13.9232V11.0155Z"
                           stroke="white"
-                          stroke-width="1.7578"
+                          strokeWidth="1.7578"
                           stroke-linecap="round"
                           stroke-linejoin="round"
                         />
                         <path
                           d="M5.1342 7.35349V2.22656H13.9232V7.35349"
                           stroke="white"
-                          stroke-width="1.7578"
+                          strokeWidth="1.7578"
                           stroke-linecap="round"
                           stroke-linejoin="round"
                         />
