@@ -10,12 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const generateRes_1 = require("../../../util/generateRes");
 const prisma = new client_1.PrismaClient();
 class VendorTypeDao {
     constructor() {
         // Get all vendor type
         this.get = () => __awaiter(this, void 0, void 0, function* () {
-            return prisma.vendor_type.findMany();
+            const query = {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            };
+            const data = prisma.vendor_types.findMany(query);
+            return (0, generateRes_1.generateRes)(data);
         });
     }
 }

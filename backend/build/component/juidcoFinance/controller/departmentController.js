@@ -26,6 +26,8 @@ class DepartmentController {
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.departmentDao.get();
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Departments Not Found!!", data, 404, "GET", "0601", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Departments Found Successfully!!", data, 200, "GET", "0601", "1.0", res);
             }
             catch (error) {

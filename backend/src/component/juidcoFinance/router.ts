@@ -59,7 +59,7 @@ class FinanceRoute {
 
     // VENDOR_MASTER_ROUTE ///
     this.vendorMasterRoute = new VendorMasterRoute();
-    this.vendorMasterRoute.configure(app); //07)
+    this.vendorMasterRoute.configure(app); //07
   }
 }
 

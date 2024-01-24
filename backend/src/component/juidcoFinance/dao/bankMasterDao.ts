@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { BankRequestData } from "../../../util/types";
+import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
@@ -25,32 +26,70 @@ class BankMasterDao {
       contact_person_name: req.body.contactPersonName,
     };
 
-    return await prisma.bank_master.create({
+    return await prisma.bank_masters.create({
       data: requestData,
     });
   };
 
   // Get limited bank master
-  get = async (page: number, limit: number) => {
-    const query = {
+  get = async (req:Request) => {
+    const page: number = Number(req.query.page);
+    const limit: number = Number(req.query.limit);
+    const search: string = String(req.query.search);
+
+    const query: Prisma.bank_mastersFindManyArgs = {
       skip: (page - 1) * limit,
       take: limit,
+      select: {
+        id: true,
+        bank_name: true,
+        ifsc_code: true,
+        branch: true,
+      },
     };
+
+    if(search !== "undefined"){
+      query.where = {
+        OR: [
+          {
+            bank_name: {
+              equals: search,
+              mode: "insensitive",
+            },
+          },
+          { ifsc_code: { equals: search, mode: "insensitive" } }
+        ],
+      }
+    }
+
     const [data, count] = await prisma.$transaction([
-      prisma.bank_master.findMany(query),
-      prisma.bank_master.count(),
+      prisma.bank_masters.findMany(query),
+      prisma.bank_masters.count({where: query.where}),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+    return generateRes(data, count, page, limit);
   };
 
   // Get single bank details
   getById = async (id: number) => {
-    return await prisma.bank_master.findUnique({ where: { id } });
+    const query: Prisma.bank_mastersFindManyArgs = {
+      where: { id },
+      select: {
+        id: true,
+        bank_name: true,
+        ifsc_code: true,
+        branch: true,
+        micr_code: true,
+        branch_address: true,
+        branch_city: true,
+        branch_state: true,
+        branch_district: true,
+        email: true,
+        contact_no: true,
+        contact_person_name: true,
+      },
+    };
+    const data = await prisma.bank_masters.findFirst(query);
+    return generateRes(data);
   };
 
   // Update bank details
@@ -69,9 +108,9 @@ class BankMasterDao {
       contact_no: req.body.contactNo,
       contact_person_name: req.body.contactPersonName,
     };
-    return await prisma.bank_master.update({
+    return await prisma.bank_masters.update({
       where: {
-        id,
+        id: id,
       },
       data: requestData,
     });
@@ -83,7 +122,7 @@ class BankMasterDao {
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
 
-    const query: Prisma.bank_masterFindManyArgs = {
+    const query: Prisma.bank_mastersFindManyArgs = {
       skip: (page - 1) * limit,
       take: limit,
       where: {
@@ -94,24 +133,24 @@ class BankMasterDao {
               mode: "insensitive",
             },
           },
-          { ifsc_code: { equals: search, mode: "insensitive" } },
-          { contact_person_name: { equals: search, mode: "insensitive" } },
+          { ifsc_code: { equals: search, mode: "insensitive" } }
         ],
+      },
+      select: {
+        id: true,
+        bank_name: true,
+        ifsc_code: true,
+        branch: true,
       },
     };
 
     const [data, count] = await prisma.$transaction([
-      prisma.bank_master.findMany(query),
-      prisma.bank_master.count({
+      prisma.bank_masters.findMany(query),
+      prisma.bank_masters.count({
         where: query.where,
       }),
     ]);
-    return {
-      currentPage: page,
-      count,
-      totalPage: Math.ceil(count / limit),
-      data,
-    };
+    return generateRes(data, count, page, limit);
   };
 }
 

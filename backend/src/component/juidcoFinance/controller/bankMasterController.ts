@@ -17,7 +17,7 @@ class BankMasterController {
   }
 
   // Create
-  create = async (req: Request, res: Response) :Promise<Response> => {
+  create = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { error } = bankMasterValidation.validate(req.body);
 
@@ -59,9 +59,21 @@ class BankMasterController {
   };
 
   // Get limited bank list
-  get = async (req: Request, res: Response):Promise<Response> => {
+  get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.bankMasterDao.get(Number(req.query.page), Number(req.query.limit));
+      const data = await this.bankMasterDao.get(req);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Bank Master Not Found!!",
+          data,
+          404,
+          "GET",
+          "0402",
+          "1.0",
+          res
+        );
 
       return sendResponse(
         true,
@@ -88,10 +100,23 @@ class BankMasterController {
   };
 
   // Get single bank details by Id
-  getById = async (req: Request, res: Response):Promise<Response> => {
+  getById = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id: number = Number(req.params.bankId);
       const data = await this.bankMasterDao.getById(id);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Bank Master Not Found!!",
+          data,
+          404,
+          "GET",
+          "0403",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Bank Master Found Successfully!!",
@@ -117,10 +142,10 @@ class BankMasterController {
   };
 
   // Update bank details by Id
-  update = async (req: Request, res: Response):Promise<Response> => {
+  update = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { error } = bankMasterValidation.validate(req.body);
- 
+
       if (error)
         return sendResponse(
           false,
@@ -133,7 +158,7 @@ class BankMasterController {
           res
         );
 
-      const data = await this.bankMasterDao.store(req);
+      const data = await this.bankMasterDao.update(req);
       return sendResponse(
         true,
         "Bank Master updated Successfully!!",
@@ -159,10 +184,21 @@ class BankMasterController {
   };
 
   // Search bank list
-  search = async (req: Request, res: Response) : Promise<Response> => {
-    try{
-
+  search = async (req: Request, res: Response): Promise<Response> => {
+    try {
       const data = await this.bankMasterDao.search(req);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Bank Master Not Found!!",
+          data,
+          404,
+          "GET",
+          "0405",
+          "1.0",
+          res
+        );
 
       return sendResponse(
         true,
@@ -174,7 +210,7 @@ class BankMasterController {
         "1.0",
         res
       );
-    }catch(error: any){
+    } catch (error: any) {
       return sendResponse(
         false,
         error.message,
@@ -186,7 +222,7 @@ class BankMasterController {
         res
       );
     }
-  }
+  };
 }
 
 export default BankMasterController;

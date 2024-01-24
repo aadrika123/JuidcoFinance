@@ -13,13 +13,16 @@ class VendorMasterRoute {
         app
             .route(`${common_1.baseUrl}/vendor-master/create`)
             .post(this.vendorMasterController.create); // 0701
-        app.route(`${common_1.baseUrl}/vendor-master`).get(this.vendorMasterController.get); //0702
+        app.route(`${common_1.baseUrl}/vendor-master/get`).get(this.vendorMasterController.get); //0702
         app
-            .route(`${common_1.baseUrl}/vendor-master/:vendorId`)
+            .route(`${common_1.baseUrl}/vendor-master/get/:vendorId`)
             .get(this.vendorMasterController.getById); // 0703
         app
             .route(`${common_1.baseUrl}/vendor-master/update`)
             .post(this.vendorMasterController.update); // 0704
+        app
+            .route(`${common_1.baseUrl}/vendor-master/search`)
+            .get(this.vendorMasterController.search); // 0705
     }
 }
 exports.default = VendorMasterRoute;

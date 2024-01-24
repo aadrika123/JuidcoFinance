@@ -20,6 +20,18 @@ class DepartmentController {
     try {
       const data = await this.departmentDao.get();
 
+      if (!data)
+        return sendResponse(
+          true,
+          "Departments Not Found!!",
+          data,
+          404,
+          "GET",
+          "0601",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Departments Found Successfully!!",

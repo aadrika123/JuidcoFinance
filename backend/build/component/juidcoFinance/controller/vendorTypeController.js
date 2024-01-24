@@ -26,6 +26,8 @@ class VendorTypeController {
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.vendorTypeDao.get();
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Vendor Type Not Found!!", data, 404, "GET", "0501", "1.0", res);
                 return (0, sendResponse_1.sendResponse)(true, "Vendor Type Found Successfully!!", data, 200, "GET", "0501", "1.0", res);
             }
             catch (error) {

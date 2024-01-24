@@ -1,11 +1,11 @@
 import {
   PrismaClient,
-  bank_master,
-  cheque_book_entry,
-  department,
-  employee,
-  vendor_master,
-  vendor_type,
+  bank_masters,
+  cheque_book_entries,
+  departments,
+  employees,
+  vendor_masters,
+  vendor_types,
 } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
@@ -14,15 +14,14 @@ const prisma = new PrismaClient();
 async function main() {
 
     /////// Accounting Code //////////////
-  let file_path = "./prisma/data/sample-accounting-code.xlsx";
+  const file_path = "./prisma/data/sample-accounting-code.xlsx";
 
   // File path.
   readXlsxFile(file_path).then(async (rows) => {
-    let n = rows.length;
+    const n = rows.length;
     for (let i = 1; i < n; i++) {
-      // console.log(rows[i]);
-      let row = rows[i];
-      await prisma.account_code.create({
+      const row = rows[i];
+      await prisma.account_codes.create({
         data: {
           id: parseInt(row[0].toString()),
           major_head: row[1].toString(),
@@ -36,15 +35,15 @@ async function main() {
   });
 
   /////// Accounting Code //////////////
-  let file_path1 = "./prisma/data/sample-function-code.xlsx";
+  const file_path1 = "./prisma/data/sample-function-code.xlsx";
 
   // File path.
   readXlsxFile(file_path1).then(async (rows) => {
-    let n = rows.length;
+    const n = rows.length;
     for (let i = 1; i < n; i++) {
       // console.log(rows[i]);
-      let row = rows[i];
-      await prisma.function_code.create({
+      const row = rows[i];
+      await prisma.function_codes.create({
         data: {
           id: parseInt(row[0].toString()),
           group: row[1].toString(),
@@ -59,15 +58,15 @@ async function main() {
 
 
   /////// Municipality Code //////////////
-  let file_path2 = "./prisma/data/sample-municipality-code1.xlsx";
+  const file_path2 = "./prisma/data/sample-municipality-code1.xlsx";
 
   // File path.
   readXlsxFile(file_path2).then(async (rows) => {
-    let n = rows.length;
+    const n = rows.length;
     for (let i = 1; i < n; i++) {
       // console.log(rows[i]);
-      let row = rows[i];
-      await prisma.municipality_code.create({
+      const row = rows[i];
+      await prisma.municipality_codes.create({
         data: {
           id: parseInt(row[0].toString()),
           ulbs: row[1].toString(),
@@ -84,7 +83,7 @@ async function main() {
 
   
   ///////////////// department ////////////////////////
-  function createRandomDepartment(): department {
+  function createRandomDepartment(): departments {
     return {
       id: faker.datatype.number(),
       name: faker.company.name(),
@@ -100,7 +99,7 @@ async function main() {
 
   let id=1;
   for (const item of departments) {
-    await prisma.department.create({
+    await prisma.departments.create({
       data: {
         id: id, //item.id,
         name: item.name,
@@ -113,7 +112,7 @@ async function main() {
   }
 
   ///////////////// Vendor Type ////////////////////////
-  function createRandomVendorType(): vendor_type {
+  function createRandomVendorType(): vendor_types {
     return {
       id: faker.datatype.number(),
       name: faker.company.name(),
@@ -129,7 +128,7 @@ async function main() {
 
   let iv=1;
   for (const item of vendorTypes) {
-    await prisma.vendor_type.create({
+    await prisma.vendor_types.create({
       data: {
         id: iv, //item.id,
         name: item.name,
@@ -142,7 +141,7 @@ async function main() {
   }
 
   ///////////////// Employee ////////////////////////
-  function createRandomEmployee(): employee {
+  function createRandomEmployee(): employees {
     return {
       id: faker.datatype.number(),
       name: faker.person.fullName(),
@@ -158,7 +157,7 @@ async function main() {
 
   let iid = 1;
   for (const item of employees) {
-    await prisma.employee.create({
+    await prisma.employees.create({
       data: {
         id: iid,
         name: item.name,
@@ -171,7 +170,7 @@ async function main() {
   }
 
   ///////////////// Bank Master ////////////////////////
-  function createRandomUser(): bank_master {
+  function createRandomUser(): bank_masters {
     return {
       id: faker.datatype.number(),
       bank_name: faker.company.name(),
@@ -195,7 +194,7 @@ async function main() {
   });
 
   for (const item of data) {
-    await prisma.bank_master.create({
+    await prisma.bank_masters.create({
       data: {
         id: item.id,
         bank_name: item.bank_name,
@@ -217,7 +216,7 @@ async function main() {
 
   
   ///////////////// cheque_book_entry ////////////////////////
-  function createRandomChequeBook(): cheque_book_entry {
+  function createRandomChequeBook(): cheque_book_entries {
     return {
       id: faker.datatype.number(),
       date: faker.date.recent(),
@@ -242,7 +241,7 @@ async function main() {
   });
 
   for (const item of chequeBooks) {
-    await prisma.cheque_book_entry.create({
+    await prisma.cheque_book_entries.create({
       data: {
         id: item.id,
         date: item.date,
@@ -265,7 +264,7 @@ async function main() {
 
 
   ///////////////// Vendor ////////////////////////
-  function createRandomVendor(): vendor_master {
+  function createRandomVendor(): vendor_masters {
     return {
       id: faker.datatype.number(),
       vendor_type_id: faker.datatype.number(),
@@ -296,7 +295,7 @@ async function main() {
   });
 
   for (const item of vendors) {
-    await prisma.vendor_master.create({
+    await prisma.vendor_masters.create({
       data: {
         id: item.id,
         vendor_type_id: 1,//item.vendor_type_id,

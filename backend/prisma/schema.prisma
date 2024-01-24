@@ -11,7 +11,7 @@ datasource db {
 }
 
 //// Primary Accounting Code
-model account_code {
+model account_codes {
   id          Int      @id @default(autoincrement())
   major_head  String
   minor_head  String
@@ -23,7 +23,7 @@ model account_code {
 }
 
 //// Function Code
-model function_code {
+model function_codes {
   id               Int      @id @default(autoincrement())
   group            String
   description_code String
@@ -35,7 +35,7 @@ model function_code {
 }
 
 //// Municipality Code
-model municipality_code {
+model municipality_codes {
   id            Int      @id @default(autoincrement())
   ulbs          String
   district      String
@@ -49,7 +49,7 @@ model municipality_code {
 }
 
 /// BankMaster
-model bank_master {
+model bank_masters {
   id                  Int      @id @default(autoincrement())
   bank_name           String
   ifsc_code           String
@@ -68,9 +68,9 @@ model bank_master {
 
 ///// Vendor Master
 
-model vendor_master {
+model vendor_masters {
   id               Int         @id @default(autoincrement())
-  vendor_type      vendor_type @relation(fields: [vendor_type_id], references: [id])
+  vendor_type      vendor_types @relation(fields: [vendor_type_id], references: [id])
   vendor_type_id   Int
   vendor_no        String
   name             String
@@ -80,7 +80,7 @@ model vendor_master {
   pan_no           String
   bank_name        String
   ifsc_code        String
-  department       department  @relation(fields: [department_id], references: [id])
+  department       departments  @relation(fields: [department_id], references: [id])
   department_id    Int
   email            String
   office_address   String
@@ -95,23 +95,23 @@ model vendor_master {
 }
 
 //// Vendor Type
-model vendor_type {
+model vendor_types {
   id         Int             @id @default(autoincrement())
   name       String
   remark     String?
-  vendors    vendor_master[]
+  vendors    vendor_masters[]
   created_at DateTime        @default(now()) @map("created_at")
   updated_at DateTime        @updatedAt @map("updated_at")
 }
 
 //// Cheque Book Entry
-model cheque_book_entry {
+model cheque_book_entries {
   id                      Int      @id @default(autoincrement())
   date                    DateTime
   bank_name               String
   bank_account_no         String
   cheque_no_from          String
-  employee                employee @relation(fields: [employee_id], references: [id])
+  employee                employees @relation(fields: [employee_id], references: [id])
   employee_id             Int
   bank_branch             String
   page_count              String
@@ -125,21 +125,21 @@ model cheque_book_entry {
 }
 
 /// Department
-model department {
+model departments {
   id         Int             @id @default(autoincrement())
   name       String
   remark     String?
-  vendors    vendor_master[]
+  vendors    vendor_masters[]
   created_at DateTime        @default(now()) @map("created_at")
   updated_at DateTime        @updatedAt @map("updated_at")
 }
 
 /// Employee
-model employee {
+model employees {
   id                  Int                 @id @default(autoincrement())
   name                String
   email               String
-  cheque_book_entries cheque_book_entry[]
+  cheque_book_entries cheque_book_entries[]
   created_at          DateTime            @default(now()) @map("created_at")
   updated_at          DateTime            @updatedAt @map("updated_at")
 }

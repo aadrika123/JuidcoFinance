@@ -22,6 +22,18 @@ class FunCodeController {
     try {
       const data = await this.funCodeDao.get(Number(req.query.page), Number(req.query.limit));
 
+      if(!data)
+      return sendResponse(
+        true,
+        "Function Code Not Found!!",
+        data,
+        404,
+        "GET",
+        "0201",
+        "1.0",
+        res
+      );
+
       return sendResponse(
         true,
         "Function Code Found Successfully!!",

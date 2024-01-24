@@ -60,7 +60,20 @@ class VendorMasterController {
   // get all vendor
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.vendorMasterDao.get(Number(req.query.page), Number(req.query.limit));
+      const data = await this.vendorMasterDao.get(req);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor Data Not Found",
+          data,
+          404,
+          "GET",
+          "0702",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Vendor Data fetched successfully",
@@ -90,6 +103,19 @@ class VendorMasterController {
     try {
       const id: number = Number(req.params.vendorId);
       const data = await this.vendorMasterDao.getById(id);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor Not Found",
+          data,
+          404,
+          "GET",
+          "0703",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
         "Vendor find successfully",
@@ -131,7 +157,7 @@ class VendorMasterController {
           res
         );
 
-      const data = await this.vendorMasterDao.store(req);
+      const data = await this.vendorMasterDao.update(req);
 
       return sendResponse(
         true,
@@ -151,6 +177,47 @@ class VendorMasterController {
         500,
         "PATCH",
         "0704",
+        "1.0",
+        res
+      );
+    }
+  };
+
+  // Search bank list
+  search = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await this.vendorMasterDao.search(req);
+
+      if (!data)
+        return sendResponse(
+          true,
+          "Vendor List Not Found!!",
+          data,
+          404,
+          "GET",
+          "0705",
+          "1.0",
+          res
+        );
+
+      return sendResponse(
+        true,
+        "Vendor List Found Successfully!!",
+        data,
+        200,
+        "GET",
+        "0705",
+        "1.0",
+        res
+      );
+    } catch (error: any) {
+      return sendResponse(
+        false,
+        error.message,
+        error.code,
+        500,
+        "GET",
+        "0705",
         "1.0",
         res
       );
