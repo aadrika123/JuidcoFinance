@@ -1,11 +1,11 @@
 import PageLayout from "@/components/Layouts/PageLayout";
-import { SubLedgure } from "@/components/Masters/ChartsOfAccount/Index";
+import { HeroAddVendor } from "@/components/Masters/VendorMaster/AddVendor/Index";
 import React from "react";
 
 export default function Home() {
   return (
     <PageLayout>
-      <SubLedgure />
+      <HeroAddVendor />
     </PageLayout>
   );
 }

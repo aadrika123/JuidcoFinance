@@ -1,14 +1,8 @@
-"use client";
-
 import React from "react";
 import ReceiptEntryHeader from "./Header/ReceiptEntryHeader";
 import ReceiptList from "./ReceiptList/ReceiptList";
 
-
-
-
 export const HeroReceiptEntry = () => {
-  
   return (
     <>
       <section>

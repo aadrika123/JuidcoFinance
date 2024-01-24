@@ -29,18 +29,18 @@ export const sidebarLinks: SidebarLinksProps = {
           path: "/",
           subModules: [
             { moduleName: "  Charts of Account", path: "/" },
-            { moduleName: "Bank Masters", path: "/bank-master" },
+            { moduleName: "Bank Masters", path: "/masters/bank-master" },
             {
               moduleName: "Vendor Masters",
-              path: "/vendor-master",
+              path: "/masters/vendor-master",
             },
             {
               moduleName: "Work Order Entry",
-              path: "/workorder",
+              path: "/masters/workorder",
             },
             {
               moduleName: "Cheque Book Entry",
-              path: "/chequebook-master",
+              path: "/masters/chequebook-master",
             },
           ],
         },

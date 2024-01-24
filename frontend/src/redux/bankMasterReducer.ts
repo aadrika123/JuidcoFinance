@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import type { AccountTableData } from "@/utils/types/types";
-
+import type { AccountTableData } from "@/utils/types/bank_master_types";
 
 interface BankMasterState {
   bankDetails: AccountTableData[];

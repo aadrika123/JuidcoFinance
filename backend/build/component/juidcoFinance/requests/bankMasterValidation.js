@@ -18,7 +18,11 @@ exports.bankMasterValidation = joi_1.default.object({
     branch_district: joi_1.default.string().required(),
     email: joi_1.default.string().email().required(),
     contact_no: joi_1.default.string().required(),
+<<<<<<< HEAD
     contact_person_name: joi_1.default.string().required(),
+=======
+    contact_person_name: joi_1.default.string().required()
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
 });
 // arrange request data for store and update
 const requestData = (req) => {

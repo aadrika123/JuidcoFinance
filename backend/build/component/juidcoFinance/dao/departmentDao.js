@@ -18,8 +18,8 @@ class DepartmentDao {
             const data = prisma.departments.findMany({
                 select: {
                     id: true,
-                    name: true
-                }
+                    name: true,
+                },
             });
             return (0, generateRes_1.generateRes)(data);
         });

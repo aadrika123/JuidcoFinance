@@ -17,6 +17,27 @@ class VendorMasterDao {
     constructor() {
         // Add new vendor in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
+<<<<<<< HEAD
+=======
+            const requestData = {
+                vendor_type_id: req.body.vendor_type_id,
+                vendor_no: req.body.vendor_no,
+                name: req.body.name,
+                mobile_no: req.body.mobile_no,
+                comm_address: req.body.comm_address,
+                tin_no: req.body.tin_no,
+                pan_no: req.body.pan_no,
+                bank_name: req.body.bank_name,
+                ifsc_code: req.body.ifsc_code,
+                department_id: req.body.department_id,
+                email: req.body.email,
+                office_address: req.body.office_address,
+                gst_no: req.body.gst_no,
+                aadhar_no: req.body.aadhar_no,
+                bank_account_no: req.body.bank_account_no,
+                bank_branch_name: req.body.bank_branch_name,
+            };
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.vendor_masters.create({
                 data: (0, vendorMasterValidation_1.vendorRequestData)(req),
             });
@@ -112,6 +133,27 @@ class VendorMasterDao {
         //update vendor master data
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
+<<<<<<< HEAD
+=======
+            const requestData = {
+                vendor_type_id: req.body.vendor_type_id,
+                vendor_no: req.body.vendor_no,
+                name: req.body.name,
+                mobile_no: req.body.mobile_no,
+                comm_address: req.body.comm_address,
+                tin_no: req.body.tin_no,
+                pan_no: req.body.pan_no,
+                bank_name: req.body.bank_name,
+                ifsc_code: req.body.ifsc_code,
+                department_id: req.body.department_id,
+                email: req.body.email,
+                office_address: req.body.office_address,
+                gst_no: req.body.gst_no,
+                aadhar_no: req.body.aadhar_no,
+                bank_account_no: req.body.bank_account_no,
+                bank_branch_name: req.body.bank_branch_name,
+            };
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.vendor_masters.update({
                 where: {
                     id,
