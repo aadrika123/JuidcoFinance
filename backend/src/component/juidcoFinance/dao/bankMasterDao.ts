@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { BankRequestData } from "../../../util/types";
 import { generateRes } from "../../../util/generateRes";
+import { requestData } from "../requests/bankMasterValidation";
 
 const prisma = new PrismaClient();
 
@@ -12,22 +12,8 @@ class BankMasterDao {
 
   // store bank details in DB
   store = async (req: Request) => {
-    const requestData: BankRequestData = {
-      bank_name: req.body.bankName,
-      ifsc_code: req.body.ifscCode,
-      branch: req.body.branch,
-      micr_code: req.body.micrCode,
-      branch_address: req.body.branchAddress,
-      branch_city: req.body.branchCity,
-      branch_state: req.body.branchState,
-      branch_district: req.body.branchDistrict,
-      email: req.body.email,
-      contact_no: req.body.contactNo,
-      contact_person_name: req.body.contactPersonName,
-    };
-
     return await prisma.bank_masters.create({
-      data: requestData,
+      data: requestData(req),
     });
   };
 
@@ -95,24 +81,11 @@ class BankMasterDao {
   // Update bank details
   update = async (req: Request) => {
     const id: number = req.body.id;
-    const requestData: BankRequestData = {
-      bank_name: req.body.bankName,
-      ifsc_code: req.body.ifscCode,
-      branch: req.body.branch,
-      micr_code: req.body.micrCode,
-      branch_address: req.body.branchAddress,
-      branch_city: req.body.branchCity,
-      branch_state: req.body.branchState,
-      branch_district: req.body.branchDistrict,
-      email: req.body.email,
-      contact_no: req.body.contactNo,
-      contact_person_name: req.body.contactPersonName,
-    };
     return await prisma.bank_masters.update({
       where: {
         id: id,
       },
-      data: requestData,
+      data: requestData(req),
     });
   };
 
