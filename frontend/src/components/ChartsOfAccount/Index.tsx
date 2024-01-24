@@ -12,6 +12,7 @@ import FunctionCode from "./FunctionCode/HeroFunctionCode";
 import { useQuery } from "react-query";
 import Loader from "../Helpers/Basic/Loader";
 import type {
+  ChartsOfAccountsProps,
   AccountingTableData,
   FunctionTableData,
   MuncipalityTableData,
@@ -19,9 +20,9 @@ import type {
 // ---- TYPES ----//
 
 type TableData =
-  | AccountingTableData[]
-  | FunctionTableData[]
-  | MuncipalityTableData[];
+  | ChartsOfAccountsProps<AccountingTableData>
+  | ChartsOfAccountsProps<FunctionTableData>
+  | ChartsOfAccountsProps<MuncipalityTableData>;
 // ---- TYPES ----//
 
 export const SubLedgure = () => {
@@ -52,11 +53,10 @@ export const SubLedgure = () => {
     page: number = 1
   ): Promise<T> => {
     const res = await axios({
-      url: `/api/finance/${endpoint}?limit=10&page=${page}`,
+      url: `/${endpoint}?limit=10&page=${page}`,
       method: "GET",
     });
-
-    return res.data?.data?.data as T;
+    return res.data?.data as T;
   };
 
   const useCodeQuery = <T extends TableData>(
@@ -72,21 +72,30 @@ export const SubLedgure = () => {
     data: accountingCode,
     isError: accountingError,
     isLoading: accountingLoading,
-  } = useCodeQuery<AccountingTableData[]>("account-codes", accountingPage);
+  } = useCodeQuery<ChartsOfAccountsProps<AccountingTableData>>(
+    "get-account-code",
+    accountingPage
+  );
 
   // QUERYING FUNCTION CODE
   const {
     data: functionCode,
     isError: functionError,
     isLoading: functionLoading,
-  } = useCodeQuery<FunctionTableData[]>("function-codes", functionPage);
+  } = useCodeQuery<ChartsOfAccountsProps<FunctionTableData>>(
+    "get-fun-code",
+    functionPage
+  );
 
   // QUERYING MUNCIPALITY CODE
   const {
     data: muncipalityCode,
     isError: muncipalityError,
     isLoading: muncipalityLoading,
-  } = useCodeQuery<MuncipalityTableData[]>("municipality-codes", muncipalPage);
+  } = useCodeQuery<ChartsOfAccountsProps<MuncipalityTableData>>(
+    "get-munci-code",
+    muncipalPage
+  );
   //// ------------- Query Functions ----------------//
 
   if (accountingError || muncipalityError || functionError) {
@@ -148,10 +157,14 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <PrimaryAccountingCode
-              data={accountingCode || []}
+              data={accountingCode?.data || []}
               nextPage={() => handlePageChangeAccounting("next")}
               prevPage={() => handlePageChangeAccounting("prev")}
-              page={accountingPage}
+              pages={{
+                page: accountingPage,
+                totalPage: accountingCode?.totalPage ?? 1,
+                currentPage: accountingCode?.currentPage ?? 1,
+              }}
             />
           )
         ) : tabIndex === 2 ? (
@@ -159,20 +172,28 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <FunctionCode
-              data={functionCode || []}
+              data={functionCode?.data || []}
               nextPage={() => handlePageChangeFunctionCode("next")}
               prevPage={() => handlePageChangeFunctionCode("prev")}
-              page={functionPage}
+              pages={{
+                page: functionPage,
+                totalPage: functionCode?.totalPage ?? 1,
+                currentPage: functionCode?.currentPage ?? 1,
+              }}
             />
           )
         ) : muncipalityLoading ? (
           <Loader />
         ) : (
           <HeroMuncipalityCode
-            data={muncipalityCode || []}
+            data={muncipalityCode?.data || []}
             nextPage={() => handlePageChangeMuncipality("next")}
             prevPage={() => handlePageChangeMuncipality("prev")}
-            page={muncipalPage}
+            pages={{
+              page: muncipalPage,
+              totalPage: muncipalityCode?.totalPage ?? 1,
+              currentPage: muncipalityCode?.currentPage ?? 1,
+            }}
           />
         )}
       </section>

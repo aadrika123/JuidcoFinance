@@ -14,7 +14,46 @@ import { Formik } from "formik";
 import PrimaryButton from "../Helpers/Button";
 import { addBankDetails } from "@/redux/bankMasterReducer";
 import { useDispatch } from "react-redux";
-import type { AddBankDetailsData, AccountTableData } from "@/utils/types/types";
+import type {
+  AddBankDetailsData,
+  AccountTableData,
+  BankMasterProps,
+} from "@/utils/types/bank_master_types";
+
+// ----- FORMIK & YUP FORM VAIDATION ---------- //
+export const AddBankDetailsSchema = Yup.object().shape({
+  bankName: Yup.string().required("Bank Name is required"),
+  ifscCode: Yup.string().required("IFSC Code is required"),
+  branch: Yup.string().required("Branch Name is required"),
+  micrCode: Yup.string().required("Micr Code is required"),
+  branchAddress: Yup.string().required("Branch Address is required"),
+  branchCity: Yup.string().required("Branch City is required"),
+  branchState: Yup.string().required("Branch State is required"),
+  branchDistrict: Yup.string().required("Branch District is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  contactNo: Yup.string()
+    .matches(/^\d{10}$/, "Invalid phone number")
+    .required("Contact Number is required"),
+  contactPersonName: Yup.string().required("Contact Person Name is required"),
+});
+
+export const initialBankDetailsValues = {
+  bankName: "",
+  ifscCode: "",
+  branch: "",
+  micrCode: "",
+  branchAddress: "",
+  branchCity: "",
+  branchState: "",
+  branchDistrict: "",
+  email: "",
+  contactNo: "",
+  contactPersonName: "",
+};
+
+// ----- FORMIK & YUP FORM VAIDATION ---------- //
 
 export const HeroBankMasters = () => {
   const [page, setPage] = useState<number>(1);
@@ -37,20 +76,25 @@ export const HeroBankMasters = () => {
 
   const queryClient = useQueryClient();
 
-  const fetchBankData = async (): Promise<AccountTableData[]> => {
+  const fetchBankData = async (): Promise<
+    BankMasterProps<AccountTableData>
+  > => {
     const res = await axios({
-      url: `/api/finance/bank-list?limit=10&page=${page}`,
+      url: `bank-master/get-all?limit=10&page=${page}`,
       method: "GET",
     });
-    return res.data?.data?.data;
+    return res.data?.data as BankMasterProps<AccountTableData>;
   };
 
   const {
-    data: accountListData = [],
+    data: accountListData,
     isError: bankAccountError,
     isLoading: bankAccountLoading,
   } = useQuery(["bank-list", page], fetchBankData);
-  dispatch(addBankDetails(accountListData));
+
+  if (accountListData?.data) {
+    dispatch(addBankDetails(accountListData?.data ?? []));
+  }
 
   if (bankAccountError) {
     throw new Error("some error occurred");
@@ -61,7 +105,7 @@ export const HeroBankMasters = () => {
     values: AddBankDetailsData
   ): Promise<AddBankDetailsData> => {
     const res = await axios({
-      url: `/api/finance/add-bank-details`,
+      url: `/bank-master/create`,
       method: "POST",
       data: values,
     });
@@ -80,40 +124,6 @@ export const HeroBankMasters = () => {
       queryClient.invalidateQueries("create");
     },
   });
-  // ----- FORMIK & YUP FORM VAIDATION ---------- //
-  const AddBankDetailsSchema = Yup.object().shape({
-    bankName: Yup.string().required("Bank Name is required"),
-    ifscCode: Yup.string().required("IFSC Code is required"),
-    branch: Yup.string().required("Branch Name is required"),
-    micrCode: Yup.string().required("Micr Code is required"),
-    branchAddress: Yup.string().required("Branch Address is required"),
-    branchCity: Yup.string().required("Branch City is required"),
-    branchState: Yup.string().required("Branch State is required"),
-    branchDistrict: Yup.string().required("Branch District is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    contactNo: Yup.string()
-      .matches(/^\d{10}$/, "Invalid phone number")
-      .required("Contact Number is required"),
-    contactPersonName: Yup.string().required("Contact Person Name is required"),
-  });
-
-  const initialBankDetailsValues = {
-    bankName: "",
-    ifscCode: "",
-    branch: "",
-    micrCode: "",
-    branchAddress: "",
-    branchCity: "",
-    branchState: "",
-    branchDistrict: "",
-    email: "",
-    contactNo: "",
-    contactPersonName: "",
-  };
-
-  // ----- FORMIK & YUP FORM VAIDATION ---------- //
 
   return (
     <>
@@ -280,7 +290,11 @@ export const HeroBankMasters = () => {
           <AccountList
             nextPage={() => handlePageChangeAccountList("next")}
             prevPage={() => handlePageChangeAccountList("prev")}
-            page={page}
+            pages={{
+              page: page,
+              totalPage: accountListData?.totalPage ?? 1,
+              currentPage: accountListData?.currentPage ?? 1,
+            }}
           />
         )}
       </section>
