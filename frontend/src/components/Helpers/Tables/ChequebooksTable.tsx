@@ -10,7 +10,6 @@ const ChequebooksTable: React.FC = () => {
     (state: RootState) => state.chequebookDetails.chequebookDetails
   );
 
-  console.log(chequebookData);
   return (
     <>
       <div className="overflow-x-auto border-[2px] border-zinc-400">
@@ -116,6 +115,7 @@ const ChequebooksTable: React.FC = () => {
               </th>
             </tr>
           </thead>
+          {chequebookData.length > 0? (
           <tbody className="">
             {chequebookData?.map((d, index: number) => (
               <tr key={index} className="border border-zinc-400 text-secondary">
@@ -140,7 +140,7 @@ const ChequebooksTable: React.FC = () => {
                 {/* account number */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.bank_account_number}</div>
+                    <div className="flex justify-center">{d?.bank_account_no}</div>
                   </div>
                 </td>
 
@@ -161,7 +161,7 @@ const ChequebooksTable: React.FC = () => {
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.employee_name}</div>
+                    <div className="flex justify-center">{d?.employee.name}</div>
                   </div>
                 </td>
 
@@ -221,8 +221,12 @@ const ChequebooksTable: React.FC = () => {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </tbody>): (<tbody><tr><td colSpan={11} className="text-center text-2xl">
+            
+              No Records
+            </td></tr></tbody>)}
         </table>
+        
       </div>
     </>
   );
