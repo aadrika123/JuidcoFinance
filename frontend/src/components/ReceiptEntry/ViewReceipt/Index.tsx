@@ -2,23 +2,22 @@
 
 import React from "react";
 import axios from "@/lib/axiosConfig";
-import { useMutation } from "react-query";
+import { useMutation} from "react-query";
 import { Formik } from "formik";
 import { SubHeading } from "@/components/Helpers/Heading";
 import InputBox from "@/components/Helpers/InputBox";
 import * as Yup from "yup";
-import type { AddChequebookDetailsData } from "@/utils/types/chequebook_master_types";
+import type { AddReceiptDetailsData } from "@/utils/types/receipt_entry_types";
 import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
+import PaymentModeRadioButtonSet from "@/components/Helpers/PaymentModeRadioButtonSet";
 
-export const HeroAddChequebook = () => {
+export const HeroViewReceipt = ({receiptId}: {receiptId:string}) => {
   
-
-
     // Add Bank Details
     const createBankDetails = async (
-      values: AddChequebookDetailsData
-    ): Promise<AddChequebookDetailsData> => {
+      values: AddReceiptDetailsData
+    ): Promise<AddReceiptDetailsData> => {
       const res = await axios({
         url: `/api/finance/add-bank-details`,
         method: "POST",
@@ -40,7 +39,7 @@ export const HeroAddChequebook = () => {
       },
     });
     // ----- FORMIK & YUP FORM VAIDATION ---------- //
-    const AddCheckbookDetailsSchema = Yup.object().shape({
+    const AddReceiptDetailsSchema = Yup.object().shape({
       bankName: Yup.string().required("Bank Name is required"),
       ifscCode: Yup.string().required("IFSC Code is required"),
       branch: Yup.string().required("Branch Name is required"),
@@ -58,7 +57,7 @@ export const HeroAddChequebook = () => {
       contactPersonName: Yup.string().required("Contact Person Name is required"),
     });
   
-    const initialChequebookDetails = {
+    const initialReceiptDetails = {
       bankName: "",
       ifscCode: "",
       branch: "",
@@ -81,14 +80,14 @@ export const HeroAddChequebook = () => {
      
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="flex justify-between">
-        <SubHeading>Add Chequebook</SubHeading>
+        <SubHeading>View/Edit Receipt</SubHeading>
       </div>
 
       
       <div className="mt-8">
       <Formik
-                  initialValues={initialChequebookDetails}
-                  validationSchema={AddCheckbookDetailsSchema}
+                  initialValues={initialReceiptDetails}
+                  validationSchema={AddReceiptDetailsSchema}
                   onSubmit={(values) => {
                     console.log(values);
                     mutate(values);
@@ -110,7 +109,7 @@ export const HeroAddChequebook = () => {
                           value={values.bankName}
                           error={errors.bankName}
                           touched={touched.bankName}
-                          label="Date"
+                          label="Reciept Date"
                           name="bankName"
                         />
                         <InputBox
@@ -119,7 +118,7 @@ export const HeroAddChequebook = () => {
                           value={values.ifscCode}
                           error={errors.ifscCode}
                           touched={touched.ifscCode}
-                          label="Issuer Name"
+                          label="Email Id"
                           name="ifscCode"
                         />
                         <InputBox
@@ -128,7 +127,7 @@ export const HeroAddChequebook = () => {
                           value={values.branch}
                           error={errors.branch}
                           touched={touched.branch}
-                          label="Name of the bank"
+                          label="Reference No"
                           name="branch"
                         />
                         <InputBox
@@ -137,7 +136,7 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="Employee Name"
+                          label="Module"
                           name="micrCode"
                         />
                         <InputBox
@@ -146,7 +145,7 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="Bank Branch Name"
+                          label="Paid By"
                           name="micrCode"
                         />
                         <InputBox
@@ -155,7 +154,7 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="Chequebook No From"
+                          label="Receipt Type"
                           name="micrCode"
                         />
                         <InputBox
@@ -164,7 +163,7 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="Bank Account No"
+                          label="Reference Date"
                           name="micrCode"
                         />
                         <InputBox
@@ -173,7 +172,7 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="Chequebook No To"
+                          label="Mobile No"
                           name="micrCode"
                         />
                         <InputBox
@@ -182,7 +181,7 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="IFSC Code"
+                          label="Administration Ward"
                           name="micrCode"
                         />
                         <InputBox
@@ -191,9 +190,18 @@ export const HeroAddChequebook = () => {
                           value={values.micrCode}
                           error={errors.micrCode}
                           touched={touched.micrCode}
-                          label="Number of Pages"
+                          label="Narration"
                           name="micrCode"
                         />
+
+                          <PaymentModeRadioButtonSet
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          name="paymentMode"
+                          label="Select Mode of Payment"
+                          value="Cash"
+                          />
+  
                         </div>
                         
                       <div className="mt-4 flex items-center gap-5 justify-end">
