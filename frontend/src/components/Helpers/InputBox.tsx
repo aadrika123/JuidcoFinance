@@ -4,7 +4,7 @@ interface InputBoxProps {
   label: React.ReactNode;
   name: string;
   data?: string[];
-  value: string | number;
+  value: string | number | undefined;
   error?: string | undefined;
   touched?: boolean | undefined;
   onChange: (e?: React.ChangeEvent<HTMLInputElement>) => void;

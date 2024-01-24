@@ -4,15 +4,15 @@ import { generateRes } from "../../../util/generateRes";
 const prisma = new PrismaClient();
 
 class DepartmentDao {
-get = async () => {
+  get = async () => {
     const data = prisma.departments.findMany({
-        select:{
-            id:true, 
-            name:true
-        }
+      select: {
+        id: true,
+        name: true,
+      },
     });
     return generateRes(data);
-}
+  };
 }
 
 export default DepartmentDao;

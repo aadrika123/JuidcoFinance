@@ -17,17 +17,17 @@ class BankMasterDao {
         // store bank details in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
             const requestData = {
-                bank_name: req.body.bankName,
-                ifsc_code: req.body.ifscCode,
+                bank_name: req.body.bank_name,
+                ifsc_code: req.body.ifsc_code,
                 branch: req.body.branch,
-                micr_code: req.body.micrCode,
-                branch_address: req.body.branchAddress,
-                branch_city: req.body.branchCity,
-                branch_state: req.body.branchState,
-                branch_district: req.body.branchDistrict,
+                micr_code: req.body.micr_code,
+                branch_address: req.body.branch_address,
+                branch_city: req.body.branch_city,
+                branch_state: req.body.branch_state,
+                branch_district: req.body.branch_district,
                 email: req.body.email,
-                contact_no: req.body.contactNo,
-                contact_person_name: req.body.contactPersonName,
+                contact_no: req.body.contact_no,
+                contact_person_name: req.body.contact_person_name,
             };
             return yield prisma.bank_masters.create({
                 data: requestData,
@@ -93,17 +93,17 @@ class BankMasterDao {
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
             const requestData = {
-                bank_name: req.body.bankName,
-                ifsc_code: req.body.ifscCode,
+                bank_name: req.body.bank_name,
+                ifsc_code: req.body.ifsc_code,
                 branch: req.body.branch,
-                micr_code: req.body.micrCode,
-                branch_address: req.body.branchAddress,
-                branch_city: req.body.branchCity,
-                branch_state: req.body.branchState,
-                branch_district: req.body.branchDistrict,
+                micr_code: req.body.micr_code,
+                branch_address: req.body.branch_address,
+                branch_city: req.body.branch_city,
+                branch_state: req.body.branch_state,
+                branch_district: req.body.branch_district,
                 email: req.body.email,
-                contact_no: req.body.contactNo,
-                contact_person_name: req.body.contactPersonName,
+                contact_no: req.body.contact_no,
+                contact_person_name: req.body.contact_person_name,
             };
             return yield prisma.bank_masters.update({
                 where: {

@@ -6,23 +6,17 @@ export type AccountTableData = {
   branch: string;
 };
 
-export type BankMasterProps<T> = {
-  currentPage: number;
-  count: number;
-  totalPage: number;
-  data: T[];
-};
-
 export interface AddBankDetailsData {
-  bankName: string;
-  ifscCode: string;
+  id?: number;
+  bank_name: string;
+  ifsc_code: string;
   branch: string;
-  micrCode: string;
-  branchAddress: string;
-  branchCity: string;
-  branchState: string;
-  branchDistrict: string;
+  micr_code: string;
+  branch_address: string;
+  branch_city: string;
+  branch_state: string;
+  branch_district: string;
   email: string;
-  contactNo: string;
-  contactPersonName: string;
+  contact_no: string;
+  contact_person_name: string;
 }

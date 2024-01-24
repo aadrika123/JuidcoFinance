@@ -2,16 +2,16 @@ import Joi from "joi";
 
 export const bankMasterValidation = Joi.object({
     id: Joi.number(),
-    bankName: Joi.string().required(),
-    ifscCode: Joi.string().required(),
+    bank_name: Joi.string().required(),
+    ifsc_code: Joi.string().required(),
     branch: Joi.string().required(),
-    micrCode: Joi.string().required(),
-    branchAddress: Joi.string().required(),
-    branchCity: Joi.string().required(),
-    branchState: Joi.string().required(),
-    branchDistrict: Joi.string().required(),
+    micr_code: Joi.string().required(),
+    branch_address: Joi.string().required(),
+    branch_city: Joi.string().required(),
+    branch_state: Joi.string().required(),
+    branch_district: Joi.string().required(),
     email: Joi.string().email().required(),
-    contactNo: Joi.string().required(),
-    contactPersonName: Joi.string().required()
+    contact_no: Joi.string().required(),
+    contact_person_name: Joi.string().required()
 });
 

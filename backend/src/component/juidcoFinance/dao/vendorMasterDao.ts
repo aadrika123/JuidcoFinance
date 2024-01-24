@@ -9,22 +9,22 @@ class VendorMasterDao {
   // Add new vendor in DB
   store = async (req: Request) => {
     const requestData: VendorRequestData = {
-      vendor_type_id: req.body.vendorTypeId,
-      vendor_no: req.body.vendorNo,
+      vendor_type_id: req.body.vendor_type_id,
+      vendor_no: req.body.vendor_no,
       name: req.body.name,
-      mobile_no: req.body.mobileNo,
-      comm_address: req.body.commAddress,
-      tin_no: req.body.tinNo,
-      pan_no: req.body.panNo,
-      bank_name: req.body.bankName,
-      ifsc_code: req.body.ifscCode,
-      department_id: req.body.departmentId,
+      mobile_no: req.body.mobile_no,
+      comm_address: req.body.comm_address,
+      tin_no: req.body.tin_no,
+      pan_no: req.body.pan_no,
+      bank_name: req.body.bank_name,
+      ifsc_code: req.body.ifsc_code,
+      department_id: req.body.department_id,
       email: req.body.email,
-      office_address: req.body.officeAddress,
-      gst_no: req.body.gstNo,
-      aadhar_no: req.body.aadharNo,
-      bank_account_no: req.body.bankAccountNo,
-      bank_branch_name: req.body.bankBranchName,
+      office_address: req.body.office_address,
+      gst_no: req.body.gst_no,
+      aadhar_no: req.body.aadhar_no,
+      bank_account_no: req.body.bank_account_no,
+      bank_branch_name: req.body.bank_branch_name,
     };
 
     return await prisma.vendor_masters.create({
@@ -131,22 +131,22 @@ class VendorMasterDao {
     const id: number = req.body.id;
 
     const requestData: VendorRequestData = {
-      vendor_type_id: req.body.vendorTypeId,
-      vendor_no: req.body.vendorNo,
+      vendor_type_id: req.body.vendor_type_id,
+      vendor_no: req.body.vendor_no,
       name: req.body.name,
-      mobile_no: req.body.mobileNo,
-      comm_address: req.body.commAddress,
-      tin_no: req.body.tinNo,
-      pan_no: req.body.panNo,
-      bank_name: req.body.bankName,
-      ifsc_code: req.body.ifscCode,
-      department_id: req.body.departmentId,
+      mobile_no: req.body.mobile_no,
+      comm_address: req.body.comm_address,
+      tin_no: req.body.tin_no,
+      pan_no: req.body.pan_no,
+      bank_name: req.body.bank_name,
+      ifsc_code: req.body.ifsc_code,
+      department_id: req.body.department_id,
       email: req.body.email,
-      office_address: req.body.officeAddress,
-      gst_no: req.body.gstNo,
-      aadhar_no: req.body.aadharNo,
-      bank_account_no: req.body.bankAccountNo,
-      bank_branch_name: req.body.bankBranchName,
+      office_address: req.body.office_address,
+      gst_no: req.body.gst_no,
+      aadhar_no: req.body.aadhar_no,
+      bank_account_no: req.body.bank_account_no,
+      bank_branch_name: req.body.bank_branch_name,
     };
 
     return await prisma.vendor_masters.update({
