@@ -11,26 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const generateRes_1 = require("../../../util/generateRes");
+const bankMasterValidation_1 = require("../requests/bankMasterValidation");
 const prisma = new client_1.PrismaClient();
 class BankMasterDao {
     constructor() {
         // store bank details in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
-            const requestData = {
-                bank_name: req.body.bankName,
-                ifsc_code: req.body.ifscCode,
-                branch: req.body.branch,
-                micr_code: req.body.micrCode,
-                branch_address: req.body.branchAddress,
-                branch_city: req.body.branchCity,
-                branch_state: req.body.branchState,
-                branch_district: req.body.branchDistrict,
-                email: req.body.email,
-                contact_no: req.body.contactNo,
-                contact_person_name: req.body.contactPersonName,
-            };
             return yield prisma.bank_masters.create({
-                data: requestData,
+                data: (0, bankMasterValidation_1.requestData)(req),
             });
         });
         // Get limited bank master
@@ -92,24 +80,11 @@ class BankMasterDao {
         // Update bank details
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
-            const requestData = {
-                bank_name: req.body.bankName,
-                ifsc_code: req.body.ifscCode,
-                branch: req.body.branch,
-                micr_code: req.body.micrCode,
-                branch_address: req.body.branchAddress,
-                branch_city: req.body.branchCity,
-                branch_state: req.body.branchState,
-                branch_district: req.body.branchDistrict,
-                email: req.body.email,
-                contact_no: req.body.contactNo,
-                contact_person_name: req.body.contactPersonName,
-            };
             return yield prisma.bank_masters.update({
                 where: {
                     id: id,
                 },
-                data: requestData,
+                data: (0, bankMasterValidation_1.requestData)(req),
             });
         });
         // Search bank details

@@ -182,47 +182,6 @@ class VendorMasterController {
       );
     }
   };
-
-  // Search bank list
-  search = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const data = await this.vendorMasterDao.search(req);
-
-      if (!data)
-        return sendResponse(
-          true,
-          "Vendor List Not Found!!",
-          data,
-          404,
-          "GET",
-          "0705",
-          "1.0",
-          res
-        );
-
-      return sendResponse(
-        true,
-        "Vendor List Found Successfully!!",
-        data,
-        200,
-        "GET",
-        "0705",
-        "1.0",
-        res
-      );
-    } catch (error: any) {
-      return sendResponse(
-        false,
-        error.message,
-        error.code,
-        500,
-        "GET",
-        "0705",
-        "1.0",
-        res
-      );
-    }
-  };
 }
 
 export default VendorMasterController;

@@ -74,18 +74,6 @@ class VendorMasterController {
                 return (0, sendResponse_1.sendResponse)(false, "Vendor updated successfully", error.message, 500, "PATCH", "0704", "1.0", res);
             }
         });
-        // Search bank list
-        this.search = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const data = yield this.vendorMasterDao.search(req);
-                if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Vendor List Not Found!!", data, 404, "GET", "0705", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Vendor List Found Successfully!!", data, 200, "GET", "0705", "1.0", res);
-            }
-            catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0705", "1.0", res);
-            }
-        });
         this.vendorMasterDao = new vendorMasterDao_1.default();
     }
 }

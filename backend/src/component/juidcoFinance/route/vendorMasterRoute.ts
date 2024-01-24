@@ -23,10 +23,6 @@ class VendorMasterRoute {
     app
       .route(`${baseUrl}/vendor-master/update`)
       .post(this.vendorMasterController.update); // 0704
-
-      app
-      .route(`${baseUrl}/vendor-master/search`)
-      .get(this.vendorMasterController.search); // 0705
   }
 }
 
