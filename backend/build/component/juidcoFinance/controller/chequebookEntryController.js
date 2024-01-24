@@ -17,22 +17,32 @@ const chequebookEntryDao_1 = __importDefault(require("../dao/chequebookEntryDao"
 /**
  * | Author- Bijoy Paitandi
  * | Created On- 24-01-2024
- * | Created for- Chequebook Entry Controller
- * | Comman apiId- 08
+ * | Created for- Chequebook Entry
+ * | Status- open
  */
 class ChequebookEntryController {
     constructor() {
+        // create a new Vendor
+        this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield this.checkbookEntryDao.store(req);
+                return (0, sendResponse_1.sendResponse)(true, "Checkbook Data added successfully", data, 200, "POST", "0801", "1.0", res);
+            }
+            catch (error) {
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0801", "1.0", res);
+            }
+        });
         // get all vendor
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.vendorMasterDao.get(req);
-                return (0, sendResponse_1.sendResponse)(true, "Chequebook Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
+                const data = yield this.checkbookEntryDao.get(req);
+                return (0, sendResponse_1.sendResponse)(true, "Chequebook Data fetched successfully", data, 200, "GET", "0802", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0702", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0802", "1.0", res);
             }
         });
-        this.vendorMasterDao = new chequebookEntryDao_1.default();
+        this.checkbookEntryDao = new chequebookEntryDao_1.default();
     }
 }
 exports.default = ChequebookEntryController;

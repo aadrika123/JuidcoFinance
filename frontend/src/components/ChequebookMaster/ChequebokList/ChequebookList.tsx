@@ -2,16 +2,21 @@ import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import React, { useState, useEffect } from "react";
 import { useQuery} from "react-query";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import ChequebooksTable from "@/components/Helpers/Tables/ChequebooksTable";
 import { useDispatch } from "react-redux";
 import { ChequebookTableData } from "@/utils/types/chequebook_master_types";
 import { addChequebookDetails } from "@/redux/chequebookMasterReducer";
 import Loader from "@/components/Helpers/Basic/Loader";
 import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
-import toast, { Toaster } from "react-hot-toast";
 
 
+/**
+ * | Author- Bijoy Paitandi
+ * | Created On- 24-01-2024
+ * | Created for- Chequebook Entry
+ * | Status: closed
+ */
 
 export type ChequebookTableProps = {
   id: number;
@@ -97,8 +102,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
 
   return (
     <>
-    <Toaster />
-    
+
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>{props?.title}</SubHeading>

@@ -5,6 +5,14 @@ import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
+
+/**
+ * | Author- Bijoy Paitandi
+ * | Created On- 24-01-2024
+ * | Created for- Chequebook Entry
+ * | Status: closed
+ */
+
 const ChequebooksTable: React.FC = () => {
   const chequebookData = useSelector(
     (state: RootState) => state.chequebookDetails.chequebookDetails
