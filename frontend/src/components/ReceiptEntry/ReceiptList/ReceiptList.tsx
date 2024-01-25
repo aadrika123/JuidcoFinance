@@ -8,7 +8,7 @@ import { ReceiptTableData } from "@/utils/types/receipt_entry_types";
 import Loader from "@/components/Helpers/Basic/Loader";
 import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
 import ReceiptTable from "@/components/Helpers/Tables/ReceiptTable";
-import { addReceiptDetails } from "@/redux/ReceiptEntryReducer";
+import { addReceiptDetails } from "@/redux/reducers/ReceiptEntryReducer";
 
 
 

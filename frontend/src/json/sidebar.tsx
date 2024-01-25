@@ -35,10 +35,6 @@ export const sidebarLinks: SidebarLinksProps = {
               path: "/masters/vendor-master",
             },
             {
-              moduleName: "Work Order Entry",
-              path: "/masters/workorder",
-            },
-            {
               moduleName: "Cheque Book Entry",
               path: "/masters/chequebook-master",
             },

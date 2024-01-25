@@ -7,7 +7,7 @@ import Loader from "@/components/Helpers/Basic/Loader";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { ChequebookTableData } from "@/utils/types/chequebook_master_types";
-import { addChequebookDetails } from "@/redux/chequebookMasterReducer";
+import { addChequebookDetails } from "@/redux/reducers/chequebookMasterReducer";
 import ChequebookList from "../ChequebokList/ChequebookList";
 import { SubHeading } from "@/components/Helpers/Heading";
 import InputBox from "@/components/Helpers/InputBox";

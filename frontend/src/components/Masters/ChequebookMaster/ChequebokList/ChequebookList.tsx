@@ -6,7 +6,7 @@ import axios from "@/lib/axiosConfig";
 import ChequebooksTable from "@/components/Helpers/Tables/ChequebooksTable";
 import { useDispatch } from "react-redux";
 import { ChequebookTableData } from "@/utils/types/chequebook_master_types";
-import { addChequebookDetails } from "@/redux/chequebookMasterReducer";
+import { addChequebookDetails } from "@/redux/reducers/chequebookMasterReducer";
 import Loader from "@/components/Helpers/Basic/Loader";
 import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
 
