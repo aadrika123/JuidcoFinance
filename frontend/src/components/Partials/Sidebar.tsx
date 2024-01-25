@@ -20,7 +20,6 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
 
         <div>
           {sidebarLinks.modules?.map((link, index: number) => {
-            console.log(link, index);
             return (
               <div key={index}>
                 <ul className="w-full menu menu-xs p-0 overflow-hidden">

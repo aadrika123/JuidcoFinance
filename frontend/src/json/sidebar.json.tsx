@@ -26,9 +26,9 @@ export const sidebarLinks: SidebarLinksProps = {
               height={100}
             />
           ),
-          path: "/",
+          path: "/finance/master",
           subModules: [
-            { moduleName: "  Charts of Account", path: "/" },
+            { moduleName: " Charts of Account", path: "/finance/masters" },
             { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
             {
               moduleName: "Vendor Masters",
@@ -79,7 +79,7 @@ export const sidebarLinks: SidebarLinksProps = {
               height={100}
             />
           ),
-          path: "/document-and-record",
+          path: "/finance/transaction",
           subModules: [
             { moduleName: "Receipt Entry ", path: "/finance/transaction/receipt-entry" },
             {
