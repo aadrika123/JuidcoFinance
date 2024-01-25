@@ -15,7 +15,7 @@ const DirectPaymentEntryHeader: React.FC = () => {
         <div className="flex">
         
           <Link
-            href={"/direct-payment-entry/add"}>
+            href={"/transaction/direct-payment-entry/add"}>
             <PrimaryButton variant="primary" className="rounded-3xl">
               + Add New Payment
             </PrimaryButton>

@@ -146,7 +146,7 @@ const PaymentEntryTable: React.FC = () => {
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
 
-                  <Link href={`/direct-payment-entry/view/${d.id}`}>
+                  <Link href={`/transaction/direct-payment-entry/view/${d.id}`}>
                       <div className="flex justify-center opacity-90">
                       
                     

@@ -1,4 +1,4 @@
-import { HeroPaymentEntry } from "@/components/DirectPaymentEntry/Index";
+import { HeroPaymentEntry } from "@/components/Transaction/DirectPaymentEntry/Index";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 
