@@ -47,4 +47,18 @@ interface VendorRequestData {
   bank_branch_name: string;
 }
 
-export type { CandidateType, ApiResponse, BankRequestData, VendorRequestData };
+interface ChequebookRequestData {
+  date: string;
+  bank_name: string;
+  bank_account_no: string;
+  cheque_no_from: string;
+  employee_id: number;
+  bank_branch: string
+  page_count: string
+  cheque_no_to: string
+  issuer_name: string
+  cheque_book_return: boolean,
+  cheque_book_return_date: string
+}
+
+export type { CandidateType, ApiResponse, BankRequestData, VendorRequestData, ChequebookRequestData};

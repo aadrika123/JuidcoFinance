@@ -6,6 +6,7 @@ import MuncipalityCodeRoute from "./route/munciCodeRoute";
 import VendorTypeRoute from "./route/vendorTypeRoute";
 import DepartmentRoute from "./route/departmentRoute";
 import VendorMasterRoute from "./route/vendorMasterRoute";
+import ChequeBookEntryRoute from "./route/chequebookEntryRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ class FinanceRoute {
   private vendorTypeRoute: VendorTypeRoute;
   private departmentRoute: DepartmentRoute;
   private vendorMasterRoute: VendorMasterRoute;
+  private chequebookEntryRoute: ChequeBookEntryRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -60,6 +62,11 @@ class FinanceRoute {
     // VENDOR_MASTER_ROUTE ///
     this.vendorMasterRoute = new VendorMasterRoute();
     this.vendorMasterRoute.configure(app); //07
+
+    /// CHECKBOOK_ENTRY_ROUTE ///
+    this.chequebookEntryRoute = new ChequeBookEntryRoute();
+    this.chequebookEntryRoute.configure(app);
+  
   }
 }
 

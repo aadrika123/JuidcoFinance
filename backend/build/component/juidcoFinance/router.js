@@ -10,6 +10,7 @@ const munciCodeRoute_1 = __importDefault(require("./route/munciCodeRoute"));
 const vendorTypeRoute_1 = __importDefault(require("./route/vendorTypeRoute"));
 const departmentRoute_1 = __importDefault(require("./route/departmentRoute"));
 const vendorMasterRoute_1 = __importDefault(require("./route/vendorMasterRoute"));
+const chequebookEntryRoute_1 = __importDefault(require("./route/chequebookEntryRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,6 +49,9 @@ class FinanceRoute {
         // VENDOR_MASTER_ROUTE ///
         this.vendorMasterRoute = new vendorMasterRoute_1.default();
         this.vendorMasterRoute.configure(app); //07
+        /// CHECKBOOK_ENTRY_ROUTE ///
+        this.chequebookEntryRoute = new chequebookEntryRoute_1.default();
+        this.chequebookEntryRoute.configure(app);
     }
 }
 exports.default = FinanceRoute;
