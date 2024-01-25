@@ -69,7 +69,7 @@ model bank_masters {
 ///// Vendor Master
 
 model vendor_masters {
-  id               Int         @id @default(autoincrement())
+  id               Int          @id @default(autoincrement())
   vendor_type      vendor_types @relation(fields: [vendor_type_id], references: [id])
   vendor_type_id   Int
   vendor_no        String
@@ -126,12 +126,13 @@ model cheque_book_entries {
 
 /// Department
 model departments {
-  id         Int             @id @default(autoincrement())
-  name       String
-  remark     String?
-  vendors    vendor_masters[]
-  created_at DateTime        @default(now()) @map("created_at")
-  updated_at DateTime        @updatedAt @map("updated_at")
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  remark                String?
+  vendors               vendor_masters[]
+  dir_payment_entries   dir_payment_entries[]
+  created_at            DateTime                @default(now()) @map("created_at")
+  updated_at            DateTime                @updatedAt @map("updated_at")
 }
 
 /// Employee
@@ -142,4 +143,58 @@ model employees {
   cheque_book_entries cheque_book_entries[]
   created_at          DateTime            @default(now()) @map("created_at")
   updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+/// Payment Types
+model payment_types {
+  id                      Int      @id @default(autoincrement())
+  type                    String
+  remark                  String
+  dir_payment_entries     dir_payment_entries[]
+  created_at              DateTime @default(now()) @map("created_at")
+  updated_at              DateTime @updatedAt @map("updated_at")
+}
+
+/// Administrative Ward
+model adminis_wards {
+  id                    Int       @id @default(autoincrement())
+  name                  String
+  remark                String
+  dir_payment_entries   dir_payment_entries[]
+  created_at            DateTime  @default(now()) @map("created_at")
+  updated_at            DateTime  @updatedAt @map("updated_at")
+}
+
+/// Grant
+model grants {
+  id                        Int       @id @default(autoincrement())
+  name                      String
+  remark                    String
+  dir_payment_entries       dir_payment_entries[]
+  created_at                DateTime  @default(now()) @map("created_at")
+  updated_at                DateTime  @updatedAt @map("updated_at")
+}
+
+
+/// Direct Payment Entry
+model dir_payment_entries {
+  id                    Int                 @id @default(autoincrement())
+  payment_date          DateTime
+  payment_type_id       Int
+  payment_type          payment_types       @relation(fields: [payment_type_id], references: [id])
+  payee_name            String
+  narration             String
+  grant_id              Int
+  grant                 grants              @relation(fields: [grant_id], references: [id])
+  user_common_budget    String
+  adminis_ward_id       Int
+  adminis_ward          adminis_wards       @relation(fields: [adminis_ward_id], references: [id])
+  address               String
+  department_id         Int
+  department            departments         @relation(fields: [department_id], references: [id])
+  email                 String
+  payment_mode          String
+  amount                String
+  created_at            DateTime            @default(now()) @map("created_at")
+  updated_at            DateTime            @updatedAt @map("updated_at")
 }

@@ -17,22 +17,6 @@ class BankMasterDao {
     constructor() {
         // store bank details in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
-<<<<<<< HEAD
-=======
-            const requestData = {
-                bank_name: req.body.bank_name,
-                ifsc_code: req.body.ifsc_code,
-                branch: req.body.branch,
-                micr_code: req.body.micr_code,
-                branch_address: req.body.branch_address,
-                branch_city: req.body.branch_city,
-                branch_state: req.body.branch_state,
-                branch_district: req.body.branch_district,
-                email: req.body.email,
-                contact_no: req.body.contact_no,
-                contact_person_name: req.body.contact_person_name,
-            };
->>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.bank_masters.create({
                 data: (0, bankMasterValidation_1.requestData)(req),
             });
@@ -96,62 +80,12 @@ class BankMasterDao {
         // Update bank details
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
-<<<<<<< HEAD
-=======
-            const requestData = {
-                bank_name: req.body.bank_name,
-                ifsc_code: req.body.ifsc_code,
-                branch: req.body.branch,
-                micr_code: req.body.micr_code,
-                branch_address: req.body.branch_address,
-                branch_city: req.body.branch_city,
-                branch_state: req.body.branch_state,
-                branch_district: req.body.branch_district,
-                email: req.body.email,
-                contact_no: req.body.contact_no,
-                contact_person_name: req.body.contact_person_name,
-            };
->>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.bank_masters.update({
                 where: {
                     id: id,
                 },
                 data: (0, bankMasterValidation_1.requestData)(req),
             });
-        });
-        // Search bank details
-        this.search = (req) => __awaiter(this, void 0, void 0, function* () {
-            const page = Number(req.query.page);
-            const limit = Number(req.query.limit);
-            const search = String(req.query.search);
-            const query = {
-                skip: (page - 1) * limit,
-                take: limit,
-                where: {
-                    OR: [
-                        {
-                            bank_name: {
-                                equals: search,
-                                mode: "insensitive",
-                            },
-                        },
-                        { ifsc_code: { equals: search, mode: "insensitive" } }
-                    ],
-                },
-                select: {
-                    id: true,
-                    bank_name: true,
-                    ifsc_code: true,
-                    branch: true,
-                },
-            };
-            const [data, count] = yield prisma.$transaction([
-                prisma.bank_masters.findMany(query),
-                prisma.bank_masters.count({
-                    where: query.where,
-                }),
-            ]);
-            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
         //////
     }

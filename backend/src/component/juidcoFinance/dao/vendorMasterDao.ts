@@ -42,7 +42,7 @@ class VendorMasterDao {
       },
     };
 
-    if(search !== "undefined"){
+    if(search !== "undefined" && search !== ""){
       query.where = {
         OR: [
           {
