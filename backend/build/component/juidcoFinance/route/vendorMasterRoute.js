@@ -20,9 +20,6 @@ class VendorMasterRoute {
         app
             .route(`${common_1.baseUrl}/vendor-master/update`)
             .post(this.vendorMasterController.update); // 0704
-        app
-            .route(`${common_1.baseUrl}/vendor-master/search`)
-            .get(this.vendorMasterController.search); // 0705
     }
 }
 exports.default = VendorMasterRoute;

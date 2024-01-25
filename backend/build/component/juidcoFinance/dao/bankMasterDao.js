@@ -11,11 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const generateRes_1 = require("../../../util/generateRes");
+const bankMasterValidation_1 = require("../requests/bankMasterValidation");
 const prisma = new client_1.PrismaClient();
 class BankMasterDao {
     constructor() {
         // store bank details in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
+<<<<<<< HEAD
+=======
             const requestData = {
                 bank_name: req.body.bank_name,
                 ifsc_code: req.body.ifsc_code,
@@ -29,8 +32,9 @@ class BankMasterDao {
                 contact_no: req.body.contact_no,
                 contact_person_name: req.body.contact_person_name,
             };
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.bank_masters.create({
-                data: requestData,
+                data: (0, bankMasterValidation_1.requestData)(req),
             });
         });
         // Get limited bank master
@@ -92,6 +96,8 @@ class BankMasterDao {
         // Update bank details
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
+<<<<<<< HEAD
+=======
             const requestData = {
                 bank_name: req.body.bank_name,
                 ifsc_code: req.body.ifsc_code,
@@ -105,11 +111,12 @@ class BankMasterDao {
                 contact_no: req.body.contact_no,
                 contact_person_name: req.body.contact_person_name,
             };
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.bank_masters.update({
                 where: {
                     id: id,
                 },
-                data: requestData,
+                data: (0, bankMasterValidation_1.requestData)(req),
             });
         });
         // Search bank details

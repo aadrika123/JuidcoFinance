@@ -11,11 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require(".prisma/client");
 const generateRes_1 = require("../../../util/generateRes");
+const vendorMasterValidation_1 = require("../requests/vendorMasterValidation");
 const prisma = new client_1.PrismaClient();
 class VendorMasterDao {
     constructor() {
         // Add new vendor in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
+<<<<<<< HEAD
+=======
             const requestData = {
                 vendor_type_id: req.body.vendor_type_id,
                 vendor_no: req.body.vendor_no,
@@ -34,8 +37,9 @@ class VendorMasterDao {
                 bank_account_no: req.body.bank_account_no,
                 bank_branch_name: req.body.bank_branch_name,
             };
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.vendor_masters.create({
-                data: requestData,
+                data: (0, vendorMasterValidation_1.vendorRequestData)(req),
             });
         });
         // get all vendor data
@@ -129,6 +133,8 @@ class VendorMasterDao {
         //update vendor master data
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
+<<<<<<< HEAD
+=======
             const requestData = {
                 vendor_type_id: req.body.vendor_type_id,
                 vendor_no: req.body.vendor_no,
@@ -147,60 +153,13 @@ class VendorMasterDao {
                 bank_account_no: req.body.bank_account_no,
                 bank_branch_name: req.body.bank_branch_name,
             };
+>>>>>>> 9f86824551a666090c6348938e1ea1c32a0dce9f
             return yield prisma.vendor_masters.update({
                 where: {
                     id,
                 },
-                data: requestData,
+                data: (0, vendorMasterValidation_1.vendorRequestData)(req),
             });
-        });
-        // Search vendor details
-        this.search = (req) => __awaiter(this, void 0, void 0, function* () {
-            const page = Number(req.query.page);
-            const limit = Number(req.query.limit);
-            const search = String(req.query.search);
-            const query = {
-                skip: (page - 1) * limit,
-                take: limit,
-                where: {
-                    OR: [
-                        {
-                            vendor_type: {
-                                name: {
-                                    equals: search,
-                                    mode: "insensitive",
-                                },
-                            },
-                        },
-                        { name: { equals: search, mode: "insensitive" } },
-                    ],
-                },
-                select: {
-                    id: true,
-                    vendor_no: true,
-                    vendor_type: {
-                        select: {
-                            id: true,
-                            name: true,
-                        },
-                    },
-                    name: true,
-                    mobile_no: true,
-                    tin_no: true,
-                    gst_no: true,
-                    is_authorized: true,
-                    created_at: true,
-                    authorized_date: true,
-                    updated_at: true,
-                },
-            };
-            const [data, count] = yield prisma.$transaction([
-                prisma.vendor_masters.findMany(query),
-                prisma.vendor_masters.count({
-                    where: query.where,
-                }),
-            ]);
-            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
     }
 }

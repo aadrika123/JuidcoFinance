@@ -74,18 +74,6 @@ class BankMasterController {
                 return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "POST", "0404", "1.0", res);
             }
         });
-        // Search bank list
-        this.search = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const data = yield this.bankMasterDao.search(req);
-                if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Bank Master Not Found!!", data, 404, "GET", "0405", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Bank Master Found Successfully!!", data, 200, "GET", "0405", "1.0", res);
-            }
-            catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0405", "1.0", res);
-            }
-        });
         this.bankMasterDao = new bankMasterDao_1.default();
     }
 }
