@@ -78,14 +78,14 @@ class ChequebookEntryDao {
             if (search !== "undefined" && search !== "") {
                 query.where = {
                     OR: [
-                        { bank_name: { contains: search, mode: "insensitive" }, },
-                        { remarks: { contains: search, mode: "insensitive" }, },
+                        { bank_name: { contains: search, mode: "insensitive" } },
+                        { remarks: { contains: search, mode: "insensitive" } },
                     ],
                 };
             }
             const [data, count] = yield prisma.$transaction([
                 prisma.cheque_book_entries.findMany(query),
-                prisma.cheque_book_entries.count({ where: query.where })
+                prisma.cheque_book_entries.count({ where: query.where }),
             ]);
             return (0, generateRes_1.generateRes)(data, count, page, limit);
         });

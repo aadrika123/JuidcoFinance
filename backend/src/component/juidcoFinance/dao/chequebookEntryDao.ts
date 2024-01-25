@@ -53,7 +53,7 @@ class ChequebookEntryDao {
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
-    
+
     const query: Prisma.cheque_book_entriesFindManyArgs = {
       skip: skip,
       take: limit,
@@ -67,7 +67,7 @@ class ChequebookEntryDao {
         cheque_no_from: true,
         bank_branch: true,
         page_count: true,
-        cheque_no_to: true, 
+        cheque_no_to: true,
         issuer_name: true,
         cheque_book_return: true,
         cheque_book_return_date: true,
@@ -77,27 +77,22 @@ class ChequebookEntryDao {
       },
     };
 
-    
-    if(search !== "undefined" && search !== ""){
-
+    if (search !== "undefined" && search !== "") {
       query.where = {
         OR: [
-          {bank_name: {contains: search, mode: "insensitive"},},
-          {remarks: {contains: search, mode: "insensitive"},},
+          { bank_name: { contains: search, mode: "insensitive" } },
+          { remarks: { contains: search, mode: "insensitive" } },
         ],
-      }
-
+      };
     }
-    
+
     const [data, count] = await prisma.$transaction([
       prisma.cheque_book_entries.findMany(query),
-      prisma.cheque_book_entries.count({where: query.where})
+      prisma.cheque_book_entries.count({ where: query.where }),
     ]);
 
     return generateRes(data, count, page, limit );
   };
-
-
 }
 
 export default ChequebookEntryDao;
