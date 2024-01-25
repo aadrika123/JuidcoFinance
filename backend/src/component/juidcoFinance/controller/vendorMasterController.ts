@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
 import VendorMasterDao from "../dao/vendorMasterDao";
 import { vendorMasterValidation } from "../requests/vendorMasterValidation";
+import ResMessage from "../responseMessage/vendorMasterMessage";
 
 /**
  * | Author- Krish Vishwakarma
@@ -24,7 +25,7 @@ class VendorMasterController {
         return sendResponse(
           false,
           error.message,
-          "error.code",
+          "",
           400,
           "POST",
           "0701",
@@ -35,7 +36,7 @@ class VendorMasterController {
       const data = await this.vendorMasterDao.store(req);
       return sendResponse(
         true,
-        "Vendor Data added successfully",
+        ResMessage.CREATED,
         data,
         200,
         "POST",
@@ -47,7 +48,7 @@ class VendorMasterController {
       return sendResponse(
         false,
         error.message,
-        "error.code",
+        "",
         500,
         "POST",
         "0701",
@@ -65,9 +66,9 @@ class VendorMasterController {
       if (!data)
         return sendResponse(
           true,
-          "Vendor Data Not Found",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0702",
           "1.0",
@@ -76,7 +77,7 @@ class VendorMasterController {
 
       return sendResponse(
         true,
-        "Vendor Data fetched successfully",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -88,7 +89,7 @@ class VendorMasterController {
       return sendResponse(
         false,
         error.message,
-        "error.code",
+        "",
         500,
         "GET",
         "0702",
@@ -107,9 +108,9 @@ class VendorMasterController {
       if (!data)
         return sendResponse(
           true,
-          "Vendor Not Found",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0703",
           "1.0",
@@ -118,7 +119,7 @@ class VendorMasterController {
 
       return sendResponse(
         true,
-        "Vendor find successfully",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -130,7 +131,7 @@ class VendorMasterController {
       return sendResponse(
         false,
         error.message,
-        "error.code",
+        "",
         500,
         "GET",
         "0703",
@@ -149,9 +150,9 @@ class VendorMasterController {
         return sendResponse(
           false,
           error.message,
-          "error.code",
+          "",
           403,
-          "PATCH",
+          "POST",
           "0704",
           "1.0",
           res
@@ -161,10 +162,10 @@ class VendorMasterController {
 
       return sendResponse(
         true,
-        "Vendor updated successfully",
+        ResMessage.UPDATED,
         data,
         200,
-        "PATCH",
+        "POST",
         "0704",
         "1.0",
         res
@@ -172,10 +173,10 @@ class VendorMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        "Vendor updated successfully",
         error.message,
+        "",
         500,
-        "PATCH",
+        "POST",
         "0704",
         "1.0",
         res

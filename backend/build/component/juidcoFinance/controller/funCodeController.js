@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
 const functionCodeDao_1 = __importDefault(require("../dao/functionCodeDao"));
+const funCodeMessage_1 = __importDefault(require("../responseMessage/funCodeMessage"));
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 20-01-2024
@@ -27,11 +28,11 @@ class FunCodeController {
             try {
                 const data = yield this.funCodeDao.get(Number(req.query.page), Number(req.query.limit));
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Function Code Not Found!!", data, 404, "GET", "0201", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Function Code Found Successfully!!", data, 200, "GET", "0201", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, funCodeMessage_1.default.NOT_FOUND, data, 200, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, funCodeMessage_1.default.FOUND, data, 200, "GET", "0201", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0201", "1.0", res);
             }
         });
         this.funCodeDao = new functionCodeDao_1.default();

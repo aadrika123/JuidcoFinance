@@ -48,7 +48,7 @@ class VendorMasterDao {
                     updated_at: true,
                 },
             };
-            if (search !== "undefined") {
+            if (search !== "undefined" && search !== "") {
                 query.where = {
                     OR: [
                         {

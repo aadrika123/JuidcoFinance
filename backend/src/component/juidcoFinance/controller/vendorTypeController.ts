@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
 import VendorTypeDao from "../dao/vendorTypeDao";
+import ResMessage from "../responseMessage/vendorTypeMessage";
 
 /**
  * | Author- Sanjiv Kumar
@@ -23,9 +24,9 @@ class VendorTypeController {
       if (!data)
         return sendResponse(
           true,
-          "Vendor Type Not Found!!",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0501",
           "1.0",
@@ -34,7 +35,7 @@ class VendorTypeController {
 
       return sendResponse(
         true,
-        "Vendor Type Found Successfully!!",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -46,7 +47,7 @@ class VendorTypeController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "GET",
         "0501",

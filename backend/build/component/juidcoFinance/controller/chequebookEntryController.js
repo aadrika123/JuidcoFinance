@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
 const chequebookEntryDao_1 = __importDefault(require("../dao/chequebookEntryDao"));
+const chequebookEntryMessage_1 = __importDefault(require("../responseMessage/chequebookEntryMessage"));
 /**
  * | Author- Bijoy Paitandi
  * | Created On- 24-01-2024
@@ -26,20 +27,22 @@ class ChequebookEntryController {
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.checkbookEntryDao.store(req);
-                return (0, sendResponse_1.sendResponse)(true, "Checkbook Data added successfully", data, 200, "POST", "0801", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, chequebookEntryMessage_1.default.CREATED, data, 200, "POST", "0801", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0801", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0801", "1.0", res);
             }
         });
         // get all vendor
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this.checkbookEntryDao.get(req);
-                return (0, sendResponse_1.sendResponse)(true, "Chequebook Data fetched successfully", data, 200, "GET", "0802", "1.0", res);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, chequebookEntryMessage_1.default.NOT_FOUND, data, 200, "GET", "0802", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, chequebookEntryMessage_1.default.FOUND, data, 200, "GET", "0802", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0802", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0802", "1.0", res);
             }
         });
         this.checkbookEntryDao = new chequebookEntryDao_1.default();

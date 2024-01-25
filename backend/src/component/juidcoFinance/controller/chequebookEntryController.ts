@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
 import ChequebookEntryDao from "../dao/chequebookEntryDao";
+import ResMessage from "../responseMessage/chequebookEntryMessage";
 
 /**
  * | Author- Bijoy Paitandi
@@ -22,7 +23,7 @@ class ChequebookEntryController {
         const data = await this.checkbookEntryDao.store(req);
         return sendResponse(
           true,
-          "Checkbook Data added successfully",
+          ResMessage.CREATED,
           data,
           200,
           "POST",
@@ -34,7 +35,7 @@ class ChequebookEntryController {
         return sendResponse(
           false,
           error.message,
-          "error.code",
+          "",
           500,
           "POST",
           "0801",
@@ -49,9 +50,22 @@ class ChequebookEntryController {
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
       const data = await this.checkbookEntryDao.get(req);
+
+      if(!data)
       return sendResponse(
         true,
-        "Chequebook Data fetched successfully",
+        ResMessage.NOT_FOUND,
+        data,
+        200,
+        "GET",
+        "0802",
+        "1.0",
+        res
+      );
+
+      return sendResponse(
+        true,
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -63,7 +77,7 @@ class ChequebookEntryController {
       return sendResponse(
         false,
         error.message,
-        "error.code",
+        "",
         500,
         "GET",
         "0802",

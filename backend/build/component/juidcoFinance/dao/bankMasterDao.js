@@ -36,7 +36,7 @@ class BankMasterDao {
                     branch: true,
                 },
             };
-            if (search !== "undefined") {
+            if (search !== "undefined" && search !== "") {
                 query.where = {
                     OR: [
                         {

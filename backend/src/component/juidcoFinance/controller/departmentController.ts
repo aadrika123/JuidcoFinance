@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import DepartmentDao from "../dao/departmentDao";
 import { sendResponse } from "../../../util/sendResponse";
+import ResMessage from "../responseMessage/departmentMessage";
 
 /**
  * | Author- Sanjiv Kumar
@@ -23,9 +24,9 @@ class DepartmentController {
       if (!data)
         return sendResponse(
           true,
-          "Departments Not Found!!",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0601",
           "1.0",
@@ -34,7 +35,7 @@ class DepartmentController {
 
       return sendResponse(
         true,
-        "Departments Found Successfully!!",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -46,7 +47,7 @@ class DepartmentController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "GET",
         "0601",

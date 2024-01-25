@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
 const munciCodeDao_1 = __importDefault(require("../dao/munciCodeDao"));
+const municCodeMessage_1 = __importDefault(require("../responseMessage/municCodeMessage"));
 /**
  * | Author- Krish Vishwakarma
  * | Created On- 22-01-2024
@@ -27,11 +28,11 @@ class MuncipalityCodeController {
             try {
                 const data = yield this.muncipalityCodeDao.get(Number(req.query.page), Number(req.query.limit));
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Muncipality Code Not Found", data, 404, "GET", "0301", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Muncipality Code Fetched successfully.", data, 200, "GET", "0301", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, municCodeMessage_1.default.NOT_FOUND, data, 200, "GET", "0301", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, municCodeMessage_1.default.FOUND, data, 200, "GET", "0301", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0301", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0301", "1.0", res);
             }
         });
         this.muncipalityCodeDao = new munciCodeDao_1.default();

@@ -3,6 +3,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
 import FunctionCodeDao from "../dao/functionCodeDao";
+import ResMessage from "../responseMessage/funCodeMessage";
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 20-01-2024
@@ -20,23 +21,26 @@ class FunCodeController {
   // Get limited Function Codes
   getFunCode = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.funCodeDao.get(Number(req.query.page), Number(req.query.limit));
-
-      if(!data)
-      return sendResponse(
-        true,
-        "Function Code Not Found!!",
-        data,
-        404,
-        "GET",
-        "0201",
-        "1.0",
-        res
+      const data = await this.funCodeDao.get(
+        Number(req.query.page),
+        Number(req.query.limit)
       );
 
+      if (!data)
+        return sendResponse(
+          true,
+          ResMessage.NOT_FOUND,
+          data,
+          200,
+          "GET",
+          "0201",
+          "1.0",
+          res
+        );
+
       return sendResponse(
         true,
-        "Function Code Found Successfully!!",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -48,7 +52,7 @@ class FunCodeController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+       "",
         500,
         "GET",
         "0201",
