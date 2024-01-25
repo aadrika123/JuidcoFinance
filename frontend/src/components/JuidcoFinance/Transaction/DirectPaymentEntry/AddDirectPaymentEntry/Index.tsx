@@ -6,13 +6,16 @@ import { useMutation } from "react-query";
 import { Formik } from "formik";
 import { SubHeading } from "@/components/Helpers/Heading";
 import InputBox from "@/components/Helpers/InputBox";
-import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
 import goBack from "@/utils/helper";
 import { AddPaymentDetailsData } from "@/utils/types/direct_payment_entry_types";
 import PaymentModeRadioWrapper from "@/components/Helpers/PaymentModeRadioWrapper";
 import PaymentModeRadioButton from "@/components/Helpers/PaymentModeRadioButton";
+import {
+  PaymenttDetailsSchema,
+  initialPaymenttDetails,
+} from "@/utils/validation/transactions/direct_payment.validation";
 // import { QueryClient } from "@tanstack/react-query";
 
 // const queryClient = new QueryClient();
@@ -42,32 +45,6 @@ export const HeroAddPaymentEntry = () => {
       // queryClient.invalidateQueries("create");
     },
   });
-  // ----- FORMIK & YUP FORM VAIDATION ---------- //
-  const AddPaymenttDetailsSchema = Yup.object().shape({
-    paymentDate: Yup.string().required("Payment Date is required"),
-    narration: Yup.string().required("Narration is required"),
-    paymentType: Yup.string().required("Payment Type is required"),
-    department: Yup.string().required("Department is required"),
-    payeeName: Yup.string().required("Payee Name is required"),
-    administrativeWard: Yup.string().required(
-      "Administrative Ward is required"
-    ),
-    grant: Yup.string().required("Grant is required"),
-    address: Yup.string().required("Address is required"),
-  });
-
-  const initialPaymenttDetails = {
-    paymentDate: "",
-    narration: "",
-    paymentType: "",
-    department: "",
-    payeeName: "",
-    administrativeWard: "",
-    grant: "",
-    address: "",
-  };
-
-  // ----- FORMIK & YUP FORM VAIDATION ---------- //
 
   return (
     <>
@@ -81,7 +58,7 @@ export const HeroAddPaymentEntry = () => {
         <div className="mt-8">
           <Formik
             initialValues={initialPaymenttDetails}
-            validationSchema={AddPaymenttDetailsSchema}
+            validationSchema={PaymenttDetailsSchema}
             onSubmit={(values) => {
               mutate(values);
             }}

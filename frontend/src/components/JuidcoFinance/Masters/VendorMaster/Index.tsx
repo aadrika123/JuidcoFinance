@@ -9,6 +9,7 @@ import { useQuery, useQueryClient, useMutation } from "react-query";
 import { MasterProps } from "@/utils/types/types";
 import toast from "react-hot-toast";
 import { VendorDetailsData } from "@/utils/types/vendor_master_types";
+import { FINANCE_URL } from "@/utils/api/urls";
 export const HeroVendorMaster = () => {
   const [page, setPage] = useState<number>(1);
 
@@ -27,7 +28,7 @@ export const HeroVendorMaster = () => {
 
   const fetchBankData = async (): Promise<MasterProps<VendorDetailsData>> => {
     const res = await axios({
-      url: `/vendor-master/get?limit=10&page=${page}`,
+      url: `${FINANCE_URL.VENDOR_MASTER_URL.get}&page=${page}`,
       method: "GET",
     });
     return res.data?.data as MasterProps<VendorDetailsData>;

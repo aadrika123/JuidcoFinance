@@ -23,6 +23,7 @@ import type {
   AccountTableData,
 } from "@/utils/types/bank_master_types";
 import type { MasterProps } from "@/utils/types/types";
+import { FINANCE_URL } from "@/utils/api/urls";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -44,7 +45,7 @@ export const HeroBankMasters = () => {
 
   const fetchBankData = async (): Promise<MasterProps<AccountTableData>> => {
     const res = await axios({
-      url: `bank-master/get-all?limit=10&page=${page}`,
+      url: `${FINANCE_URL.BANK_MASTER_URL.get}&page=${page}`,
       method: "GET",
     });
     return res.data?.data as MasterProps<AccountTableData>;
@@ -69,7 +70,7 @@ export const HeroBankMasters = () => {
     values: AddBankDetailsData
   ): Promise<AddBankDetailsData> => {
     const res = await axios({
-      url: `/bank-master/create`,
+      url: `${FINANCE_URL.BANK_MASTER_URL.create}`,
       method: "POST",
       data: values,
     });

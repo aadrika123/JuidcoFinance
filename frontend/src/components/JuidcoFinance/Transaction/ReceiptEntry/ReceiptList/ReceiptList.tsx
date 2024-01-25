@@ -1,3 +1,5 @@
+"use client"
+
 import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import React, { useState } from "react";

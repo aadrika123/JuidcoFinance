@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import PrimaryButton from "@/components/Helpers/Button";
 import InputBox from "@/components/Helpers/InputBox";
-import { AddBankDetailsSchema } from "../Index";
+import { AddBankDetailsSchema } from "@/utils/validation/masters/bank_master.validation";
 import axios from "@/lib/axiosConfig";
 import { AddBankDetailsData } from "@/utils/types/bank_master_types";
+import { FINANCE_URL } from "@/utils/api/urls";
 
 const EditBankAccount = ({ bankID }: { bankID: string }) => {
   const [bankAccountDetails, setBankAccountDetails] =
@@ -16,7 +17,7 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
   useEffect(() => {
     (async () => {
       const res = await axios({
-        url: `/bank-master/get-by-id/${bankID}`,
+        url: `${FINANCE_URL.BANK_MASTER_URL.getById}/${bankID}`,
         method: "GET",
       });
       setBankAccountDetails(res?.data?.data);

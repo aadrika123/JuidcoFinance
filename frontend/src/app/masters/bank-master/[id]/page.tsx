@@ -1,4 +1,4 @@
-import EditBankAccount from "@/components/Masters/BankMasters/EditBankAccount/EditBankAccount";
+import EditBankAccount from "@/components/JuidcoFinance/Masters/BankMasters/EditBankAccount/EditBankAccount";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

@@ -81,7 +81,7 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/document-and-record",
           subModules: [
-            { moduleName: "Receipt Entry ", path: "/" },
+            { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
             {
               moduleName: "Direct Payment Entry",
               path: "/transaction/direct-payment-entry",
