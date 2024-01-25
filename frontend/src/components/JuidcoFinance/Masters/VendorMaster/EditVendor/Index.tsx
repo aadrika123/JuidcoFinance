@@ -2,7 +2,7 @@
 
 import React from "react";
 import axios from "@/lib/axiosConfig";
-import InputBox from "../../Helpers/InputBox";
+import InputBox from "@/components/Helpers/InputBox";
 import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 

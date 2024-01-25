@@ -4,11 +4,14 @@ import { RootState } from "@/redux/store";
 import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 
 const PaymentEntryTable: React.FC = () => {
   const paymentEntryData = useSelector(
     (state: RootState) => state.paymentDetails.paymentDetails
   );
+
+  const pathName = usePathname();
 
   return (
     <>
@@ -146,7 +149,7 @@ const PaymentEntryTable: React.FC = () => {
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
 
-                  <Link href={`/transaction/direct-payment-entry/view/${d.id}`}>
+                  <Link href={`${pathName}/view/${d.id}`}>
                       <div className="flex justify-center opacity-90">
                       
                     

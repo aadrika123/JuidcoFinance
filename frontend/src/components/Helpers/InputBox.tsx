@@ -1,7 +1,7 @@
 import React from "react";
 
 interface InputBoxProps {
-  label: React.ReactNode;
+  label: string;
   name: string;
   data?: string[];
   value: string | number | undefined;
