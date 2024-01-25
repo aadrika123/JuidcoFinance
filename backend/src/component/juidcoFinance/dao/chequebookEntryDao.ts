@@ -1,8 +1,7 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
 import { generateRes2 } from "../../../util/generateRes2";
-import { ChequebookRequestData } from "../../../util/types";
-
+// import { ChequebookRequestData } from "../../../util/types";
 
 /**
  * | Author- Bijoy Paitandi
@@ -14,38 +13,34 @@ import { ChequebookRequestData } from "../../../util/types";
 const prisma = new PrismaClient();
 
 class ChequebookEntryDao {
+  // Add new vendor in DB
+  store = async (req: Request) => {
+    console.log(req);
+    return;
 
-    // Add new vendor in DB
-    store = async (req: Request) => {
+    // const requestData: ChequebookRequestData = {
+    //   vendor_type_id: req.body.vendorTypeId,
+    //   vendor_no: req.body.vendorNo,
+    //   name: req.body.name,
+    //   mobile_no: req.body.mobileNo,
+    //   comm_address: req.body.commAddress,
+    //   tin_no: req.body.tinNo,
+    //   pan_no: req.body.panNo,
+    //   bank_name: req.body.bankName,
+    //   ifsc_code: req.body.ifscCode,
+    //   department_id: req.body.departmentId,
+    //   email: req.body.email,
+    //   office_address: req.body.officeAddress,
+    //   gst_no: req.body.gstNo,
+    //   aadhar_no: req.body.aadharNo,
+    //   bank_account_no: req.body.bankAccountNo,
+    //   bank_branch_name: req.body.bankBranchName,
+    // };
 
-      console.log(req);
-      return;
-      
-      const requestData: ChequebookRequestData = {
-        vendor_type_id: req.body.vendorTypeId,
-        vendor_no: req.body.vendorNo,
-        name: req.body.name,
-        mobile_no: req.body.mobileNo,
-        comm_address: req.body.commAddress,
-        tin_no: req.body.tinNo,
-        pan_no: req.body.panNo,
-        bank_name: req.body.bankName,
-        ifsc_code: req.body.ifscCode,
-        department_id: req.body.departmentId,
-        email: req.body.email,
-        office_address: req.body.officeAddress,
-        gst_no: req.body.gstNo,
-        aadhar_no: req.body.aadharNo,
-        bank_account_no: req.body.bankAccountNo,
-        bank_branch_name: req.body.bankBranchName,
-      };
-  
-      return await prisma.vendor_masters.create({
-        data: requestData,
-      });
-    };
-  
-  
+    // return await prisma.vendor_masters.create({
+    //   data: requestData,
+    // });
+  };
 
   // get all chequebook data
   get = async (req: Request) => {
@@ -53,7 +48,7 @@ class ChequebookEntryDao {
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
-    
+
     const query: Prisma.cheque_book_entriesFindManyArgs = {
       skip: skip,
       take: limit,
@@ -67,7 +62,7 @@ class ChequebookEntryDao {
         cheque_no_from: true,
         bank_branch: true,
         page_count: true,
-        cheque_no_to: true, 
+        cheque_no_to: true,
         issuer_name: true,
         cheque_book_return: true,
         cheque_book_return_date: true,
@@ -77,27 +72,22 @@ class ChequebookEntryDao {
       },
     };
 
-    
-    if(search !== "undefined" && search !== ""){
-
+    if (search !== "undefined" && search !== "") {
       query.where = {
         OR: [
-          {bank_name: {contains: search, mode: "insensitive"},},
-          {remarks: {contains: search, mode: "insensitive"},},
+          { bank_name: { contains: search, mode: "insensitive" } },
+          { remarks: { contains: search, mode: "insensitive" } },
         ],
-      }
-
+      };
     }
-    
+
     const [data, count] = await prisma.$transaction([
       prisma.cheque_book_entries.findMany(query),
-      prisma.cheque_book_entries.count({where: query.where})
+      prisma.cheque_book_entries.count({ where: query.where }),
     ]);
 
-    return generateRes2(data, count, page, limit );
+    return generateRes2(data, count, page, limit);
   };
-
-
 }
 
 export default ChequebookEntryDao;
