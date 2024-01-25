@@ -35,10 +35,6 @@ export const sidebarLinks: SidebarLinksProps = {
               path: "/masters/vendor-master",
             },
             {
-              moduleName: "Work Order Entry",
-              path: "/masters/workorder",
-            },
-            {
               moduleName: "Cheque Book Entry",
               path: "/masters/chequebook-master",
             },
@@ -85,7 +81,7 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/document-and-record",
           subModules: [
-            { moduleName: "Receipt Entry ", path: "/" },
+            { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
             {
               moduleName: "Direct Payment Entry",
               path: "/transaction/direct-payment-entry",

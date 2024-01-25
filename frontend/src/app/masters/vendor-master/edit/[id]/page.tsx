@@ -1,5 +1,5 @@
 import PageLayout from "@/components/Layouts/PageLayout";
-import { HeroEditVendor } from "@/components/Masters/VendorMaster/EditVendor/Index";
+import { HeroEditVendor } from "@/components/JuidcoFinance/Masters/VendorMaster/EditVendor/Index";
 import React from "react";
 
 export default function Home() {

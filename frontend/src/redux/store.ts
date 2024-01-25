@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import bankMasterReducer from "./bankMasterReducer";
-import chequebookMasterReducer from "./chequebookMasterReducer";
-import ReceiptEntryReducer from "./ReceiptEntryReducer";
+import bankMasterReducer from "./reducers/bankMasterReducer";
+import chequebookMasterReducer from "./reducers/chequebookMasterReducer";
+import ReceiptEntryReducer from "./reducers/ReceiptEntryReducer";
 import paymentEntryReducer from "./paymentEntryReducer";
 
 // ...

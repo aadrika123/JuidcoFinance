@@ -1,11 +1,11 @@
 import PageLayout from "@/components/Layouts/PageLayout";
-import { HeroAddVendor } from "@/components/JuidcoFinance/Masters/VendorMaster/AddVendor/Index";
+import { HeroAddReceipt } from "@/components/JuidcoFinance/Transaction/ReceiptEntry/AddReceipt/Index";
 import React from "react";
 
 export default function Home() {
   return (
     <PageLayout>
-      <HeroAddVendor />
+      <HeroAddReceipt />
     </PageLayout>
   );
 }
