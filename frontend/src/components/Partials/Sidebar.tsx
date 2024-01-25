@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { sidebarLinks } from "@/json/sidebar";
+import { sidebarLinks } from "@/json/sidebar.json";
 import { usePathname } from "next/navigation";
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;

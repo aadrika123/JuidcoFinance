@@ -29,14 +29,14 @@ export const sidebarLinks: SidebarLinksProps = {
           path: "/",
           subModules: [
             { moduleName: "  Charts of Account", path: "/" },
-            { moduleName: "Bank Masters", path: "/masters/bank-master" },
+            { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
             {
               moduleName: "Vendor Masters",
-              path: "/masters/vendor-master",
+              path: "/finance/masters/vendor-master",
             },
             {
               moduleName: "Cheque Book Entry",
-              path: "/masters/chequebook-master",
+              path: "/finance/masters/chequebook-master",
             },
           ],
         },
@@ -81,10 +81,10 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/document-and-record",
           subModules: [
-            { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
+            { moduleName: "Receipt Entry ", path: "/finance/transaction/receipt-entry" },
             {
               moduleName: "Direct Payment Entry",
-              path: "/transaction/direct-payment-entry",
+              path: "/finance/transaction/direct-payment-entry",
             },
             {
               moduleName: "Bills Payment Entry",
