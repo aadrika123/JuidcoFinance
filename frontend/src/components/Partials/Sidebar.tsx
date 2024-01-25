@@ -41,7 +41,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                   className={`${
                                     pathName.startsWith(sub.path)
                                       ? " bg-[#12743B]"
-                                      : "bg-transparent text-zinc-600"
+                                      : " bg-transparent text-zinc-600"
                                   } ml-2 text-[0.9375rem] p-1 pr-4 hover:bg-[#12743B] hover:text-white font-semibold text-white`}
                                 >
                                   <i className="w-8 rounded-md p-1.5 bg-primary_green ">
