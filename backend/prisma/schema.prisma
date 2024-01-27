@@ -114,7 +114,7 @@ model cheque_book_entries {
   employee                employees @relation(fields: [employee_id], references: [id])
   employee_id             Int
   bank_branch             String
-  page_count              String
+  page_count              Int
   cheque_no_to            String
   issuer_name             String
   cheque_book_return      Boolean
@@ -179,6 +179,7 @@ model grants {
 /// Direct Payment Entry
 model dir_payment_entries {
   id                    Int                 @id @default(autoincrement())
+  payment_no            Int                 
   payment_date          DateTime
   payment_type_id       Int
   payment_type          payment_types       @relation(fields: [payment_type_id], references: [id])
@@ -186,7 +187,7 @@ model dir_payment_entries {
   narration             String
   grant_id              Int
   grant                 grants              @relation(fields: [grant_id], references: [id])
-  user_common_budget    String
+  user_common_budget    Boolean
   adminis_ward_id       Int
   adminis_ward          adminis_wards       @relation(fields: [adminis_ward_id], references: [id])
   address               String
@@ -194,7 +195,7 @@ model dir_payment_entries {
   department            departments         @relation(fields: [department_id], references: [id])
   email                 String
   payment_mode          String
-  amount                String
+  amount                Int
   created_at            DateTime            @default(now()) @map("created_at")
   updated_at            DateTime            @updatedAt @map("updated_at")
 }

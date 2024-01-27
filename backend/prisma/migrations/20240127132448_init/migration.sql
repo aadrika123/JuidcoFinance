@@ -1,53 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `account_code` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `bank_master` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `cheque_book_entry` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `department` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `employee` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `function_code` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `municipality_code` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `vendor_master` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `vendor_type` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "cheque_book_entry" DROP CONSTRAINT "cheque_book_entry_employee_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "vendor_master" DROP CONSTRAINT "vendor_master_department_id_fkey";
-
--- DropForeignKey
-ALTER TABLE "vendor_master" DROP CONSTRAINT "vendor_master_vendor_type_id_fkey";
-
--- DropTable
-DROP TABLE "account_code";
-
--- DropTable
-DROP TABLE "bank_master";
-
--- DropTable
-DROP TABLE "cheque_book_entry";
-
--- DropTable
-DROP TABLE "department";
-
--- DropTable
-DROP TABLE "employee";
-
--- DropTable
-DROP TABLE "function_code";
-
--- DropTable
-DROP TABLE "municipality_code";
-
--- DropTable
-DROP TABLE "vendor_master";
-
--- DropTable
-DROP TABLE "vendor_type";
-
 -- CreateTable
 CREATE TABLE "account_codes" (
     "id" SERIAL NOT NULL,
@@ -159,7 +109,7 @@ CREATE TABLE "cheque_book_entries" (
     "cheque_no_from" TEXT NOT NULL,
     "employee_id" INTEGER NOT NULL,
     "bank_branch" TEXT NOT NULL,
-    "page_count" TEXT NOT NULL,
+    "page_count" INTEGER NOT NULL,
     "cheque_no_to" TEXT NOT NULL,
     "issuer_name" TEXT NOT NULL,
     "cheque_book_return" BOOLEAN NOT NULL,
@@ -193,6 +143,61 @@ CREATE TABLE "employees" (
     CONSTRAINT "employees_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "payment_types" (
+    "id" SERIAL NOT NULL,
+    "type" TEXT NOT NULL,
+    "remark" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "payment_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "adminis_wards" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "adminis_wards_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "grants" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "grants_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "dir_payment_entries" (
+    "id" SERIAL NOT NULL,
+    "payment_no" INTEGER NOT NULL,
+    "payment_date" TIMESTAMP(3) NOT NULL,
+    "payment_type_id" INTEGER NOT NULL,
+    "payee_name" TEXT NOT NULL,
+    "narration" TEXT NOT NULL,
+    "grant_id" INTEGER NOT NULL,
+    "user_common_budget" BOOLEAN NOT NULL,
+    "adminis_ward_id" INTEGER NOT NULL,
+    "address" TEXT NOT NULL,
+    "department_id" INTEGER NOT NULL,
+    "email" TEXT NOT NULL,
+    "payment_mode" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "dir_payment_entries_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -201,3 +206,15 @@ ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_department_id_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "cheque_book_entries" ADD CONSTRAINT "cheque_book_entries_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_payment_type_id_fkey" FOREIGN KEY ("payment_type_id") REFERENCES "payment_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_grant_id_fkey" FOREIGN KEY ("grant_id") REFERENCES "grants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -53,12 +53,35 @@ interface ChequebookRequestData {
   bank_account_no: string;
   cheque_no_from: string;
   employee_id: number;
-  bank_branch: string
-  page_count: string
-  cheque_no_to: string
-  issuer_name: string
-  cheque_book_return: boolean,
-  cheque_book_return_date: string
+  bank_branch: string;
+  page_count: string;
+  cheque_no_to: string;
+  issuer_name: string;
+  cheque_book_return: boolean;
+  cheque_book_return_date: string;
 }
 
-export type { CandidateType, ApiResponse, BankRequestData, VendorRequestData, ChequebookRequestData};
+interface DirPaymentEntryRequestData {
+  payment_date: string;
+  payment_no: number;
+  payment_type_id: number;
+  payee_name: string;
+  narration: string;
+  grant_id: number;
+  user_common_budget: boolean;
+  adminis_ward_id: number;
+  address: string;
+  department_id: number;
+  email: string;
+  payment_mode: string;
+  amount: number;
+}
+
+export type {
+  CandidateType,
+  ApiResponse,
+  BankRequestData,
+  VendorRequestData,
+  ChequebookRequestData,
+  DirPaymentEntryRequestData,
+};
