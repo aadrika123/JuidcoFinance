@@ -14,7 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
 const chequebookEntryDao_1 = __importDefault(require("../dao/chequebookEntryDao"));
-const chequebookEntryMessage_1 = __importDefault(require("../responseMessage/chequebookEntryMessage"));
+const cheuqebookValidation_1 = require("../requests/cheuqebookValidation");
+const joi_1 = __importDefault(require("joi"));
 /**
  * | Author- Bijoy Paitandi
  * | Created On- 24-01-2024
@@ -23,29 +24,82 @@ const chequebookEntryMessage_1 = __importDefault(require("../responseMessage/che
  */
 class ChequebookEntryController {
     constructor() {
-        // create a new Vendor
+        // create a new chequebook
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.checkbookEntryDao.store(req);
-                return (0, sendResponse_1.sendResponse)(true, chequebookEntryMessage_1.default.CREATED, data, 200, "POST", "0801", "1.0", res);
+                const { error } = cheuqebookValidation_1.chequebookValidation.validate(req.body);
+                if (error)
+                    return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0801", "1.0", res);
+                const data = yield this.chequebookEntryDao.store(req);
+                return (0, sendResponse_1.sendResponse)(true, "Chequebook added successfully", data, 200, "POST", "0801", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0801", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0801", "1.0", res);
             }
         });
-        // get all vendor
+        // get all chequebooks
         this.get = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this.checkbookEntryDao.get(req);
+                const data = yield this.chequebookEntryDao.get(req);
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, chequebookEntryMessage_1.default.NOT_FOUND, data, 200, "GET", "0802", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, chequebookEntryMessage_1.default.FOUND, data, 200, "GET", "0802", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, "No Chequebooks Found", data, 200, "GET", "0802", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, "Chequebook Data fetched successfully", data, 200, "GET", "0802", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0802", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0802", "1.0", res);
             }
         });
-        this.checkbookEntryDao = new chequebookEntryDao_1.default();
+        // get employee list
+        this.get_employee_list = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = yield this.chequebookEntryDao.get_employee_list(req);
+                return (0, sendResponse_1.sendResponse)(true, "Employee list fetched successfully", data, 200, "GET", "0803", "1.0", res);
+            }
+            catch (error) {
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0803", "1.0", res);
+            }
+        });
+        // get chequebook by ID
+        this.getById = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                // get the data
+                const id = Number(req.params.chequebookId);
+                // validate
+                const { error } = joi_1.default.object({
+                    id: joi_1.default.number().required()
+                }).validate({ 'id': id });
+                if (error)
+                    return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0804", "1.0", res);
+                // fetch the data
+                const data = yield this.chequebookEntryDao.getById(id);
+                if (!data)
+                    return (0, sendResponse_1.sendResponse)(true, "Chequebook Not Found", data, 200, "GET", "0804", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, "Chequebook found successfully", data, 200, "GET", "0804", "1.0", res);
+            }
+            catch (error) {
+                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0703", "1.0", res);
+            }
+        });
+        // update vendor information
+        this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                // validate fields
+                const { error } = cheuqebookValidation_1.chequebookValidationAlongWithID.validate(req.body);
+                if (error)
+                    return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 403, "PATCH", "0805", "1.0", res);
+                const data = yield this.chequebookEntryDao.update(req);
+                return (0, sendResponse_1.sendResponse)(true, "Chequebook updated successfully", data, 200, "PATCH", "0705", "1.0", res);
+            }
+            catch (error) {
+                if (Object.prototype.hasOwnProperty.call(error, 'code')) {
+                    if (error.code == "P2025") {
+                        return (0, sendResponse_1.sendResponse)(true, "Illegal operation, your IP will be blacklisted.", [], 200, "PATCH", "0805", "1.0", res);
+                    }
+                }
+                return (0, sendResponse_1.sendResponse)(false, "There was an unhandled error", error.code, 500, "PATCH", "0805", "1.0", res);
+            }
+        });
+        this.chequebookEntryDao = new chequebookEntryDao_1.default();
     }
 }
 exports.default = ChequebookEntryController;

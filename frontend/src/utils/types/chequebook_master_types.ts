@@ -32,3 +32,18 @@ export interface AddChequebookDetailsData {
   page_count: number,
   remarks: string,
 }
+
+export interface ChequebookData {
+  id: number,
+  date: string,
+  bank_branch: string,
+  bank_name: string,
+  bank_account_no: string,
+  cheque_no_from: string,
+  cheque_no_to: string,
+  employee: EmployeeDetailsData,
+  issuer_name: string,
+  ifsc_code: string,
+  page_count: number,
+  remarks: string,
+}

@@ -1,6 +1,6 @@
 import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useQuery} from "react-query";
 import axios from "axios";
 import ChequebooksTable from "@/components/Helpers/Tables/ChequebooksTable";
@@ -9,6 +9,7 @@ import { ChequebookTableData } from "@/utils/types/chequebook_master_types";
 import { addChequebookDetails } from "@/redux/reducers/chequebookMasterReducer";
 import Loader from "@/components/Helpers/Basic/Loader";
 import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
+import APIs from "@/json/apis.json";
 
 
 /**
@@ -17,16 +18,6 @@ import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
  * | Created for- Chequebook Entry
  * | Status: closed
  */
-
-export type ChequebookTableProps = {
-  id: number;
-  vendor_type: string;
-  vendor_no: string;
-  name: string;
-  tin_no: string;
-  gst_no: string;
-  is_authorized: boolean;
-};
 
 type ChequebookListProps = {
   title: string;
@@ -37,6 +28,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(0);
   const [searchText, setSearchText] = useState<string>("");
+
   // redux
   const dispatch = useDispatch();
 
@@ -46,14 +38,16 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
 
   const fetchData = async (): Promise<ChequebookTableData[]> => {
     const res = await axios({
-      url: `/api/v1/finance/chequebook-entry/get?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}`,
+      url: `${APIs.chequebook_master$get}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}`,
       method: "GET",
     });
     
-    const data = res.data?.data;
+    let data = res.data?.data;
     
+    if(data == null){
+      data = {'totalPage': 0, 'data': [] };
+    }
     setPageCount(data.totalPage);
-
     return data?.data;
   };
 
@@ -62,8 +56,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
       data: chequebookListData = [],
       isError: chequebookError,
       isLoading: chequebookLoading,
-      refetch: reloadData
-    } = useQuery([], fetchData);
+    } = useQuery([page, searchText], fetchData);
     
     if (chequebookError) {
       throw new Error("Fatal Error!");
@@ -71,7 +64,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
       dispatch(addChequebookDetails(chequebookListData));
   }
 
-  const handlePageChangeAccountList = (direction: "prev" | "next") => {
+  const handlePageChange = (direction: "prev" | "next") => {
     const newPageNumber = direction === "prev" ? page - 1 : page + 1;
     if(newPageNumber>0 && newPageNumber<= pageCount){
       setPage(newPageNumber);
@@ -79,26 +72,12 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
     
   };
 
-  const nextPage = () => {
-    handlePageChangeAccountList("next");
-    
-  }
-
-  const prevPage = () => {
-    handlePageChangeAccountList("prev")
-  }
-
   const onSearchTextChange = (text: string) => {
     setSearchText(text);
     setPage(1);
-    setPageCount(0);
   }
 
-
-  useEffect(() => {
-    reloadData();
- }, [page, searchText, pageCount]);
-
+  
 
   return (
     <>
@@ -110,7 +89,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
       </div>
 
       <div className="mt-8">
-      {chequebookLoading ? (
+      {chequebookLoading? (
           <Loader />
         ) : (
           <ChequebooksTable />
@@ -119,7 +98,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
 
         <div className="flex items-center justify-end mt-5 gap-5">
           {page > 1 && (
-            <PrimaryButton onClick={prevPage} variant="primary">
+            <PrimaryButton onClick={() => handlePageChange("prev")} variant="primary">
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +121,7 @@ const ChequebookList: React.FC<ChequebookListProps> = (props) => {
           )}
 
           {page < pageCount && (
-                      <PrimaryButton onClick={nextPage} variant="primary">
+                      <PrimaryButton onClick={() => handlePageChange("next")} variant="primary">
                       Next
                       <span>
                         <svg
