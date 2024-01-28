@@ -109,17 +109,12 @@ class DirPaymentEntryDao {
         // Update payment entry details
         this.update = (req) => __awaiter(this, void 0, void 0, function* () {
             const id = req.body.id;
-            try {
-                return yield prisma.dir_payment_entries.update({
-                    where: {
-                        id: id,
-                    },
-                    data: (0, dirPaymentEntryValidation_1.requestData)(req),
-                });
-            }
-            catch (error) {
-                throw Error(error.meta.cause);
-            }
+            return yield prisma.dir_payment_entries.update({
+                where: {
+                    id: id,
+                },
+                data: (0, dirPaymentEntryValidation_1.requestData)(req),
+            });
         });
         //////
     }

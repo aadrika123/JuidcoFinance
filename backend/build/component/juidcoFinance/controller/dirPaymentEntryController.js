@@ -66,14 +66,14 @@ class DirPaymentEntryController {
         // Update payment entry details by Id
         this.update = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const { error } = dirPaymentEntryValidation_1.dirPaymentEntryValidation.validate(req.body);
+                const { error } = dirPaymentEntryValidation_1.dirPaymentEntryValidationAlongWithID.validate(req.body);
                 if (error)
-                    return (0, sendResponse_1.sendResponse)(false, error.message, "", 403, "POST", "0904", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(false, error, "", 403, "POST", "0904", "1.0", res);
                 const data = yield this.dirPaymentEntryDao.update(req);
                 return (0, sendResponse_1.sendResponse)(true, dirPaymentEntryMessage_1.default.UPDATED, data, 200, "POST", "0904", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0904", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "POST", "0904", "1.0", res);
             }
         });
         this.dirPaymentEntryDao = new dirPaymentEntryDao_1.default();

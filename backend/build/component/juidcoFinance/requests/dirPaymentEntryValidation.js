@@ -3,11 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requestData = exports.dirPaymentEntryValidation = void 0;
+exports.requestData = exports.dirPaymentEntryValidationAlongWithID = exports.dirPaymentEntryValidation = void 0;
 const joi_1 = __importDefault(require("joi"));
 // Validating request data
 exports.dirPaymentEntryValidation = joi_1.default.object({
-    id: joi_1.default.number(),
     payment_date: joi_1.default.date().required(),
     payment_type_id: joi_1.default.number().required(),
     payee_name: joi_1.default.string().required(),
@@ -20,6 +19,10 @@ exports.dirPaymentEntryValidation = joi_1.default.object({
     department_id: joi_1.default.number().required(),
     payment_mode: joi_1.default.string().required(),
     amount: joi_1.default.number().required(),
+});
+// Validating request data for update
+exports.dirPaymentEntryValidationAlongWithID = exports.dirPaymentEntryValidation.keys({
+    id: joi_1.default.number().required()
 });
 // arrange request data for store and update
 const requestData = (req) => {

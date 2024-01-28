@@ -4,7 +4,6 @@ import { Request } from "express";
 
 // Validating request data
 export const dirPaymentEntryValidation = Joi.object({
-  id: Joi.number(),
   payment_date: Joi.date().required(),
   payment_type_id: Joi.number().required(),
   payee_name: Joi.string().required(),
@@ -17,6 +16,11 @@ export const dirPaymentEntryValidation = Joi.object({
   department_id: Joi.number().required(),
   payment_mode: Joi.string().required(),
   amount: Joi.number().required(),
+});
+
+// Validating request data for update
+export const dirPaymentEntryValidationAlongWithID = dirPaymentEntryValidation.keys({
+  id: Joi.number().required()
 });
 
 // arrange request data for store and update

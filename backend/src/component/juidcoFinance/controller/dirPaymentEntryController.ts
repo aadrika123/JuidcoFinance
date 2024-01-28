@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { dirPaymentEntryValidation } from "../requests/dirPaymentEntryValidation";
+import { dirPaymentEntryValidation, dirPaymentEntryValidationAlongWithID } from "../requests/dirPaymentEntryValidation";
 import { sendResponse } from "../../../util/sendResponse";
 import ResMessage from "../responseMessage/dirPaymentEntryMessage";
 import DirPaymentEntryDao from "../dao/dirPaymentEntryDao";
@@ -147,12 +147,12 @@ class DirPaymentEntryController {
   // Update payment entry details by Id
   update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = dirPaymentEntryValidation.validate(req.body);
+      const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body);
 
       if (error)
         return sendResponse(
           false,
-          error.message,
+          error,
           "",
           403,
           "POST",
@@ -175,7 +175,7 @@ class DirPaymentEntryController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "POST",

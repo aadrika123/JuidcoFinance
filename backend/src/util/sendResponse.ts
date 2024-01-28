@@ -7,7 +7,7 @@ import errorCodes from "./errorCodes";
 
 export const sendResponse = async (
   status: boolean,
-  message: string,
+  message: any,
   resData: unknown,
   responseCode: number,
   action: string,
@@ -20,13 +20,21 @@ export const sendResponse = async (
     resData = errorCodes[resData as keyof typeof errorCodes];
   }
 
+  if (message && message?.code) {
+    // message = errorCodes[message?.code as keyof typeof errorCodes];
+    message = message.meta.cause;
+    responseCode = 400;
+  } else {
+    message = message?.message || message;
+  }
+
   const jsonRes = {
     status,
     message,
     "meta-data": {
       apiId,
       version,
-      responseTime: responseTime(res),
+      responseTime: res.locals.responseTime,
       action,
       deviceId,
     },
@@ -34,31 +42,4 @@ export const sendResponse = async (
   };
 
   return res.status(responseCode).json(jsonRes);
-};
-
-
-// export const responseTime = (req:Request, res:Response, next: NextFunction): void=>{
-//   const startTime = process.hrtime();
-//   // let totalTimeInMs;
-
-//   res.on('finish', ()=>{
-//     const totalTime = process.hrtime(startTime);
-//      const totalTimeInMs = totalTime[0] * 1000 + totalTime[1] / 1e6;
-//      res.locals.responseTime = totalTimeInMs;
-//      console.log("first",res.locals.responseTime)
-//   });
-//   next();
-//   // return totalTimeInMs;
-// }
-
-const responseTime = (res: Response): Promise<number> => {
-  const startTime = process.hrtime();
-
-  return new Promise((resolve) => {
-    res.on('finish', () => {
-      const totalTime = process.hrtime(startTime);
-      const totalTimeInMs = totalTime[0] * 1000 + totalTime[1] / 1e6;
-      resolve(totalTimeInMs);
-    });
-  });
 };

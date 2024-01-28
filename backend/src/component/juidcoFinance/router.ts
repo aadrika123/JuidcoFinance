@@ -8,6 +8,9 @@ import DepartmentRoute from "./route/departmentRoute";
 import VendorMasterRoute from "./route/vendorMasterRoute";
 import ChequeBookEntryRoute from "./route/chequebookEntryRoute";
 import DirPaymentEntryRoute from "./route/dirPaymentEntryRoute";
+import PaymentTypeRoute from "./route/paymentTypeRoute";
+import AdministrativeWardRoute from "./route/adminisWardRoute";
+import GrantRoute from "./route/grantRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +38,9 @@ class FinanceRoute {
   private vendorMasterRoute: VendorMasterRoute;
   private chequebookEntryRoute: ChequeBookEntryRoute;
   private dirPaymentEntryRoute: DirPaymentEntryRoute;
+  private paymentTypeRoute: PaymentTypeRoute;
+  private adminisWardRoute: AdministrativeWardRoute;
+  private grantRoute: GrantRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -72,6 +78,18 @@ class FinanceRoute {
     /// DIRECT_PAYMENT_ENTRY ///
     this.dirPaymentEntryRoute = new DirPaymentEntryRoute();
     this.dirPaymentEntryRoute.configure(app);  // 09
+
+    /// PAYMENT_TYPE ///
+    this.paymentTypeRoute = new PaymentTypeRoute();
+    this.paymentTypeRoute.configure(app);  // 10
+
+    /// ADMINISTRATIVE_WARD ///
+    this.adminisWardRoute = new AdministrativeWardRoute();
+    this.adminisWardRoute.configure(app);  // 11
+
+    /// GRANT ///
+    this.grantRoute = new GrantRoute();
+    this.grantRoute.configure(app);  // 12
   }
 }
 
