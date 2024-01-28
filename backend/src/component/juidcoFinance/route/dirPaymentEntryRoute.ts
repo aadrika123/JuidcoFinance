@@ -15,7 +15,7 @@ class DirPaymentEntryRoute {
     configure(app: express.Application) : void {
         app.route(`${baseUrl}/direct-payment-entry/create`).post(this.dirPaymentEntryController.create); //0901
         app.route(`${baseUrl}/direct-payment-entry/get-all`).get(this.dirPaymentEntryController.get); //0902
-        app.route(`${baseUrl}/direct-payment-entry/get-by-id/:bankId`).get(this.dirPaymentEntryController.getById); //0903
+        app.route(`${baseUrl}/direct-payment-entry/get-by-id/:id`).get(this.dirPaymentEntryController.getById); //0903
         app.route(`${baseUrl}/direct-payment-entry/update`).post(this.dirPaymentEntryController.update); //0904
     }
 }

@@ -5,12 +5,12 @@ import { Request } from "express";
 // Validating request data
 export const dirPaymentEntryValidation = Joi.object({
   id: Joi.number(),
-  payment_date: Joi.string().required(),
+  payment_date: Joi.date().required(),
   payment_type_id: Joi.number().required(),
   payee_name: Joi.string().required(),
   narration: Joi.string().required(),
   grant_id: Joi.number().required(),
-  user_common_budget: Joi.string().required(),
+  user_common_budget: Joi.boolean().required(),
   adminis_ward_id: Joi.number().required(),
   address: Joi.string().required(),
   email: Joi.string().email().required(),

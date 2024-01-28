@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { dirPaymentEntryValidation } from "../requests/dirPaymentEntryValidation";
 import { sendResponse } from "../../../util/sendResponse";
-import ResMessage from "../responseMessage/bankMasterMessage";
+import ResMessage from "../responseMessage/dirPaymentEntryMessage";
 import DirPaymentEntryDao from "../dao/dirPaymentEntryDao";
 
 /**
@@ -33,6 +33,8 @@ class DirPaymentEntryController {
           "1.0",
           res
         );
+
+        req.body.payment_no = 123;
 
       const data = await this.dirPaymentEntryDao.store(req);
       return sendResponse(
@@ -103,7 +105,7 @@ class DirPaymentEntryController {
   // Get single payment entry details by Id
   getById = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const id: number = Number(req.params.paymentId);
+      const id: number = Number(req.params.id);
       const data = await this.dirPaymentEntryDao.getById(id);
 
       if (!data)
