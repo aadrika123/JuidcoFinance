@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require(".prisma/client");
 const generateRes_1 = require("../../../util/generateRes");
-// import { ChequebookRequestData } from "../../../util/types";
+const cheuqebookValidation_1 = require("../requests/cheuqebookValidation");
 /**
  * | Author- Bijoy Paitandi
  * | Created On- 24-01-2024
@@ -21,31 +21,11 @@ const generateRes_1 = require("../../../util/generateRes");
 const prisma = new client_1.PrismaClient();
 class ChequebookEntryDao {
     constructor() {
-        // Add new vendor in DB
+        // Add new chequebook in DB
         this.store = (req) => __awaiter(this, void 0, void 0, function* () {
-            console.log(req);
-            return;
-            // const requestData: ChequebookRequestData = {
-            //   vendor_type_id: req.body.vendorTypeId,
-            //   vendor_no: req.body.vendorNo,
-            //   name: req.body.name,
-            //   mobile_no: req.body.mobileNo,
-            //   comm_address: req.body.commAddress,
-            //   tin_no: req.body.tinNo,
-            //   pan_no: req.body.panNo,
-            //   bank_name: req.body.bankName,
-            //   ifsc_code: req.body.ifscCode,
-            //   department_id: req.body.departmentId,
-            //   email: req.body.email,
-            //   office_address: req.body.officeAddress,
-            //   gst_no: req.body.gstNo,
-            //   aadhar_no: req.body.aadharNo,
-            //   bank_account_no: req.body.bankAccountNo,
-            //   bank_branch_name: req.body.bankBranchName,
-            // };
-            // return await prisma.vendor_masters.create({
-            //   data: requestData,
-            // });
+            return yield prisma.cheque_book_entries.create({
+                data: (0, cheuqebookValidation_1.chequebookRequestData)(req),
+            });
         });
         // get all chequebook data
         this.get = (req) => __awaiter(this, void 0, void 0, function* () {
@@ -60,8 +40,12 @@ class ChequebookEntryDao {
                     id: true,
                     date: true,
                     bank_name: true,
-                    employee: true,
-                    employee_id: true,
+                    employee: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    },
                     bank_account_no: true,
                     cheque_no_from: true,
                     bank_branch: true,
@@ -78,16 +62,75 @@ class ChequebookEntryDao {
             if (search !== "undefined" && search !== "") {
                 query.where = {
                     OR: [
-                        { bank_name: { contains: search, mode: "insensitive" } },
-                        { remarks: { contains: search, mode: "insensitive" } },
+                        { bank_name: { contains: search, mode: "insensitive" }, },
+                        { remarks: { contains: search, mode: "insensitive" }, },
                     ],
                 };
             }
             const [data, count] = yield prisma.$transaction([
                 prisma.cheque_book_entries.findMany(query),
-                prisma.cheque_book_entries.count({ where: query.where }),
+                prisma.cheque_book_entries.count({ where: query.where })
             ]);
             return (0, generateRes_1.generateRes)(data, count, page, limit);
+        });
+        // get all chequebook data
+        this.get_employee_list = (req) => __awaiter(this, void 0, void 0, function* () {
+            const search = String(req.query.search);
+            const query = {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            };
+            if (search !== "undefined" && search !== "") {
+                query.where = {
+                    name: { contains: search, mode: "insensitive" }
+                };
+            }
+            const [data] = yield prisma.$transaction([
+                prisma.employees.findMany(query),
+            ]);
+            return { 'data': data };
+        });
+        //get single chequebook data by ID
+        this.getById = (id) => __awaiter(this, void 0, void 0, function* () {
+            const query = {
+                where: { id },
+                select: {
+                    id: true,
+                    date: true,
+                    bank_name: true,
+                    employee: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    },
+                    bank_account_no: true,
+                    cheque_no_from: true,
+                    bank_branch: true,
+                    page_count: true,
+                    cheque_no_to: true,
+                    issuer_name: true,
+                    cheque_book_return: true,
+                    cheque_book_return_date: true,
+                    remarks: true,
+                    created_at: true,
+                    updated_at: true,
+                },
+            };
+            const data = yield prisma.cheque_book_entries.findFirst(query);
+            return (0, generateRes_1.generateRes)(data);
+        });
+        //update chequebook data
+        this.update = (req) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.body.id;
+            return yield prisma.cheque_book_entries.update({
+                where: {
+                    id,
+                },
+                data: (0, cheuqebookValidation_1.chequebookRequestData)(req),
+            });
         });
     }
 }

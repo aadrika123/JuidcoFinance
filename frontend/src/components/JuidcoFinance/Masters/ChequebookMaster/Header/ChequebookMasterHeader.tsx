@@ -2,6 +2,7 @@ import React from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
 import PrimaryButton from "@/components/Helpers/Button";
 import Link from "next/link";
+import Routes from "@/json/routes.json";
 
 
 const ChequebookMasterHeader: React.FC = () => {
@@ -14,14 +15,14 @@ const ChequebookMasterHeader: React.FC = () => {
         </div>
         <div className="flex">
         <Link
-            href={"/chequebook-master/return"}>
+            href={Routes.chequebook_master$return}>
             <PrimaryButton variant="cancel" className="rounded-3xl mr-8">
               Return Chequebook
             </PrimaryButton>
           </Link>
 
           <Link
-            href={"/chequebook-master/add"}>
+            href={Routes.chequebook_master$add}>
             <PrimaryButton variant="primary" className="rounded-3xl">
               + Add Chequebook
             </PrimaryButton>

@@ -4,6 +4,7 @@ import { RootState } from "@/redux/store";
 import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import Routes from "@/json/routes.json";
 
 
 /**
@@ -193,7 +194,7 @@ const ChequebooksTable: React.FC = () => {
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
 
-                  <Link href={`/chequebook-master/view/${d.id}`}>
+                  <Link href={`${Routes.chequebook_master$view}/${d.id}`}>
                       <div className="flex justify-center opacity-90">
                       
                     

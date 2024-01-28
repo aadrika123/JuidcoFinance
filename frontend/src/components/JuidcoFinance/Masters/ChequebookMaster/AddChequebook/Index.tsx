@@ -1,185 +1,248 @@
 "use client";
 
 import React from "react";
-import axios from "@/lib/axiosConfig";
-import { useMutation } from "react-query";
+import axios from "axios";
+import { useMutation, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { SubHeading } from "@/components/Helpers/Heading";
-import InputBox from "@/components/Helpers/InputBox";
-import type { AddChequebookDetailsData } from "@/utils/types/chequebook_master_types";
-import {
-  CheckbookDetailsSchema,
-  initialChequebookDetails,
-} from "@/utils/validation/masters/chequebook_master.validation";
+import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
-import { QueryClient } from "@tanstack/react-query";
+import DateInputBox from "@/components/Helpers/DateInputBox";
+import DropDownListBox from "@/components/Helpers/DropDownListBox";
+import InputBox2 from "@/components/Helpers/InputBox2";
+import Routes from "@/json/routes.json";
+import APIs from "@/json/apis.json";
+
+/**
+ * | Author- Bijoy Paitandi
+ * | Created On- 24-01-2024
+ * | Created for- Chequebook Entry
+ * | UI/UX Design: https://www.figma.com/file/E8bQY6k1Hx9IFkZEOXXo6R/Finance-Module-Final-Kit?node-id=933%3A2529&mode=dev
+ * | Status: closed
+ */
+
+export interface AddChequebookDetailsData {
+  date: Date;
+  issuer_name: string
+  bank_name: string;
+  bank_account_no: string;
+  cheque_no_from: string;
+  employee_id: number;
+  bank_branch: string;
+  page_count: number;
+  cheque_no_to: string;
+}
+
 
 export const HeroAddChequebook = () => {
-  const queryClient = new QueryClient();
+  
 
-  // Add Bank Details
-  const createBankDetails = async (
-    values: AddChequebookDetailsData
-  ): Promise<AddChequebookDetailsData> => {
-    const res = await axios({
-      url: `/api/finance/add-bank-details`,
-      method: "POST",
-      data: values,
+    const queryClient = useQueryClient();
+
+    // Add Chequebook Details
+    const createChequebookDetails = async (
+      values: AddChequebookDetailsData
+    ): Promise<AddChequebookDetailsData> => {
+      const res = await axios({
+        url: `${APIs.chequebook_mater$create}`,
+        method: "POST",
+        data: values,
+      });
+      return res.data;
+    };
+    const { mutate } = useMutation(createChequebookDetails, {
+      onSuccess: (data) => {
+        console.log(data);
+        
+        toast.success("Successfully Added Chequebook Details!");
+      },
+      onError: () => {
+        alert("There was an error, Please check your internet connection.");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("create");
+      },
     });
-    return res.data;
-  };
-  const { mutate } = useMutation(createBankDetails, {
-    onSuccess: (data) => {
-      console.log(data);
-
-      toast.success("Successfully Added Bank Details!");
-    },
-    onError: () => {
-      alert("there was an error");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries("create");
-    },
-  });
+    // ----- FORMIK & YUP FORM VAIDATION ---------- //
+    const AddCheckbookDetailsSchema = Yup.object().shape({
+      date: Yup.date().required("Issue date is required."),
+      issuer_name: Yup.string().required("Issuer name is required."),
+      bank_name: Yup.string().required("Bank Name is required"),
+      bank_account_no: Yup.string().required("Bank Account No is required."),
+      cheque_no_from: Yup.string().required("Serial number of first check leaf"),
+      employee_id: Yup.number().required("Please select the employee").notOneOf([-1], "Please select an employee"),
+      bank_branch: Yup.string().required("Bank branch is required."),
+      page_count: Yup.number().required("Page count is required.").notOneOf([0], "Invalid page count"),
+      cheque_no_to: Yup.string().required("Serial number of the last check leaf is required")
+    });
+  
+    const initialChequebookDetails = {
+      date: new Date(),
+      issuer_name: "",
+      bank_name: "",
+      bank_account_no: "",
+      cheque_no_from: "",
+      employee_id: -1,
+      bank_branch: "",
+      page_count: 0,
+      cheque_no_to: "",
+    };
+  
+    // ----- FORMIK & YUP FORM VAIDATION ---------- //
 
   return (
     <>
       <Toaster />
-
+     
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
-        <div className="flex justify-between">
-          <SubHeading>Add Chequebook</SubHeading>
-        </div>
+      <div className="flex justify-between">
+        <SubHeading>Add Chequebook</SubHeading>
+      </div>
 
-        <div className="mt-8">
-          <Formik
-            initialValues={initialChequebookDetails}
-            validationSchema={CheckbookDetailsSchema}
-            onSubmit={(values) => {
-              console.log(values);
-              mutate(values);
-            }}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.bankName}
-                    error={errors.bankName}
-                    touched={touched.bankName}
-                    label="Date"
-                    name="bankName"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.ifscCode}
-                    error={errors.ifscCode}
-                    touched={touched.ifscCode}
-                    label="Issuer Name"
-                    name="ifscCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.branch}
-                    error={errors.branch}
-                    touched={touched.branch}
-                    label="Name of the bank"
-                    name="branch"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="Employee Name"
-                    name="micrCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="Bank Branch Name"
-                    name="micrCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="Chequebook No From"
-                    name="micrCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="Bank Account No"
-                    name="micrCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="Chequebook No To"
-                    name="micrCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="IFSC Code"
-                    name="micrCode"
-                  />
-                  <InputBox
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.micrCode}
-                    error={errors.micrCode}
-                    touched={touched.micrCode}
-                    label="Number of Pages"
-                    name="micrCode"
-                  />
-                </div>
+      
+      <div className="mt-8">
+      <Formik
+                  initialValues={initialChequebookDetails}
+                  validationSchema={AddCheckbookDetailsSchema}
+                  onSubmit={(values) => {
+                    // console.log(values);
+                    mutate(values);
+                  }}
+                >
+                  {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    resetForm
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <div className="grid grid-cols-2 gap-x-6 gap-4 ">
+                        
+                        <DateInputBox
+                          label="Issue Date"
+                          name="date"
+                          error={errors.date}
+                          touched={touched.date}
+                          value={values.date}
+                        />
+                        
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="text"
+                          placeholder="Example: ICICI bank Delhi"
+                          value={values.issuer_name}
+                          touched={touched.issuer_name}
+                          error={errors.issuer_name}
+                          label="Issuer Name"
+                          name="issuer_name"
+                        />
 
-                <div className="mt-4 flex items-center gap-5 justify-end">
-                  <PrimaryButton buttonType="button" variant="cancel">
-                    Back
-                  </PrimaryButton>
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="text"
+                          placeholder="Example: Bank of Baroda"
+                          value={values.bank_name}
+                          touched={touched.bank_name}
+                          error={errors.bank_name}
+                          label="Name of the bank"
+                          name="bank_name"
+                        />
 
-                  <PrimaryButton buttonType="button" variant="cancel">
-                    Reset
-                  </PrimaryButton>
-                  <PrimaryButton buttonType="submit" variant="primary">
-                    Save
-                  </PrimaryButton>
-                </div>
-              </form>
-            )}
-          </Formik>
-        </div>
+                        <DropDownListBox
+                          api={APIs.chequebook_master$employee_list}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="Please select an employee"
+                          value={values.employee_id}
+                          error={errors.employee_id}
+                          touched={touched.employee_id}
+                          label="Employee Name"
+                          name="employee_id"
+                        />
+
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="text"
+                          placeholder="Example: Ranchi"
+                          value={values.bank_branch}
+                          touched={touched.bank_branch}
+                          error={errors.bank_branch}
+                          label="Bank Branch Name"
+                          name="bank_branch"
+                        />
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="text"
+                          placeholder="Example: 374837438787438"
+                          value={values.cheque_no_from}
+                          touched={touched.cheque_no_from}
+                          error={errors.cheque_no_from}
+                          label="Cheque Number From"
+                          name="cheque_no_from"
+                        />
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="text"
+                          placeholder="Example: 32987239847"
+                          value={values.bank_account_no}
+                          touched={touched.bank_account_no}
+                          error={errors.bank_account_no}
+                          label="Bank Account No"
+                          name="bank_account_no"
+                        />
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="text"
+                          placeholder="Example: 374837438787438"
+                          value={values.cheque_no_to}
+                          touched={touched.cheque_no_to}
+                          error={errors.cheque_no_to}
+                          label="Cheque Number To"
+                          name="cheque_no_to"
+                        />
+                        <InputBox2
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="number"
+                          placeholder="Example: 20"
+                          value={values.page_count}
+                          touched={touched.page_count}
+                          error={errors.page_count}
+                          label="Number of pages"
+                          name="page_count"
+                        />
+
+                        </div>
+                        
+                      <div className="mt-4 flex items-center gap-5 justify-end">
+                      <PrimaryButton buttonType="button" onClick={() => open(Routes.chequebook_master, "_self")} variant="cancel">
+                          Back
+                        </PrimaryButton>
+
+                        <PrimaryButton buttonType="button" onClick={resetForm} variant="cancel">
+                          Reset
+                        </PrimaryButton>
+                        <PrimaryButton buttonType="submit" variant="primary">
+                          Save
+                        </PrimaryButton>
+                      </div>
+                    </form>
+                  )}
+              </Formik>
+      </div>
       </section>
+
+    
     </>
   );
 };

@@ -48,17 +48,17 @@ interface VendorRequestData {
 }
 
 interface ChequebookRequestData {
-  date: string;
+  date: Date;
+  issuer_name: string
   bank_name: string;
   bank_account_no: string;
   cheque_no_from: string;
   employee_id: number;
   bank_branch: string;
-  page_count: string;
+  page_count: number;
   cheque_no_to: string;
-  issuer_name: string;
   cheque_book_return: boolean;
-  cheque_book_return_date: string;
+  cheque_book_return_date: Date;
 }
 
 interface DirPaymentEntryRequestData {
