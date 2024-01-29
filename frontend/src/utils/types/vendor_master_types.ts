@@ -1,15 +1,8 @@
 // Vendor Master Types //
 
 export interface VendorDetailsData {
-  id: number;
-  vendor_type: {
-    id: number;
-    name: string;
-  };
-  department: {
-    id: number;
-    name: string;
-  };
+  vendor_type_id: string | number;
+  department_id: string | number;
   name: string;
   mobile_no: string;
   tin_no: string;
@@ -23,8 +16,4 @@ export interface VendorDetailsData {
   aadhar_no: string;
   bank_account_no: string;
   bank_branch_name: string;
-  is_authorized: boolean;
-  created_at: string;
-  authorized_date: string | null;
-  updated_at: string;
 }

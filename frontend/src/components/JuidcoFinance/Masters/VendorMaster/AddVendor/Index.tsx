@@ -40,7 +40,7 @@ export const HeroAddVendor = () => {
       alert("there was an error");
     },
     onSettled: () => {
-      queryClient.invalidateQueries("create");
+      queryClient.invalidateQueries("vendor-list");
     },
   });
 
@@ -73,11 +73,11 @@ export const HeroAddVendor = () => {
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.vendor_type.name}
-                    error={errors.vendor_type?.name}
-                    touched={touched.vendor_type?.name}
+                    value={values.vendor_type_id}
+                    error={errors.vendor_type_id}
+                    touched={touched.vendor_type_id}
                     label="Vendor Type *"
-                    name="vendor_type"
+                    name="vendor_type_id"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -91,11 +91,11 @@ export const HeroAddVendor = () => {
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.department.name}
-                    error={errors.department?.name}
-                    touched={touched.department?.name}
+                    value={values.department_id}
+                    error={errors.department_id}
+                    touched={touched.department_id}
                     label="Department *"
-                    name="department"
+                    name="department_id"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -204,6 +204,7 @@ export const HeroAddVendor = () => {
 
                 <div className="flex items-center justify-end mt-5 gap-5">
                   <PrimaryButton
+                    buttonType="button"
                     variant={"cancel"}
                     onClick={() => {
                       history.back();

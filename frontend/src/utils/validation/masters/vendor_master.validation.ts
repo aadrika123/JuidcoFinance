@@ -2,40 +2,31 @@ import { VendorDetailsData } from "@/utils/types/vendor_master_types";
 import * as Yup from "yup";
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
-
 export const VendorDetailsSchema = Yup.object().shape({
-  vendorType: Yup.string().required("Vendor type is required"),
-  mobileNo: Yup.string()
+  vendor_type_id: Yup.number().required("Vendor type is required"),
+  department_id: Yup.number().required("Department is required"),
+  name: Yup.string().required("Vendor Name is required"),
+  mobile_no: Yup.string()
     .matches(/^\d{10}$/, "Invalid mobile number")
     .required("Mobile Number is required"),
-  departmentId: Yup.number().required("Department is required"),
+  tin_no: Yup.string().required("TIN No. is required"),
+  gst_no: Yup.string().required("GST No. Name is required"),
+  comm_address: Yup.string().required("Contact address is required"),
+  pan_no: Yup.string().required("Pan number is required"),
+  bank_name: Yup.string().required("Bank Name is required"),
+  ifsc_code: Yup.string().required("IFSC code is required"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  name: Yup.string().required("Vendor Name is required"),
-  bankName: Yup.string().required("Bank Name is required"),
-
-  contactAddress: Yup.string().required("Contact address is required"),
-  ifscCode: Yup.string().required("IFSC code is required"),
-  tinNo: Yup.string().required("TIN No. is required"),
-
-  bankAccountNo: Yup.string().required("Bank account no. is required"),
-  gstNo: Yup.string().required("GST No. Name is required"),
-  bankBranchName: Yup.string().required("Bank Branch Name is required"),
-  aadharNo: Yup.string().required("Aaadhaar number is required"),
-  panNo: Yup.string().required("Pan number is required"),
+  office_address: Yup.string().required("Office address is required"),
+  aadhar_no: Yup.string().required("Aaadhaar number is required"),
+  bank_account_no: Yup.string().required("Bank account no. is required"),
+  bank_branch_name: Yup.string().required("Bank Branch Name is required"),
 });
 
 export const initialVendorDetails: VendorDetailsData = {
-  id: 0,
-  vendor_type: {
-    id: 0,
-    name: "",
-  },
-  department: {
-    id: 0,
-    name: "",
-  },
+  vendor_type_id: 0,
+  department_id: 0,
   name: "",
   mobile_no: "",
   tin_no: "",
@@ -49,10 +40,6 @@ export const initialVendorDetails: VendorDetailsData = {
   aadhar_no: "",
   bank_account_no: "",
   bank_branch_name: "",
-  is_authorized: false,
-  created_at: "",
-  authorized_date: null,
-  updated_at: "",
 };
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
