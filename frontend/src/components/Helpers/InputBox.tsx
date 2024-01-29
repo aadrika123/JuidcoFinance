@@ -11,6 +11,7 @@ interface InputBoxProps {
   isDatalist?: boolean | true;
   onChange: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (e?: React.FocusEvent<HTMLInputElement>) => void;
+  type?: string;
 }
 
 const InputBox: React.FC<InputBoxProps> = (props) => {
@@ -21,6 +22,7 @@ const InputBox: React.FC<InputBoxProps> = (props) => {
           {props.label}
         </label>
         <input
+          type={props.type || 'text'}
           placeholder="text"
           onChange={props.onChange}
           onBlur={props.onBlur}

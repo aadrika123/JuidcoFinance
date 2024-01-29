@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
 import { generateRes } from "../../../util/generateRes";
-import {vendorRequestData } from "../requests/vendorMasterValidation";
+import { vendorRequestData } from "../requests/vendorMasterValidation";
 
 const prisma = new PrismaClient();
 
@@ -42,7 +42,7 @@ class VendorMasterDao {
       },
     };
 
-    if(search !== "undefined" && search !== ""){
+    if (search !== "undefined" && search !== "") {
       query.where = {
         OR: [
           {
@@ -55,7 +55,7 @@ class VendorMasterDao {
           },
           { name: { equals: search, mode: "insensitive" } },
         ],
-      }
+      };
     }
 
     const [data, count] = await prisma.$transaction([
@@ -63,7 +63,7 @@ class VendorMasterDao {
       prisma.vendor_masters.count(),
     ]);
 
-    return generateRes(data, count, page, limit );
+    return generateRes(data, count, page, limit);
   };
 
   //get single vendor data by ID
@@ -88,12 +88,11 @@ class VendorMasterDao {
         mobile_no: true,
         tin_no: true,
         gst_no: true,
-        comm_address: true,
         pan_no: true,
         bank_name: true,
         ifsc_code: true,
         email: true,
-        office_address: true,
+        contact_address: true,
         aadhar_no: true,
         bank_account_no: true,
         bank_branch_name: true,
@@ -117,7 +116,6 @@ class VendorMasterDao {
       data: vendorRequestData(req),
     });
   };
-
 }
 
 export default VendorMasterDao;

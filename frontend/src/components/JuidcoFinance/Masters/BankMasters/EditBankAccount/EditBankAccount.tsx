@@ -8,10 +8,16 @@ import { AddBankDetailsSchema } from "@/utils/validation/masters/bank_master.val
 import axios from "@/lib/axiosConfig";
 import { AddBankDetailsData } from "@/utils/types/bank_master_types";
 import { FINANCE_URL } from "@/utils/api/urls";
+import goBack from "@/utils/helper";
+import { useMutation } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
 
 const EditBankAccount = ({ bankID }: { bankID: string }) => {
   const [bankAccountDetails, setBankAccountDetails] =
     useState<AddBankDetailsData>();
+
+  const queryClient = new QueryClient();
 
   // get single bank account details
   useEffect(() => {
@@ -23,30 +29,62 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
       setBankAccountDetails(res?.data?.data);
     })();
   }, [bankID]);
-  console.log(bankAccountDetails, "data");
-  //Formik initiali state.
+
+  const updateBankDetails = async (values: AddBankDetailsData) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.BANK_MASTER_URL.update}`,
+        method: "POST",
+        data: {
+          id: bankAccountDetails?.id,
+          ...values,
+        },
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { mutate } = useMutation(updateBankDetails, {
+    onSuccess: () => {
+      toast.success("Successfully Added Bank Details!");
+    },
+
+    onError: (error) => {
+      console.log(error);
+      alert("there was an error updating");
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+
   const initialBankDetailsValues = {
-    bankName: bankAccountDetails?.bank_name,
-    ifscCode: bankAccountDetails?.ifsc_code,
-    branch: bankAccountDetails?.branch,
-    micrCode: bankAccountDetails?.micr_code,
-    branchAddress: bankAccountDetails?.branch_address,
-    branchCity: bankAccountDetails?.branch_city,
-    branchState: bankAccountDetails?.branch_state,
-    branchDistrict: bankAccountDetails?.branch_district,
-    email: bankAccountDetails?.email,
-    contactNo: bankAccountDetails?.contact_no,
-    contactPersonName: bankAccountDetails?.contact_person_name,
+    bank_name: bankAccountDetails?.bank_name || "",
+    ifsc_code: bankAccountDetails?.ifsc_code || "",
+    branch: bankAccountDetails?.branch || "",
+    micr_code: bankAccountDetails?.micr_code || "",
+    branch_address: bankAccountDetails?.branch_address || "",
+    branch_city: bankAccountDetails?.branch_city || "",
+    branch_state: bankAccountDetails?.branch_state || "",
+    branch_district: bankAccountDetails?.branch_district || "",
+    email: bankAccountDetails?.email || "",
+    contact_no: bankAccountDetails?.contact_no || "",
+    contact_person_name: bankAccountDetails?.contact_person_name || "",
   };
 
   return (
     <>
+      <Toaster />
       <Formik
         initialValues={initialBankDetailsValues}
         validationSchema={AddBankDetailsSchema}
-        onSubmit={(values) => {
+        enableReinitialize={true}
+        onSubmit={(values: AddBankDetailsData) => {
           console.log(values);
-          // mutate(values);
+          mutate(values);
         }}
       >
         {({
@@ -62,18 +100,18 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.bankName}
-                error={errors.bankName}
-                touched={touched.bankName}
+                value={values.bank_name}
+                error={errors.bank_name}
+                touched={touched.bank_name}
                 label="Name of Bank *"
                 name="bank_name"
               />
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.ifscCode}
-                error={errors.ifscCode}
-                touched={touched.ifscCode}
+                value={values.ifsc_code}
+                error={errors.ifsc_code}
+                touched={touched.ifsc_code}
                 label="IFSC Code *"
                 name="ifsc_code"
               />
@@ -89,54 +127,54 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.micrCode}
-                error={errors.micrCode}
-                touched={touched.micrCode}
+                value={values.micr_code}
+                error={errors.micr_code}
+                touched={touched.micr_code}
                 label="MICR Code"
                 name="micr_code"
               />
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.branchAddress}
-                error={errors.branchAddress}
-                touched={touched.branchAddress}
+                value={values.branch_address}
+                error={errors.branch_address}
+                touched={touched.branch_address}
                 label="Bank Branch Address"
                 name="branch_address"
               />
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.contactNo}
-                error={errors.contactNo}
-                touched={touched.contactNo}
+                value={values.contact_no}
+                error={errors.contact_no}
+                touched={touched.contact_no}
                 label="Contact Number"
                 name="contact_no"
               />
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.branchCity}
-                error={errors.branchCity}
-                touched={touched.branchCity}
+                value={values.branch_city}
+                error={errors.branch_city}
+                touched={touched.branch_city}
                 label="Bank Branch City"
                 name="branch_city"
               />
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.branchDistrict}
-                error={errors.branchDistrict}
-                touched={touched.branchDistrict}
+                value={values.branch_district}
+                error={errors.branch_district}
+                touched={touched.branch_district}
                 label="Bank Branch District"
                 name="branch_district"
               />
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.branchState}
-                error={errors.branchState}
-                touched={touched.branchState}
+                value={values.branch_state}
+                error={errors.branch_state}
+                touched={touched.branch_state}
                 label="Bank Branch State "
                 name="branch_state"
               />
@@ -152,15 +190,19 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
               <InputBox
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.contactPersonName}
-                error={errors.contactPersonName}
-                touched={touched.contactPersonName}
+                value={values.contact_person_name}
+                error={errors.contact_person_name}
+                touched={touched.contact_person_name}
                 name="contact_person_name"
                 label="Contact Person Name / Designation"
               />
             </div>
             <div className="mt-4 flex items-center gap-5 justify-end">
-              <PrimaryButton buttonType="button" variant="cancel">
+              <PrimaryButton
+                buttonType="button"
+                variant="cancel"
+                onClick={goBack}
+              >
                 Close
               </PrimaryButton>
               <PrimaryButton buttonType="button" variant="cancel">

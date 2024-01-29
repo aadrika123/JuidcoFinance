@@ -144,7 +144,7 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
 
                 {/*  IFSC Code */}
                 <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">{d?.ifsc_code}</div>
+                  <div className="flex justify-center">{d?.vendor_no}</div>
                 </td>
 
                 {/* BRANCH */}

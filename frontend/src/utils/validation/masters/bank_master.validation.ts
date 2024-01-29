@@ -32,3 +32,4 @@ export const initialBankDetailsValues: AddBankDetailsData = {
   contact_no: "",
   contact_person_name: "",
 };
+

@@ -23,8 +23,8 @@ export const FINANCE_URL: Urls = {
 
   VENDOR_MASTER_URL: {
     get: "/vendor-master/get?limit=10",
-    create: "/api/finance/add-vendor-details",
-    update: "/api/finance/update-vendor-details",
+    create: "/vendor-master/create",
+    update: "/vendor-master/update",
     getById: "/vendor-master/get",
   },
 

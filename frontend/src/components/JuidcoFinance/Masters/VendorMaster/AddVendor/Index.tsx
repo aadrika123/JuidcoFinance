@@ -14,6 +14,8 @@ import {
   VendorDetailsSchema,
   initialVendorDetails,
 } from "@/utils/validation/masters/vendor_master.validation";
+import { FINANCE_URL } from "@/utils/api/urls";
+import goBack from "@/utils/helper";
 // Imports // ----------------------------------------------------------------
 
 // Main Functions // ----------------------------------------------------------------
@@ -25,7 +27,7 @@ export const HeroAddVendor = () => {
     values: VendorDetailsData
   ): Promise<VendorDetailsData> => {
     const res = await axios({
-      url: `/api/finance/add-vendor-details`,
+      url: `${FINANCE_URL.VENDOR_MASTER_URL.create}`,
       method: "POST",
       data: values,
     });
@@ -41,6 +43,7 @@ export const HeroAddVendor = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries("vendor-list");
+      goBack();
     },
   });
 
@@ -77,6 +80,7 @@ export const HeroAddVendor = () => {
                     error={errors.vendor_type_id}
                     touched={touched.vendor_type_id}
                     label="Vendor Type *"
+                    type="number"
                     name="vendor_type_id"
                   />
                   <InputBox
@@ -94,6 +98,7 @@ export const HeroAddVendor = () => {
                     value={values.department_id}
                     error={errors.department_id}
                     touched={touched.department_id}
+                    type="number"
                     label="Department *"
                     name="department_id"
                   />
@@ -128,11 +133,11 @@ export const HeroAddVendor = () => {
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.office_address}
-                    error={errors.office_address}
-                    touched={touched.office_address}
-                    label="Office Address"
-                    name="office_address"
+                    value={values.contact_address}
+                    error={errors.contact_address}
+                    touched={touched.contact_address}
+                    label="Contact Address"
+                    name="contact_address"
                   />
 
                   <InputBox
