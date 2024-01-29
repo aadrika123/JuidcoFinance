@@ -34,7 +34,7 @@ class BankMasterDao {
       },
     };
 
-    if(search !== "undefined"){
+    if(search !== "undefined" && search !== ""){
       query.where = {
         OR: [
           {
@@ -57,6 +57,7 @@ class BankMasterDao {
 
   // Get single bank details
   getById = async (id: number) => {
+
     const query: Prisma.bank_mastersFindManyArgs = {
       where: { id },
       select: {
@@ -87,43 +88,6 @@ class BankMasterDao {
       },
       data: requestData(req),
     });
-  };
-
-  // Search bank details
-  search = async (req: Request) => {
-    const page: number = Number(req.query.page);
-    const limit: number = Number(req.query.limit);
-    const search: string = String(req.query.search);
-
-    const query: Prisma.bank_mastersFindManyArgs = {
-      skip: (page - 1) * limit,
-      take: limit,
-      where: {
-        OR: [
-          {
-            bank_name: {
-              equals: search,
-              mode: "insensitive",
-            },
-          },
-          { ifsc_code: { equals: search, mode: "insensitive" } }
-        ],
-      },
-      select: {
-        id: true,
-        bank_name: true,
-        ifsc_code: true,
-        branch: true,
-      },
-    };
-
-    const [data, count] = await prisma.$transaction([
-      prisma.bank_masters.findMany(query),
-      prisma.bank_masters.count({
-        where: query.where,
-      }),
-    ]);
-    return generateRes(data, count, page, limit);
   };
 }
 

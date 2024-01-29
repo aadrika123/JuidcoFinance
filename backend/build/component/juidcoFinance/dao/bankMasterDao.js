@@ -36,7 +36,7 @@ class BankMasterDao {
                     branch: true,
                 },
             };
-            if (search !== "undefined") {
+            if (search !== "undefined" && search !== "") {
                 query.where = {
                     OR: [
                         {
@@ -86,40 +86,6 @@ class BankMasterDao {
                 },
                 data: (0, bankMasterValidation_1.requestData)(req),
             });
-        });
-        // Search bank details
-        this.search = (req) => __awaiter(this, void 0, void 0, function* () {
-            const page = Number(req.query.page);
-            const limit = Number(req.query.limit);
-            const search = String(req.query.search);
-            const query = {
-                skip: (page - 1) * limit,
-                take: limit,
-                where: {
-                    OR: [
-                        {
-                            bank_name: {
-                                equals: search,
-                                mode: "insensitive",
-                            },
-                        },
-                        { ifsc_code: { equals: search, mode: "insensitive" } }
-                    ],
-                },
-                select: {
-                    id: true,
-                    bank_name: true,
-                    ifsc_code: true,
-                    branch: true,
-                },
-            };
-            const [data, count] = yield prisma.$transaction([
-                prisma.bank_masters.findMany(query),
-                prisma.bank_masters.count({
-                    where: query.where,
-                }),
-            ]);
-            return (0, generateRes_1.generateRes)(data, count, page, limit);
         });
         //////
     }

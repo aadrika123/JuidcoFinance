@@ -1,9 +1,13 @@
 import {
   PrismaClient,
+  adminis_wards,
   bank_masters,
   cheque_book_entries,
   departments,
+  dir_payment_entries,
   employees,
+  grants,
+  payment_types,
   vendor_masters,
   vendor_types,
 } from "@prisma/client";
@@ -12,8 +16,7 @@ import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 async function main() {
-
-    /////// Accounting Code //////////////
+  /////// Accounting Code //////////////
   const file_path = "./prisma/data/sample-accounting-code.xlsx";
 
   // File path.
@@ -28,7 +31,7 @@ async function main() {
           minor_head: row[2].toString(),
           detail_code: row[3].toString(),
           description: row[4].toString(),
-          remark: row[5].toString()
+          remark: row[5].toString(),
         },
       });
     }
@@ -50,12 +53,11 @@ async function main() {
           description_code: row[2].toString(),
           cost_center: row[3].toString(),
           description: row[4].toString(),
-          remark: row[5].toString()
+          remark: row[5].toString(),
         },
       });
     }
   });
-
 
   /////// Municipality Code //////////////
   const file_path2 = "./prisma/data/sample-municipality-code1.xlsx";
@@ -75,13 +77,12 @@ async function main() {
           district_code: row[4].toString(),
           category: row[5].toString(),
           code: row[6].toString(),
-          remark: row[7].toString()
+          remark: row[7].toString(),
         },
       });
     }
   });
 
-  
   ///////////////// department ////////////////////////
   function createRandomDepartment(): departments {
     return {
@@ -97,7 +98,7 @@ async function main() {
     count: 5,
   });
 
-  let id=1;
+  let id = 1;
   for (const item of departments) {
     await prisma.departments.create({
       data: {
@@ -126,7 +127,7 @@ async function main() {
     count: 5,
   });
 
-  let iv=1;
+  let iv = 1;
   for (const item of vendorTypes) {
     await prisma.vendor_types.create({
       data: {
@@ -214,7 +215,6 @@ async function main() {
     });
   }
 
-  
   ///////////////// cheque_book_entry ////////////////////////
   function createRandomChequeBook(): cheque_book_entries {
     return {
@@ -225,7 +225,7 @@ async function main() {
       cheque_no_from: faker.finance.creditCardNumber(),
       employee_id: faker.datatype.number(),
       bank_branch: faker.address.city(),
-      page_count: faker.datatype.number(100).toString(), // assuming page_count is a string
+      page_count: faker.datatype.number(), // assuming page_count is a string
       cheque_no_to: faker.finance.creditCardNumber(),
       issuer_name: faker.person.fullName(),
       cheque_book_return: faker.datatype.boolean(),
@@ -248,7 +248,7 @@ async function main() {
         bank_name: item.bank_name,
         bank_account_no: item.bank_account_no,
         cheque_no_from: item.cheque_no_from,
-        employee_id: 1,//item.employee_id,
+        employee_id: 1, //item.employee_id,
         bank_branch: item.bank_branch,
         page_count: item.page_count,
         cheque_no_to: item.cheque_no_to,
@@ -261,7 +261,6 @@ async function main() {
       },
     });
   }
-
 
   ///////////////// Vendor ////////////////////////
   function createRandomVendor(): vendor_masters {
@@ -298,7 +297,7 @@ async function main() {
     await prisma.vendor_masters.create({
       data: {
         id: item.id,
-        vendor_type_id: 1,//item.vendor_type_id,
+        vendor_type_id: 1, //item.vendor_type_id,
         vendor_no: item.vendor_no,
         name: item.name,
         mobile_no: item.mobile_no,
@@ -322,6 +321,144 @@ async function main() {
     });
   }
 
+  ///////////////// Administrative Ward /////////////////////
+  function createRandomAdminisWard(): adminis_wards {
+    return {
+      id: faker.datatype.number(),
+      name: faker.company.name(),
+      remark: faker.lorem.sentence(),
+      created_at: faker.date.recent(),
+      updated_at: faker.date.recent(),
+    };
+  }
+
+  const adminisWards = faker.helpers.multiple(createRandomAdminisWard, {
+    count: 5,
+  });
+
+  let iw = 1;
+  for (const item of adminisWards) {
+    await prisma.adminis_wards.create({
+      data: {
+        id: iw, //item.id,
+        name: item.name,
+        remark: item.remark,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      },
+    });
+    iw++;
+  }
+
+  //////////////// Payment Type ///////////////////////
+  function createRandomPaymentType(): payment_types {
+    return {
+      id: faker.datatype.number(),
+      type: faker.person.firstName(),
+      remark: faker.lorem.sentence(),
+      created_at: faker.date.recent(),
+      updated_at: faker.date.recent(),
+    };
+  }
+
+  const paymentTypes = faker.helpers.multiple(createRandomPaymentType, {
+    count: 5,
+  });
+
+  const paymentModes = ['Credit Card', 'Debit Card', 'PayPal', 'Cash', 'Bank Transfer'];
+  let ip = 1;
+  for (const item of paymentTypes) {
+    await prisma.payment_types.create({
+      data: {
+        id: ip,
+        type: paymentModes[ip-1],
+        remark: item.remark,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      },
+    });
+    ip++;
+  }
+
+  /////////////// Grants //////////////////////////
+  function createRandomGrant(): grants {
+    return {
+      id: faker.datatype.number(),
+      name: faker.company.name(),
+      remark: faker.lorem.sentence(),
+      created_at: faker.date.recent(),
+      updated_at: faker.date.recent(),
+    };
+  }
+
+  const grants = faker.helpers.multiple(createRandomGrant, {
+    count: 5,
+  });
+
+  let ig = 1;
+  for (const item of grants) {
+    await prisma.grants.create({
+      data: {
+        id: ig, //item.id,
+        name: item.name,
+        remark: item.remark,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      },
+    });
+    ig++;
+  }
+
+  ///////////////// Direct Payment Entry ////////////////////////
+  function createRandomDirPaymentEntry(): dir_payment_entries {
+    return {
+      id: faker.datatype.number(),
+      payment_no: faker.datatype.number(),
+      payment_date: faker.date.recent(),
+      payment_type_id: faker.datatype.number(),
+      payee_name: faker.person.fullName(),
+      narration: faker.lorem.sentence(),
+      grant_id: faker.datatype.number(),
+      user_common_budget: faker.datatype.boolean(),
+      adminis_ward_id: faker.datatype.number(),
+      address: faker.address.streetAddress(),
+      department_id: faker.datatype.number(),
+      email: faker.internet.email(),
+      payment_mode: faker.internet.email(),
+      amount: faker.datatype.number(),
+      created_at: faker.date.past(),
+      updated_at: faker.date.recent(),
+    };
+  }
+
+  const paymentEntries = faker.helpers.multiple(createRandomDirPaymentEntry, {
+    count: 20,
+  });
+
+  let pn =1;
+  for (const item of paymentEntries) {
+    await prisma.dir_payment_entries.create({
+      data: {
+        id: item.id,
+        payment_no: pn,
+        payment_date: item.payment_date,
+        payment_type_id: 1,
+        payee_name: item.payee_name,
+        narration: item.narration,
+        grant_id: 1,
+        user_common_budget: item.user_common_budget,
+        adminis_ward_id: 2,
+        address: item.address,
+        department_id: 1,
+        email: item.email,
+        payment_mode: item.payment_mode,
+        amount: item.amount,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      },
+    });
+    pn++;
+  }
 }
 main()
   .then(async () => {

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const departmentDao_1 = __importDefault(require("../dao/departmentDao"));
 const sendResponse_1 = require("../../../util/sendResponse");
+const departmentMessage_1 = __importDefault(require("../responseMessage/departmentMessage"));
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 22-01-2024
@@ -27,11 +28,11 @@ class DepartmentController {
             try {
                 const data = yield this.departmentDao.get();
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Departments Not Found!!", data, 404, "GET", "0601", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Departments Found Successfully!!", data, 200, "GET", "0601", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, departmentMessage_1.default.NOT_FOUND, data, 200, "GET", "0601", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, departmentMessage_1.default.FOUND, data, 200, "GET", "0601", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0601", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0601", "1.0", res);
             }
         });
         this.departmentDao = new departmentDao_1.default();

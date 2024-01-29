@@ -1,7 +1,9 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
-import { generateRes2 } from "../../../util/generateRes2";
-// import { ChequebookRequestData } from "../../../util/types";
+import { generateRes } from "../../../util/generateRes";
+import { chequebookRequestData } from "../requests/cheuqebookValidation";
+
+
 
 /**
  * | Author- Bijoy Paitandi
@@ -13,33 +15,14 @@ import { generateRes2 } from "../../../util/generateRes2";
 const prisma = new PrismaClient();
 
 class ChequebookEntryDao {
-  // Add new vendor in DB
+
+
+
+   // Add new chequebook in DB
   store = async (req: Request) => {
-    console.log(req);
-    return;
-
-    // const requestData: ChequebookRequestData = {
-    //   vendor_type_id: req.body.vendorTypeId,
-    //   vendor_no: req.body.vendorNo,
-    //   name: req.body.name,
-    //   mobile_no: req.body.mobileNo,
-    //   comm_address: req.body.commAddress,
-    //   tin_no: req.body.tinNo,
-    //   pan_no: req.body.panNo,
-    //   bank_name: req.body.bankName,
-    //   ifsc_code: req.body.ifscCode,
-    //   department_id: req.body.departmentId,
-    //   email: req.body.email,
-    //   office_address: req.body.officeAddress,
-    //   gst_no: req.body.gstNo,
-    //   aadhar_no: req.body.aadharNo,
-    //   bank_account_no: req.body.bankAccountNo,
-    //   bank_branch_name: req.body.bankBranchName,
-    // };
-
-    // return await prisma.vendor_masters.create({
-    //   data: requestData,
-    // });
+    return await prisma.cheque_book_entries.create({
+      data: chequebookRequestData(req),
+    });
   };
 
   // get all chequebook data
@@ -48,7 +31,7 @@ class ChequebookEntryDao {
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
-
+    
     const query: Prisma.cheque_book_entriesFindManyArgs = {
       skip: skip,
       take: limit,
@@ -56,13 +39,17 @@ class ChequebookEntryDao {
         id: true,
         date: true,
         bank_name: true,
-        employee: true,
-        employee_id: true,
+        employee: {
+          select:{
+            id: true,
+            name: true
+          }
+        },
         bank_account_no: true,
         cheque_no_from: true,
         bank_branch: true,
         page_count: true,
-        cheque_no_to: true,
+        cheque_no_to: true, 
         issuer_name: true,
         cheque_book_return: true,
         cheque_book_return_date: true,
@@ -72,22 +59,97 @@ class ChequebookEntryDao {
       },
     };
 
-    if (search !== "undefined" && search !== "") {
+    
+    if(search !== "undefined" && search !== ""){
+
       query.where = {
         OR: [
-          { bank_name: { contains: search, mode: "insensitive" } },
-          { remarks: { contains: search, mode: "insensitive" } },
+          {bank_name: {contains: search, mode: "insensitive"},},
+          {remarks: {contains: search, mode: "insensitive"},},
         ],
-      };
-    }
+      }
 
+    }
+    
     const [data, count] = await prisma.$transaction([
       prisma.cheque_book_entries.findMany(query),
-      prisma.cheque_book_entries.count({ where: query.where }),
+      prisma.cheque_book_entries.count({where: query.where})
     ]);
 
-    return generateRes2(data, count, page, limit);
+    return generateRes(data, count, page, limit );
   };
+
+  // get all chequebook data
+  get_employee_list = async (req: Request) => {
+    const search: string = String(req.query.search);
+    
+    const query: Prisma.employeesFindManyArgs = {
+      select: {
+        id: true,
+        name: true,
+      },
+    };
+
+    
+    if(search !== "undefined" && search !== ""){
+
+      query.where = {
+        name: {contains: search, mode: "insensitive"}
+      }
+
+    }
+    
+    const [data] = await prisma.$transaction([
+      prisma.employees.findMany(query),
+    ]);
+
+    return {'data': data};
+  };
+
+
+  //get single chequebook data by ID
+  getById = async (id: number) => {
+    const query: Prisma.cheque_book_entriesFindFirstArgs = {
+      where: { id },
+      select: {
+        id: true,
+        date: true,
+        bank_name: true,
+        employee: {
+          select:{
+            id: true,
+            name: true
+          }
+        },
+        
+        bank_account_no: true,
+        cheque_no_from: true,
+        bank_branch: true,
+        page_count: true,
+        cheque_no_to: true, 
+        issuer_name: true,
+        cheque_book_return: true,
+        cheque_book_return_date: true,
+        remarks: true,
+        created_at: true,
+        updated_at: true,
+      },
+    };
+    const data = await prisma.cheque_book_entries.findFirst(query);
+    return generateRes(data);
+  };
+
+  //update chequebook data
+  update = async (req: Request) => {
+    const id: number = req.body.id;
+    return await prisma.cheque_book_entries.update({
+      where: {
+        id,
+      },
+      data: chequebookRequestData(req),
+    });
+  };
+
 }
 
 export default ChequebookEntryDao;

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
 const vendorTypeDao_1 = __importDefault(require("../dao/vendorTypeDao"));
+const vendorTypeMessage_1 = __importDefault(require("../responseMessage/vendorTypeMessage"));
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 22-01-2024
@@ -27,11 +28,11 @@ class VendorTypeController {
             try {
                 const data = yield this.vendorTypeDao.get();
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Vendor Type Not Found!!", data, 404, "GET", "0501", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Vendor Type Found Successfully!!", data, 200, "GET", "0501", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, vendorTypeMessage_1.default.NOT_FOUND, data, 200, "GET", "0501", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, vendorTypeMessage_1.default.FOUND, data, 200, "GET", "0501", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, error.code, 500, "GET", "0501", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0501", "1.0", res);
             }
         });
         this.vendorTypeDao = new vendorTypeDao_1.default();

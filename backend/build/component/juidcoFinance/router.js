@@ -11,6 +11,10 @@ const vendorTypeRoute_1 = __importDefault(require("./route/vendorTypeRoute"));
 const departmentRoute_1 = __importDefault(require("./route/departmentRoute"));
 const vendorMasterRoute_1 = __importDefault(require("./route/vendorMasterRoute"));
 const chequebookEntryRoute_1 = __importDefault(require("./route/chequebookEntryRoute"));
+const dirPaymentEntryRoute_1 = __importDefault(require("./route/dirPaymentEntryRoute"));
+const paymentTypeRoute_1 = __importDefault(require("./route/paymentTypeRoute"));
+const adminisWardRoute_1 = __importDefault(require("./route/adminisWardRoute"));
+const grantRoute_1 = __importDefault(require("./route/grantRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,10 +52,22 @@ class FinanceRoute {
         this.departmentRoute.configure(app); // 06
         // VENDOR_MASTER_ROUTE ///
         this.vendorMasterRoute = new vendorMasterRoute_1.default();
-        this.vendorMasterRoute.configure(app); //07
+        this.vendorMasterRoute.configure(app); // 07
         /// CHECKBOOK_ENTRY_ROUTE ///
         this.chequebookEntryRoute = new chequebookEntryRoute_1.default();
-        this.chequebookEntryRoute.configure(app);
+        this.chequebookEntryRoute.configure(app); // 08
+        /// DIRECT_PAYMENT_ENTRY ///
+        this.dirPaymentEntryRoute = new dirPaymentEntryRoute_1.default();
+        this.dirPaymentEntryRoute.configure(app); // 09
+        /// PAYMENT_TYPE ///
+        this.paymentTypeRoute = new paymentTypeRoute_1.default();
+        this.paymentTypeRoute.configure(app); // 10
+        /// ADMINISTRATIVE_WARD ///
+        this.adminisWardRoute = new adminisWardRoute_1.default();
+        this.adminisWardRoute.configure(app); // 11
+        /// GRANT ///
+        this.grantRoute = new grantRoute_1.default();
+        this.grantRoute.configure(app); // 12
     }
 }
 exports.default = FinanceRoute;

@@ -21,13 +21,21 @@ const sendResponse = (status, message, resData, responseCode, action, apiId, ver
     if (!status) {
         resData = errorCodes_1.default[resData];
     }
+    if (message && (message === null || message === void 0 ? void 0 : message.code)) {
+        // message = errorCodes[message?.code as keyof typeof errorCodes];
+        message = message.meta.cause;
+        responseCode = 400;
+    }
+    else {
+        message = (message === null || message === void 0 ? void 0 : message.message) || message;
+    }
     const jsonRes = {
         status,
         message,
         "meta-data": {
             apiId,
             version,
-            responseTime: responseTime(res),
+            responseTime: res.locals.responseTime,
             action,
             deviceId,
         },
@@ -36,25 +44,3 @@ const sendResponse = (status, message, resData, responseCode, action, apiId, ver
     return res.status(responseCode).json(jsonRes);
 });
 exports.sendResponse = sendResponse;
-// export const responseTime = (req:Request, res:Response, next: NextFunction): void=>{
-//   const startTime = process.hrtime();
-//   // let totalTimeInMs;
-//   res.on('finish', ()=>{
-//     const totalTime = process.hrtime(startTime);
-//      const totalTimeInMs = totalTime[0] * 1000 + totalTime[1] / 1e6;
-//      res.locals.responseTime = totalTimeInMs;
-//      console.log("first",res.locals.responseTime)
-//   });
-//   next();
-//   // return totalTimeInMs;
-// }
-const responseTime = (res) => {
-    const startTime = process.hrtime();
-    return new Promise((resolve) => {
-        res.on('finish', () => {
-            const totalTime = process.hrtime(startTime);
-            const totalTimeInMs = totalTime[0] * 1000 + totalTime[1] / 1e6;
-            resolve(totalTimeInMs);
-        });
-    });
-};

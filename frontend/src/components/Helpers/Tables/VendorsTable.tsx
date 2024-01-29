@@ -176,7 +176,7 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
 
                 {/* Edit */}
                 <td className="border border-zinc-400">
-                  <Link href={`${pathName}/${d.id}`}>
+                  <Link href={`${pathName}/edit/${d.id}`}>
                     <div className="flex justify-center opacity-90">
                       <span>Edit</span>
                       <span className="ml-2 mt-1">
@@ -210,7 +210,7 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
                 {/* View / Print */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <Link href={`${pathName}/${d.id}`}>
+                    <Link href={`${pathName}/view/${d.id}`}>
                       <div className="flex justify-center opacity-90">
                         <span>View</span>
                         <span className="ml-2 mt-1">

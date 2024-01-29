@@ -1,6 +1,7 @@
 import { sendResponse } from "../../../util/sendResponse";
 import { Request, Response } from "express";
 import AccountingCodeDao from "../dao/accountingCodeDao";
+import ResMessage from "../responseMessage/accountCodeMessage";
 
 /**
  * | Author- Krish Vishwakarma
@@ -26,9 +27,9 @@ class AccountCodeController {
       if (!data)
         return sendResponse(
           true,
-          "Function Code Not Found",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0201",
           "1.0",
@@ -37,7 +38,7 @@ class AccountCodeController {
 
       return sendResponse(
         true,
-        "Function Code Found Successfully!!",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -49,7 +50,7 @@ class AccountCodeController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "GET",
         "0201",

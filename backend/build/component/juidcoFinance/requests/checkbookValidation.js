@@ -3,29 +3,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkbookValidation = void 0;
+exports.chequebookRequestData = exports.chequebookValidationAlongWithID = exports.chequebookValidation = void 0;
 const joi_1 = __importDefault(require("joi"));
-exports.checkbookValidation = joi_1.default.object({
-    id: joi_1.default.number(),
-    vendorTypeId: joi_1.default.number().required(),
-    vendorNo: joi_1.default.string().required(),
-    name: joi_1.default.string().required(),
-    mobileNo: joi_1.default.string()
-        .pattern(/^[0-9]{10}$/)
-        .required(),
-    commAddress: joi_1.default.string().required(),
-    tinNo: joi_1.default.string().allow(null, "").optional(),
-    panNo: joi_1.default.string().allow(null, "").optional(),
-    bankName: joi_1.default.string().required(),
-    ifscCode: joi_1.default.string().required(),
-    departmentId: joi_1.default.number().integer().required(),
-    email: joi_1.default.string().email().required(),
-    officeAddress: joi_1.default.string().required(),
-    gstNo: joi_1.default.string().allow(null, "").optional(),
-    aadharNo: joi_1.default.string()
-        .pattern(/^[0-9]{12}$/)
-        .allow(null, "")
-        .optional(),
-    bankAccountNo: joi_1.default.string().required(),
-    bankBranchName: joi_1.default.string().required(),
+exports.chequebookValidation = joi_1.default.object({
+    date: joi_1.default.date().iso().required(),
+    issuer_name: joi_1.default.string().required(),
+    bank_name: joi_1.default.string().required(),
+    bank_account_no: joi_1.default.string().required(),
+    cheque_no_from: joi_1.default.string().required(),
+    employee_id: joi_1.default.number().required(),
+    bank_branch: joi_1.default.string().required(),
+    page_count: joi_1.default.number().required(),
+    cheque_no_to: joi_1.default.string().required(),
 });
+exports.chequebookValidationAlongWithID = exports.chequebookValidation.keys({
+    id: joi_1.default.number().required()
+});
+// arrange request data for store and update
+const chequebookRequestData = (req) => {
+    return {
+        date: req.body.date,
+        issuer_name: req.body.issuer_name,
+        bank_name: req.body.bank_name,
+        bank_account_no: req.body.bank_account_no,
+        cheque_no_from: req.body.cheque_no_from,
+        employee_id: req.body.employee_id,
+        bank_branch: req.body.bank_branch,
+        page_count: req.body.page_count,
+        cheque_no_to: req.body.cheque_no_to,
+        cheque_book_return: false,
+        cheque_book_return_date: new Date(),
+    };
+};
+exports.chequebookRequestData = chequebookRequestData;

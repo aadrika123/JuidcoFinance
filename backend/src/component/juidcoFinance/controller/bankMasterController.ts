@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { bankMasterValidation } from "../requests/bankMasterValidation";
 import { sendResponse } from "../../../util/sendResponse";
 import BankMasterDao from "../dao/bankMasterDao";
+import ResMessage from "../responseMessage/bankMasterMessage";
 
 /**
  * | Author- Sanjiv Kumar
@@ -25,7 +26,7 @@ class BankMasterController {
         return sendResponse(
           false,
           error.message,
-          "error.code",
+          "",
           403,
           "POST",
           "0401",
@@ -36,7 +37,7 @@ class BankMasterController {
       const data = await this.bankMasterDao.store(req);
       return sendResponse(
         true,
-        "Bank Master created Successfully!!",
+        ResMessage.CREATED,
         data,
         201,
         "POST",
@@ -48,7 +49,7 @@ class BankMasterController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "POST",
         "0401",
@@ -66,9 +67,9 @@ class BankMasterController {
       if (!data)
         return sendResponse(
           true,
-          "Bank Master Not Found!!",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0402",
           "1.0",
@@ -77,7 +78,7 @@ class BankMasterController {
 
       return sendResponse(
         true,
-        "Bank Master Found Successfully!!",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -89,7 +90,7 @@ class BankMasterController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "GET",
         "0402",
@@ -108,9 +109,9 @@ class BankMasterController {
       if (!data)
         return sendResponse(
           true,
-          "Bank Master Not Found!!",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0403",
           "1.0",
@@ -119,7 +120,7 @@ class BankMasterController {
 
       return sendResponse(
         true,
-        "Bank Master Found Successfully!!",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -131,7 +132,7 @@ class BankMasterController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "GET",
         "0403",
@@ -150,7 +151,7 @@ class BankMasterController {
         return sendResponse(
           false,
           error.message,
-          "error.code",
+          "",
           403,
           "POST",
           "0404",
@@ -161,7 +162,7 @@ class BankMasterController {
       const data = await this.bankMasterDao.update(req);
       return sendResponse(
         true,
-        "Bank Master updated Successfully!!",
+        ResMessage.UPDATED,
         data,
         200,
         "POST",
@@ -173,7 +174,7 @@ class BankMasterController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "POST",
         "0404",

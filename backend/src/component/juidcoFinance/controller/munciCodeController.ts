@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
 import MuncipalityCodeDao from "../dao/munciCodeDao";
+import ResMessage from "../responseMessage/municCodeMessage";
 
 /**
  * | Author- Krish Vishwakarma
@@ -30,9 +31,9 @@ class MuncipalityCodeController {
       if (!data)
         return sendResponse(
           true,
-          "Muncipality Code Not Found",
+          ResMessage.NOT_FOUND,
           data,
-          404,
+          200,
           "GET",
           "0301",
           "1.0",
@@ -41,7 +42,7 @@ class MuncipalityCodeController {
 
       return sendResponse(
         true,
-        "Muncipality Code Fetched successfully.",
+        ResMessage.FOUND,
         data,
         200,
         "GET",
@@ -53,7 +54,7 @@ class MuncipalityCodeController {
       return sendResponse(
         false,
         error.message,
-        error.code,
+        "",
         500,
         "GET",
         "0301",

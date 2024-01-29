@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { sidebarLinks } from "@/json/sidebar";
+import { sidebarLinks } from "@/json/sidebar.json";
 import { usePathname } from "next/navigation";
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;
@@ -20,7 +20,6 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
 
         <div>
           {sidebarLinks.modules?.map((link, index: number) => {
-            console.log(link, index);
             return (
               <div key={index}>
                 <ul className="w-full menu menu-xs p-0 overflow-hidden">

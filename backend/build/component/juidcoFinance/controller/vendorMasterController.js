@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sendResponse_1 = require("../../../util/sendResponse");
 const vendorMasterDao_1 = __importDefault(require("../dao/vendorMasterDao"));
 const vendorMasterValidation_1 = require("../requests/vendorMasterValidation");
+const vendorMasterMessage_1 = __importDefault(require("../responseMessage/vendorMasterMessage"));
 /**
  * | Author- Krish Vishwakarma
  * | Created On- 22-01-2024
@@ -28,12 +29,12 @@ class VendorMasterController {
             try {
                 const { error } = vendorMasterValidation_1.vendorMasterValidation.validate(req.body);
                 if (error)
-                    return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 400, "POST", "0701", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(false, error.message, "", 400, "POST", "0701", "1.0", res);
                 const data = yield this.vendorMasterDao.store(req);
-                return (0, sendResponse_1.sendResponse)(true, "Vendor Data added successfully", data, 200, "POST", "0701", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, vendorMasterMessage_1.default.CREATED, data, 200, "POST", "0701", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "POST", "0701", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0701", "1.0", res);
             }
         });
         // get all vendor
@@ -41,11 +42,11 @@ class VendorMasterController {
             try {
                 const data = yield this.vendorMasterDao.get(req);
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Vendor Data Not Found", data, 404, "GET", "0702", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Vendor Data fetched successfully", data, 200, "GET", "0702", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, vendorMasterMessage_1.default.NOT_FOUND, data, 200, "GET", "0702", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, vendorMasterMessage_1.default.FOUND, data, 200, "GET", "0702", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0702", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0702", "1.0", res);
             }
         });
         // get vendor by ID
@@ -54,11 +55,11 @@ class VendorMasterController {
                 const id = Number(req.params.vendorId);
                 const data = yield this.vendorMasterDao.getById(id);
                 if (!data)
-                    return (0, sendResponse_1.sendResponse)(true, "Vendor Not Found", data, 404, "GET", "0703", "1.0", res);
-                return (0, sendResponse_1.sendResponse)(true, "Vendor find successfully", data, 200, "GET", "0703", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(true, vendorMasterMessage_1.default.NOT_FOUND, data, 200, "GET", "0703", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, vendorMasterMessage_1.default.FOUND, data, 200, "GET", "0703", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 500, "GET", "0703", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0703", "1.0", res);
             }
         });
         // update vendor information
@@ -66,12 +67,12 @@ class VendorMasterController {
             try {
                 const { error } = vendorMasterValidation_1.vendorMasterValidation.validate(req.body);
                 if (error)
-                    return (0, sendResponse_1.sendResponse)(false, error.message, "error.code", 403, "PATCH", "0704", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(false, error.message, "", 403, "POST", "0704", "1.0", res);
                 const data = yield this.vendorMasterDao.update(req);
-                return (0, sendResponse_1.sendResponse)(true, "Vendor updated successfully", data, 200, "PATCH", "0704", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(true, vendorMasterMessage_1.default.UPDATED, data, 200, "POST", "0704", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, "Vendor updated successfully", error.message, 500, "PATCH", "0704", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0704", "1.0", res);
             }
         });
         this.vendorMasterDao = new vendorMasterDao_1.default();
