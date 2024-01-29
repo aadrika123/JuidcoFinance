@@ -1,11 +1,9 @@
-import { useField } from "formik";
 import React from "react";
 
-interface RadioButtonProps {
+interface CheckBoxProps {
   label: string;
-  id: string;
   name: string;
-  value: number | string;
+  value?: string | boolean;
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
@@ -13,23 +11,24 @@ interface RadioButtonProps {
   onBlur: (e?: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const RadioButton: React.FC<RadioButtonProps> = (props) => {
-  const fieldId = "id_" + props.id;
-
+const CheckBox: React.FC<CheckBoxProps> = (props) => {
+  const fieldId = "id_" + props.name;
   return (
     <div className="flex items-center">
       <input
         onChange={props.onChange}
         onBlur={props.onBlur}
-        value={props.label}
         className={`mr-1 bg-white ${props.className}`}
         name={props.name}
         id={fieldId}
-        type="radio"
+        type="checkbox"
       />
       <label htmlFor={fieldId}>{props.label}</label>
+      {props.touched && props.error && (
+        <div className="text-red-500">{props.error}</div>
+      )}
     </div>
   );
 };
 
-export default RadioButton;
+export default CheckBox;
