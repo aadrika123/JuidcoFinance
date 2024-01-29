@@ -6,7 +6,7 @@ import { Request } from "express";
 export const vendorMasterValidation = Joi.object({
   id: Joi.number(),
   vendor_type_id: Joi.number().required(),
-  vendor_no: Joi.string().required(),
+  vendor_no: Joi.string(),
   name: Joi.string().required(),
   mobile_no: Joi.string()
     .pattern(/^[0-9]{10}$/)
@@ -31,7 +31,7 @@ export const vendorMasterValidation = Joi.object({
 export const vendorRequestData = (req: Request): VendorRequestData => {
   return {
     vendor_type_id: req.body.vendor_type_id,
-      vendor_no: req.body.vendor_no,
+      vendor_no: "jjjhb55kk",
       name: req.body.name,
       mobile_no: req.body.mobile_no,
       tin_no: req.body.tin_no,

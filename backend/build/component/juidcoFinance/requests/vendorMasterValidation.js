@@ -9,7 +9,7 @@ const joi_1 = __importDefault(require("joi"));
 exports.vendorMasterValidation = joi_1.default.object({
     id: joi_1.default.number(),
     vendor_type_id: joi_1.default.number().required(),
-    vendor_no: joi_1.default.string().required(),
+    vendor_no: joi_1.default.string(),
     name: joi_1.default.string().required(),
     mobile_no: joi_1.default.string()
         .pattern(/^[0-9]{10}$/)
@@ -33,7 +33,7 @@ exports.vendorMasterValidation = joi_1.default.object({
 const vendorRequestData = (req) => {
     return {
         vendor_type_id: req.body.vendor_type_id,
-        vendor_no: req.body.vendor_no,
+        vendor_no: "jjjhb55kk",
         name: req.body.name,
         mobile_no: req.body.mobile_no,
         tin_no: req.body.tin_no,

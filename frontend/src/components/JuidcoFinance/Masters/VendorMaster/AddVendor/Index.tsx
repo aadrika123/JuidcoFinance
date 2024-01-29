@@ -14,6 +14,8 @@ import {
   VendorDetailsSchema,
   initialVendorDetails,
 } from "@/utils/validation/masters/vendor_master.validation";
+import { FINANCE_URL } from "@/utils/api/urls";
+import goBack from "@/utils/helper";
 // Imports // ----------------------------------------------------------------
 
 // Main Functions // ----------------------------------------------------------------
@@ -25,7 +27,7 @@ export const HeroAddVendor = () => {
     values: VendorDetailsData
   ): Promise<VendorDetailsData> => {
     const res = await axios({
-      url: `/api/finance/add-vendor-details`,
+      url: `${FINANCE_URL.VENDOR_MASTER_URL.create}`,
       method: "POST",
       data: values,
     });
@@ -40,7 +42,8 @@ export const HeroAddVendor = () => {
       alert("there was an error");
     },
     onSettled: () => {
-      queryClient.invalidateQueries("create");
+      queryClient.invalidateQueries("vendor-list");
+      goBack();
     },
   });
 
@@ -73,11 +76,12 @@ export const HeroAddVendor = () => {
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.vendor_type.name}
-                    error={errors.vendor_type?.name}
-                    touched={touched.vendor_type?.name}
+                    value={values.vendor_type_id}
+                    error={errors.vendor_type_id}
+                    touched={touched.vendor_type_id}
                     label="Vendor Type *"
-                    name="vendor_type"
+                    type="number"
+                    name="vendor_type_id"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -91,11 +95,12 @@ export const HeroAddVendor = () => {
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.department.name}
-                    error={errors.department?.name}
-                    touched={touched.department?.name}
+                    value={values.department_id}
+                    error={errors.department_id}
+                    touched={touched.department_id}
+                    type="number"
                     label="Department *"
-                    name="department"
+                    name="department_id"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -128,11 +133,11 @@ export const HeroAddVendor = () => {
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.office_address}
-                    error={errors.office_address}
-                    touched={touched.office_address}
-                    label="Office Address"
-                    name="office_address"
+                    value={values.contact_address}
+                    error={errors.contact_address}
+                    touched={touched.contact_address}
+                    label="Contact Address"
+                    name="contact_address"
                   />
 
                   <InputBox
@@ -204,6 +209,7 @@ export const HeroAddVendor = () => {
 
                 <div className="flex items-center justify-end mt-5 gap-5">
                   <PrimaryButton
+                    buttonType="button"
                     variant={"cancel"}
                     onClick={() => {
                       history.back();
