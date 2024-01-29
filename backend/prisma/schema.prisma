@@ -75,7 +75,6 @@ model vendor_masters {
   vendor_no        String
   name             String
   mobile_no        String
-  comm_address     String
   tin_no           String
   pan_no           String
   bank_name        String
@@ -83,7 +82,7 @@ model vendor_masters {
   department       departments  @relation(fields: [department_id], references: [id])
   department_id    Int
   email            String
-  office_address   String
+  contact_address  String
   gst_no           String
   aadhar_no        String
   bank_account_no  String
