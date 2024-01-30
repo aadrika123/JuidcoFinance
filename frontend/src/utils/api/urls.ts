@@ -1,14 +1,19 @@
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"
-  | "CHEQUEBOOK_MASTER_URL";
+  | "CHEQUEBOOK_MASTER_URL"
+  | "DIRECT_PAYMENT_ENTRY_URL"
+  | "PAYMENT_TYPE_URL"
+  | "ADMINIS_WARD_URL"
+  | "GRANT_URL"
+  | "DEPARTMENT_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
-    get: string;
-    create: string;
-    update: string;
-    getById: string;
+    get?: string;
+    create?: string;
+    update?: string;
+    getById?: string;
     delete?: string;
   };
 };
@@ -33,5 +38,28 @@ export const FINANCE_URL: Urls = {
     create: "/api/finance/add-vendor-details",
     update: "/api/finance/update-vendor-details",
     getById: "/vendor-master/get",
+  },
+
+  DIRECT_PAYMENT_ENTRY_URL: {
+    get: "/direct-payment-entry/get-all?limit=10",
+    create: "/direct-payment-entry/create",
+    update: "/direct-payment-entry/update",
+    getById: "direct-payment-entry/get-by-id",
+  },
+
+  PAYMENT_TYPE_URL: {
+    get: "/payment-type/get",
+  },
+
+  ADMINIS_WARD_URL: {
+    get: "/adminis-ward/get",
+  },
+
+  GRANT_URL: {
+    get: "/grant/get",
+  },
+
+  DEPARTMENT_URL: {
+    get: "/department/get",
   },
 };

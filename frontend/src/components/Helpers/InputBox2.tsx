@@ -10,15 +10,16 @@ import React from "react";
 
 interface InputBox2Props {
   label: React.ReactNode;
-  name: string;
+  name?: string;
   type: string;
-  placeholder: string | "";
-  value: string | number;
+  isReadOnly?: boolean | false; 
+  placeholder?: string | "";
+  value?: string | number | undefined;
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
-  onChange: (e?: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e?: React.FocusEvent<HTMLInputElement>) => void;
+  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e?: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const InputBox2: React.FC<InputBox2Props> = (props) => {
@@ -31,6 +32,7 @@ const InputBox2: React.FC<InputBox2Props> = (props) => {
           {props.label}
         </label>
         <input
+        readOnly={props.isReadOnly}
           placeholder={props.placeholder}
           onChange={props.onChange}
           onBlur={props.onBlur}

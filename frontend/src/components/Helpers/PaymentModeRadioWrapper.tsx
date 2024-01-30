@@ -1,18 +1,20 @@
 import React from "react";
 interface PaymentModeRadioWrapperProps {
     children: React.ReactNode;
-    label: string
+    label: string;
+    className?: string;
 }
 
 const PaymentModeRadioWrapper :React.FC<PaymentModeRadioWrapperProps>= (
     {
         children,
-        label
+        label,
+        className
     }
 ) => {
   return (
     <>
-      <label className="text-secondary text-sm" htmlFor="browser">
+      <label className={`mb-2 text-secondary text-sm ${className}`} htmlFor="browser">
         {label}
       </label>
       {children}

@@ -1,15 +1,16 @@
 import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import React, { useState } from "react";
-import { useQuery} from "react-query";
+import { useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 import { PaymentTableData } from "@/utils/types/direct_payment_entry_types";
 import Loader from "@/components/Helpers/Basic/Loader";
 import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
 import PaymentEntryTable from "@/components/Helpers/Tables/PaymentEntryTable";
 import { addPaymentDetails } from "@/redux/paymentEntryReducer";
-
-
+import { FINANCE_URL } from "@/utils/api/urls";
+import axios from "@/lib/axiosConfig";
+import { MasterProps } from "@/utils/types/types";
 
 type PaymentListProps = {
   title: string;
@@ -18,18 +19,18 @@ type PaymentListProps = {
 const PaymentList: React.FC<PaymentListProps> = (props) => {
   const [page, setPage] = useState<number>(1);
   let searchText = "";
-  
+
   const handlePageChangeAccountList = (direction: "prev" | "next") => {
     setPage((prevPage) => (direction === "prev" ? prevPage - 1 : prevPage + 1));
   };
 
   const nextPage = () => {
     handlePageChangeAccountList("next");
-  }
+  };
 
   const prevPage = () => {
-    handlePageChangeAccountList("prev")
-  }
+    handlePageChangeAccountList("prev");
+  };
 
   // redux
   const dispatch = useDispatch();
@@ -38,105 +39,41 @@ const PaymentList: React.FC<PaymentListProps> = (props) => {
 
   // ----- FETCH DATA ------////
 
-
-
-  const fetchData = async (): Promise<PaymentTableData[]> => {
-
-    // const res = await axios({
-    //   url: `/api/finance/bank-list?limit=10&page=${page}`,
-    //   method: "GET",
-    // });
-    
-    // return res.data?.data?.data;
-
-    // console.log(searchText);
-
-    let data: PaymentTableData[] = [];
-    if(searchText.length > 0){
-      data = [
-        {
-          id: 1,
-          paymentNo: "383843",
-          paymentName: "9-3-2020",
-          paymentType: "Cash",
-          amount: 3443434,
-          ledgerCode: "someone",
-          budgetName: "paid on time"
-        },
-    
-        {
-          id: 2,
-          paymentNo: "383843",
-          paymentName: "9-3-2020",
-          paymentType: "Online",
-          amount: 3443434,
-          ledgerCode: "someone",
-          budgetName: "paid on time"
-        },
-      ];
-    }else{
-      data = [
-        {
-          id: 3,
-          paymentNo: "383843",
-          paymentName: "9-3-2020",
-          paymentType: "Cash",
-          amount: 3443434,
-          ledgerCode: "someone",
-          budgetName: "paid on time"
-        },
-    
-        {
-          id: 4,
-          paymentNo: "383843",
-          paymentName: "9-3-2020",
-          paymentType: "Online",
-          amount: 3443434,
-          ledgerCode: "someone",
-          budgetName: "paid on time"
-        },
-      ];
-
-    }
-    
-    
-    
-    return data;
+  const fetchData = async (): Promise<MasterProps<PaymentTableData>> => {
+    const res = await axios({
+      url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.get}&page=${page}`,
+      method: "GET",
+    });
+    return res?.data?.data as MasterProps<PaymentTableData>;
   };
 
-  
   const {
-      data: paymentListData = [],
-      isError: paymentError,
-      isLoading: paymentsLoading,
-      refetch: reloadData
-    } = useQuery([], fetchData);
-    
-    if (paymentError) {
-      throw new Error("some error occurred");
-    }else{
-      dispatch(addPaymentDetails(paymentListData));
+    data: paymentListData,
+    isError: paymentError,
+    isLoading: paymentsLoading,
+    refetch: reloadData,
+  } = useQuery([page], fetchData);
+
+  if (paymentError) {
+    throw new Error("some error occurred");
+  } else {
+    dispatch(addPaymentDetails(paymentListData?.data ?? []));
   }
 
   const onSearchTextChange = (text: string) => {
     searchText = text;
     reloadData();
-  }
+  };
 
   return (
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>{props?.title}</SubHeading>
-        <DebouncedSearchBox debounceTime={1000} onChange={onSearchTextChange}/>
+        <DebouncedSearchBox debounceTime={1000} onChange={onSearchTextChange} />
       </div>
 
       <div className="mt-8">
-      {paymentsLoading ? (
-          <Loader />
-        ) : (
-          <PaymentEntryTable />
-        )}
-        
+        {paymentsLoading ? <Loader /> : <PaymentEntryTable />}
 
         <div className="flex items-center justify-end mt-5 gap-5">
           {page > 1 && (

@@ -1,36 +1,26 @@
+type PaymentType = {
+  id: number;
+  type: string;
+};
+
 export type PaymentTableData = {
   id: number;
-  paymentNo: string;
-  paymentName: string;
-  paymentType: string;
+  payment_no: number;
+  payee_name: string;
+  payment_type: PaymentType;
   amount: number;
-  ledgerCode: string;
-  budgetName: string;
 };
 
 export interface AddPaymentDetailsData {
-  // paymentNo: string,
-  // paymentName: string,
-  // paymentType: string,
-  // amount: number,
-  // ledgerCode: string,
-  // budgetName: string
-  ////////////////////
-//   paymentDate: string;
-//   narration: string;
-//   paymentType: number;
-//   department: number;
-//   payeeName: string;
-//   administrativeWard: number;
-//   grant: number;
-//   address: string;
-  ///////////////
-  paymentDate: string;
+  payment_date: string;
   narration: string;
-  paymentType: string;
-  department: string;
-  payeeName: string;
-  administrativeWard: string;
-  grant: string;
+  payment_type_id: number | string;
+  department_id: number | string;
+  payee_name: string;
+  adminis_ward_id: number | string;
+  grant_id: number | string;
   address: string;
+  amount: number | string;
+  user_common_budget: boolean | string;
+  payment_mode: string;
 }
