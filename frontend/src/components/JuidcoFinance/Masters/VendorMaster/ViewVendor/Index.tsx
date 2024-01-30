@@ -7,10 +7,12 @@ import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import { useQuery } from "react-query";
 import Loader from "@/components/Helpers/Basic/Loader";
+import { FINANCE_URL } from "@/utils/api/urls";
+import goBack from "@/utils/helper";
 
 type VendorType = {
   id: BigInteger;
-  type: string;
+  name: string;
 };
 
 type DepartmentType = {
@@ -30,7 +32,7 @@ type VendorData = {
   department: DepartmentType;
   email: string;
   bank_name: string;
-  office_address: string;
+  contact_address: string;
   ifsc_code: string;
   bank_account_no: string;
   bank_branch_name: string;
@@ -45,7 +47,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
   // ----- FETCH DATA ------////
   const fetchVendorData = async (): Promise<VendorData> => {
     const res = await axios({
-      url: `/api/finance/get-single-vendor?id=${vendorID}`,
+      url: `${FINANCE_URL.VENDOR_MASTER_URL.getById}/${vendorID}`,
       method: "GET",
     });
 
@@ -63,7 +65,6 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
     throw new Error("some error occurred");
   }
 
-  console.log(vendorData?.vendor_type?.type, "juyuj");
 
   return (
     <>
@@ -80,7 +81,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
               <div className="grid grid-cols-2 gap-x-6 gap-4">
                 <FilledDisabledInputBox
                   label="Vendor Type *"
-                  value={vendorData?.vendor_type?.type}
+                  value={vendorData?.vendor_type?.name}
                 />
                 <FilledDisabledInputBox
                   label="Contact Number"
@@ -104,7 +105,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
                 />
                 <FilledDisabledInputBox
                   label="Office Address"
-                  value={vendorData?.office_address}
+                  value={vendorData?.contact_address}
                 />
                 <FilledDisabledInputBox
                   label="IFSC Code *"
@@ -135,8 +136,8 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
                     label="Date Created"
                     value={vendorData?.created_at}
                   />
-                  <FilledDisabledInputBox label="Date Authorized" />
-                  <FilledDisabledInputBox label="Date Modified" />
+                  <FilledDisabledInputBox label="Date Authorized" value={vendorData?.authorized_date} />
+                  <FilledDisabledInputBox label="Date Modified" value={vendorData?.updated_at} />
                 </div>
                 <FilledDisabledInputBox
                   label="Pan No."
@@ -145,7 +146,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
               </div>
 
               <div className="flex items-center justify-end mt-5 gap-5">
-                <PrimaryButton variant={"cancel"}>Back</PrimaryButton>
+                <PrimaryButton variant={"cancel"} onClick={goBack}>Back</PrimaryButton>
 
                 <PrimaryButton variant="primary">Print</PrimaryButton>
               </div>
