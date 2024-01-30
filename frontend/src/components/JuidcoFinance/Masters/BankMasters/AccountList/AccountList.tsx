@@ -9,6 +9,8 @@ type AccountListProps = {
   nextPage: () => void;
   prevPage: () => void;
   pages: Pagination;
+  setSearchQuery: (value: string) => void;
+  setFetchQuery: () => void;
 };
 
 const AccountList: React.FC<AccountListProps> = (props) => {
@@ -16,7 +18,14 @@ const AccountList: React.FC<AccountListProps> = (props) => {
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>Bank Account List</SubHeading>
-        <SearchBox />
+        <SearchBox
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            props.setSearchQuery(e.target.value)
+          }
+          onKeyDown={(event) => {
+            if (event.key === "Enter") props.setFetchQuery();
+          }}
+        />
       </div>
 
       <div className="mt-8">
