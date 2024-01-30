@@ -1,6 +1,7 @@
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"
+  | "VENDOT_TYPE_URL"
   | "CHEQUEBOOK_MASTER_URL"
   | "DIRECT_PAYMENT_ENTRY_URL"
   | "PAYMENT_TYPE_URL"
@@ -31,6 +32,10 @@ export const FINANCE_URL: Urls = {
     create: "/vendor-master/create",
     update: "/vendor-master/update",
     getById: "/vendor-master/get",
+  },
+
+  VENDOT_TYPE_URL: {
+    get: "/vendor-type/get",
   },
 
   CHEQUEBOOK_MASTER_URL: {

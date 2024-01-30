@@ -9,10 +9,15 @@ import { SubHeading } from "@/components/Helpers/Heading";
 import { VendorDetailsSchema } from "@/utils/validation/masters/vendor_master.validation";
 import { VendorDetailsData } from "@/utils/types/vendor_master_types";
 import { FINANCE_URL } from "@/utils/api/urls";
+import DropDownList from "@/components/Helpers/DropDownList";
 import goBack from "@/utils/helper";
+import toast, { Toaster } from "react-hot-toast";
+import { useQueryClient, useMutation } from "react-query";
 
 export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
-  const [vendorDetails, setVendorDetails] = useState<[]>();
+  const [vendorDetails, setVendorDetails] = useState<VendorDetailsData>();
+
+  const queryClient = useQueryClient();
   // GET VENDOR DETAILS BY ID
   useEffect(() => {
     (async () => {
@@ -23,8 +28,46 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
       setVendorDetails(res?.data?.data);
     })();
   }, [vendorID]);
+
+  // UPDATE VENDOR DETAILS
+  const updateVendorDetails = async (
+    values: VendorDetailsData
+  ): Promise<VendorDetailsData> => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.VENDOR_MASTER_URL.update}`,
+        method: "POST",
+        data: {
+          id: vendorDetails?.id,
+          ...values,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<VendorDetailsData, Error, VendorDetailsData>(
+    updateVendorDetails,
+    {
+      onSuccess: () => {
+        toast.success("Updated vendor details");
+      },
+      onError: () => {
+        alert("Error updating vendor details");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("vendor-list");
+        goBack();
+      },
+    }
+  );
+
   return (
     <>
+      <Toaster />
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Edit Vendor</SubHeading>
@@ -33,20 +76,20 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
         <div className="mt-8">
           <Formik
             initialValues={{
-              vendor_type_id: 0,
-              department_id: 0,
-              name: "",
-              mobile_no: "",
-              tin_no: "",
-              gst_no: "",
-              pan_no: "",
-              bank_name: "",
-              ifsc_code: "",
-              email: "",
-              contact_address: "",
-              aadhar_no: "",
-              bank_account_no: "",
-              bank_branch_name: "",
+              vendor_type_id: vendorDetails?.vendor_type?.id || "",
+              department_id: vendorDetails?.department?.id || "",
+              name: vendorDetails?.name || "",
+              mobile_no: vendorDetails?.mobile_no || "",
+              tin_no: vendorDetails?.tin_no || "",
+              gst_no: vendorDetails?.gst_no || "",
+              pan_no: vendorDetails?.pan_no || "",
+              bank_name: vendorDetails?.bank_name || "",
+              ifsc_code: vendorDetails?.ifsc_code || "",
+              email: vendorDetails?.email || "",
+              contact_address: vendorDetails?.contact_address || "",
+              aadhar_no: vendorDetails?.aadhar_no || "",
+              bank_account_no: vendorDetails?.bank_account_no || "",
+              bank_branch_name: vendorDetails?.bank_branch_name || "",
             }}
             validationSchema={VendorDetailsSchema}
             enableReinitialize={true}
@@ -65,7 +108,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                  <InputBox
+                  <DropDownList
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.vendor_type_id}
@@ -73,6 +116,8 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     touched={touched.vendor_type_id}
                     label="Vendor Type *"
                     name="vendor_type_id"
+                    placeholder={"Select Vendor Type"}
+                    api={FINANCE_URL.VENDOT_TYPE_URL.get || ""}
                   />
                   <InputBox
                     onChange={handleChange}
@@ -83,32 +128,35 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     label="Contact Number *"
                     name="mobile_no"
                   />
-                  <InputBox
+
+                  <DropDownList
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.department_id}
                     error={errors.department_id}
                     touched={touched.department_id}
-                    label="Department Name"
+                    label="Department *"
                     name="department_id"
+                    placeholder={"Select Department"}
+                    api={FINANCE_URL.DEPARTMENT_URL.get || ""}
                   />
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.bank_account_no}
-                    error={errors.bank_account_no}
-                    touched={touched.bank_account_no}
-                    label="bank_account_no Address"
-                    name="bank_account_no"
+                    value={values.email}
+                    error={errors.email}
+                    touched={touched.email}
+                    label="Email Address"
+                    name="email"
                   />
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.vendor_no}
-                    error={errors.vendor_no}
-                    touched={touched.vendor_no}
+                    value={values.name}
+                    error={errors.name}
+                    touched={touched.name}
                     label="Vendor Name"
-                    name="vendor_no"
+                    name="name"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -119,6 +167,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     label="Name of the bank"
                     name="bank_name"
                   />
+
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -128,13 +177,14 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     label="Contact Address"
                     name="contact_address"
                   />
+
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.ifsc_code}
                     error={errors.ifsc_code}
                     touched={touched.ifsc_code}
-                    label="IFSC Code"
+                    label="IFSC Code *"
                     name="ifsc_code"
                   />
                   <InputBox
@@ -143,7 +193,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     value={values.tin_no}
                     error={errors.tin_no}
                     touched={touched.tin_no}
-                    label="TIN No. "
+                    label="TIN No."
                     name="tin_no"
                   />
                   <InputBox
@@ -161,18 +211,17 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     value={values.gst_no}
                     error={errors.gst_no}
                     touched={touched.gst_no}
-                    name="gst_no"
                     label="GST No."
+                    name="gst_no"
                   />
-
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.bank_branch_name}
                     error={errors.bank_branch_name}
                     touched={touched.bank_branch_name}
-                    name="bank_branch"
-                    label="Bank Branch."
+                    name="bank_branch_name"
+                    label="Bank Branch"
                   />
 
                   <InputBox
@@ -181,10 +230,10 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     value={values.aadhar_no}
                     error={errors.aadhar_no}
                     touched={touched.aadhar_no}
-                    name="aadhaar_no"
-                    label="Aadhaar No.."
+                    name="aadhar_no"
+                    label="Aadhaar No."
                   />
-
+                  <span></span>
                   <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -213,14 +262,6 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
               </form>
             )}
           </Formik>
-
-          <div className="flex items-center justify-end mt-5 gap-5">
-            <PrimaryButton variant={"cancel"}>Back</PrimaryButton>
-
-            <PrimaryButton variant={"cancel"}>Reset</PrimaryButton>
-
-            <PrimaryButton variant="primary">Print</PrimaryButton>
-          </div>
         </div>
       </section>
     </>

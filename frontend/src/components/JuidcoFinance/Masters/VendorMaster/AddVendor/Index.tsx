@@ -16,6 +16,7 @@ import {
 } from "@/utils/validation/masters/vendor_master.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
+import DropDownList from "@/components/Helpers/DropDownList";
 // Imports // ----------------------------------------------------------------
 
 // Main Functions // ----------------------------------------------------------------
@@ -34,8 +35,7 @@ export const HeroAddVendor = () => {
     return res.data;
   };
   const { mutate } = useMutation(createVendorDetails, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       toast.success("Successfully Added Vendor Details!");
     },
     onError: () => {
@@ -73,15 +73,16 @@ export const HeroAddVendor = () => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                  <InputBox
+                  <DropDownList
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.vendor_type_id}
                     error={errors.vendor_type_id}
                     touched={touched.vendor_type_id}
                     label="Vendor Type *"
-                    type="number"
                     name="vendor_type_id"
+                    placeholder={"Select Vendor Type"}
+                    api={FINANCE_URL.VENDOT_TYPE_URL.get || ""}
                   />
                   <InputBox
                     onChange={handleChange}
@@ -92,15 +93,17 @@ export const HeroAddVendor = () => {
                     label="Contact Number *"
                     name="mobile_no"
                   />
-                  <InputBox
+
+                  <DropDownList
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.department_id}
                     error={errors.department_id}
                     touched={touched.department_id}
-                    type="number"
                     label="Department *"
                     name="department_id"
+                    placeholder={"Select Department"}
+                    api={FINANCE_URL.DEPARTMENT_URL.get || ""}
                   />
                   <InputBox
                     onChange={handleChange}

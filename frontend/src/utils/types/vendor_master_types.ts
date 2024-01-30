@@ -5,10 +5,14 @@ export interface VendorDetailsData {
   id?: number;
   vendor_no?: string;
   vendor_type?: {
+    id: string;
     name: string;
-  }
+  };
   vendor_type_id: string | number;
   department_id: string | number;
+  department?: {
+    id: string;
+  };
   name: string;
   mobile_no: string;
   tin_no: string;
