@@ -32,7 +32,7 @@ class VendorTypeController {
                 return (0, sendResponse_1.sendResponse)(true, vendorTypeMessage_1.default.FOUND, data, 200, "GET", "0501", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0501", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "GET", "0501", "1.0", res);
             }
         });
         this.vendorTypeDao = new vendorTypeDao_1.default();

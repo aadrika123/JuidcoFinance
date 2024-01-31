@@ -32,7 +32,7 @@ class MuncipalityCodeController {
                 return (0, sendResponse_1.sendResponse)(true, municCodeMessage_1.default.FOUND, data, 200, "GET", "0301", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0301", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "GET", "0301", "1.0", res);
             }
         });
         this.muncipalityCodeDao = new munciCodeDao_1.default();

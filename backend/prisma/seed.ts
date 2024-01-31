@@ -13,6 +13,8 @@ import {
 } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
+import bill_payment_entry_seed from "./bill_payment_entry_seed";
+import bill_type_seed from "./bill_type_seed";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -457,6 +459,12 @@ async function main() {
     });
     pn++;
   }
+
+  //////////////// Bill Types //////////////////////
+  bill_type_seed();
+
+  /////////////// Bill Payment Entry //////////////////
+  bill_payment_entry_seed();
 }
 main()
   .then(async () => {
