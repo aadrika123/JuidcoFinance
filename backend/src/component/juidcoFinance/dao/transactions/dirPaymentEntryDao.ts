@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { generateRes } from "../../../util/generateRes";
-import { requestData } from "../requests/dirPaymentEntryValidation";
+import { generateRes } from "../../../../util/generateRes";
+import { requestData } from "../../requests/transactions/dirPaymentEntryValidation";
 
 const prisma = new PrismaClient();
 

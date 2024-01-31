@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
-import { generateRes } from "../../../util/generateRes";
-import { vendorRequestData } from "../requests/vendorMasterValidation";
+import { generateRes } from "../../../../util/generateRes";
+import { vendorRequestData } from "../../requests/masters/vendorMasterValidation";
 
 const prisma = new PrismaClient();
 

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { VendorRequestData } from "../../../util/types";
+import { VendorRequestData } from "../../../../util/types";
 import { Request } from "express";
 
 // Validating request data

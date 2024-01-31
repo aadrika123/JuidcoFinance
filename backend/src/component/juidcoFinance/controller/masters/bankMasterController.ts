@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { bankMasterValidation } from "../requests/bankMasterValidation";
-import { sendResponse } from "../../../util/sendResponse";
-import BankMasterDao from "../dao/bankMasterDao";
-import ResMessage from "../responseMessage/bankMasterMessage";
+import { bankMasterValidation } from "../../requests/masters/bankMasterValidation";
+import { sendResponse } from "../../../../util/sendResponse";
+import BankMasterDao from "../../dao/masters/bankMasterDao";
+import ResMessage from "../../responseMessage/masters/bankMasterMessage";
 
 /**
  * | Author- Sanjiv Kumar

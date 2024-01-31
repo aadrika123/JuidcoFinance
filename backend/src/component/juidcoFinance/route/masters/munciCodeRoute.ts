@@ -1,5 +1,5 @@
-import { baseUrl } from "../../../util/common";
-import MuncipalityCodeController from "../controller/munciCodeController";
+import { baseUrl } from "../../../../util/common";
+import MuncipalityCodeController from "../../controller/masters/munciCodeController";
 import express from "express";
 class MuncipalityCodeRoute {
   private muncipalityCodeController: MuncipalityCodeController;

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { BankRequestData } from "../../../util/types";
+import { BankRequestData } from "../../../../util/types";
 import { Request } from "express";
 
 // Validating request data

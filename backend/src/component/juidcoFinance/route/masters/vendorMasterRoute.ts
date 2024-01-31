@@ -1,6 +1,6 @@
-import { baseUrl } from "../../../util/common";
+import { baseUrl } from "../../../../util/common";
 import express from "express";
-import VendorMasterController from "../controller/vendorMasterController";
+import VendorMasterController from "../../controller/masters/vendorMasterController";
 
 class VendorMasterRoute {
   private vendorMasterController: VendorMasterController;

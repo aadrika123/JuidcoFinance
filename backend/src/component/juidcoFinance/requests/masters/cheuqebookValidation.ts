@@ -1,6 +1,6 @@
 
 import Joi from "joi";
-import { ChequebookRequestData } from "../../../util/types";
+import { ChequebookRequestData } from "../../../../util/types";
 import { Request } from "express";
 
 export const chequebookValidation = Joi.object({

@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
-import { generateRes } from "../../../util/generateRes";
-import { chequebookRequestData } from "../requests/cheuqebookValidation";
+import { generateRes } from "../../../../util/generateRes";
+import { chequebookRequestData } from "../../requests/masters/cheuqebookValidation";
 
 
 
