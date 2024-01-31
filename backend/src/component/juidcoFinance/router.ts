@@ -1,16 +1,18 @@
 import express from "express";
-import FunCodeRoute from "./route/funCodeRoute";
-import BankMasterRoute from "./route/bankMasterRoute";
-import AccountCodeRoute from "./route/accountCodeRoute";
-import MuncipalityCodeRoute from "./route/munciCodeRoute";
+import FunCodeRoute from "./route/masters/funCodeRoute";
+import BankMasterRoute from "./route/masters/bankMasterRoute";
+import AccountCodeRoute from "./route/masters/accountCodeRoute";
+import MuncipalityCodeRoute from "./route/masters/munciCodeRoute";
 import VendorTypeRoute from "./route/vendorTypeRoute";
 import DepartmentRoute from "./route/departmentRoute";
-import VendorMasterRoute from "./route/vendorMasterRoute";
-import ChequeBookEntryRoute from "./route/chequebookEntryRoute";
-import DirPaymentEntryRoute from "./route/dirPaymentEntryRoute";
+import VendorMasterRoute from "./route/masters/vendorMasterRoute";
+import ChequeBookEntryRoute from "./route/masters/chequebookEntryRoute";
+import DirPaymentEntryRoute from "./route/transactions/dirPaymentEntryRoute";
 import PaymentTypeRoute from "./route/paymentTypeRoute";
 import AdministrativeWardRoute from "./route/adminisWardRoute";
 import GrantRoute from "./route/grantRoute";
+import EmployeeRoute from "./route/employeeRoute";
+import BillTypeRoute from "./route/billTypeRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,8 @@ class FinanceRoute {
   private paymentTypeRoute: PaymentTypeRoute;
   private adminisWardRoute: AdministrativeWardRoute;
   private grantRoute: GrantRoute;
+  private employeeRoute: EmployeeRoute;
+  private billTypeRoute: BillTypeRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -90,6 +94,14 @@ class FinanceRoute {
     /// GRANT ///
     this.grantRoute = new GrantRoute();
     this.grantRoute.configure(app);  // 12
+
+    /// EMPLOYEE ///
+    this.employeeRoute = new EmployeeRoute();
+    this.employeeRoute.configure(app);  // 13
+
+    /// BILL TYPE ///
+    this.billTypeRoute = new BillTypeRoute();
+    this.billTypeRoute.configure(app);  // 14
   }
 }
 

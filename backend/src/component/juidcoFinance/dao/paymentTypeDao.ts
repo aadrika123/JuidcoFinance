@@ -3,7 +3,7 @@ import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
-// -> Belongs to Chart of Accounts
+// -> Get All Payment Type
 class PaymentTypeDao {
   get = async () => {
     const query: Prisma.payment_typesFindManyArgs = {

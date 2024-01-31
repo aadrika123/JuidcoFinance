@@ -144,7 +144,7 @@ model modules {
 }
 
 //// subledgers
-model subledger {
+model subledgers {
   id         Int             @id @default(autoincrement())
   name       String
   remark     String?
@@ -177,7 +177,7 @@ model receipt_entry {
   narration           String
   
   subledger_id        Int
-  subledger           subledger @relation(fields: [subledger_id], references: [id])    
+  subledger           subledgers @relation(fields: [subledger_id], references: [id])    
   amount              Float
 }
 
@@ -188,6 +188,7 @@ model departments {
   remark                String?
   vendors               vendor_masters[]
   dir_payment_entries   dir_payment_entries[]
+  bill_payment_entries  bill_payment_entries[]
   created_at            DateTime                @default(now()) @map("created_at")
   updated_at            DateTime                @updatedAt @map("updated_at")
 }
@@ -198,6 +199,7 @@ model employees {
   name                String
   email               String
   cheque_book_entries cheque_book_entries[]
+  bill_payment_entries  bill_payment_entries[]
   created_at          DateTime            @default(now()) @map("created_at")
   updated_at          DateTime            @updatedAt @map("updated_at")
 }
@@ -218,6 +220,7 @@ model adminis_wards {
   name                  String
   remark                String
   dir_payment_entries   dir_payment_entries[]
+  bill_payment_entries  bill_payment_entries[]
   receipt_entries       receipt_entry[]
   created_at            DateTime  @default(now()) @map("created_at")
   updated_at            DateTime  @updatedAt @map("updated_at")
@@ -256,4 +259,38 @@ model dir_payment_entries {
   amount                Int
   created_at            DateTime            @default(now()) @map("created_at")
   updated_at            DateTime            @updatedAt @map("updated_at")
+}
+
+/// Bill Types
+model bill_types {
+  id                    Int                   @id @default(autoincrement())
+  type                  String
+  remark                String
+  bill_payment_entries  bill_payment_entries[]
+  created_at            DateTime            @default(now()) @map("created_at")
+  updated_at            DateTime            @updatedAt @map("updated_at")
+}
+
+
+/// Bills Payment Entry
+model bill_payment_entries {
+  id                   Int                 @id @default(autoincrement())
+  bill_no              Int
+  bill_type            bill_types          @relation(fields: [bill_type_id], references: [id])
+  bill_type_id         Int
+  bill_entry_date      String
+  department           departments         @relation(fields: [department_id], references: [id])
+  department_id        Int
+  vendor_name          String
+  address              String
+  payee_name           employees           @relation(fields: [payee_name_id], references: [id])
+  payee_name_id        Int
+  adminis_ward         adminis_wards       @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward_id      Int
+  bill_amount          Int
+  advance              Int
+  deposit              Int
+  other_deductions     Int
+  created_at           DateTime            @default(now()) @map("created_at")
+  updated_at           DateTime            @updatedAt @map("updated_at")
 }

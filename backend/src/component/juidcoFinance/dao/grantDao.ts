@@ -3,7 +3,7 @@ import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
-// -> Belongs to Chart of Accounts
+// -> Get All grants
 class GrantDao {
   get = async () => {
     const query: Prisma.grantsFindManyArgs = {

@@ -31,7 +31,7 @@ class AccountCodeController {
                 return (0, sendResponse_1.sendResponse)(true, accountCodeMessage_1.default.FOUND, data, 200, "GET", "0201", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0201", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "GET", "0201", "1.0", res);
             }
         });
         this.accountCodeDao = new accountingCodeDao_1.default();

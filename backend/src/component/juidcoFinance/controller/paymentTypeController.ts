@@ -48,7 +48,7 @@ class PaymentTypeController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
        "",
         500,
         "GET",

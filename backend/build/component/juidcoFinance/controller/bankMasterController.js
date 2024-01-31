@@ -29,12 +29,12 @@ class BankMasterController {
             try {
                 const { error } = bankMasterValidation_1.bankMasterValidation.validate(req.body);
                 if (error)
-                    return (0, sendResponse_1.sendResponse)(false, error.message, "", 403, "POST", "0401", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(false, error, "", 403, "POST", "0401", "1.0", res);
                 const data = yield this.bankMasterDao.store(req);
                 return (0, sendResponse_1.sendResponse)(true, bankMasterMessage_1.default.CREATED, data, 201, "POST", "0401", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0401", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "POST", "0401", "1.0", res);
             }
         });
         // Get limited bank list
@@ -46,7 +46,7 @@ class BankMasterController {
                 return (0, sendResponse_1.sendResponse)(true, bankMasterMessage_1.default.FOUND, data, 200, "GET", "0402", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0402", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "GET", "0402", "1.0", res);
             }
         });
         // Get single bank details by Id
@@ -59,7 +59,7 @@ class BankMasterController {
                 return (0, sendResponse_1.sendResponse)(true, bankMasterMessage_1.default.FOUND, data, 200, "GET", "0403", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0403", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "GET", "0403", "1.0", res);
             }
         });
         // Update bank details by Id
@@ -67,12 +67,12 @@ class BankMasterController {
             try {
                 const { error } = bankMasterValidation_1.bankMasterValidation.validate(req.body);
                 if (error)
-                    return (0, sendResponse_1.sendResponse)(false, error.message, "", 403, "POST", "0404", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(false, error, "", 403, "POST", "0404", "1.0", res);
                 const data = yield this.bankMasterDao.update(req);
                 return (0, sendResponse_1.sendResponse)(true, bankMasterMessage_1.default.UPDATED, data, 200, "POST", "0404", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0404", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "POST", "0404", "1.0", res);
             }
         });
         this.bankMasterDao = new bankMasterDao_1.default();

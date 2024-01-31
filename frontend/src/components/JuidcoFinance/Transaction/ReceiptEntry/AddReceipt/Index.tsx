@@ -14,6 +14,7 @@ import {
   ReceiptDetailsSchema,
   initialReceiptDetails,
 } from "@/utils/validation/transactions/receipt_entry.validation";
+import ReceiptEntryTable from "@/components/Helpers/Tables/ReceiptEntryTable";
 export const HeroAddReceipt = () => {
   // Add Bank Details
   const createReceiptDetails = async (
@@ -45,12 +46,8 @@ export const HeroAddReceipt = () => {
     <>
       <Toaster />
 
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
-        <div className="flex justify-between">
-          <SubHeading>Add Receipt</SubHeading>
-        </div>
+      <section>
 
-        <div className="mt-8">
           <Formik
             initialValues={initialReceiptDetails}
             validationSchema={ReceiptDetailsSchema}
@@ -67,7 +64,18 @@ export const HeroAddReceipt = () => {
               handleBlur,
               handleSubmit,
             }) => (
-              <form onSubmit={handleSubmit}>
+
+              <>
+
+              
+            
+
+              <form onSubmit={handleSubmit}>    
+              <div className="border rounded-lg border-zinc-300 p-6 px-10">
+              
+              <div className="flex justify-between">
+                <SubHeading>Add Receipt</SubHeading>
+              </div>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
                   <InputBox
                     onChange={handleChange}
@@ -158,17 +166,75 @@ export const HeroAddReceipt = () => {
                     touched={touched.micrCode}
                     label="Narration"
                     name="micrCode"
+                    
                   />
 
-                  <PaymentModeRadioButtonSet
+                
+                <InputBox
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.micrCode}
+                    error={errors.micrCode}
+                    touched={touched.micrCode}
+                    label="Narration"
+                    name="micrCode"
+                    
+                  />
+
+                <InputBox
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.micrCode}
+                    error={errors.micrCode}
+                    touched={touched.micrCode}
+                    label="Sub Ledger"
+                    name="micrCode"
+                    
+                  />
+
+                <InputBox
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.micrCode}
+                    error={errors.micrCode}
+                    touched={touched.micrCode}
+                    label="Amount"
+                    name="micrCode"
+                  />
+
+                <span></span>
+                
+                <PaymentModeRadioButtonSet
                     onChange={handleChange}
                     onBlur={handleBlur}
                     name="paymentMode"
-                    label="Select Mode of Payment"
+                    label=""
                     value="Cash"
                   />
+                  
+                </div>
                 </div>
 
+                <div className="mt-10 border rounded-lg border-zinc-300 p-6 px-10">
+        <div className="flex justify-between">
+          <SubHeading>Select Mode of Payment</SubHeading>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-6 gap-4 ">
+        
+
+          
+
+          </div>
+
+          
+          <div className="flex justify-between mt-10">
+          <SubHeading>Receipt Entry Table</SubHeading>
+        </div>
+
+        <ReceiptEntryTable />
+
+        
                 <div className="mt-4 flex items-center gap-5 justify-end">
                   <PrimaryButton buttonType="button" variant="cancel">
                     Back
@@ -181,10 +247,15 @@ export const HeroAddReceipt = () => {
                     Save
                   </PrimaryButton>
                 </div>
+                </div>
               </form>
+              
+              </>
+
             )}
-          </Formik>
-        </div>
+          
+        
+        </Formik>
       </section>
     </>
   );
