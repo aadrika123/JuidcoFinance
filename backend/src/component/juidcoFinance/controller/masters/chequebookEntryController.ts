@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
-import ChequebookEntryDao from "../dao/chequebookEntryDao";
-import { chequebookValidation, chequebookValidationAlongWithID } from "../requests/cheuqebookValidation";
+import { sendResponse } from "../../../../util/sendResponse";
+import ChequebookEntryDao from "../../dao/masters/chequebookEntryDao";
+import { chequebookValidation, chequebookValidationAlongWithID } from "../../requests/masters/cheuqebookValidation";
 import Joi from "joi";
 
 /**

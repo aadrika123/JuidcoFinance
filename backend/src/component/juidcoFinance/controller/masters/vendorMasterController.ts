@@ -1,49 +1,46 @@
 import { Request, Response } from "express";
-import { dirPaymentEntryValidation, dirPaymentEntryValidationAlongWithID } from "../requests/dirPaymentEntryValidation";
-import { sendResponse } from "../../../util/sendResponse";
-import ResMessage from "../responseMessage/dirPaymentEntryMessage";
-import DirPaymentEntryDao from "../dao/dirPaymentEntryDao";
+import { sendResponse } from "../../../../util/sendResponse";
+import VendorMasterDao from "../../dao/masters/vendorMasterDao";
+import { vendorMasterValidation } from "../../requests/masters/vendorMasterValidation";
+import ResMessage from "../../responseMessage/masters/vendorMasterMessage";
 
 /**
- * | Author- Sanjiv Kumar
- * | Created On- 25-01-2024
- * | Created for- Direct Payment Entry Controller
- * | Common apiId- 09
+ * | Author- Krish Vishwakarma
+ * | Created On- 22-01-2024
+ * | Created for- Vendor Master Controller
+ * | Comman apiId- 05
  */
 
-class DirPaymentEntryController {
-  private dirPaymentEntryDao: DirPaymentEntryDao;
+class VendorMasterController {
+  private vendorMasterDao: VendorMasterDao;
   constructor() {
-    this.dirPaymentEntryDao = new DirPaymentEntryDao();
+    this.vendorMasterDao = new VendorMasterDao();
   }
 
-  // Create
+  // create a new Vendor
   create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = dirPaymentEntryValidation.validate(req.body);
-
+      const { error } = vendorMasterValidation.validate(req.body);
       if (error)
         return sendResponse(
           false,
           error,
           "",
-          403,
+          400,
           "POST",
-          "0901",
+          "0701",
           "1.0",
           res
         );
 
-        req.body.payment_no = 123;
-
-      const data = await this.dirPaymentEntryDao.store(req);
+      const data = await this.vendorMasterDao.store(req);
       return sendResponse(
         true,
         ResMessage.CREATED,
         data,
-        201,
+        200,
         "POST",
-        "0901",
+        "0701",
         "1.0",
         res
       );
@@ -54,17 +51,17 @@ class DirPaymentEntryController {
         "",
         500,
         "POST",
-        "0901",
+        "0701",
         "1.0",
         res
       );
     }
   };
 
-  // Get limited payment entry list
+  // get all vendor
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.dirPaymentEntryDao.get(req);
+      const data = await this.vendorMasterDao.get(req);
 
       if (!data)
         return sendResponse(
@@ -73,7 +70,7 @@ class DirPaymentEntryController {
           data,
           200,
           "GET",
-          "0902",
+          "0702",
           "1.0",
           res
         );
@@ -84,49 +81,7 @@ class DirPaymentEntryController {
         data,
         200,
         "GET",
-        "0902",
-        "1.0",
-        res
-      );
-    } catch (error: any) {
-      return sendResponse(
-        false,
-        error.message,
-        "",
-        500,
-        "GET",
-        "0902",
-        "1.0",
-        res
-      );
-    }
-  };
-
-  // Get single payment entry details by Id
-  getById = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const id: number = Number(req.params.id);
-      const data = await this.dirPaymentEntryDao.getById(id);
-
-      if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
-          data,
-          200,
-          "GET",
-          "0903",
-          "1.0",
-          res
-        );
-
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
-        data,
-        200,
-        "GET",
-        "0903",
+        "0702",
         "1.0",
         res
       );
@@ -137,17 +92,59 @@ class DirPaymentEntryController {
         "",
         500,
         "GET",
-        "0903",
+        "0702",
         "1.0",
         res
       );
     }
   };
 
-  // Update payment entry details by Id
+  // get vendor by ID
+  getById = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const id: number = Number(req.params.vendorId);
+      const data = await this.vendorMasterDao.getById(id);
+
+      if (!data)
+        return sendResponse(
+          true,
+          ResMessage.NOT_FOUND,
+          data,
+          200,
+          "GET",
+          "0703",
+          "1.0",
+          res
+        );
+
+      return sendResponse(
+        true,
+        ResMessage.FOUND,
+        data,
+        200,
+        "GET",
+        "0703",
+        "1.0",
+        res
+      );
+    } catch (error: any) {
+      return sendResponse(
+        false,
+        error,
+        "",
+        500,
+        "GET",
+        "0703",
+        "1.0",
+        res
+      );
+    }
+  };
+
+  // update vendor information
   update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body);
+      const { error } = vendorMasterValidation.validate(req.body);
 
       if (error)
         return sendResponse(
@@ -156,19 +153,20 @@ class DirPaymentEntryController {
           "",
           403,
           "POST",
-          "0904",
+          "0704",
           "1.0",
           res
         );
 
-      const data = await this.dirPaymentEntryDao.update(req);
+      const data = await this.vendorMasterDao.update(req);
+
       return sendResponse(
         true,
         ResMessage.UPDATED,
         data,
         200,
         "POST",
-        "0904",
+        "0704",
         "1.0",
         res
       );
@@ -179,7 +177,7 @@ class DirPaymentEntryController {
         "",
         500,
         "POST",
-        "0904",
+        "0704",
         "1.0",
         res
       );
@@ -187,4 +185,4 @@ class DirPaymentEntryController {
   };
 }
 
-export default DirPaymentEntryController;
+export default VendorMasterController;

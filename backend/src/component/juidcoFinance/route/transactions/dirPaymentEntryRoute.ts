@@ -1,6 +1,6 @@
 import express from "express";
-import { baseUrl } from "../../../util/common";
-import DirPaymentEntryController from "../controller/dirPaymentEntryController";
+import { baseUrl } from "../../../../util/common";
+import DirPaymentEntryController from "../../controller/transactions/dirPaymentEntryController";
 
 /**
  * | Route - 09

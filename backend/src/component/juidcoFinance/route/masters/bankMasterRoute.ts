@@ -1,6 +1,6 @@
 import express from "express";
-import BankMasterController from "../controller/bankMasterController";
-import {baseUrl} from "../../../util/common"
+import BankMasterController from "../../controller/masters/bankMasterController";
+import {baseUrl} from "../../../../util/common"
 /**
  * | Route - 04
  */

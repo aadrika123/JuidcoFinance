@@ -1,25 +1,29 @@
-import { sendResponse } from "../../../util/sendResponse";
 import { Request, Response } from "express";
-import AccountingCodeDao from "../dao/accountingCodeDao";
-import ResMessage from "../responseMessage/accountCodeMessage";
+import { sendResponse } from "../../../../util/sendResponse";
+import MuncipalityCodeDao from "../../dao/masters/munciCodeDao";
+import ResMessage from "../../responseMessage/masters/municCodeMessage";
 
 /**
  * | Author- Krish Vishwakarma
  * | Created On- 22-01-2024
- * | Created for- Account Code Controller
- * | Comman apiId- 01
+ * | Created for- Muncipality Code Controller
+ * | Common apiId- 03 .
  */
 
-class AccountCodeController {
-  private accountCodeDao: AccountingCodeDao;
+class MuncipalityCodeController {
+  private muncipalityCodeDao: MuncipalityCodeDao;
 
   constructor() {
-    this.accountCodeDao = new AccountingCodeDao();
+    this.muncipalityCodeDao = new MuncipalityCodeDao();
   }
 
-  getAccountCode = async (req: Request, res: Response): Promise<Response> => {
+  // Muncipality Code Controller
+  getMuncipalityCode = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
-      const data = await this.accountCodeDao.get(
+      const data = await this.muncipalityCodeDao.get(
         Number(req.query.page),
         Number(req.query.limit)
       );
@@ -31,7 +35,7 @@ class AccountCodeController {
           data,
           200,
           "GET",
-          "0201",
+          "0301",
           "1.0",
           res
         );
@@ -42,7 +46,7 @@ class AccountCodeController {
         data,
         200,
         "GET",
-        "0201",
+        "0301",
         "1.0",
         res
       );
@@ -53,7 +57,7 @@ class AccountCodeController {
         "",
         500,
         "GET",
-        "0201",
+        "0301",
         "1.0",
         res
       );
@@ -61,4 +65,4 @@ class AccountCodeController {
   };
 }
 
-export default AccountCodeController;
+export default MuncipalityCodeController;

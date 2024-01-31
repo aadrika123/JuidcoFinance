@@ -1,7 +1,7 @@
 "use strict";
 
-import { baseUrl } from "../../../util/common";
-import FunCodeController from "../controller/funCodeController";
+import { baseUrl } from "../../../../util/common";
+import FunCodeController from "../../controller/masters/funCodeController";
 import express from "express";
 
 /**

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { DirPaymentEntryRequestData } from "../../../util/types";
+import { DirPaymentEntryRequestData } from "../../../../util/types";
 import { Request } from "express";
 
 // Validating request data

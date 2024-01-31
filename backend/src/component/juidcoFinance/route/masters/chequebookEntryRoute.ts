@@ -1,6 +1,6 @@
-import { baseUrl } from "../../../util/common";
+import { baseUrl } from "../../../../util/common";
 import express from "express";
-import ChequebookEntryController from "../controller/chequebookEntryController";
+import ChequebookEntryController from "../../controller/masters/chequebookEntryController";
 
 
 /**

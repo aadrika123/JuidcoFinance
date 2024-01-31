@@ -1,9 +1,9 @@
 "use strict";
 
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
-import FunctionCodeDao from "../dao/functionCodeDao";
-import ResMessage from "../responseMessage/funCodeMessage";
+import { sendResponse } from "../../../../util/sendResponse";
+import FunctionCodeDao from "../../dao/masters/functionCodeDao";
+import ResMessage from "../../responseMessage/masters/funCodeMessage";
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 20-01-2024

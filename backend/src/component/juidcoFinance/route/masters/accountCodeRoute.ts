@@ -1,6 +1,6 @@
 import express from "express";
-import AccountCodeController from "../controller/accountCodeController";
-import { baseUrl } from "../../../util/common";
+import AccountCodeController from "../../controller/masters/accountCodeController";
+import { baseUrl } from "../../../../util/common";
 
 /**
  * | Route - 01
