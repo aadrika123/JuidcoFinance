@@ -24,7 +24,7 @@ class VendorMasterController {
       if (error)
         return sendResponse(
           false,
-          error.message,
+          error,
           "",
           400,
           "POST",
@@ -47,7 +47,7 @@ class VendorMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "POST",
@@ -88,7 +88,7 @@ class VendorMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "GET",
@@ -130,7 +130,7 @@ class VendorMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "GET",
@@ -149,7 +149,7 @@ class VendorMasterController {
       if (error)
         return sendResponse(
           false,
-          error.message,
+          error,
           "",
           403,
           "POST",
@@ -173,7 +173,7 @@ class VendorMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "POST",

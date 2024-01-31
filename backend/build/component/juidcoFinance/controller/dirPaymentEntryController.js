@@ -29,13 +29,13 @@ class DirPaymentEntryController {
             try {
                 const { error } = dirPaymentEntryValidation_1.dirPaymentEntryValidation.validate(req.body);
                 if (error)
-                    return (0, sendResponse_1.sendResponse)(false, error.message, "", 403, "POST", "0901", "1.0", res);
+                    return (0, sendResponse_1.sendResponse)(false, error, "", 403, "POST", "0901", "1.0", res);
                 req.body.payment_no = 123;
                 const data = yield this.dirPaymentEntryDao.store(req);
                 return (0, sendResponse_1.sendResponse)(true, dirPaymentEntryMessage_1.default.CREATED, data, 201, "POST", "0901", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "POST", "0901", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "POST", "0901", "1.0", res);
             }
         });
         // Get limited payment entry list
@@ -60,7 +60,7 @@ class DirPaymentEntryController {
                 return (0, sendResponse_1.sendResponse)(true, dirPaymentEntryMessage_1.default.FOUND, data, 200, "GET", "0903", "1.0", res);
             }
             catch (error) {
-                return (0, sendResponse_1.sendResponse)(false, error.message, "", 500, "GET", "0903", "1.0", res);
+                return (0, sendResponse_1.sendResponse)(false, error, "", 500, "GET", "0903", "1.0", res);
             }
         });
         // Update payment entry details by Id

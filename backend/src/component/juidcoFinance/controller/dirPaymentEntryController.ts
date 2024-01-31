@@ -25,7 +25,7 @@ class DirPaymentEntryController {
       if (error)
         return sendResponse(
           false,
-          error.message,
+          error,
           "",
           403,
           "POST",
@@ -50,7 +50,7 @@ class DirPaymentEntryController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "POST",
@@ -133,7 +133,7 @@ class DirPaymentEntryController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "GET",

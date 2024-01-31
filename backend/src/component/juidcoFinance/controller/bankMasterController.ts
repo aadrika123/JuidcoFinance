@@ -25,7 +25,7 @@ class BankMasterController {
       if (error)
         return sendResponse(
           false,
-          error.message,
+          error,
           "",
           403,
           "POST",
@@ -48,7 +48,7 @@ class BankMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "POST",
@@ -89,7 +89,7 @@ class BankMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "GET",
@@ -131,7 +131,7 @@ class BankMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "GET",
@@ -150,7 +150,7 @@ class BankMasterController {
       if (error)
         return sendResponse(
           false,
-          error.message,
+          error,
           "",
           403,
           "POST",
@@ -173,7 +173,7 @@ class BankMasterController {
     } catch (error: any) {
       return sendResponse(
         false,
-        error.message,
+        error,
         "",
         500,
         "POST",

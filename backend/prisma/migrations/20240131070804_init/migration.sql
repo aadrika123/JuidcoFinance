@@ -69,14 +69,13 @@ CREATE TABLE "vendor_masters" (
     "vendor_no" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "mobile_no" TEXT NOT NULL,
-    "comm_address" TEXT NOT NULL,
     "tin_no" TEXT NOT NULL,
     "pan_no" TEXT NOT NULL,
     "bank_name" TEXT NOT NULL,
     "ifsc_code" TEXT NOT NULL,
     "department_id" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
-    "office_address" TEXT NOT NULL,
+    "contact_address" TEXT NOT NULL,
     "gst_no" TEXT NOT NULL,
     "aadhar_no" TEXT NOT NULL,
     "bank_account_no" TEXT NOT NULL,
@@ -198,6 +197,38 @@ CREATE TABLE "dir_payment_entries" (
     CONSTRAINT "dir_payment_entries_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "bill_types" (
+    "id" SERIAL NOT NULL,
+    "type" TEXT NOT NULL,
+    "remark" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "bill_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "bill_payment_entries" (
+    "id" SERIAL NOT NULL,
+    "bill_no" INTEGER NOT NULL,
+    "bill_type_id" INTEGER NOT NULL,
+    "bill_entry_date" TEXT NOT NULL,
+    "department_id" INTEGER NOT NULL,
+    "vendor_name" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "payee_name_id" INTEGER NOT NULL,
+    "adminis_ward_id" INTEGER NOT NULL,
+    "bill_amount" INTEGER NOT NULL,
+    "advance" INTEGER NOT NULL,
+    "deposit" INTEGER NOT NULL,
+    "other_deductions" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "bill_payment_entries_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -218,3 +249,15 @@ ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_adminis_wa
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_bill_type_id_fkey" FOREIGN KEY ("bill_type_id") REFERENCES "bill_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_payee_name_id_fkey" FOREIGN KEY ("payee_name_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
