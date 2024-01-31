@@ -15,7 +15,7 @@ const receipt_types_seeder = async () => {
   
   for(let i=0;i<names.length;i++){
     records.push({
-      id: i,
+      id: i+1,
       name: names[i],
       remark: faker.lorem.sentence(),
       created_at: faker.date.past(),

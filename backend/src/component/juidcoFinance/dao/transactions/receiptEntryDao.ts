@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
-import { generateRes } from "../../../util/generateRes";
+import { generateRes } from "../../../../util/generateRes";
+
 
 
 /**
@@ -21,28 +22,13 @@ class ReceiptEntryDao {
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
     
-    const query: Prisma.cheque_book_entriesFindManyArgs = {
+    
+    const query: Prisma.receipt_entriesFindManyArgs = {
       skip: skip,
       take: limit,
       select: {
         id: true,
         date: true,
-        bank_name: true,
-        employee: {
-          select:{
-            id: true,
-            name: true
-          }
-        },
-        bank_account_no: true,
-        cheque_no_from: true,
-        bank_branch: true,
-        page_count: true,
-        cheque_no_to: true, 
-        issuer_name: true,
-        cheque_book_return: true,
-        cheque_book_return_date: true,
-        remarks: true,
         created_at: true,
         updated_at: true,
       },
@@ -53,22 +39,22 @@ class ReceiptEntryDao {
 
       query.where = {
         OR: [
-          {bank_name: {contains: search, mode: "insensitive"},},
-          {remarks: {contains: search, mode: "insensitive"},},
+          {email_id: {contains: search, mode: "insensitive"},},
+          {paid_by: {contains: search, mode: "insensitive"},},
         ],
       }
 
     }
     
     const [data, count] = await prisma.$transaction([
-      prisma.cheque_book_entries.findMany(query),
-      prisma.cheque_book_entries.count({where: query.where})
+      prisma.receipt_entries.findMany(query),
+      prisma.receipt_entries.count({where: query.where})
     ]);
 
     return generateRes(data, count, page, limit );
   };
 
-
+  
 }
 
 export default ReceiptEntryDao;

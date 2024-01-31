@@ -17,6 +17,7 @@ const adminisWardRoute_1 = __importDefault(require("./route/adminisWardRoute"));
 const grantRoute_1 = __importDefault(require("./route/grantRoute"));
 const employeeRoute_1 = __importDefault(require("./route/employeeRoute"));
 const billTypeRoute_1 = __importDefault(require("./route/billTypeRoute"));
+const receiptEntryRoute_1 = __importDefault(require("./route/masters/receiptEntryRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -76,6 +77,9 @@ class FinanceRoute {
         /// BILL TYPE ///
         this.billTypeRoute = new billTypeRoute_1.default();
         this.billTypeRoute.configure(app); // 14
+        /// RECEIPTS ///
+        this.receiptsRoute = new receiptEntryRoute_1.default();
+        this.receiptsRoute.configure(app);
     }
 }
 exports.default = FinanceRoute;

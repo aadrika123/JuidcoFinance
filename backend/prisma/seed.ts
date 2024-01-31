@@ -17,6 +17,12 @@ import bill_payment_entry_seed from "./bill_payment_entry_seed";
 import bill_type_seed from "./bill_type_seed";
 import receipt_types_seeder from "./receipt_types_seeder";
 import subledgers_seeder from "./subledger_list_seeder";
+import modules_seeder from "./modules_seeder";
+import receipts_seeder from "./receipts_seeder";
+
+
+
+
 
 const prisma = new PrismaClient();
 async function main() {
@@ -472,6 +478,11 @@ async function main() {
   receipt_types_seeder();
 
   subledgers_seeder();
+
+  modules_seeder();
+
+  receipts_seeder();
+
 }
 main()
   .then(async () => {

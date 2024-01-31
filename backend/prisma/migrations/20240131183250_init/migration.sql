@@ -154,7 +154,7 @@ CREATE TABLE "subledgers" (
 );
 
 -- CreateTable
-CREATE TABLE "receipt_entry" (
+CREATE TABLE "receipt_entries" (
     "id" SERIAL NOT NULL,
     "receipt_no" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
@@ -162,14 +162,15 @@ CREATE TABLE "receipt_entry" (
     "email_id" TEXT NOT NULL,
     "module_id" INTEGER NOT NULL,
     "receipt_type_id" INTEGER NOT NULL,
-    "reference_date" TIMESTAMP(3) NOT NULL,
     "mobile_no" TEXT NOT NULL,
     "admin_ward_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
     "subledger_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "receipt_entry_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "receipt_entries_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -291,16 +292,16 @@ ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_department_id_fkey" 
 ALTER TABLE "cheque_book_entries" ADD CONSTRAINT "cheque_book_entries_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "receipt_entry" ADD CONSTRAINT "receipt_entry_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "receipt_entry" ADD CONSTRAINT "receipt_entry_receipt_type_id_fkey" FOREIGN KEY ("receipt_type_id") REFERENCES "receipt_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_receipt_type_id_fkey" FOREIGN KEY ("receipt_type_id") REFERENCES "receipt_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "receipt_entry" ADD CONSTRAINT "receipt_entry_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "receipt_entry" ADD CONSTRAINT "receipt_entry_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_payment_type_id_fkey" FOREIGN KEY ("payment_type_id") REFERENCES "payment_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
