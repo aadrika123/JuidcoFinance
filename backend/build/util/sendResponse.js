@@ -22,8 +22,8 @@ const sendResponse = (status, message, resData, responseCode, action, apiId, ver
         resData = errorCodes_1.default[resData];
     }
     if (message && (message === null || message === void 0 ? void 0 : message.code)) {
-        message = errorCodes_1.default[message === null || message === void 0 ? void 0 : message.code];
-        // message = message.meta.cause;
+        // message = errorCodes[message?.code as keyof typeof errorCodes];
+        message = message.meta.cause;
         responseCode = 400;
     }
     else {

@@ -21,8 +21,8 @@ export const sendResponse = async (
   }
 
   if (message && message?.code) {
-    message = errorCodes[message?.code as keyof typeof errorCodes];
-    // message = message.meta.cause;
+    // message = errorCodes[message?.code as keyof typeof errorCodes];
+    message = message.meta.cause;
     responseCode = 400;
   } else {
     message = message?.message || message;
