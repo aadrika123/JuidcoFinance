@@ -123,6 +123,64 @@ model cheque_book_entries {
   updated_at              DateTime @updatedAt @map("updated_at")
 }
 
+//// Receipt Type
+model receipt_types {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  receipts    receipt_entry[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+//// Modules
+model modules {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  receipts    receipt_entry[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+//// subledgers
+model subledger {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  receipts    receipt_entry[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+
+//// Receipt Entry
+model receipt_entry {
+  id                  Int @id @default(autoincrement())
+  receipt_no          String
+  date                DateTime
+  paid_by             String
+  email_id            String
+  
+  module_id           Int
+  module              modules @relation(fields: [module_id], references: [id])
+  
+  receipt_type        receipt_types @relation(fields: [receipt_type_id], references: [id])
+  receipt_type_id     Int
+  
+  reference_date      DateTime
+  mobile_no           String
+  
+  admin_ward_id       Int
+  admin_ward          adminis_wards @relation(fields: [admin_ward_id], references: [id])
+  
+  narration           String
+  
+  subledger_id        Int
+  subledger           subledger @relation(fields: [subledger_id], references: [id])    
+  amount              Float
+}
+
 /// Department
 model departments {
   id                    Int                     @id @default(autoincrement())
@@ -160,6 +218,7 @@ model adminis_wards {
   name                  String
   remark                String
   dir_payment_entries   dir_payment_entries[]
+  receipt_entries       receipt_entry[]
   created_at            DateTime  @default(now()) @map("created_at")
   updated_at            DateTime  @updatedAt @map("updated_at")
 }
