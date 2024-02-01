@@ -48,7 +48,7 @@ interface VendorRequestData {
 
 interface ChequebookRequestData {
   date: Date;
-  issuer_name: string
+  issuer_name: string;
   bank_name: string;
   bank_account_no: string;
   cheque_no_from: string;
@@ -75,6 +75,25 @@ interface DirPaymentEntryRequestData {
   payment_mode: string;
   amount: number;
 }
+
+// interface VoucherEntryRequestData {
+//   id: number
+//   voucher_no : number
+//   voucher_date : string
+//   voucher_type: string
+//   voucher_type_id;
+//   narration;
+//   department;
+//   department_id;
+//   adminis_ward;
+//   adminis_ward_id;
+
+//   amount;
+//   dr_cr;
+//   total;
+//   created_at;
+//   updated_at;
+// }
 
 export type {
   CandidateType,

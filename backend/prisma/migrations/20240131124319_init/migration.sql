@@ -229,6 +229,47 @@ CREATE TABLE "bill_payment_entries" (
     CONSTRAINT "bill_payment_entries_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "voucher_types" (
+    "id" SERIAL NOT NULL,
+    "type" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "voucher_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "voucher_sub_type" (
+    "id" SERIAL NOT NULL,
+    "type" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "voucher_sub_type_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "voucher_entries" (
+    "id" SERIAL NOT NULL,
+    "voucher_no" INTEGER NOT NULL,
+    "voucher_date" TEXT NOT NULL,
+    "voucher_type_id" INTEGER NOT NULL,
+    "narration" TEXT NOT NULL,
+    "department_id" INTEGER NOT NULL,
+    "adminis_ward_id" INTEGER NOT NULL,
+    "voucher_sub_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "dr_cr" INTEGER NOT NULL,
+    "total" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "voucher_entries_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -261,3 +302,15 @@ ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_payee_na
 
 -- AddForeignKey
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_type_id_fkey" FOREIGN KEY ("voucher_type_id") REFERENCES "voucher_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_sub_id_fkey" FOREIGN KEY ("voucher_sub_id") REFERENCES "voucher_sub_type"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

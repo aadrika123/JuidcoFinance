@@ -11,6 +11,8 @@ import DirPaymentEntryRoute from "./route/transactions/dirPaymentEntryRoute";
 import PaymentTypeRoute from "./route/paymentTypeRoute";
 import AdministrativeWardRoute from "./route/adminisWardRoute";
 import GrantRoute from "./route/grantRoute";
+import VoucherTypeRoute from "./route/voucherTypeRoute";
+import VoucherSubTypeRoute from "./route/voucherSubTypeRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,8 @@ class FinanceRoute {
   private paymentTypeRoute: PaymentTypeRoute;
   private adminisWardRoute: AdministrativeWardRoute;
   private grantRoute: GrantRoute;
+  private voucherTypeRoute: VoucherTypeRoute;
+  private voucherSubTypeRoute: VoucherSubTypeRoute
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -61,11 +65,11 @@ class FinanceRoute {
 
     /// VENDOR_TYPE_ROUTE ///
     this.vendorTypeRoute = new VendorTypeRoute();
-    this.vendorTypeRoute.configure(app);  // 05
+    this.vendorTypeRoute.configure(app); // 05
 
     /// DEPARTMENT_ROUTE ///
     this.departmentRoute = new DepartmentRoute();
-    this.departmentRoute.configure(app)  // 06
+    this.departmentRoute.configure(app); // 06
 
     // VENDOR_MASTER_ROUTE ///
     this.vendorMasterRoute = new VendorMasterRoute();
@@ -73,23 +77,31 @@ class FinanceRoute {
 
     /// CHECKBOOK_ENTRY_ROUTE ///
     this.chequebookEntryRoute = new ChequeBookEntryRoute();
-    this.chequebookEntryRoute.configure(app);  // 08
+    this.chequebookEntryRoute.configure(app); // 08
 
     /// DIRECT_PAYMENT_ENTRY ///
     this.dirPaymentEntryRoute = new DirPaymentEntryRoute();
-    this.dirPaymentEntryRoute.configure(app);  // 09
+    this.dirPaymentEntryRoute.configure(app); // 09
 
     /// PAYMENT_TYPE ///
     this.paymentTypeRoute = new PaymentTypeRoute();
-    this.paymentTypeRoute.configure(app);  // 10
+    this.paymentTypeRoute.configure(app); // 10
 
     /// ADMINISTRATIVE_WARD ///
     this.adminisWardRoute = new AdministrativeWardRoute();
-    this.adminisWardRoute.configure(app);  // 11
+    this.adminisWardRoute.configure(app); // 11
 
     /// GRANT ///
     this.grantRoute = new GrantRoute();
-    this.grantRoute.configure(app);  // 12
+    this.grantRoute.configure(app); // 12
+
+    // VOUCHER_TYPE ///
+    this.voucherTypeRoute = new VoucherTypeRoute();
+    this.voucherTypeRoute.configure(app); // 15
+
+    // VOUCHER_SUB_TYPE ///
+    this.voucherSubTypeRoute = new VoucherSubTypeRoute();
+    this.voucherSubTypeRoute.configure(app); // 16
   }
 }
 

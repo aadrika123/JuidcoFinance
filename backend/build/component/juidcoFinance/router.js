@@ -3,18 +3,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const funCodeRoute_1 = __importDefault(require("./route/funCodeRoute"));
-const bankMasterRoute_1 = __importDefault(require("./route/bankMasterRoute"));
-const accountCodeRoute_1 = __importDefault(require("./route/accountCodeRoute"));
-const munciCodeRoute_1 = __importDefault(require("./route/munciCodeRoute"));
+const funCodeRoute_1 = __importDefault(require("./route/masters/funCodeRoute"));
+const bankMasterRoute_1 = __importDefault(require("./route/masters/bankMasterRoute"));
+const accountCodeRoute_1 = __importDefault(require("./route/masters/accountCodeRoute"));
+const munciCodeRoute_1 = __importDefault(require("./route/masters/munciCodeRoute"));
 const vendorTypeRoute_1 = __importDefault(require("./route/vendorTypeRoute"));
 const departmentRoute_1 = __importDefault(require("./route/departmentRoute"));
-const vendorMasterRoute_1 = __importDefault(require("./route/vendorMasterRoute"));
-const chequebookEntryRoute_1 = __importDefault(require("./route/chequebookEntryRoute"));
-const dirPaymentEntryRoute_1 = __importDefault(require("./route/dirPaymentEntryRoute"));
+const vendorMasterRoute_1 = __importDefault(require("./route/masters/vendorMasterRoute"));
+const chequebookEntryRoute_1 = __importDefault(require("./route/masters/chequebookEntryRoute"));
+const dirPaymentEntryRoute_1 = __importDefault(require("./route/transactions/dirPaymentEntryRoute"));
 const paymentTypeRoute_1 = __importDefault(require("./route/paymentTypeRoute"));
 const adminisWardRoute_1 = __importDefault(require("./route/adminisWardRoute"));
 const grantRoute_1 = __importDefault(require("./route/grantRoute"));
+const voucherTypeRoute_1 = __importDefault(require("./route/voucherTypeRoute"));
+const voucherSubTypeRoute_1 = __importDefault(require("./route/voucherSubTypeRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -68,6 +70,12 @@ class FinanceRoute {
         /// GRANT ///
         this.grantRoute = new grantRoute_1.default();
         this.grantRoute.configure(app); // 12
+        // VOUCHER_TYPE ///
+        this.voucherTypeRoute = new voucherTypeRoute_1.default();
+        this.voucherTypeRoute.configure(app); // 15
+        // VOUCHER_SUB_TYPE ///
+        this.voucherSubTypeRoute = new voucherSubTypeRoute_1.default();
+        this.voucherSubTypeRoute.configure(app); // 16
     }
 }
 exports.default = FinanceRoute;
