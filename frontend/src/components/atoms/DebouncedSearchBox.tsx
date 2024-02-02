@@ -1,20 +1,19 @@
 import React from "react";
 
 interface DebouncedSearchBoxProps {
-  debounceTime: number,
   onChange: (e: string) => void;
 }
 
 const DebouncedSearchBox: React.FC<DebouncedSearchBoxProps> = (props) => {
-
+  const debounceTime = 1000; // 1 second
   const [searchText, setSearchText] = React.useState("");
 
   React.useEffect(() => {
     const delayInputTimeoutId = setTimeout(() => {
       props.onChange(searchText);
-    }, props.debounceTime);
+    }, debounceTime);
     return () => clearTimeout(delayInputTimeoutId);
-  }, [searchText, props.debounceTime]);
+  }, [searchText, debounceTime]);
 
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

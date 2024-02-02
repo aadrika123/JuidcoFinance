@@ -35,7 +35,7 @@ const SimpleTable = <T, >({columns, data, onViewButtonClick}: SimpleTableProps<T
   ) : (
     data?.map((row, index) => {
       return (
-        <tr key={`row-${index}`}>
+        <tr key={`row-${index}`} className="border border-zinc-400 text-secondary">
           {columns.map((column, index2) => {
             const value = (row[column.name as keyof typeof row]);
             if(value instanceof Date){
@@ -44,11 +44,21 @@ const SimpleTable = <T, >({columns, data, onViewButtonClick}: SimpleTableProps<T
             }
             else{
               const value1 = value as string;
-              return <td key={`cell-${index2}`}>{value1}</td>;
+              return (
+              <td key={`cell-${index2}`} className="border border-zinc-400">
+                <div className="flex justify-center">
+                  {value1}
+                </div>
+              </td>
+              );
             }
                 
           })}
-          <td><ViewIconButton onClick={onViewButtonClick}/></td>
+          <td>
+            <div className="flex justify-center">
+            <ViewIconButton onClick={onViewButtonClick}/>
+            </div>
+          </td>
         </tr>
       );
     })
