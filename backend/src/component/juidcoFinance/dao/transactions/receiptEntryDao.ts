@@ -22,13 +22,17 @@ class ReceiptEntryDao {
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
     
-    
     const query: Prisma.receipt_entriesFindManyArgs = {
       skip: skip,
       take: limit,
       select: {
         id: true,
         date: true,
+        receipt_no: true,
+        subledger_id: true,
+        paid_by: true,
+        amount: true,
+        narration: true,
         created_at: true,
         updated_at: true,
       },
@@ -39,7 +43,7 @@ class ReceiptEntryDao {
 
       query.where = {
         OR: [
-          {email_id: {contains: search, mode: "insensitive"},},
+          {email: {contains: search, mode: "insensitive"},},
           {paid_by: {contains: search, mode: "insensitive"},},
         ],
       }

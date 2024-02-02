@@ -159,7 +159,7 @@ CREATE TABLE "receipt_entries" (
     "receipt_no" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "paid_by" TEXT NOT NULL,
-    "email_id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "module_id" INTEGER NOT NULL,
     "receipt_type_id" INTEGER NOT NULL,
     "mobile_no" TEXT NOT NULL,

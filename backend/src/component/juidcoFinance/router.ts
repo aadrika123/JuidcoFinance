@@ -107,8 +107,8 @@ class FinanceRoute {
 
 
     /// RECEIPTS ///
-    this.receiptsRoute = new ReceiptEntryRoute();
-    this.receiptsRoute.configure(app);
+    this.receiptsRoute = new ReceiptEntryRoute(); 
+    this.receiptsRoute.configure(app); //19
 
   }
 }

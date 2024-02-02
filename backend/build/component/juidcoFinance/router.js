@@ -79,7 +79,7 @@ class FinanceRoute {
         this.billTypeRoute.configure(app); // 14
         /// RECEIPTS ///
         this.receiptsRoute = new receiptEntryRoute_1.default();
-        this.receiptsRoute.configure(app);
+        this.receiptsRoute.configure(app); //19
     }
 }
 exports.default = FinanceRoute;

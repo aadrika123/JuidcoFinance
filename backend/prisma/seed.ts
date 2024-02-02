@@ -469,19 +469,19 @@ async function main() {
   }
 
   //////////////// Bill Types //////////////////////
-  bill_type_seed();
+  await bill_type_seed();
 
   /////////////// Bill Payment Entry //////////////////
-  bill_payment_entry_seed();
+  await bill_payment_entry_seed();
 
   /////////////// Receipt Types Seeder //////////////////
-  receipt_types_seeder();
+  await receipt_types_seeder();
 
-  subledgers_seeder();
+  await subledgers_seeder();
 
-  modules_seeder();
+  await modules_seeder();
 
-  receipts_seeder();
+  await receipts_seeder();
 
 }
 main()

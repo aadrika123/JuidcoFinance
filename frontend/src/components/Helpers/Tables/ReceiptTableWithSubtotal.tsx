@@ -1,18 +1,185 @@
 "use client";
 
 import { RootState } from "@/redux/store";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import PrimaryButton from "../Button";
+import Popup from "@/components/Helpers/Basic/Popup";
+import { Formik } from "formik";
+import InputBox from "../InputBox";
+import { initialReceiptDetails } from "@/utils/validation/transactions/receipt_entry.validation";
 
-const ReceiptTable: React.FC = () => {
+
+
+const ReceiptTableWithSubtotal: React.FC = () => {
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
+
   const chequebookData = useSelector(
     (state: RootState) => state.receiptDetails.receiptDetails
   );
 
+  function handlePopup() {
+    setPopupOpen(!popupOpen);
+  }
+
   console.log(chequebookData);
+
+  
   return (
     <>
+
+{popupOpen && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
+          <section className="fixed left-1/2 top-[2rem] transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[11.73831rem] z-50">
+            <div className="relative z-50 scale-75">
+              <Popup
+                closeModal={handlePopup}
+                title="Add Bank Account"
+              >
+                <Formik
+                  initialValues={initialReceiptDetails}
+                  validationSchema={AddBankDetailsSchema}
+                  onSubmit={(values: AddBankDetailsData) => {
+                    console.log(values);
+                    
+                  }}
+                >
+                  {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <div className="grid grid-cols-2 gap-x-6 gap-4 ">
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.bank_name}
+                          error={errors.bank_name}
+                          touched={touched.bank_name}
+                          label="Name of Bank *"
+                          name="bank_name"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.ifsc_code}
+                          error={errors.ifsc_code}
+                          touched={touched.ifsc_code}
+                          label="IFSC Code *"
+                          name="ifsc_code"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.branch}
+                          error={errors.branch}
+                          touched={touched.branch}
+                          label="Bank Branch *"
+                          name="branch"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.micr_code}
+                          error={errors.micr_code}
+                          touched={touched.micr_code}
+                          label="MICR Code"
+                          name="micr_code"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.branch_address}
+                          error={errors.branch_address}
+                          touched={touched.branch_address}
+                          label="Bank Branch Address"
+                          name="branch_address"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.contact_no}
+                          error={errors.contact_no}
+                          touched={touched.contact_no}
+                          label="Contact Number"
+                          name="contact_no"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.branch_city}
+                          error={errors.branch_city}
+                          touched={touched.branch_city}
+                          label="Bank Branch City"
+                          name="branch_city"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.branch_district}
+                          error={errors.branch_district}
+                          touched={touched.branch_district}
+                          label="Bank Branch District"
+                          name="branch_district"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.branch_state}
+                          error={errors.branch_state}
+                          touched={touched.branch_state}
+                          label="Bank Branch State "
+                          name="branch_state"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.email}
+                          error={errors.email}
+                          touched={touched.email}
+                          label="Email Id"
+                          name="email"
+                        />
+                        <InputBox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.contact_person_name}
+                          error={errors.contact_person_name}
+                          touched={touched.contact_person_name}
+                          name="contact_person_name"
+                          label="Contact Person Name / Designation"
+                        />
+                      </div>
+                      <div className="mt-4 flex items-center gap-5 justify-end">
+                        <PrimaryButton
+                          onClick={handlePopup}
+                          buttonType="button"
+                          variant="cancel"
+                        >
+                          Close
+                        </PrimaryButton>
+                        <PrimaryButton buttonType="button" variant="cancel">
+                          Reset
+                        </PrimaryButton>
+                        <PrimaryButton buttonType="submit" variant="primary">
+                          Save
+                        </PrimaryButton>
+                      </div>
+                    </form>
+                  )}
+                </Formik>
+              </Popup>
+            </div>
+          </section>
+        </>
+      )}
+
       <div className="overflow-x-auto border-[2px] border-zinc-400">
         <table className="table table-md">
           <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
@@ -23,17 +190,7 @@ const ReceiptTable: React.FC = () => {
                   
                 </div>
               </th>
-              <th className="border border-zinc-400  font-medium">
-                <div className="flex gap-2">
-                  <span>Receipt No</span>
-                </div>
-              </th>
-
-              <th className="border border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Receipt Date</span>
-                </div>
-              </th>
+              
 
               <th className="border  border-zinc-400 font-medium">
                 <div className="flex gap-2">
@@ -41,12 +198,7 @@ const ReceiptTable: React.FC = () => {
                 </div>
               </th>
 
-              <th className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Paid by</span>
-                </div>
-              </th>
-
+              
               <th className="border   border-zinc-400 font-medium">
                 <div className="flex gap-2">
                   <span>Amount (Rs)</span>
@@ -55,15 +207,14 @@ const ReceiptTable: React.FC = () => {
 
               <th className="border   border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Narration</span>
+                  <span>Payment Mode</span>
                 </div>
               </th>
-
               
     
               <th className="border  border-zinc-400  font-medium">
                 <div className="flex gap-2">
-                  <span>View / Edit / Print </span>
+                  <span> Add / Remove </span>
                   <span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -105,45 +256,22 @@ const ReceiptTable: React.FC = () => {
                 {/* ID */}
                 <td className="border border-zinc-400">{d?.id}</td>
 
-                {/* Date */}
-                <td className="border border-zinc-400">{d?.receipt_no}</td>
 
-                {/*  Bank Branch */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">{d?.date.toString()}</div>
-                </td>
-
-                {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
                     <div className="flex justify-center">{d?.subledger_id}</div>
                   </div>
                 </td>
 
-                {/* account number */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.paid_by}</div>
-                  </div>
-                </td>
-
-                {/* Bank Name */}
+                {/* Amount */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
                     <div className="flex justify-center">{d?.amount}</div>
                   </div>
                 </td>
 
-                {/* Bank Name */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.narration}</div>
-                  </div>
-                </td>
-
-                
-
-                {/* View / Print */}
+            
+                {/* Add / Remove */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
 
@@ -183,6 +311,18 @@ const ReceiptTable: React.FC = () => {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td colSpan={5}>
+              <div className="flex w-full justify-center mt-8">
+                <PrimaryButton variant="cancel" onClick={handlePopup}>Add New Receipt Entry +</PrimaryButton>
+              </div>
+              </td>
+            </tr>
+            <tr className="border border-zinc-400 text-secondary">
+              <td colSpan={2} className="border border-zinc-400 ">Total: </td>
+              <td className="border border-zinc-400 ">Rs. 3939</td>
+              <td colSpan={2}></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -190,4 +330,4 @@ const ReceiptTable: React.FC = () => {
   );
 };
 
-export default ReceiptTable;
+export default ReceiptTableWithSubtotal;

@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, receipt_entries } from "@prisma/client";
+import { PrismaClient, receipt_entries } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -24,16 +24,17 @@ const receipts_seeder = async () => {
       receipt_no: "R"+(i+1),
       date: faker.date.past(),
       paid_by: faker.company.name(),
-      email_id: faker.internet.email(),
-      module_id: random_one(module_ids),
-      receipt_type_id: random_one(receipt_type_ids),
+      email: faker.internet.email(),
       mobile_no: faker.phone.number(),
-      admin_ward_id: random_one(admin_ward_ids),
       narration: faker.lorem.sentence(),
-      subledger_id: random_one(subledger_ids),
       amount: parseFloat(faker.commerce.price()),
       created_at: faker.date.past(),
-      updated_at: faker.date.recent()
+      updated_at: faker.date.recent(),
+
+      admin_ward_id: random_one(admin_ward_ids),
+      receipt_type_id: random_one(receipt_type_ids),
+      module_id: random_one(module_ids),
+      subledger_id: random_one(subledger_ids),
     };
 
     console.log(record);

@@ -4,127 +4,81 @@ import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import React, { useState } from "react";
 import { useQuery} from "react-query";
-import axios from "@/lib/axiosConfig";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { ReceiptTableData } from "@/utils/types/receipt_entry_types";
 import Loader from "@/components/Helpers/Basic/Loader";
 import DebouncedSearchBox from "@/components/Helpers/DebouncedSearchBox";
 import ReceiptTable from "@/components/Helpers/Tables/ReceiptTable";
 import { addReceiptDetails } from "@/redux/reducers/ReceiptEntryReducer";
+import APIs from "@/json/apis.json";
 
 
+/**
+ * | Author- Bijoy Paitandi
+ * | Created On- 1-02-2024
+ * | Created for- Chequebook Entry
+ * | Status: closed
+ */
 
 type ReceiptListProps = {
   title: string;
 };
 
 const ReceiptList: React.FC<ReceiptListProps> = (props) => {
+  const numberOfRowsPerPage = 5;
   const [page, setPage] = useState<number>(1);
-  let searchText = "";
-  
-  const handlePageChangeAccountList = (direction: "prev" | "next") => {
-    setPage((prevPage) => (direction === "prev" ? prevPage - 1 : prevPage + 1));
-  };
-
-  const nextPage = () => {
-    handlePageChangeAccountList("next");
-  }
-
-  const prevPage = () => {
-    handlePageChangeAccountList("prev")
-  }
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [searchText, setSearchText] = useState<string>("");
 
   // redux
   const dispatch = useDispatch();
 
   // redux
-
   // ----- FETCH DATA ------////
 
-
-
   const fetchData = async (): Promise<ReceiptTableData[]> => {
+    const res = await axios({
+      url: `${APIs.receipt_entry$get}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}`,
+      method: "GET",
+    });
 
-    // const res = await axios({
-    //   url: `/api/finance/bank-list?limit=10&page=${page}`,
-    //   method: "GET",
-    // });
-    
-    // return res.data?.data?.data;
+    let data = res.data?.data;
 
-    // console.log(searchText);
-
-    let data: ReceiptTableData[] = [];
-    if(searchText.length > 0){
-      data = [
-        {
-          id: 1,
-          receiptNo: "383843",
-          receiptDate: "9-3-2020",
-          subLedger: "3443434",
-          paidBy: "someone",
-          amount: 909394,
-          narration: "paid on time"
-        },
-    
-        {
-          id: 2,
-          receiptNo: "383843",
-          receiptDate: "9-3-2020",
-          subLedger: "3443434",
-          paidBy: "someone",
-          amount: 909394,
-          narration: "paid on time"
-        },
-      ];
-    }else{
-      data = [
-        {
-          id: 3,
-          receiptNo: "383843",
-          receiptDate: "9-3-2020",
-          subLedger: "3443434",
-          paidBy: "someone",
-          amount: 909394,
-          narration: "paid on time"
-        },
-    
-        {
-          id: 4,
-          receiptNo: "383843",
-          receiptDate: "9-3-2020",
-          subLedger: "3443434",
-          paidBy: "someone",
-          amount: 909394,
-          narration: "paid on time"
-        },
-      ];
-
+    if (data == null) {
+      data = { totalPage: 0, data: [] };
     }
-    
-    
-    
-    return data;
+
+    console.log(data);
+
+    setPageCount(data.totalPage);
+    return data?.data;
   };
 
-  
   const {
-      data: receiptListData = [],
-      isError: receiptError,
-      isLoading: receiptsLoading,
-      refetch: reloadData
-    } = useQuery([], fetchData);
-    
-    if (receiptError) {
-      throw new Error("some error occurred");
-    }else{
-      dispatch(addReceiptDetails(receiptListData));
+    data: receiptData = [],
+    isError: receiptError,
+    isLoading: receiptsLoading,
+  } = useQuery([page, searchText], fetchData);
+
+  if (receiptError) {
+    console.log(receiptError);
+    // throw new Error("Fatal Error!");
+  } else {
+    dispatch(addReceiptDetails(receiptData));
   }
 
+  const handlePageChange = (direction: "prev" | "next") => {
+    const newPageNumber = direction === "prev" ? page - 1 : page + 1;
+    if (newPageNumber > 0 && newPageNumber <= pageCount) {
+      setPage(newPageNumber);
+    }
+  };
+
   const onSearchTextChange = (text: string) => {
-    searchText = text;
-    reloadData();
-  }
+    setSearchText(text);
+    setPage(1);
+  };
 
   return (
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
@@ -140,10 +94,11 @@ const ReceiptList: React.FC<ReceiptListProps> = (props) => {
           <ReceiptTable />
         )}
         
-
+        <div className="flex items-center justify-between mt-5 gap-5">
+          <div>Showing {page} out of {pageCount} pages</div>
         <div className="flex items-center justify-end mt-5 gap-5">
           {page > 1 && (
-            <PrimaryButton onClick={prevPage} variant="primary">
+            <PrimaryButton onClick={() => handlePageChange("prev")} variant="primary">
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +120,9 @@ const ReceiptList: React.FC<ReceiptListProps> = (props) => {
             </PrimaryButton>
           )}
 
-          <PrimaryButton onClick={nextPage} variant="primary">
+          
+          {page < pageCount && (
+          <PrimaryButton onClick={() => handlePageChange("next")} variant="primary">
             Next
             <span>
               <svg
@@ -185,6 +142,9 @@ const ReceiptList: React.FC<ReceiptListProps> = (props) => {
               </svg>
             </span>
           </PrimaryButton>
+          )}
+        
+        </div>
         </div>
       </div>
     </section>
