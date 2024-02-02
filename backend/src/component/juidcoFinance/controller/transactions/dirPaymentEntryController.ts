@@ -19,7 +19,7 @@ class DirPaymentEntryController {
 
   // Create
   create = async (req: Request, res: Response): Promise<Response> => {
-    try {
+    try { 
       const { error } = dirPaymentEntryValidation.validate(req.body);
 
       if (error)

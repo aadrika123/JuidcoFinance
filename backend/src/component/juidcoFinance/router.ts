@@ -11,8 +11,12 @@ import DirPaymentEntryRoute from "./route/transactions/dirPaymentEntryRoute";
 import PaymentTypeRoute from "./route/paymentTypeRoute";
 import AdministrativeWardRoute from "./route/adminisWardRoute";
 import GrantRoute from "./route/grantRoute";
+import EmployeeRoute from "./route/employeeRoute";
+import BillTypeRoute from "./route/billTypeRoute";
 import VoucherTypeRoute from "./route/voucherTypeRoute";
 import VoucherSubTypeRoute from "./route/voucherSubTypeRoute";
+import SubLedgerRoute from "./route/subLedgerRoute";
+import VoucherEntryRoute from "./route/documentation/voucherEntryRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +47,12 @@ class FinanceRoute {
   private paymentTypeRoute: PaymentTypeRoute;
   private adminisWardRoute: AdministrativeWardRoute;
   private grantRoute: GrantRoute;
+  private employeeRoute: EmployeeRoute;
+  private billTypeRoute: BillTypeRoute;
   private voucherTypeRoute: VoucherTypeRoute;
-  private voucherSubTypeRoute: VoucherSubTypeRoute
+  private voucherSubTypeRoute: VoucherSubTypeRoute;
+  private subLedgerRoute: SubLedgerRoute;
+  private voucherEntryRoute: VoucherEntryRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -95,6 +103,14 @@ class FinanceRoute {
     this.grantRoute = new GrantRoute();
     this.grantRoute.configure(app); // 12
 
+    /// EMPLOYEE ///
+    this.employeeRoute = new EmployeeRoute();
+    this.employeeRoute.configure(app); // 13
+
+    /// BILL TYPE ///
+    this.billTypeRoute = new BillTypeRoute();
+    this.billTypeRoute.configure(app); // 14
+
     // VOUCHER_TYPE ///
     this.voucherTypeRoute = new VoucherTypeRoute();
     this.voucherTypeRoute.configure(app); // 15
@@ -102,6 +118,14 @@ class FinanceRoute {
     // VOUCHER_SUB_TYPE ///
     this.voucherSubTypeRoute = new VoucherSubTypeRoute();
     this.voucherSubTypeRoute.configure(app); // 16
+
+    // VOUCHER_SUB_TYPE ///
+    this.subLedgerRoute = new SubLedgerRoute();
+    this.subLedgerRoute.configure(app); // 17
+
+    // VOUCHER_ENTRY_ROUTES ///
+    this.voucherEntryRoute = new VoucherEntryRoute();
+    this.voucherEntryRoute.configure(app); // 18
   }
 }
 

@@ -259,10 +259,19 @@ model voucher_sub_types {
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
 
+model sub_ledger {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  remark               String?
+  voucher_entries      voucher_entries[]
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+}
+
 model voucher_entries {
   id               Int           @id @default(autoincrement())
   voucher_no       Int          
-  voucher_date     String
+  voucher_date     DateTime
   voucher_type     voucher_types @relation(fields: [voucher_type_id], references: [id])
   voucher_type_id  Int
   narration        String
@@ -272,9 +281,10 @@ model voucher_entries {
   adminis_ward_id  Int
   voucher_sub_type voucher_sub_types @relation(fields: [voucher_sub_id], references: [id])
   voucher_sub_id   Int
+  sub_ledger       sub_ledger    @relation(fields: [sub_ledger_id], references: [id])
+  sub_ledger_id    Int
   amount           Float
   dr_cr            Int
-  total            Int 
   created_at       DateTime      @default(now()) @map("created_at")
   updated_at       DateTime      @updatedAt @map("updated_at")
 }

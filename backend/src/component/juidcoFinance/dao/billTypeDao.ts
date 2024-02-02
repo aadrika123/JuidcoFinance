@@ -3,18 +3,18 @@ import { generateRes } from "../../../util/generateRes";
 
 const prisma = new PrismaClient();
 
-// -> Get All grants
-class GrantDao {
+// -> Get All bill types
+class BillTypeDao {
   get = async () => {
-    const query: Prisma.grantsFindManyArgs = {
+    const query: Prisma.bill_typesFindManyArgs = {
       select: {
         id: true,
-        name: true,
+        type: true,
       },
     };
-    const data = prisma.grants.findMany(query);
+    const data = prisma.bill_types.findMany(query);
     return generateRes(data);
   };
 }
 
-export default GrantDao;
+export default BillTypeDao;

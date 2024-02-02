@@ -76,24 +76,20 @@ interface DirPaymentEntryRequestData {
   amount: number;
 }
 
-// interface VoucherEntryRequestData {
-//   id: number
-//   voucher_no : number
-//   voucher_date : string
-//   voucher_type: string
-//   voucher_type_id;
-//   narration;
-//   department;
-//   department_id;
-//   adminis_ward;
-//   adminis_ward_id;
-
-//   amount;
-//   dr_cr;
-//   total;
-//   created_at;
-//   updated_at;
-// }
+interface VoucherEntryRequestData {
+  id?: number;
+  voucher_no: number;
+  voucher_date: Date;
+  voucher_type_id: number;
+  narration: string;
+  department_id: number;
+  adminis_ward_id: number;
+  voucher_sub_id: number;
+  sub_ledger_id: number;
+  amount: number;
+  dr_cr: number;
+  total?: number;
+}
 
 export type {
   CandidateType,
@@ -102,4 +98,5 @@ export type {
   VendorRequestData,
   ChequebookRequestData,
   DirPaymentEntryRequestData,
+  VoucherEntryRequestData,
 };

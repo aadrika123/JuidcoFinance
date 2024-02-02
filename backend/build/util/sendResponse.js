@@ -18,12 +18,13 @@ const errorCodes_1 = __importDefault(require("./errorCodes"));
  * | Response Msg Version with apiMetaData
  */
 const sendResponse = (status, message, resData, responseCode, action, apiId, version, res, deviceId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     if (!status) {
         resData = errorCodes_1.default[resData];
     }
-    if (message && (message === null || message === void 0 ? void 0 : message.code)) {
-        message = errorCodes_1.default[message === null || message === void 0 ? void 0 : message.code];
-        // message = message.meta.cause;
+    if (message && (message === null || message === void 0 ? void 0 : message.code) && ((_a = message === null || message === void 0 ? void 0 : message.meta) === null || _a === void 0 ? void 0 : _a.cause)) {
+        // message = errorCodes[message?.code as keyof typeof errorCodes];
+        message = message.meta.cause;
         responseCode = 400;
     }
     else {

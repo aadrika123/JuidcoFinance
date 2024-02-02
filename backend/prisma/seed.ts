@@ -18,6 +18,7 @@ import bill_type_seed from "./seeder/bill_type_seed";
 import voucher_types_seed from "./seeder/voucher_types_seed";
 import voucher_sub_types_seed from "./seeder/voucher_sub_type_seed";
 import voucher_entries_seed from "./seeder/voucher_entries_seed";
+import sub_ledger_seed from "./seeder/sub_ledger_seed";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -474,6 +475,9 @@ async function main() {
 
   //////////////// Voucher sub type //////////////////
   await voucher_sub_types_seed();
+
+    //////////////// Sub Ledger //////////////////
+    await sub_ledger_seed();
 
   //////////////// Bill Types //////////////////////
   await bill_type_seed();

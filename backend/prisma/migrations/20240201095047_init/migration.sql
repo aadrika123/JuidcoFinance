@@ -241,29 +241,40 @@ CREATE TABLE "voucher_types" (
 );
 
 -- CreateTable
-CREATE TABLE "voucher_sub_type" (
+CREATE TABLE "voucher_sub_types" (
     "id" SERIAL NOT NULL,
     "type" TEXT NOT NULL,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "voucher_sub_type_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "voucher_sub_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "sub_ledger" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "sub_ledger_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "voucher_entries" (
     "id" SERIAL NOT NULL,
     "voucher_no" INTEGER NOT NULL,
-    "voucher_date" TEXT NOT NULL,
+    "voucher_date" TIMESTAMP(3) NOT NULL,
     "voucher_type_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
     "department_id" INTEGER NOT NULL,
     "adminis_ward_id" INTEGER NOT NULL,
     "voucher_sub_id" INTEGER NOT NULL,
+    "sub_ledger_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "dr_cr" INTEGER NOT NULL,
-    "total" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -313,4 +324,7 @@ ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_department_id_fkey
 ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_sub_id_fkey" FOREIGN KEY ("voucher_sub_id") REFERENCES "voucher_sub_type"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_sub_id_fkey" FOREIGN KEY ("voucher_sub_id") REFERENCES "voucher_sub_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_sub_ledger_id_fkey" FOREIGN KEY ("sub_ledger_id") REFERENCES "sub_ledger"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

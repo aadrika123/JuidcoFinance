@@ -1,25 +1,25 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
-import VoucherTypeDao from "../dao/voucherTypeDao";
 import ResMessage from "../responseMessage/vendorTypeMessage";
+import SubLedgerDao from "../dao/subLedgerDao";
 
 /**
  * | Author- Krish
- * | Created On- 31-01-2024
- * | Created for- Voucher Type Controller
- * | Common apiId- 15
+ * | Created On- 01-02-2024
+ * | Created for- Sub Ledger Controller
+ * | Common apiId- 17
  */
 
-class VoucherTypeController {
-  private voucherTypeDao: VoucherTypeDao;
+class SubLedgerController {
+  private subLedgerDao: SubLedgerDao;
   constructor() {
-    this.voucherTypeDao = new VoucherTypeDao();
+    this.subLedgerDao = new SubLedgerDao();
   }
 
   // Get all vendor Types
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.voucherTypeDao.get();
+      const data = await this.subLedgerDao.get();
 
       if (!data)
         return sendResponse(
@@ -28,7 +28,7 @@ class VoucherTypeController {
           data,
           200,
           "GET",
-          "1501",
+          "1701",
           "1.0",
           res
         );
@@ -39,14 +39,14 @@ class VoucherTypeController {
         data,
         200,
         "GET",
-        "1501",
+        "1701",
         "1.0",
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "1501", "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", "1701", "1.0", res);
     }
   };
 }
 
-export default VoucherTypeController;
+export default SubLedgerController;

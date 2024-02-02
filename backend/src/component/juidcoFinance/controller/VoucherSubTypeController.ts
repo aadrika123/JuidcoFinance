@@ -44,7 +44,7 @@ class VoucherSubTypeController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "0501", "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", "1601", "1.0", res);
     }
   };
 }
