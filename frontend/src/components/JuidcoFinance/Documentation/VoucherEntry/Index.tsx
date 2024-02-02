@@ -26,7 +26,7 @@ export const HeroVoucherEntry = () => {
 
   const fetchBankData = async (): Promise<MasterProps<VendorDetailsData>> => {
     const res = await axios({
-      url: `${FINANCE_URL.VENDOR_MASTER_URL.get}&page=${page}&search=${searchQuery}`,
+      url: `${FINANCE_URL.VOUCHER_ENTRY_URL.get}&page=${page}&search=${searchQuery}`,
       method: "GET",
     });
     return res.data?.data as MasterProps<VendorDetailsData>;
@@ -41,6 +41,8 @@ export const HeroVoucherEntry = () => {
   // if (vendorListData?.data) {
   //   dispatch(addBankDetails(accountListData?.data ?? []));
   // }
+
+ 
 
   if (vendorError) {
     throw new Error("some error occurred");
