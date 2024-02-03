@@ -1,5 +1,11 @@
 import { Response } from "express";
 
+type resObj = {
+  action: string;
+  apiId: string;
+  version: string;
+};
+
 interface CandidateType {
   id: string;
   name: string;
@@ -62,9 +68,9 @@ interface ChequebookRequestData {
 
 interface DirPaymentEntryRequestData {
   payment_date: string;
-  payment_no: number;
+  payment_no: string;
   payment_type_id: number;
-  payee_name: string;
+  payee_name_id: number;
   narration: string;
   grant_id: number;
   user_common_budget: boolean;
@@ -76,11 +82,31 @@ interface DirPaymentEntryRequestData {
   amount: number;
 }
 
+interface BillPaymentEntryRequestData {
+  bill_no: string,
+  bill_type_id: number,
+  bill_entry_date: string,
+  department_id: number,
+  vendor_name: string,
+  address: string,
+  payee_name_id: number,
+  adminis_ward_id: number,
+  bill_amount: number,
+  advance: number,
+  deposit: number,
+  deductions_amount: number,
+  earlier_payment: number,
+  payable_amount: number,
+  net_amount: number
+}
+
 export type {
+  resObj,
   CandidateType,
   ApiResponse,
   BankRequestData,
   VendorRequestData,
   ChequebookRequestData,
   DirPaymentEntryRequestData,
+  BillPaymentEntryRequestData
 };

@@ -1,48 +1,61 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
-import { multiRequestData, requestData } from "../../requests/transactions/dirPaymentEntryValidation";
+import { requestData } from "../../requests/transactions/dirPaymentEntryValidation";
+import { multiRequestData } from "../../requests/transactions/billPaymentEntryValidation";
 
 const prisma = new PrismaClient();
 
-class DirPaymentEntryDao {
+class BillPaymentEntryDao {
   constructor() {
     //////
   }
 
   // store payment entry details in DB
   store = async (req: Request) => {
-    return await prisma.dir_payment_entries.createMany({
+    return await prisma.bill_payment_entries.createMany({
       data: multiRequestData(req),
     });
   };
 
-  // Get limited payment entry
+  // Get limited bill payment entry
   get = async (req: Request) => {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
 
-    const query: Prisma.dir_payment_entriesFindManyArgs = {
+    const query: Prisma.bill_payment_entriesFindManyArgs = {
       skip: (page - 1) * limit,
       take: limit,
       select: {
         id: true,
-        payment_no: true,
-        payment_date: true,
-        amount: true,
+        vendor_name: true,
+        bill_no: true,
+        bill_entry_date: true,
         payee_name: {
           select: {
             id: true,
             name: true,
           },
         },
-        payment_type: {
+        bill_type: {
           select: {
             id: true,
             type: true,
           },
         },
+        department: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        bill_amount: true,
+        is_approved: true,
+        earlier_payment: true,
+        payable_amount: true,
+        deductions_amount: true,
+        net_amount: true
       },
     };
 
@@ -57,47 +70,45 @@ class DirPaymentEntryDao {
               },
             },
           },
-          { payment_no: { contains: search } },
+          { bill_no: { contains: search } },
         ],
       };
     }
 
     const [data, count] = await prisma.$transaction([
-      prisma.dir_payment_entries.findMany(query),
-      prisma.dir_payment_entries.count({ where: query.where }),
+      prisma.bill_payment_entries.findMany(query),
+      prisma.bill_payment_entries.count({ where: query.where }),
     ]);
     return generateRes(data, count, page, limit);
   };
 
-  // Get single payment entry details
+  // Get single bill payment entry details
   getById = async (id: number) => {
-    const query: Prisma.dir_payment_entriesFindManyArgs = {
+    const query: Prisma.bill_payment_entriesFindManyArgs = {
       where: { id },
       select: {
         id: true,
-        payment_no: true,
-        payment_date: true,
-        amount: true,
+        vendor_name: true,
+        bill_no: true,
+        bill_entry_date: true,
         payee_name: {
           select: {
             id: true,
             name: true,
           },
         },
-        payment_type: {
+        bill_type: {
           select: {
             id: true,
             type: true,
           },
         },
-        narration: true,
-        grant: {
+        department: {
           select: {
             id: true,
             name: true,
           },
         },
-        user_common_budget: true,
         adminis_ward: {
           select: {
             id: true,
@@ -105,24 +116,20 @@ class DirPaymentEntryDao {
           },
         },
         address: true,
-        department: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        email: true,
-        payment_mode: true,
+        bill_amount: true,
+        advance: true,
+        deposit: true,
+        deductions_amount: true
       },
     };
-    const data = await prisma.dir_payment_entries.findFirst(query);
+    const data = await prisma.bill_payment_entries.findFirst(query);
     return generateRes(data);
   };
 
-  // Update payment entry details
+  // Update bill payment entry details
   update = async (req: Request) => {
     const id: number = req.body.id;
-    return await prisma.dir_payment_entries.update({
+    return await prisma.bill_payment_entries.update({
       where: {
         id: id,
       },
@@ -131,4 +138,4 @@ class DirPaymentEntryDao {
   };
 }
 
-export default DirPaymentEntryDao;
+export default BillPaymentEntryDao;

@@ -178,10 +178,10 @@ CREATE TABLE "grants" (
 -- CreateTable
 CREATE TABLE "dir_payment_entries" (
     "id" SERIAL NOT NULL,
-    "payment_no" INTEGER NOT NULL,
+    "payment_no" TEXT NOT NULL,
     "payment_date" TIMESTAMP(3) NOT NULL,
     "payment_type_id" INTEGER NOT NULL,
-    "payee_name" TEXT NOT NULL,
+    "payee_name_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
     "grant_id" INTEGER NOT NULL,
     "user_common_budget" BOOLEAN NOT NULL,
@@ -190,7 +190,7 @@ CREATE TABLE "dir_payment_entries" (
     "department_id" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
     "payment_mode" TEXT NOT NULL,
-    "amount" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -211,18 +211,22 @@ CREATE TABLE "bill_types" (
 -- CreateTable
 CREATE TABLE "bill_payment_entries" (
     "id" SERIAL NOT NULL,
-    "bill_no" INTEGER NOT NULL,
+    "bill_no" TEXT NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
-    "bill_entry_date" TEXT NOT NULL,
+    "bill_entry_date" TIMESTAMP(3) NOT NULL,
     "department_id" INTEGER NOT NULL,
     "vendor_name" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "payee_name_id" INTEGER NOT NULL,
     "adminis_ward_id" INTEGER NOT NULL,
-    "bill_amount" INTEGER NOT NULL,
-    "advance" INTEGER NOT NULL,
-    "deposit" INTEGER NOT NULL,
-    "other_deductions" INTEGER NOT NULL,
+    "bill_amount" DOUBLE PRECISION NOT NULL,
+    "advance" DOUBLE PRECISION NOT NULL,
+    "deposit" DOUBLE PRECISION NOT NULL,
+    "deductions_amount" DOUBLE PRECISION NOT NULL,
+    "earlier_payment" DOUBLE PRECISION NOT NULL,
+    "payable_amount" DOUBLE PRECISION NOT NULL,
+    "net_amount" DOUBLE PRECISION NOT NULL,
+    "is_approved" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -240,6 +244,9 @@ ALTER TABLE "cheque_book_entries" ADD CONSTRAINT "cheque_book_entries_employee_i
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_payment_type_id_fkey" FOREIGN KEY ("payment_type_id") REFERENCES "payment_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_payee_name_id_fkey" FOREIGN KEY ("payee_name_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_grant_id_fkey" FOREIGN KEY ("grant_id") REFERENCES "grants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

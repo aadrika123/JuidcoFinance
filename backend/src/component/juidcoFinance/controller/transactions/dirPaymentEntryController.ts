@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { dirPaymentEntryValidation, dirPaymentEntryValidationAlongWithID } from "../../requests/transactions/dirPaymentEntryValidation";
-import { sendResponse } from "../../../../util/sendResponse";
-import ResMessage from "../../responseMessage/transactions/dirPaymentEntryMessage";
+import { dirPaymentEntryValidationAlongWithID, dirPaymentEntryValidation } from "../../requests/transactions/dirPaymentEntryValidation";
 import DirPaymentEntryDao from "../../dao/transactions/dirPaymentEntryDao";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resObj } from "../../../../util/types";
+import { resMessage } from "../../responseMessage/commonMessage";
 
 /**
  * | Author- Sanjiv Kumar
@@ -13,178 +14,125 @@ import DirPaymentEntryDao from "../../dao/transactions/dirPaymentEntryDao";
 
 class DirPaymentEntryController {
   private dirPaymentEntryDao: DirPaymentEntryDao;
+  private initMesg: string;
   constructor() {
     this.dirPaymentEntryDao = new DirPaymentEntryDao();
+    this.initMesg = "Direct Payment Entry";
   }
 
   // Create
-  create = async (req: Request, res: Response): Promise<Response> => {
+  create = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
     try {
       const { error } = dirPaymentEntryValidation.validate(req.body);
 
-      if (error)
-        return sendResponse(
-          false,
-          error,
-          "",
-          403,
-          "POST",
-          "0901",
-          "1.0",
-          res
-        );
-
-        req.body.payment_no = 123;
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
       const data = await this.dirPaymentEntryDao.store(req);
-      return sendResponse(
-        true,
-        ResMessage.CREATED,
+      return CommonRes.CREATED(
+        resMessage(this.initMesg).CREATED,
         data,
-        201,
-        "POST",
-        "0901",
-        "1.0",
+        resObj,
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0901",
-        "1.0",
-        res
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 
   // Get limited payment entry list
-  get = async (req: Request, res: Response): Promise<Response> => {
+  get = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const data = await this.dirPaymentEntryDao.get(req);
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.SUCCESS(
+          resMessage(this.initMesg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "0902",
-          "1.0",
+          resObj,
           res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
-        data,
-        200,
-        "GET",
-        "0902",
-        "1.0",
-        res
-      );
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error.message,
-        "",
-        500,
-        "GET",
-        "0902",
-        "1.0",
-        res
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 
   // Get single payment entry details by Id
-  getById = async (req: Request, res: Response): Promise<Response> => {
+  getById = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const id: number = Number(req.params.id);
       const data = await this.dirPaymentEntryDao.getById(id);
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.SUCCESS(
+          resMessage(this.initMesg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "0903",
-          "1.0",
+          resObj,
           res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
-        data,
-        200,
-        "GET",
-        "0903",
-        "1.0",
-        res
-      );
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "GET",
-        "0903",
-        "1.0",
-        res
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 
   // Update payment entry details by Id
-  update = async (req: Request, res: Response): Promise<Response> => {
+  update = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
     try {
       const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body);
 
-      if (error)
-        return sendResponse(
-          false,
-          error,
-          "",
-          403,
-          "POST",
-          "0904",
-          "1.0",
-          res
-        );
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
       const data = await this.dirPaymentEntryDao.update(req);
-      return sendResponse(
-        true,
-        ResMessage.UPDATED,
+      return CommonRes.CREATED(
+        resMessage(this.initMesg).UPDATED,
         data,
-        200,
-        "POST",
-        "0904",
-        "1.0",
+        resObj,
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0904",
-        "1.0",
-        res
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 }
 
 export default DirPaymentEntryController;
+

@@ -13,8 +13,8 @@ import {
 } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
-import bill_payment_entry_seed from "./bill_payment_entry_seed";
-import bill_type_seed from "./bill_type_seed";
+import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
+import bill_type_seed from "./seeder/bill_type_seed";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -365,13 +365,19 @@ async function main() {
     count: 5,
   });
 
-  const paymentModes = ['Credit Card', 'Debit Card', 'PayPal', 'Cash', 'Bank Transfer'];
+  const paymentModes = [
+    "Credit Card",
+    "Debit Card",
+    "PayPal",
+    "Cash",
+    "Bank Transfer",
+  ];
   let ip = 1;
   for (const item of paymentTypes) {
     await prisma.payment_types.create({
       data: {
         id: ip,
-        type: paymentModes[ip-1],
+        type: paymentModes[ip - 1],
         remark: item.remark,
         created_at: item.created_at,
         updated_at: item.updated_at,
@@ -413,16 +419,16 @@ async function main() {
   function createRandomDirPaymentEntry(): dir_payment_entries {
     return {
       id: faker.datatype.number(),
-      payment_no: faker.datatype.number(),
+      payment_no: `pn${faker.datatype.number(6)}`,
       payment_date: faker.date.recent(),
-      payment_type_id: faker.datatype.number(),
-      payee_name: faker.person.fullName(),
+      payment_type_id: 1,
+      payee_name_id: 1,
       narration: faker.lorem.sentence(),
-      grant_id: faker.datatype.number(),
+      grant_id: 1,
       user_common_budget: faker.datatype.boolean(),
-      adminis_ward_id: faker.datatype.number(),
+      adminis_ward_id: 2,
       address: faker.address.streetAddress(),
-      department_id: faker.datatype.number(),
+      department_id: 1,
       email: faker.internet.email(),
       payment_mode: faker.internet.email(),
       amount: faker.datatype.number(),
@@ -435,36 +441,15 @@ async function main() {
     count: 20,
   });
 
-  let pn =1;
-  for (const item of paymentEntries) {
-    await prisma.dir_payment_entries.create({
-      data: {
-        id: item.id,
-        payment_no: pn,
-        payment_date: item.payment_date,
-        payment_type_id: 1,
-        payee_name: item.payee_name,
-        narration: item.narration,
-        grant_id: 1,
-        user_common_budget: item.user_common_budget,
-        adminis_ward_id: 2,
-        address: item.address,
-        department_id: 1,
-        email: item.email,
-        payment_mode: item.payment_mode,
-        amount: item.amount,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    pn++;
-  }
+  await prisma.dir_payment_entries.createMany({
+    data: paymentEntries,
+  });
 
   //////////////// Bill Types //////////////////////
-  bill_type_seed();
+  await bill_type_seed();
 
   /////////////// Bill Payment Entry //////////////////
-  bill_payment_entry_seed();
+  await bill_payment_entry_seed();
 }
 main()
   .then(async () => {
