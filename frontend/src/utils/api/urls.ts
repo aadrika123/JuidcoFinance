@@ -1,3 +1,9 @@
+/**
+ * Author: Krish
+ * use: For API URLs
+ * status: Open
+ */
+
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"

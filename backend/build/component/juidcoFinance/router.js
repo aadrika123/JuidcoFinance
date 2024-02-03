@@ -17,6 +17,7 @@ const adminisWardRoute_1 = __importDefault(require("./route/adminisWardRoute"));
 const grantRoute_1 = __importDefault(require("./route/grantRoute"));
 const employeeRoute_1 = __importDefault(require("./route/employeeRoute"));
 const billTypeRoute_1 = __importDefault(require("./route/billTypeRoute"));
+const receiptEntryRoute_1 = __importDefault(require("./route/masters/receiptEntryRoute"));
 const voucherTypeRoute_1 = __importDefault(require("./route/voucherTypeRoute"));
 const voucherSubTypeRoute_1 = __importDefault(require("./route/voucherSubTypeRoute"));
 const subLedgerRoute_1 = __importDefault(require("./route/subLedgerRoute"));
@@ -79,6 +80,10 @@ class FinanceRoute {
         this.employeeRoute.configure(app); // 13
         /// BILL TYPE ///
         this.billTypeRoute = new billTypeRoute_1.default();
+        this.billTypeRoute.configure(app); // 14
+        /// RECEIPTS ///
+        this.receiptsRoute = new receiptEntryRoute_1.default();
+        this.receiptsRoute.configure(app); //19
         this.billTypeRoute.configure(app); // 14
         // VOUCHER_TYPE ///
         this.voucherTypeRoute = new voucherTypeRoute_1.default();

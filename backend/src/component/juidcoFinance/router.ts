@@ -13,6 +13,7 @@ import AdministrativeWardRoute from "./route/adminisWardRoute";
 import GrantRoute from "./route/grantRoute";
 import EmployeeRoute from "./route/employeeRoute";
 import BillTypeRoute from "./route/billTypeRoute";
+import ReceiptEntryRoute from "./route/masters/receiptEntryRoute";
 import VoucherTypeRoute from "./route/voucherTypeRoute";
 import VoucherSubTypeRoute from "./route/voucherSubTypeRoute";
 import SubLedgerRoute from "./route/subLedgerRoute";
@@ -53,6 +54,7 @@ class FinanceRoute {
   private voucherSubTypeRoute: VoucherSubTypeRoute;
   private subLedgerRoute: SubLedgerRoute;
   private voucherEntryRoute: VoucherEntryRoute;
+  private receiptsRoute: ReceiptEntryRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -109,6 +111,13 @@ class FinanceRoute {
 
     /// BILL TYPE ///
     this.billTypeRoute = new BillTypeRoute();
+    this.billTypeRoute.configure(app);  // 14
+
+
+    /// RECEIPTS ///
+    this.receiptsRoute = new ReceiptEntryRoute(); 
+    this.receiptsRoute.configure(app); //19
+
     this.billTypeRoute.configure(app); // 14
 
     // VOUCHER_TYPE ///

@@ -5,7 +5,7 @@ import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
-const ReceiptTable: React.FC = () => {
+const ReceiptEntryTable: React.FC = () => {
   const chequebookData = useSelector(
     (state: RootState) => state.receiptDetails.receiptDetails
   );
@@ -23,78 +23,23 @@ const ReceiptTable: React.FC = () => {
                   
                 </div>
               </th>
-              <th className="border border-zinc-400  font-medium">
-                <div className="flex gap-2">
-                  <span>Receipt No</span>
-                </div>
-              </th>
-
-              <th className="border border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Receipt Date</span>
-                </div>
-              </th>
-
               <th className="border  border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Sub ledger</span>
+                  <span>Sub ledger / Name</span>
                 </div>
               </th>
 
               <th className="border   border-zinc-400 font-medium">
                 <div className="flex gap-2">
-                  <span>Paid by</span>
+                  <span>Amount (₹)</span>
                 </div>
               </th>
 
-              <th className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Amount (Rs)</span>
-                </div>
-              </th>
-
-              <th className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
-                  <span>Narration</span>
-                </div>
-              </th>
-
-              
-    
+        
               <th className="border  border-zinc-400  font-medium">
                 <div className="flex gap-2">
-                  <span>View / Edit / Print </span>
-                  <span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="19"
-                      height="19"
-                      viewBox="0 0 19 19"
-                      fill="none"
-                    >
-                      <path
-                        d="M5.03514 13.9453H3.57031C3.18181 13.9453 2.80922 13.7909 2.53451 13.5162C2.2598 13.2415 2.10547 12.8689 2.10547 12.4804V8.81835C2.10547 8.42985 2.2598 8.05727 2.53451 7.78256C2.80922 7.50785 3.18181 7.35352 3.57031 7.35352H15.289C15.6775 7.35352 16.0501 7.50785 16.3248 7.78256C16.5995 8.05727 16.7538 8.42985 16.7538 8.81835V12.4804C16.7538 12.8689 16.5995 13.2415 16.3248 13.5162C16.0501 13.7909 15.6775 13.9453 15.289 13.9453H13.8242"
-                        stroke="white"
-                        strokeWidth="1.7578"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M13.8242 11.0156H5.03516V16.875H13.8242V11.0156Z"
-                        stroke="white"
-                        strokeWidth="1.7578"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M5.03516 7.35349V2.22656H13.8242V7.35349"
-                        stroke="white"
-                        strokeWidth="1.7578"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
+                  <span>Add / Remove </span>
+                
                 </div>
               </th>
             </tr>
@@ -105,25 +50,11 @@ const ReceiptTable: React.FC = () => {
                 {/* ID */}
                 <td className="border border-zinc-400">{d?.id}</td>
 
-                {/* Date */}
-                <td className="border border-zinc-400">{d?.receipt_no}</td>
-
-                {/*  Bank Branch */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">{d?.date.toString()}</div>
-                </td>
-
+                
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.subledger_id}</div>
-                  </div>
-                </td>
-
-                {/* account number */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.paid_by}</div>
+                    <div className="flex justify-center">{d?.subLedger}</div>
                   </div>
                 </td>
 
@@ -149,7 +80,6 @@ const ReceiptTable: React.FC = () => {
 
                   <Link href={`/receipt-entry/view/${d.id}`}>
                       <div className="flex justify-center opacity-90">
-                      
                     
                         <span className="ml-2 mt-1">
                           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 15 14" fill="none">
@@ -190,4 +120,4 @@ const ReceiptTable: React.FC = () => {
   );
 };
 
-export default ReceiptTable;
+export default ReceiptEntryTable;

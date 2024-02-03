@@ -15,6 +15,14 @@ import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
 import bill_type_seed from "./seeder/bill_type_seed";
+import receipt_types_seeder from "./receipt_types_seeder";
+import subledgers_seeder from "./subledger_list_seeder";
+import modules_seeder from "./modules_seeder";
+import receipts_seeder from "./receipts_seeder";
+
+
+
+
 import voucher_types_seed from "./seeder/voucher_types_seed";
 import voucher_sub_types_seed from "./seeder/voucher_sub_type_seed";
 import voucher_entries_seed from "./seeder/voucher_entries_seed";
@@ -483,7 +491,17 @@ async function main() {
   await bill_type_seed();
 
   /////////////// Bill Payment Entry //////////////////
-  await bill_payment_entry_seed();
+  await await bill_payment_entry_seed();
+
+  /////////////// Receipt Types Seeder //////////////////
+  await receipt_types_seeder();
+
+  await subledgers_seeder();
+
+  await modules_seeder();
+
+  await receipts_seeder();
+
 
   //////////////// Voucher Entries //////////////////
   await voucher_entries_seed();

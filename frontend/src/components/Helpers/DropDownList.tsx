@@ -15,7 +15,7 @@ interface DropDownListProps {
   name: string;
   placeholder: string | "";
   value: number | string;
-  api: string; 
+  api: string;
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
@@ -30,8 +30,8 @@ interface DropDownList {
 }
 
 const DropDownList: React.FC<DropDownListProps> = (props) => {
-  const [field, meta, helpers] = useField(props.name);
- 
+  const [, , helpers] = useField(props.name);
+
   const { setValue } = helpers;
 
   const fieldId = "id_" + props.name;
@@ -68,7 +68,9 @@ const DropDownList: React.FC<DropDownListProps> = (props) => {
           name={props.name}
           id={fieldId}
         >
-          <option selected value="">{props.placeholder}</option>
+          <option selected value="">
+            {props.placeholder}
+          </option>
           {dataList.map((d: DropDownList) => (
             <option key={d?.id} value={d?.id}>
               {d?.name || d?.type}
