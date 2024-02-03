@@ -10,7 +10,7 @@ export interface ColumnProps {
 interface SimpleTableProps<T>{
   columns: Array<ColumnProps>;
   data?: T[];
-  onViewButtonClick: () => void; 
+  onViewButtonClick: (id: T[keyof T]) => void; 
 }
 
 
@@ -56,7 +56,7 @@ const SimpleTable = <T, >({columns, data, onViewButtonClick}: SimpleTableProps<T
           })}
           <td>
             <div className="flex justify-center">
-            <ViewIconButton onClick={onViewButtonClick}/>
+            <ViewIconButton onClick={() => onViewButtonClick(row['id' as keyof typeof row])}/>
             </div>
           </td>
         </tr>

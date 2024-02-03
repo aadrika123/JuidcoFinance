@@ -4,11 +4,12 @@ import React from "react";
 import ReceiptEntryHeader from "./Header/ReceiptEntryHeader";
 import TableWithSearch from "@/components/molecules/TableWithSearch";
 import APIs from "@/json/apis.json";
+import Routes from "@/json/routes.json";
 
 export const HeroReceiptEntry = () => {
 
-  const onViewButtonClick = () => {
-    window.alert("Not defined yet");
+  const onViewButtonClick = (id: string) => {
+    window.open(`${Routes.receipt_entry$view}/${id}`, "_self");
   }
   return (
     <>

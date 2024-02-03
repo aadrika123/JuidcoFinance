@@ -58,6 +58,33 @@ class ReceiptEntryDao {
     return generateRes(data, count, page, limit );
   };
 
+    //get single receipt data by ID
+    getById = async (id: number) => {
+
+      const query: Prisma.receipt_entriesFindFirstArgs = {
+        where: { id },
+        select: {
+          id: true,
+          date: true,
+          email: true,
+          receipt_no: true,
+          module_id: true,
+          paid_by: true,
+          receipt_type_id: true,
+          mobile_no: true,
+          admin_ward_id: true,
+          narration: true,
+          subledger_id: true,
+          amount: true,
+          created_at: true,
+          updated_at: true,
+        },
+      };
+      const data = await prisma.receipt_entries.findFirst(query);
+      return generateRes(data);
+    };
+  
+  
   
 }
 

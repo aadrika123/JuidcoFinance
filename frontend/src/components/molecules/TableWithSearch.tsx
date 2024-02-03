@@ -17,16 +17,16 @@ import Loader from "../Helpers/Basic/Loader";
  */
 
 
-interface TableWithSearchProps{
+interface TableWithSearchProps<T>{
     title: string;
     columns: Array<ColumnProps>;
-    onViewButtonClick: () => void;
+    onViewButtonClick: (id: T[keyof T]) => void;
     api: string;
     numberOfRowsPerPage: number;
 }
 
 
-const TableWithSearch = <T, >({title, columns, onViewButtonClick, api, numberOfRowsPerPage}: TableWithSearchProps) => {
+const TableWithSearch = <T, >({title, columns, onViewButtonClick, api, numberOfRowsPerPage}: TableWithSearchProps<T>) => {
     const [page, setPage] = useState<number>(1);
     const [pageCount, setPageCount] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>("");

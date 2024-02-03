@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../../util/sendResponse";
 import ReceiptEntryDao from "../../dao/transactions/receiptEntryDao";
+import Joi from "joi";
 
 /**
  * | Author- Bijoy Paitandi
@@ -55,6 +56,71 @@ class ReceiptEntryController {
       );
     }
   };
+
+    // get receipt by ID
+    getById = async (req: Request, res: Response): Promise<Response> => {
+    
+    
+      try {
+        // get the data
+        const id: number = Number(req.params.receiptId);
+      
+  
+        // validate
+        const { error } = Joi.object({
+          id: Joi.number().required()
+        }).validate({'id': id});
+  
+        if (error)
+          return sendResponse(
+            false,
+            error.message,
+            "error.code",
+            400,
+            "POST",
+            "0804",
+            "1.0",
+            res
+          );
+  
+        // fetch the data
+        const data = await this.receiptEntryDao.getById(id);
+  
+        if (!data)
+          return sendResponse(
+            true,
+            "Receipt Not Found",
+            data,
+            200,
+            "GET",
+            "0804",
+            "1.0",
+            res
+          );
+  
+        return sendResponse(
+          true,
+          "Receipt found successfully",
+          data,
+          200,
+          "GET",
+          "0804",
+          "1.0",
+          res
+        );
+      } catch (error: any) {
+        return sendResponse(
+          false,
+          error.message,
+          "error.code",
+          500,
+          "GET",
+          "0703",
+          "1.0",
+          res
+        );
+      }
+    };
 
 }
 

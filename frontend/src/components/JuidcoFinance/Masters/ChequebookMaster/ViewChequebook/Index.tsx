@@ -293,7 +293,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                       
 
                         <div className="mt-4 flex items-center gap-5 justify-end">
-                        <PrimaryButton buttonType="button" onClick={() => window.alert("coming soon")}variant="cancel">
+                        <PrimaryButton buttonType="button" onClick={() => window.alert("coming soon")} variant="cancel">
                           Print
                         </PrimaryButton>
 

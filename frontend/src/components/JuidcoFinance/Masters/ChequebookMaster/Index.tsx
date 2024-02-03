@@ -43,7 +43,7 @@ export const HeroChequebookMaster = () => {
           {name: 'bank_account_no', caption: "Bank Account No"},
           {name: 'cheque_no_from', caption: "Cheque Number From"},
           {name: 'cheque_no_to', caption: "Cheque Number To"},
-          {name: 'employee_id', caption: "Employee Name"},
+          {name: 'employee_name', caption: "Employee Name"},
           {name: 'issuer_name', caption: "Issuer Name"},
           {name: 'remarks', caption: "Remarks"},
         ]}

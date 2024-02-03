@@ -20,6 +20,8 @@ class ReceiptEntryRoute {
   
   configure(app: express.Application): void {
     app.route(`${this.baseUrl}/get`).get(this.receiptEntryController.get); //0802
+    app.route(`${this.baseUrl}/get/:receiptId`).get(this.receiptEntryController.getById); // 0804
+    
     
   }
 }
