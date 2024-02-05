@@ -8,18 +8,22 @@ const bill_payment_entry_seed = async () => {
   function createRandomBillPaymentEntry(): bill_payment_entries {
     return {
       id: faker.datatype.number(),
-      bill_no: faker.datatype.number(),
-      bill_type_id: faker.datatype.number(),
-      bill_entry_date: faker.date.recent().toISOString(),
-      department_id: faker.datatype.number(),
+      bill_no: `bn${faker.datatype.number(6)}`,
+      bill_type_id: 1,
+      bill_entry_date: faker.date.recent(),
+      department_id: 1,
       vendor_name: faker.person.fullName(),
       address: faker.address.streetAddress(),
-      payee_name_id: faker.datatype.number(),
-      adminis_ward_id: faker.datatype.number(),
+      payee_name_id: 1,
+      adminis_ward_id: 1,
       bill_amount: faker.datatype.number(),
       advance: faker.datatype.number(),
       deposit: faker.datatype.number(),
-      other_deductions: faker.datatype.number(),
+      deductions_amount: faker.datatype.number(),
+      earlier_payment: faker.datatype.number(),
+      payable_amount: faker.datatype.number(),
+      net_amount: faker.datatype.number(),
+      is_approved: false,
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
     };
@@ -32,29 +36,9 @@ const bill_payment_entry_seed = async () => {
     }
   );
 
-  let bn = 1;
-  for (const item of billPaymentEntries) {
-    await prisma.bill_payment_entries.create({
-      data: {
-        id: item.id,
-        bill_no: bn,
-        bill_type_id: 1,
-        bill_entry_date: item.bill_entry_date,
-        department_id: 1,
-        vendor_name: item.vendor_name,
-        address: item.address,
-        payee_name_id: 1,
-        adminis_ward_id: 1,
-        bill_amount: item.bill_amount,
-        advance: item.advance,
-        deposit: item.deposit,
-        other_deductions: item.other_deductions,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    bn++;
-  }
+  await prisma.bill_payment_entries.createMany({
+    data: billPaymentEntries,
+  });
 };
 
 export default bill_payment_entry_seed;

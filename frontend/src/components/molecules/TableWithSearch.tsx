@@ -25,18 +25,6 @@ interface TableWithSearchProps<T>{
     numberOfRowsPerPage: number;
 }
 
-const TableWithSearch = <T,>({
-  columns,
-  data,
-  onViewButtonClick,
-}: TableWithSearchProps<T>) => {
-  const onSearchTextChange = () => {
-    window.alert("Not defined");
-  };
-
-  return (
-    <>
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
 
 const TableWithSearch = <T, >({title, columns, onViewButtonClick, api, numberOfRowsPerPage}: TableWithSearchProps<T>) => {
     const [page, setPage] = useState<number>(1);
