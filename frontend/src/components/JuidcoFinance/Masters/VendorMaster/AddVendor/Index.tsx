@@ -17,6 +17,7 @@ import {
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
 import DropDownList from "@/components/Helpers/DropDownList";
+import Form from "@/components/atoms/Form";
 // Imports // ----------------------------------------------------------------
 
 // Main Functions // ----------------------------------------------------------------
@@ -47,12 +48,35 @@ export const HeroAddVendor = () => {
     },
   });
 
+  console.log(VendorDetailsSchema, "lol");
+
   return (
     <>
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Add Vendor</SubHeading>
         </div>
+
+        <Form
+          fields={[
+            {
+              HEADER: "vendor_type_id",
+              ACCESSOR: "vendor_type_id",
+              type: "number",
+            },
+            {
+              HEADER: "department_id",
+              ACCESSOR: "department_id",
+              type: "number",
+            },
+          ]}
+          heading="Add Bank Account"
+          validate={{
+            initialValues: initialVendorDetails,
+            formValidationSchema: VendorDetailsSchema,
+          }}
+          uri=""
+        />
 
         <div className="mt-8">
           <Formik

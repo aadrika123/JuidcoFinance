@@ -16,7 +16,7 @@ import {
   initialPaymentDetails,
 } from "@/utils/validation/transactions/direct_payment.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
-import InputBox2 from "@/components/Helpers/InputBox2";
+import InputBox from "@/components/Helpers/InputBox";
 import DateInputBox from "@/components/Helpers/DateInputBox";
 import DropDownList from "@/components/Helpers/DropDownList";
 import { func } from "joi";
@@ -79,7 +79,7 @@ export const HeroAddPaymentEntry = () => {
                     error={errors.payment_date}
                     touched={touched.payment_date}
                   /> */}
-                    <InputBox2
+                    <InputBox
                       type="date"
                       placeholder="Enter Narration"
                       onChange={handleChange}
@@ -90,7 +90,7 @@ export const HeroAddPaymentEntry = () => {
                       label="Payment Date"
                       name="payment_date"
                     />
-                    <InputBox2
+                    <InputBox
                       type="text"
                       placeholder="Enter Narration"
                       onChange={handleChange}
@@ -123,7 +123,7 @@ export const HeroAddPaymentEntry = () => {
                       label="Department"
                       name="department_id"
                     />
-                    <InputBox2
+                    <InputBox
                       type="text"
                       placeholder="Enter Payee Name"
                       onChange={handleChange}
@@ -156,7 +156,7 @@ export const HeroAddPaymentEntry = () => {
                       label="Grant"
                       name="grant_id"
                     />
-                    <InputBox2
+                    <InputBox
                       type="text"
                       placeholder="Enter Address"
                       onChange={handleChange}

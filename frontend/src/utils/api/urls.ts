@@ -1,3 +1,9 @@
+/**
+ * Author: Krish
+ * use: For API URLs
+ * status: Open
+ */
+
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"
@@ -7,7 +13,8 @@ type FinanceUrlKeys =
   | "PAYMENT_TYPE_URL"
   | "ADMINIS_WARD_URL"
   | "GRANT_URL"
-  | "DEPARTMENT_URL";
+  | "DEPARTMENT_URL"
+  | "VOUCHER_ENTRY_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -50,6 +57,13 @@ export const FINANCE_URL: Urls = {
     create: "/direct-payment-entry/create",
     update: "/direct-payment-entry/update",
     getById: "direct-payment-entry/get-by-id",
+  },
+
+  VOUCHER_ENTRY_URL: {
+    get: "/voucher-entry/get?limit=10",
+    create: "/direct-payment-entry/create",
+    update: "",
+    getById: "",
   },
 
   PAYMENT_TYPE_URL: {

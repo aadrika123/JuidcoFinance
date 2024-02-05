@@ -20,7 +20,7 @@ export const sendResponse = async (
     resData = errorCodes[resData as keyof typeof errorCodes];
   }
 
-  if (message && message?.code) {
+  if (message && message?.code && message?.meta?.cause) {
     // message = errorCodes[message?.code as keyof typeof errorCodes];
     message = message.meta.cause;
     responseCode = 400;

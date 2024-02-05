@@ -18,6 +18,10 @@ const grantRoute_1 = __importDefault(require("./route/grantRoute"));
 const employeeRoute_1 = __importDefault(require("./route/employeeRoute"));
 const billTypeRoute_1 = __importDefault(require("./route/billTypeRoute"));
 const receiptEntryRoute_1 = __importDefault(require("./route/masters/receiptEntryRoute"));
+const voucherTypeRoute_1 = __importDefault(require("./route/voucherTypeRoute"));
+const voucherSubTypeRoute_1 = __importDefault(require("./route/voucherSubTypeRoute"));
+const subLedgerRoute_1 = __importDefault(require("./route/subLedgerRoute"));
+const voucherEntryRoute_1 = __importDefault(require("./route/documentation/voucherEntryRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -80,6 +84,19 @@ class FinanceRoute {
         /// RECEIPTS ///
         this.receiptsRoute = new receiptEntryRoute_1.default();
         this.receiptsRoute.configure(app); //19
+        this.billTypeRoute.configure(app); // 14
+        // VOUCHER_TYPE ///
+        this.voucherTypeRoute = new voucherTypeRoute_1.default();
+        this.voucherTypeRoute.configure(app); // 15
+        // VOUCHER_SUB_TYPE ///
+        this.voucherSubTypeRoute = new voucherSubTypeRoute_1.default();
+        this.voucherSubTypeRoute.configure(app); // 16
+        // VOUCHER_SUB_TYPE ///
+        this.subLedgerRoute = new subLedgerRoute_1.default();
+        this.subLedgerRoute.configure(app); // 17
+        // VOUCHER_ENTRY_ROUTES ///
+        this.voucherEntryRoute = new voucherEntryRoute_1.default();
+        this.voucherEntryRoute.configure(app); // 18
     }
 }
 exports.default = FinanceRoute;

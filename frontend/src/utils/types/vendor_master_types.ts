@@ -1,8 +1,8 @@
 // Vendor Master Types //
 
 export interface VendorDetailsData {
-  is_authorized?: boolean;
   id?: number;
+  is_authorized?: boolean;
   vendor_no?: string;
   vendor_type?: {
     id: string;

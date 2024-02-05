@@ -48,7 +48,7 @@ interface VendorRequestData {
 
 interface ChequebookRequestData {
   date: Date;
-  issuer_name: string
+  issuer_name: string;
   bank_name: string;
   bank_account_no: string;
   cheque_no_from: string;
@@ -76,6 +76,21 @@ interface DirPaymentEntryRequestData {
   amount: number;
 }
 
+interface VoucherEntryRequestData {
+  id?: number;
+  voucher_no: number;
+  voucher_date: Date;
+  voucher_type_id: number;
+  narration: string;
+  department_id: number;
+  adminis_ward_id: number;
+  voucher_sub_id: number;
+  sub_ledger_id: number;
+  amount: number;
+  dr_cr: number;
+  total?: number;
+}
+
 export type {
   CandidateType,
   ApiResponse,
@@ -83,4 +98,5 @@ export type {
   VendorRequestData,
   ChequebookRequestData,
   DirPaymentEntryRequestData,
+  VoucherEntryRequestData,
 };

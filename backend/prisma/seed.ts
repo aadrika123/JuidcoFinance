@@ -13,8 +13,8 @@ import {
 } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
-import bill_payment_entry_seed from "./bill_payment_entry_seed";
-import bill_type_seed from "./bill_type_seed";
+import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
+import bill_type_seed from "./seeder/bill_type_seed";
 import receipt_types_seeder from "./receipt_types_seeder";
 import subledgers_seeder from "./subledger_list_seeder";
 import modules_seeder from "./modules_seeder";
@@ -23,6 +23,10 @@ import receipts_seeder from "./receipts_seeder";
 
 
 
+import voucher_types_seed from "./seeder/voucher_types_seed";
+import voucher_sub_types_seed from "./seeder/voucher_sub_type_seed";
+import voucher_entries_seed from "./seeder/voucher_entries_seed";
+import sub_ledger_seed from "./seeder/sub_ledger_seed";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -373,13 +377,19 @@ async function main() {
     count: 5,
   });
 
-  const paymentModes = ['Credit Card', 'Debit Card', 'PayPal', 'Cash', 'Bank Transfer'];
+  const paymentModes = [
+    "Credit Card",
+    "Debit Card",
+    "PayPal",
+    "Cash",
+    "Bank Transfer",
+  ];
   let ip = 1;
   for (const item of paymentTypes) {
     await prisma.payment_types.create({
       data: {
         id: ip,
-        type: paymentModes[ip-1],
+        type: paymentModes[ip - 1],
         remark: item.remark,
         created_at: item.created_at,
         updated_at: item.updated_at,
@@ -443,7 +453,7 @@ async function main() {
     count: 20,
   });
 
-  let pn =1;
+  let pn = 1;
   for (const item of paymentEntries) {
     await prisma.dir_payment_entries.create({
       data: {
@@ -468,11 +478,20 @@ async function main() {
     pn++;
   }
 
+  //////////////// Voucher Type //////////////////
+  await voucher_types_seed();
+
+  //////////////// Voucher sub type //////////////////
+  await voucher_sub_types_seed();
+
+    //////////////// Sub Ledger //////////////////
+    await sub_ledger_seed();
+
   //////////////// Bill Types //////////////////////
   await bill_type_seed();
 
   /////////////// Bill Payment Entry //////////////////
-  await bill_payment_entry_seed();
+  await await bill_payment_entry_seed();
 
   /////////////// Receipt Types Seeder //////////////////
   await receipt_types_seeder();
@@ -483,6 +502,9 @@ async function main() {
 
   await receipts_seeder();
 
+
+  //////////////// Voucher Entries //////////////////
+  await voucher_entries_seed();
 }
 main()
   .then(async () => {
