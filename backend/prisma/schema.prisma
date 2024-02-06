@@ -122,7 +122,6 @@ model cheque_book_entries {
   created_at              DateTime  @default(now()) @map("created_at")
   updated_at              DateTime  @updatedAt @map("updated_at")
 }
-
 /// Department
 model departments {
   id                   Int                    @id @default(autoincrement())
@@ -131,6 +130,7 @@ model departments {
   vendors              vendor_masters[]
   dir_payment_entries  dir_payment_entries[]
   bill_payment_entries bill_payment_entries[]
+  voucher_entries      voucher_entries[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -164,6 +164,8 @@ model adminis_wards {
   remark               String
   dir_payment_entries  dir_payment_entries[]
   bill_payment_entries bill_payment_entries[]
+  receipt_entries       receipt_entries[]
+  voucher_entries      voucher_entries[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -238,4 +240,113 @@ model bill_payment_entries {
   is_approved       Boolean       @default(false)
   created_at        DateTime      @default(now()) @map("created_at")
   updated_at        DateTime      @updatedAt @map("updated_at")
+}
+
+
+// ----------------------------------------------------------------  //
+// * | Author- Krish
+// * | Created On- 31-01-2024
+// * | Created for- Documentation & Record Keeping
+
+model voucher_types {
+  id                   Int                    @id @default(autoincrement())
+  type                 String
+  remark               String?
+  voucher_entries      voucher_entries[]
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+}
+
+model voucher_sub_types {
+  id                   Int                    @id @default(autoincrement())
+  type                 String
+  remark               String?
+  voucher_entries      voucher_entries[]
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+}
+
+
+model voucher_entries {
+  id               Int           @id @default(autoincrement())
+  voucher_no       Int          
+  voucher_date     DateTime
+  voucher_type     voucher_types @relation(fields: [voucher_type_id], references: [id])
+  voucher_type_id  Int
+  narration        String
+  department       departments   @relation(fields: [department_id], references: [id])
+  department_id    Int
+  adminis_ward     adminis_wards @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward_id  Int
+  voucher_sub_type voucher_sub_types @relation(fields: [voucher_sub_id], references: [id])
+  voucher_sub_id   Int
+  sub_ledger       subledgers    @relation(fields: [sub_ledger_id], references: [id])
+  sub_ledger_id    Int
+  amount           Float
+  dr_cr            Int
+  created_at       DateTime      @default(now()) @map("created_at")
+  updated_at       DateTime      @updatedAt @map("updated_at")
+}
+
+
+//// Receipt Type
+model receipt_types {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  receipts    receipt_entries[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+//// Modules
+model modules {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  // receipts    receipt_entries[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+//// subledgers
+model subledgers {
+  id         Int             @id @default(autoincrement())
+  name       String
+  remark     String?
+  receipts    receipt_entries[]
+  vouchers    voucher_entries[]
+  created_at DateTime        @default(now()) @map("created_at")
+  updated_at DateTime        @updatedAt @map("updated_at")
+}
+
+
+//// Receipt Entry
+model receipt_entries{
+  id                  Int @id @default(autoincrement())
+  receipt_no          String
+  date                DateTime
+  paid_by             String
+  email            String
+  
+  module_id           Int
+  // module              modules @relation(fields: [module_id], references: [id])
+  
+  receipt_type        receipt_types @relation(fields: [receipt_type_id], references: [id])
+  receipt_type_id     Int
+  
+  mobile_no           String
+  
+  admin_ward_id       Int
+  admin_ward          adminis_wards @relation(fields: [admin_ward_id], references: [id])
+  
+  narration           String
+  
+  subledger_id        Int
+  subledger           subledgers @relation(fields: [subledger_id], references: [id])    
+  amount              Float
+
+  created_at          DateTime        @default(now()) @map("created_at")
+  updated_at          DateTime        @updatedAt @map("updated_at")
+
 }

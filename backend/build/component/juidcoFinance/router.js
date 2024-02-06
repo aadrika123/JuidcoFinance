@@ -96,7 +96,7 @@ class FinanceRoute {
         this.subLedgerRoute.configure(app); // 17
         // VOUCHER_ENTRY_ROUTES ///
         this.voucherEntryRoute = new voucherEntryRoute_1.default();
-        this.voucherEntryRoute.configure(app); // 18
+        this.voucherEntryRoute.configure(app, "18");
     }
 }
 exports.default = FinanceRoute;

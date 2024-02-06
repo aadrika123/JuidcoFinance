@@ -134,7 +134,7 @@ class FinanceRoute {
 
     // VOUCHER_ENTRY_ROUTES ///
     this.voucherEntryRoute = new VoucherEntryRoute();
-    this.voucherEntryRoute.configure(app); // 18
+    this.voucherEntryRoute.configure(app, "18");
   }
 }
 

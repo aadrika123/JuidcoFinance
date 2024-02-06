@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { generateRes } from "../../../util/generateRes";
+import { generateRes } from "../../../../util/generateRes";
 
 const prisma = new PrismaClient();
-class SubLedgerDao {
+class SubledgerDao {
   get = async () => {
-    const data = prisma.sub_ledger.findMany({
+    const data = prisma.subledgers.findMany({
       select: {
         id: true,
         name: true,
@@ -14,4 +14,4 @@ class SubLedgerDao {
   };
 }
 
-export default SubLedgerDao;
+export default SubledgerDao;

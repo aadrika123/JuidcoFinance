@@ -15,6 +15,14 @@ import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
 import bill_type_seed from "./seeder/bill_type_seed";
+import receipt_types_seeder from "./seeder/receipt_types_seeder";
+import modules_seeder from "./seeder/modules_seeder";
+import receipts_seeder from "./seeder/receipts_seeder";
+import voucher_types_seed from "./seeder/voucher_types_seed";
+import voucher_sub_types_seed from "./seeder/voucher_sub_type_seed";
+import subledgers_seeder from "./seeder/subledger_list_seeder";
+import voucher_entries_seed from "./seeder/voucher_entries_seed";
+
 
 const prisma = new PrismaClient();
 async function main() {
@@ -451,14 +459,28 @@ async function main() {
   //////////////// Voucher sub type //////////////////
   await voucher_sub_types_seed();
 
-    //////////////// Sub Ledger //////////////////
-    await sub_ledger_seed();
 
   //////////////// Bill Types //////////////////////
   await bill_type_seed();
 
   /////////////// Bill Payment Entry //////////////////
   await bill_payment_entry_seed();
+
+
+
+   /////////////// Receipt Types Seeder //////////////////
+   await receipt_types_seeder();
+
+   await subledgers_seeder();
+ 
+   await modules_seeder();
+ 
+   await receipts_seeder();
+
+
+    //////////////// Voucher Entries //////////////////
+  await voucher_entries_seed();
+ 
 }
 main()
   .then(async () => {

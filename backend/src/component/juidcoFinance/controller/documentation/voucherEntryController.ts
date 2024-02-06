@@ -3,6 +3,8 @@ import VoucherEntryDao from "../../dao/documentation/voucherEntryDao";
 import { sendResponse } from "../../../../util/sendResponse";
 import { resMessage } from "../../../../util/common";
 import { voucherEntryValidation } from "../../requests/documentation/voucherEntryValidation";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resObj } from "../../../../util/types";
 
 /**
  * | Author- Krish
@@ -13,64 +15,54 @@ import { voucherEntryValidation } from "../../requests/documentation/voucherEntr
 
 class VoucherEntryController {
   private voucherEntryDao: VoucherEntryDao;
-
+  private initMsg: string;
   constructor() {
     this.voucherEntryDao = new VoucherEntryDao();
+    this.initMsg = "Voucher Entry";
   }
 
   // Create
-  create = async (req: Request, res: Response): Promise<Response> => {
+  create = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId, action: "POST", version: "1.0",
+    };
+
     try {
       const { error } = voucherEntryValidation.validate(req.body);
 
-      if (error)
-        return sendResponse(false, error, "", 403, "POST", "1801", "1.0", res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
       const data = await this.voucherEntryDao.store(req);
-      return sendResponse(
-        true,
-        resMessage("Voucher Entry").CREATED,
+      return CommonRes.CREATED(
+        resMessage(this.initMsg).CREATED,
         data,
-        201,
-        "POST",
-        "1801",
-        "1.0",
+        resObj,
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "POST", "1801", "1.0", res);
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 
   // Get limited Voucher entry list
-  get = async (req: Request, res: Response): Promise<Response> => {
+  get = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId, action: "GET", version: "1.0"
+    };
     try {
       const data = await this.voucherEntryDao.get(req);
 
       if (!data)
-        return sendResponse(
-          true,
-          resMessage("Voucher entry").NOT_FOUND,
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "1802",
-          "1.0",
+          resObj,
           res
-        );
-
-      return sendResponse(
-        true,
-        resMessage("Voucher entry").FOUND,
-        data,
-        200,
-        "GET",
-        "1802",
-        "1.0",
-        res
       );
+
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "1802", "1.0", res);
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 }
