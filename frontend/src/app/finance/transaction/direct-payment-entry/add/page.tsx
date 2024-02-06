@@ -1,4 +1,4 @@
-import { HeroAddPaymentEntry } from "@/components/JuidcoFinance/Transaction/DirectPaymentEntry/AddDirectPaymentEntry/Index";
+import { HeroAddPaymentEntry } from "@/components/JuidcoFinance/page/Transaction/DirectPaymentEntry/AddDirectPaymentEntry/Index";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

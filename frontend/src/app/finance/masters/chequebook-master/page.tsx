@@ -1,4 +1,4 @@
-import { HeroChequebookMaster } from "@/components/JuidcoFinance/Masters/ChequebookMaster/Index";
+import { HeroChequebookMaster } from "@/components/JuidcoFinance/page/Masters/ChequebookMaster/Index";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

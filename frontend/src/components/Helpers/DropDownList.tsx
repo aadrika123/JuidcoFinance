@@ -20,7 +20,7 @@ interface DropDownListProps {
   touched?: boolean | undefined;
   className?: string;
   onChange: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
-  onBlur: (e?: React.FocusEvent<HTMLSelectElement>) => void;
+  onBlur?: (e?: React.FocusEvent<HTMLSelectElement>) => void;
 }
 
 interface DropDownList {

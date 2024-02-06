@@ -1,5 +1,5 @@
 
-import { HeroVoucherEntry } from "@/components/JuidcoFinance/Documentation/VoucherEntry/Index";
+import { HeroVoucherEntry } from "@/components/JuidcoFinance/page/Documentation/VoucherEntry/Index";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

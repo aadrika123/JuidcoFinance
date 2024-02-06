@@ -12,3 +12,10 @@ body {
   align-items: center !important;
   gap: 10px;
 }
+
+
+
+table tbody::-webkit-scrollbar {
+  /* Set display to none */
+  display: none;
+}

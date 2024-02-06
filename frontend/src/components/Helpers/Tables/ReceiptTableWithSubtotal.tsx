@@ -9,6 +9,8 @@ import Popup from "@/components/Helpers/Basic/Popup";
 import { Formik } from "formik";
 import InputBox from "../InputBox";
 import { initialReceiptDetails } from "@/utils/validation/transactions/receipt_entry.validation";
+import { AddBankDetailsData } from "@/utils/types/bank_master_types";
+import { AddBankDetailsSchema } from "@/utils/validation/masters/bank_master.validation";
 
 
 
