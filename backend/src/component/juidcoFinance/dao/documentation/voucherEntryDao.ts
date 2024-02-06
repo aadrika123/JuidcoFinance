@@ -18,9 +18,10 @@ class VoucherEntryDao {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
+    const skip = (page -1 ) * limit;
 
     const query: Prisma.voucher_entriesFindManyArgs = {
-      skip: (page - 1) * limit,
+      skip: skip,
       take: limit,
       select: {
         id: true,

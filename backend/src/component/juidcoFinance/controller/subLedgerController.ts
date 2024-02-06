@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
 import ResMessage from "../responseMessage/vendorTypeMessage";
-import SubLedgerDao from "../dao/subLedgerDao";
+import SubledgerDao from "../dao/transactions/subledgerDao";
 
 /**
  * | Author- Krish
@@ -10,16 +10,16 @@ import SubLedgerDao from "../dao/subLedgerDao";
  * | Common apiId- 17
  */
 
-class SubLedgerController {
-  private subLedgerDao: SubLedgerDao;
+class SubledgerController {
+  private subledgerDao: SubledgerDao;
   constructor() {
-    this.subLedgerDao = new SubLedgerDao();
+    this.subledgerDao = new SubledgerDao();
   }
 
   // Get all vendor Types
   get = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await this.subLedgerDao.get();
+      const data = await this.subledgerDao.get();
 
       if (!data)
         return sendResponse(
@@ -49,4 +49,4 @@ class SubLedgerController {
   };
 }
 
-export default SubLedgerController;
+export default SubledgerController;
