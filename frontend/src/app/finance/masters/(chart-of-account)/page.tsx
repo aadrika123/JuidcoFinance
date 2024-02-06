@@ -1,5 +1,5 @@
 import PageLayout from "@/components/Layouts/PageLayout";
-import { SubLedgure } from "@/components/JuidcoFinance/Masters/ChartsOfAccount/Index";
+import { SubLedgure } from "@/components/JuidcoFinance/page/Masters/ChartsOfAccount/Index";
 import React from "react";
 
 export default function Home() {

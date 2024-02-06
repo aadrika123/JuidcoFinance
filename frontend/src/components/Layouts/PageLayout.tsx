@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../Partials/Header";
-import Sidebar from "../Partials/Sidebar";
+import Header from "../JuidcoFinance/Partials/Header";
+import Sidebar from "../JuidcoFinance/Partials/Sidebar";
 interface PageLayoutProps {
   children: React.ReactNode;
 }
