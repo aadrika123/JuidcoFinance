@@ -89,6 +89,9 @@ model vendor_masters {
   bank_branch_name String
   authorized_date  DateTime? // Use DateTime? for nullable date fields
   is_authorized    Boolean      @default(false)
+
+  bill_invoices    bill_invoices[]
+
   created_at       DateTime     @default(now()) @map("created_at")
   updated_at       DateTime     @updatedAt @map("updated_at")
 }
@@ -131,6 +134,7 @@ model departments {
   dir_payment_entries  dir_payment_entries[]
   bill_payment_entries bill_payment_entries[]
   voucher_entries      voucher_entries[]
+  bill_invoices        bill_invoices[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -166,6 +170,7 @@ model adminis_wards {
   bill_payment_entries bill_payment_entries[]
   receipt_entries       receipt_entries[]
   voucher_entries      voucher_entries[]
+  bill_invoices        bill_invoices[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -208,9 +213,10 @@ model dir_payment_entries {
 /// Bill Types
 model bill_types {
   id                   Int                    @id @default(autoincrement())
-  type                 String
-  remark               String
+  name                 String
+  remark               String?
   bill_payment_entries bill_payment_entries[]
+  bill_invoice_entries bill_invoices[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -327,7 +333,7 @@ model receipt_entries{
   receipt_no          String
   date                DateTime
   paid_by             String
-  email            String
+  email               String
   
   module_id           Int
   // module              modules @relation(fields: [module_id], references: [id])
@@ -349,4 +355,50 @@ model receipt_entries{
   created_at          DateTime        @default(now()) @map("created_at")
   updated_at          DateTime        @updatedAt @map("updated_at")
 
+}
+
+
+/// Bill Stages
+model bill_stages {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  remark               String?
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+
+
+  bill_invoices        bill_invoices[]
+}
+
+
+//// Bill Invoice Table : Managed By: Bijoy Paitandi
+model bill_invoices{
+  id                      Int             @id @default(autoincrement())
+  bill_number             Int
+  
+  type_id                 Int
+  type                    bill_types      @relation(fields: [type_id], references: [id])
+
+  vendor_id               Int
+  vendor                  vendor_masters  @relation(fields: [vendor_id], references: [id])
+
+  department_id           Int
+  department              departments     @relation(fields: [department_id], references: [id])
+
+  bill_date               DateTime
+  entry_date              DateTime
+
+  stage_id                Int
+  bill_stage              bill_stages     @relation(fields: [stage_id], references: [id])
+
+  address                 String
+  narration               String
+
+  admin_ward_id           Int
+  admin_ward              adminis_wards   @relation(fields: [admin_ward_id], references: [id])
+
+  amount                  Float
+
+  created_at              DateTime        @default(now()) @map("created_at")
+  updated_at              DateTime        @updatedAt @map("updated_at")
 }

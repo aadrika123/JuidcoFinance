@@ -327,6 +327,37 @@ CREATE TABLE "receipt_entries" (
     CONSTRAINT "receipt_entries_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "bill_stages" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "bill_stages_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "bill_invoices" (
+    "id" SERIAL NOT NULL,
+    "bill_number" INTEGER NOT NULL,
+    "type_id" INTEGER NOT NULL,
+    "vendor_id" INTEGER NOT NULL,
+    "department_id" INTEGER NOT NULL,
+    "bill_date" TIMESTAMP(3) NOT NULL,
+    "entry_date" TIMESTAMP(3) NOT NULL,
+    "stage_id" INTEGER NOT NULL,
+    "address" TEXT NOT NULL,
+    "narration" TEXT NOT NULL,
+    "admin_ward_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "bill_invoices_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -386,3 +417,18 @@ ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_admin_ward_id_fkey
 
 -- AddForeignKey
 ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_type_id_fkey" FOREIGN KEY ("type_id") REFERENCES "bill_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_vendor_id_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendor_masters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_stage_id_fkey" FOREIGN KEY ("stage_id") REFERENCES "bill_stages"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
