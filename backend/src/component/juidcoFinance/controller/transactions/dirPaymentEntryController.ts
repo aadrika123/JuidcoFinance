@@ -4,6 +4,7 @@ import DirPaymentEntryDao from "../../dao/transactions/dirPaymentEntryDao";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resObj } from "../../../../util/types";
 import { resMessage } from "../../responseMessage/commonMessage";
+import Joi from "joi";
 
 /**
  * | Author- Sanjiv Kumar
@@ -89,6 +90,14 @@ class DirPaymentEntryController {
     };
     try {
       const id: number = Number(req.params.id);
+
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required().greater(0)
+      }).validate({'id': id});
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
       const data = await this.dirPaymentEntryDao.getById(id);
 
       if (!data)

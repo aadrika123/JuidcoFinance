@@ -2,10 +2,6 @@ import express, { Request, Response } from "express";
 import { baseUrl } from "../../../../util/common";
 import DirPaymentEntryController from "../../controller/transactions/dirPaymentEntryController";
 
-/**
- * | Route - 09
- */
-
 class DirPaymentEntryRoute {
     private dirPaymentEntryController: DirPaymentEntryController;
     constructor(){
