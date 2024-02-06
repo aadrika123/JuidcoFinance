@@ -13,6 +13,8 @@ const APIs = class {
   static chequebook_master$update = this.chequebook_master_root+"/update";
   static chequebook_master$employee_list = this.chequebook_master_root+"/get-employee-list";
 
+  static receipt_entry_root = "/api/v1/finance/receipt-entry";
+  static receipt_entry$get = this.receipt_entry_root+"/get";
 
 }
 

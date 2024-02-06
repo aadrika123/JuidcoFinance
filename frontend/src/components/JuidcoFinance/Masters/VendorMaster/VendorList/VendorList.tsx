@@ -10,6 +10,8 @@ type VendorListProps = {
   prevPage: () => void;
   data: VendorDetailsData[];
   page: number;
+  setSearchQuery: (value: string) => void;
+  fetchVendorSearchQuery: () => void;
 };
 
 const VendorList: React.FC<VendorListProps> = (props) => {
@@ -19,7 +21,14 @@ const VendorList: React.FC<VendorListProps> = (props) => {
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>Vendor List</SubHeading>
-        <SearchBox />
+        <SearchBox
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            props.setSearchQuery(e.target.value)
+          }
+          onKeyDown={(event) => {
+            if (event.key === "Enter") props.fetchVendorSearchQuery();
+          }}
+        />
       </div>
 
       <div className="mt-8">

@@ -1,12 +1,12 @@
 // Bank Master Types //
 export type ReceiptTableData = {
   id: number;
-  receiptNo: string,
-  receiptDate: string,
-  subLedger: string,
-  paidBy: string,
-  amount: number,
-  narration: string,
+  date: Date;
+  receipt_no: string;
+  subledger_id: number;
+  paid_by: string;
+  amount: number;
+  narration: string;
 };
 
 

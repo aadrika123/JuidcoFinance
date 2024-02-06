@@ -30,6 +30,8 @@ import { FINANCE_URL } from "@/utils/api/urls";
 export const HeroBankMasters = () => {
   const [page, setPage] = useState<number>(1);
   const [isAddBankAccountOpen, setIsBankAccountOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [fetchQuery, setFetchQuery] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const handlePageChangeAccountList = (direction: "prev" | "next") => {
@@ -40,12 +42,18 @@ export const HeroBankMasters = () => {
     setIsBankAccountOpen(!isAddBankAccountOpen);
   }
 
+  // Handle change Value for search fetch query
+  function handleSearchFetchQueryChange(): void {
+    setFetchQuery(!fetchQuery);
+  }
+  console.log(fetchQuery);
+
   // ----- FETCH DATA ------////
   const queryClient = useQueryClient();
 
   const fetchBankData = async (): Promise<MasterProps<AccountTableData>> => {
     const res = await axios({
-      url: `${FINANCE_URL.BANK_MASTER_URL.get}&page=${page}`,
+      url: `${FINANCE_URL.BANK_MASTER_URL.get}&page=${page}&search=${searchQuery}`,
       method: "GET",
     });
     return res.data?.data as MasterProps<AccountTableData>;
@@ -55,7 +63,7 @@ export const HeroBankMasters = () => {
     data: accountListData,
     isError: bankAccountError,
     isLoading: bankAccountLoading,
-  } = useQuery(["bank-list", page], fetchBankData);
+  } = useQuery(["bank-list", page, fetchQuery], fetchBankData);
 
   if (accountListData?.data) {
     dispatch(addBankDetails(accountListData?.data ?? []));
@@ -264,6 +272,8 @@ export const HeroBankMasters = () => {
               totalPage: accountListData?.totalPage ?? 1,
               currentPage: accountListData?.currentPage ?? 1,
             }}
+            setSearchQuery={setSearchQuery}
+            setFetchQuery={handleSearchFetchQueryChange}
           />
         )}
       </section>

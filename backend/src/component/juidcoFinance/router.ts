@@ -13,6 +13,11 @@ import AdministrativeWardRoute from "./route/adminisWardRoute";
 import GrantRoute from "./route/grantRoute";
 import EmployeeRoute from "./route/employeeRoute";
 import BillTypeRoute from "./route/billTypeRoute";
+import ReceiptEntryRoute from "./route/masters/receiptEntryRoute";
+import VoucherTypeRoute from "./route/voucherTypeRoute";
+import VoucherSubTypeRoute from "./route/voucherSubTypeRoute";
+import SubLedgerRoute from "./route/subLedgerRoute";
+import VoucherEntryRoute from "./route/documentation/voucherEntryRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +50,11 @@ class FinanceRoute {
   private grantRoute: GrantRoute;
   private employeeRoute: EmployeeRoute;
   private billTypeRoute: BillTypeRoute;
+  private voucherTypeRoute: VoucherTypeRoute;
+  private voucherSubTypeRoute: VoucherSubTypeRoute;
+  private subLedgerRoute: SubLedgerRoute;
+  private voucherEntryRoute: VoucherEntryRoute;
+  private receiptsRoute: ReceiptEntryRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -65,11 +75,11 @@ class FinanceRoute {
 
     /// VENDOR_TYPE_ROUTE ///
     this.vendorTypeRoute = new VendorTypeRoute();
-    this.vendorTypeRoute.configure(app);  // 05
+    this.vendorTypeRoute.configure(app); // 05
 
     /// DEPARTMENT_ROUTE ///
     this.departmentRoute = new DepartmentRoute();
-    this.departmentRoute.configure(app)  // 06
+    this.departmentRoute.configure(app); // 06
 
     // VENDOR_MASTER_ROUTE ///
     this.vendorMasterRoute = new VendorMasterRoute();
@@ -77,31 +87,54 @@ class FinanceRoute {
 
     /// CHECKBOOK_ENTRY_ROUTE ///
     this.chequebookEntryRoute = new ChequeBookEntryRoute();
-    this.chequebookEntryRoute.configure(app);  // 08
+    this.chequebookEntryRoute.configure(app); // 08
 
     /// DIRECT_PAYMENT_ENTRY ///
     this.dirPaymentEntryRoute = new DirPaymentEntryRoute();
-    this.dirPaymentEntryRoute.configure(app);  // 09
+    this.dirPaymentEntryRoute.configure(app); // 09
 
     /// PAYMENT_TYPE ///
     this.paymentTypeRoute = new PaymentTypeRoute();
-    this.paymentTypeRoute.configure(app);  // 10
+    this.paymentTypeRoute.configure(app); // 10
 
     /// ADMINISTRATIVE_WARD ///
     this.adminisWardRoute = new AdministrativeWardRoute();
-    this.adminisWardRoute.configure(app);  // 11
+    this.adminisWardRoute.configure(app); // 11
 
     /// GRANT ///
     this.grantRoute = new GrantRoute();
-    this.grantRoute.configure(app);  // 12
+    this.grantRoute.configure(app); // 12
 
     /// EMPLOYEE ///
     this.employeeRoute = new EmployeeRoute();
-    this.employeeRoute.configure(app);  // 13
+    this.employeeRoute.configure(app); // 13
 
     /// BILL TYPE ///
     this.billTypeRoute = new BillTypeRoute();
     this.billTypeRoute.configure(app);  // 14
+
+
+    /// RECEIPTS ///
+    this.receiptsRoute = new ReceiptEntryRoute(); 
+    this.receiptsRoute.configure(app); //19
+
+    this.billTypeRoute.configure(app); // 14
+
+    // VOUCHER_TYPE ///
+    this.voucherTypeRoute = new VoucherTypeRoute();
+    this.voucherTypeRoute.configure(app); // 15
+
+    // VOUCHER_SUB_TYPE ///
+    this.voucherSubTypeRoute = new VoucherSubTypeRoute();
+    this.voucherSubTypeRoute.configure(app); // 16
+
+    // VOUCHER_SUB_TYPE ///
+    this.subLedgerRoute = new SubLedgerRoute();
+    this.subLedgerRoute.configure(app); // 17
+
+    // VOUCHER_ENTRY_ROUTES ///
+    this.voucherEntryRoute = new VoucherEntryRoute();
+    this.voucherEntryRoute.configure(app); // 18
   }
 }
 

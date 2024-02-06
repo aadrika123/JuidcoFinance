@@ -445,6 +445,15 @@ async function main() {
     data: paymentEntries,
   });
 
+  //////////////// Voucher Type //////////////////
+  await voucher_types_seed();
+
+  //////////////// Voucher sub type //////////////////
+  await voucher_sub_types_seed();
+
+    //////////////// Sub Ledger //////////////////
+    await sub_ledger_seed();
+
   //////////////// Bill Types //////////////////////
   await bill_type_seed();
 

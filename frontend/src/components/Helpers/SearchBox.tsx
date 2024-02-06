@@ -1,6 +1,8 @@
 import React from "react";
 
-const SearchBox: React.FC = () => {
+const SearchBox: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
+  ...props
+}) => {
   return (
     <>
       <div className="relative">
@@ -34,6 +36,7 @@ const SearchBox: React.FC = () => {
           type="text"
           placeholder="Type here"
           className="input bg-transparent border-secondary w-full max-w-xs pl-10"
+          {...props}
         />
       </div>
     </>

@@ -51,9 +51,9 @@ export const sidebarLinks: SidebarLinksProps = {
               height={100}
             />
           ),
-          path: "/document-and-record",
+          path: "/finance/documentation",
           subModules: [
-            { moduleName: "Voucher Entry", path: "/" },
+            { moduleName: "Voucher Entry", path: "/finance/documentation/voucher-entry" },
             {
               moduleName: "Cheque Issue Entry",
               path: "/vendor",

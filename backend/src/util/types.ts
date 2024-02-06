@@ -54,7 +54,7 @@ interface VendorRequestData {
 
 interface ChequebookRequestData {
   date: Date;
-  issuer_name: string
+  issuer_name: string;
   bank_name: string;
   bank_account_no: string;
   cheque_no_from: string;

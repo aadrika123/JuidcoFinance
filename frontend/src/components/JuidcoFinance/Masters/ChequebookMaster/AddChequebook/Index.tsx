@@ -10,7 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
 import DateInputBox from "@/components/Helpers/DateInputBox";
 import DropDownListBox from "@/components/Helpers/DropDownListBox";
-import InputBox2 from "@/components/Helpers/InputBox2";
+import InputBox from "@/components/Helpers/InputBox";
 import Routes from "@/json/routes.json";
 import APIs from "@/json/apis.json";
 
@@ -130,7 +130,7 @@ export const HeroAddChequebook = () => {
                           value={values.date}
                         />
                         
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -142,7 +142,7 @@ export const HeroAddChequebook = () => {
                           name="issuer_name"
                         />
 
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -166,7 +166,7 @@ export const HeroAddChequebook = () => {
                           name="employee_id"
                         />
 
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -177,7 +177,7 @@ export const HeroAddChequebook = () => {
                           label="Bank Branch Name"
                           name="bank_branch"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -188,7 +188,7 @@ export const HeroAddChequebook = () => {
                           label="Cheque Number From"
                           name="cheque_no_from"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -199,7 +199,7 @@ export const HeroAddChequebook = () => {
                           label="Bank Account No"
                           name="bank_account_no"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -210,7 +210,7 @@ export const HeroAddChequebook = () => {
                           label="Cheque Number To"
                           name="cheque_no_to"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="number"

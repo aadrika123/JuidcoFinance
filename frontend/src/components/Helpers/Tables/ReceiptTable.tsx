@@ -106,24 +106,24 @@ const ReceiptTable: React.FC = () => {
                 <td className="border border-zinc-400">{d?.id}</td>
 
                 {/* Date */}
-                <td className="border border-zinc-400">{d?.receiptNo}</td>
+                <td className="border border-zinc-400">{d?.receipt_no}</td>
 
                 {/*  Bank Branch */}
                 <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">{d?.receiptDate}</div>
+                  <div className="flex justify-center">{d?.date.toString()}</div>
                 </td>
 
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.subLedger}</div>
+                    <div className="flex justify-center">{d?.subledger_id}</div>
                   </div>
                 </td>
 
                 {/* account number */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.paidBy}</div>
+                    <div className="flex justify-center">{d?.paid_by}</div>
                   </div>
                 </td>
 

@@ -1,8 +1,16 @@
+'use client'
+
 import React from "react";
 import ReceiptEntryHeader from "./Header/ReceiptEntryHeader";
-import ReceiptList from "./ReceiptList/ReceiptList";
+import TableWithSearch from "@/components/molecules/TableWithSearch";
+import APIs from "@/json/apis.json";
+import Routes from "@/json/routes.json";
 
 export const HeroReceiptEntry = () => {
+
+  const onViewButtonClick = (id: string) => {
+    window.open(`${Routes.receipt_entry$view}/${id}`, "_self");
+  }
   return (
     <>
       <section>
@@ -10,7 +18,26 @@ export const HeroReceiptEntry = () => {
       </section>
 
       <section className="mt-8">
-        <ReceiptList title="List of Receipts" />
+
+        {/* <ReceiptList title="List of Receipts" /> */}
+
+        <TableWithSearch
+        api={`${APIs.receipt_entry$get}`}
+        numberOfRowsPerPage={5}
+        title="Receipt List"
+        onViewButtonClick={onViewButtonClick}
+
+        columns={[
+          {name: 'id', caption: "Sr. No."},
+          {name: 'receipt_no', caption: "Receipt No"},
+          {name: 'date', caption: "Receipt Date"},
+          {name: 'subledger', caption: "Subledger"},
+          {name: 'paid_by', caption: "Paid By"},
+          {name: 'amount', caption: "Amount"},
+          {name: 'narration', caption: "Narration"},
+        ]}
+
+        />
       </section>
     </>
   );

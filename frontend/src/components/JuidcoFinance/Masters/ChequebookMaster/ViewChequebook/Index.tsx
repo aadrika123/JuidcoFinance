@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import Loader from "@/components/Helpers/Basic/Loader";
 import { ChequebookData } from "@/utils/types/chequebook_master_types";
 import DropDownListBox from "@/components/Helpers/DropDownListBox";
-import InputBox2 from "@/components/Helpers/InputBox2";
+import InputBox from "@/components/Helpers/InputBox";
 import * as Yup from "yup";
 import DateInputBox from "@/components/Helpers/DateInputBox";
 import Joi from "joi";
@@ -196,7 +196,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           value={values.date}
                         />
                         
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -208,7 +208,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           name="issuer_name"
                         />
 
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -232,7 +232,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           name="employee_id"
                         />
 
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -243,7 +243,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           label="Bank Branch Name"
                           name="bank_branch"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -254,7 +254,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           label="Cheque Number From"
                           name="cheque_no_from"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -265,7 +265,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           label="Bank Account No"
                           name="bank_account_no"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="text"
@@ -276,7 +276,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                           label="Cheque Number To"
                           name="cheque_no_to"
                         />
-                        <InputBox2
+                        <InputBox
                           onChange={handleChange}
                           onBlur={handleBlur}
                           type="number"
@@ -293,7 +293,7 @@ export const HeroViewChequebook = ({chequebookID}: {chequebookID:string}) => {
                       
 
                         <div className="mt-4 flex items-center gap-5 justify-end">
-                        <PrimaryButton buttonType="button" onClick={() => window.alert("coming soon")}variant="cancel">
+                        <PrimaryButton buttonType="button" onClick={() => window.alert("coming soon")} variant="cancel">
                           Print
                         </PrimaryButton>
 

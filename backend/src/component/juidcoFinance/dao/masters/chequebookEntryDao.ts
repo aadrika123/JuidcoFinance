@@ -31,49 +31,31 @@ class ChequebookEntryDao {
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
-    
-    const query: Prisma.cheque_book_entriesFindManyArgs = {
-      skip: skip,
-      take: limit,
-      select: {
-        id: true,
-        date: true,
-        bank_name: true,
-        employee: {
-          select:{
-            id: true,
-            name: true
-          }
-        },
-        bank_account_no: true,
-        cheque_no_from: true,
-        bank_branch: true,
-        page_count: true,
-        cheque_no_to: true, 
-        issuer_name: true,
-        cheque_book_return: true,
-        cheque_book_return_date: true,
-        remarks: true,
-        created_at: true,
-        updated_at: true,
-      },
-    };
 
-    
+
+    let where = {};
+    let rawQuery = null;
+
     if(search !== "undefined" && search !== ""){
-
-      query.where = {
+      where = {
         OR: [
-          {bank_name: {contains: search, mode: "insensitive"},},
+          {bank_branch: {contains: search, mode: "insensitive"},},
           {remarks: {contains: search, mode: "insensitive"},},
         ],
       }
 
+      const searchPattern = `%${search}%`.toUpperCase();
+      rawQuery = Prisma.sql`select a.*, b.name as employee_name from cheque_book_entries a left join employees b on a.employee_id = b.id where upper(a.bank_branch) like ${searchPattern} or upper(a.remarks) like ${searchPattern} limit ${limit} offset ${skip};`;
+
+    }else{
+      rawQuery = Prisma.sql`select a.*, b.name as employee_name from cheque_book_entries a left join employees b on a.employee_id = b.id limit ${limit} offset ${skip};`;
     }
     
+    
+    
     const [data, count] = await prisma.$transaction([
-      prisma.cheque_book_entries.findMany(query),
-      prisma.cheque_book_entries.count({where: query.where})
+      prisma.$queryRaw(rawQuery),
+      prisma.cheque_book_entries.count({where: where})
     ]);
 
     return generateRes(data, count, page, limit );
@@ -109,6 +91,8 @@ class ChequebookEntryDao {
 
   //get single chequebook data by ID
   getById = async (id: number) => {
+
+    // const data = await prisma.$queryRaw`select a.*, b.name as employee_name from cheque_book_entries a left join employees b on a.employee_id = b.id where a.id=${id};`;
     const query: Prisma.cheque_book_entriesFindFirstArgs = {
       where: { id },
       select: {
