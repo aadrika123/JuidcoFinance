@@ -7,7 +7,7 @@ interface ViewIconButtonProps {
 const ViewIconButton: React.FC<ViewIconButtonProps> = ({ ...props }) => {
   return (
     <button {...props}>
-      <span className="ml-2 mt-1">
+      <span className="ml-2 mt-1 flex items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"

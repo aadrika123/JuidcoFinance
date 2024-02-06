@@ -21,6 +21,7 @@ interface TableWithFeaturesProps {
   api: string;
   numberOfRowsPerPage: number;
   value?: () => void;
+  center?: boolean;
 }
 
 interface stateTypes<T> {
@@ -35,6 +36,7 @@ const TableWithFeatures = <T,>({
   columns,
   api,
   numberOfRowsPerPage,
+  center=false,
 }: TableWithFeaturesProps) => {
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
@@ -107,6 +109,7 @@ const TableWithFeatures = <T,>({
               <Table
                 columns={columns}
                 data={data}
+                center={center}
               />
               <NextPrevPagination
                 page={page}

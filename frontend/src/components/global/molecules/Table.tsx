@@ -28,6 +28,12 @@ interface SimpleTableProps<T> {
   height?: string;
 }
 
+type ObjectContent ={
+  id: number;
+  type?: string;
+  name?: string;
+}
+
 const Table = <T,>({
   columns,
   data,
@@ -53,6 +59,7 @@ const Table = <T,>({
     </Trow>
   ) : (
     data?.map((row, index) => {
+
       return (
         <Trow
           key={index}
@@ -64,6 +71,7 @@ const Table = <T,>({
             const value1: ReactNode | string =
               value instanceof Date
                 ? dayjs(value).format("DD MMM YYYY")
+                : typeof value === 'object' ? (value as ObjectContent).type || (value as ObjectContent).name
                 : column.value
                 ? column.value(row["id" as keyof typeof row] as string)
                 : (value as string);

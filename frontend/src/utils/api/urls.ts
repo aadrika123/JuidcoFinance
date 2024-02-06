@@ -60,7 +60,7 @@ export const FINANCE_URL: Urls = {
   },
 
   VOUCHER_ENTRY_URL: {
-    get: "/voucher-entry/get?limit=10",
+    get: "/voucher-entry/get",
     create: "/direct-payment-entry/create",
     update: "",
     getById: "",

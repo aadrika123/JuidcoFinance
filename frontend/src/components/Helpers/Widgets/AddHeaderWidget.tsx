@@ -12,7 +12,7 @@ const AddHeaderWidget: React.FC<AddHeaderWidgetProps> = (props) => {
   const pathName = usePathname();
   return (
     <>
-      <div className="overflow-x-auto flex justify-between">
+      <div className="overflow-x-auto flex justify-between pb-[2rem]">
         <div className="flex items-center">
           <SubHeading className="text-2xl">{props.title}</SubHeading>
         </div>

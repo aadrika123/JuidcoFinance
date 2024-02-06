@@ -1,16 +1,21 @@
 "use client";
 
-import React from "react";
-import { FormikHelpers } from "formik";
+import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
+import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
+import React, { useState } from "react";
 import * as Yup from "yup";
-import FormikWrapper from "../organisms/FormikContainer";
-import { Choice, FieldTypeProps, FormValues } from "@/utils/types/FormikTypes/formikTypes";
+import {
+  Choice,
+  FieldTypeProps,
+  FormValues,
+} from "@/utils/types/FormikTypes/formikTypes";
+import FormikWrapper from "@/components/global/organisms/FormikContainer";
+import { FormikHelpers } from "formik";
 
-interface HrmsFormProps {
-  onClose?: () => void;
-}
+const Hoc = PopupFormikHOC(FormikWrapper);
 
-const Form: React.FC<HrmsFormProps> = (props) => {
+export const AddVoucherEntry = () => {
+  const [data, setData] = useState<FormValues[]>([]);
   const choices: Choice[] = [
     { key: "Choice a", value: "choicea" },
     { key: "Choice b", value: "choiceb" },
@@ -33,7 +38,7 @@ const Form: React.FC<HrmsFormProps> = (props) => {
   });
 
   const onSubmit = (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    console.log("Form data", values);
+    setData((prev) => [...prev, values]);
     actions.setSubmitting(false);
   };
 
@@ -70,17 +75,39 @@ const Form: React.FC<HrmsFormProps> = (props) => {
     },
   ];
 
+  const footerData = [
+    {
+      key: "Total",
+      value: 200,
+    },
+    {
+      key: "Net Total",
+      value: 300,
+    },
+  ];
+
   return (
     <>
-      <FormikWrapper
+      <Hoc
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         fields={fields}
-        onClose={props.onClose}
+      />
+      <TableWithCount
+        data={data}
+        scrollable
+        title="Title 1"
+        columns={[
+          { name: "email", caption: "Sr. No." },
+          { name: "description", caption: "Sub-Ledger/Name" },
+          { name: "select_choice", caption: "Amount(Rs) " },
+          { name: "click_choice", caption: "Voucher Type" },
+          // { name: "branch", caption: "Dr/Cr" },
+          // { name: "branch", caption: "Add/Remove" },
+        ]}
+        footerData={footerData}
       />
     </>
   );
 };
-
-export default Form;
