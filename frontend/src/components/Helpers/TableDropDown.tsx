@@ -1,26 +1,22 @@
 import { useQuery } from "react-query";
 import React from "react";
 import axios from "@/lib/axiosConfig";
-import { useField } from "formik";
 
 /**
  * | Author- Sanjiv Kumar
- * | Created On- 27-01-2024
+ * | Created On- 30-01-2024
  * | Created for- Select Input Field
  * | Status- done
  */
 
 interface DropDownListProps {
-  label?: React.ReactNode;
   name: string;
   placeholder: string | "";
   value: number | string;
   api: string;
-  error?: string | undefined;
-  touched?: boolean | undefined;
   className?: string;
-  onChange: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
-  onBlur: (e?: React.FocusEvent<HTMLSelectElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  isRequired?: boolean | false;
 }
 
 interface DropDownList {
@@ -29,13 +25,7 @@ interface DropDownList {
   type?: string;
 }
 
-const DropDownList: React.FC<DropDownListProps> = (props) => {
-  const [field, meta, helpers] = useField(props.name);
- 
-  const { setValue } = helpers;
-
-  const fieldId = "id_" + props.name;
-
+const TableDropDownList: React.FC<DropDownListProps> = (props) => {
   const fetchData = async (): Promise<DropDownList[]> => {
     const res = await axios({
       url: props.api,
@@ -57,16 +47,12 @@ const DropDownList: React.FC<DropDownListProps> = (props) => {
   return (
     <>
       <div className="flex flex-col gap-1">
-        <label className="text-secondary text-sm" htmlFor={fieldId}>
-          {props.label}
-        </label>
         <select
-          onChange={(event) => setValue(parseInt(event.target.value))}
-          onBlur={props.onBlur}
+          onChange={props.onChange}
+          required={props.isRequired}
           value={props.value}
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
-          id={fieldId}
         >
           <option selected value="">{props.placeholder}</option>
           {dataList.map((d: DropDownList) => (
@@ -75,13 +61,9 @@ const DropDownList: React.FC<DropDownListProps> = (props) => {
             </option>
           ))}
         </select>
-
-        {props.touched && props.error && (
-          <div className="text-red-500">{props.error}</div>
-        )}
       </div>
     </>
   );
 };
 
-export default DropDownList;
+export default TableDropDownList;

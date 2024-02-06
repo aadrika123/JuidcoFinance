@@ -1,6 +1,5 @@
 import React from "react";
 
-
 /**
  * | Author- Bijoy Paitandi
  * | Created On- 24-01-2025
@@ -9,17 +8,18 @@ import React from "react";
  */
 
 interface InputBox2Props {
-  label: React.ReactNode;
+  label?: React.ReactNode;
   name?: string;
   type: string;
-  isReadOnly?: boolean | false; 
+  isReadOnly?: boolean | false;
   placeholder?: string | "";
   value?: string | number | undefined;
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
-  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e?: React.FocusEvent<HTMLInputElement>) => void;
+  isRequired?: boolean | false;
 }
 
 const InputBox2: React.FC<InputBox2Props> = (props) => {
@@ -32,7 +32,8 @@ const InputBox2: React.FC<InputBox2Props> = (props) => {
           {props.label}
         </label>
         <input
-        readOnly={props.isReadOnly}
+          readOnly={props.isReadOnly}
+          required={props.isRequired}
           placeholder={props.placeholder}
           onChange={props.onChange}
           onBlur={props.onBlur}
@@ -42,7 +43,7 @@ const InputBox2: React.FC<InputBox2Props> = (props) => {
           name={props.name}
           id={fieldId}
         />
-        
+
         {props.touched && props.error && (
           <div className="text-red-500">{props.error}</div>
         )}

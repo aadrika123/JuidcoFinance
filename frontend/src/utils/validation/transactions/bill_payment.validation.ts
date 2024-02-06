@@ -1,8 +1,8 @@
-import { AddPaymentDetailsData } from "@/utils/types/direct_payment_entry_types";
+import { BillPaymentDetailsData } from "@/utils/types/bill_payment_entry_types";
 import * as Yup from "yup";
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
-export const PaymentDetailsSchema = Yup.object().shape({
+export const BillPaymentDetailsSchema = Yup.object().shape({
   payment_date: Yup.string().required("Payment Date is required"),
   narration: Yup.string().required("Narration is required"),
   payment_type_id: Yup.number().required("Payment Type is required"),
@@ -11,13 +11,13 @@ export const PaymentDetailsSchema = Yup.object().shape({
   adminis_ward_id: Yup.number().required("Administrative Ward is required"),
   grant_id: Yup.number().required("Grant is required"),
   address: Yup.string().required("Address is required"),
-  // amount: Yup.number().required("Amount is required"),
+  amount: Yup.number().required("Amount is required"),
   user_common_budget: Yup.boolean().required("User common budget is required"),
   payment_mode: Yup.string().required("Select Payment of Mode is required"),
-  // ledger_code_id: Yup.string().required("Select Ledger code is required"),
+  ledger_code_id: Yup.string().required("Select Ledger code is required"),
 });
 
-export const initialPaymentDetails: AddPaymentDetailsData = {
+export const initialBillPaymentDetails: BillPaymentDetailsData = {
   payment_date: "",
   narration: "",
   payment_type_id: "",
@@ -26,9 +26,10 @@ export const initialPaymentDetails: AddPaymentDetailsData = {
   adminis_ward_id: "",
   grant_id: "",
   address: "",
+  amount: "",
   user_common_budget: false,
   payment_mode:"",
-  ledger_code_id: 0
+  ledger_code_id: "",
 };
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //

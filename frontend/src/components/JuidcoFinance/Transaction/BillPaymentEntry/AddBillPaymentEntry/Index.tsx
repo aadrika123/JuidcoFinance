@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import axios from "@/lib/axiosConfig";
 import { useMutation } from "react-query";
 import { Formik } from "formik";
@@ -8,7 +8,7 @@ import { SubHeading } from "@/components/Helpers/Heading";
 import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
 import goBack from "@/utils/helper";
-import { AddPaymentDetailsData } from "@/utils/types/direct_payment_entry_types";
+import { BillPaymentDetailsData } from "@/utils/types/bill_payment_entry_types";
 import PaymentModeRadioWrapper from "@/components/Helpers/PaymentModeRadioWrapper";
 import PaymentModeRadioButton from "@/components/Helpers/PaymentModeRadioButton";
 import {
@@ -20,13 +20,12 @@ import InputBox2 from "@/components/Helpers/InputBox2";
 import DateInputBox from "@/components/Helpers/DateInputBox";
 import DropDownList from "@/components/Helpers/DropDownList";
 import CheckBox from "@/components/Helpers/CheckBox";
-import SubLedgerTable from "../SubLedgerTable/SubLedgerTable";
 
-export const HeroAddPaymentEntry = () => {
-  // Add New Payment Details
+export const HeroBillPaymentEntry = () => {
+  // Bill New Payment Details
   const createPaymentDetails = async (
-    values: AddPaymentDetailsData
-  ): Promise<AddPaymentDetailsData> => {
+    values: BillPaymentDetailsData
+  ): Promise<BillPaymentDetailsData> => {
     const res = await axios({
       url: FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.create,
       method: "POST",
@@ -37,74 +36,13 @@ export const HeroAddPaymentEntry = () => {
   const { mutate } = useMutation(createPaymentDetails, {
     onSuccess: (data) => {
       console.log(data);
-      toast.success("Successfully Added New Payment");
+      toast.success("Successfully Billed New Payment");
     },
     onError: () => {
       alert("there was an error");
     },
   });
-  // Inside your component
 
-  const [dirPaymentEntries, setDirPaymentEntries] = useState<
-    AddPaymentDetailsData[]
-  >([
-    {
-      payment_date: "",
-      narration: "",
-      payment_type_id: "",
-      department_id: "",
-      payee_name: "",
-      adminis_ward_id: "",
-      grant_id: "",
-      address: "",
-      amount: "",
-      user_common_budget: false,
-      payment_mode: "",
-      ledger_code_id: 0,
-    },
-  ]);
-
-  const handleSelectChange = (
-    e: React.ChangeEvent<HTMLSelectElement>, index: number
-  ) => {
-    if (e) {
-      e.preventDefault();
-    }
-    setDirPaymentEntries((prev) => {
-      const updatedEntries = [...prev];
-        updatedEntries[index] = { ...updatedEntries[index], ledger_code_id: parseInt(e.target.value) };
-        return updatedEntries;
-
-    });
-  };
-
-  const handleTextChange = (
-    e: React.ChangeEvent<HTMLInputElement>, index: number
-  ) => {
-    if (e) {
-      e.preventDefault();
-    }
-
-    setDirPaymentEntries((prev) => {
-      const updatedEntries = [...prev];
-        updatedEntries[index] = { ...updatedEntries[index], amount: e.target.value };
-        return updatedEntries;
-
-    });
-
-  };
-
-  const handleRemoveEntry = (index: number) =>{
-    setDirPaymentEntries((prev) => {
-      const updatedEntries = [...prev];
-      return updatedEntries.filter((i, idx) => {
-        if(idx !== index){
-          return i;
-        }
-        
-      })
-    });
-  }
 
   return (
     <>
@@ -114,10 +52,9 @@ export const HeroAddPaymentEntry = () => {
           <Formik
             initialValues={initialPaymentDetails}
             validationSchema={PaymentDetailsSchema}
-            onSubmit={(values, {resetForm}) => {
+            onSubmit={(values) => {
               console.log("first dsf dfsd", values);
-              setDirPaymentEntries((prev) => [...prev, values]);
-              resetForm()
+              
               // mutate(values);
             }}
           >
@@ -132,7 +69,7 @@ export const HeroAddPaymentEntry = () => {
               <form onSubmit={handleSubmit}>
                 <section className="border rounded-lg border-zinc-300 p-6 px-10">
                   <div className="flex justify-between">
-                    <SubHeading>Add New Payment</SubHeading>
+                    <SubHeading>Add New Bill Payment</SubHeading>
                   </div>
                   <div className="mt-8 grid grid-cols-2 gap-x-6 gap-4 ">
                     {/* <DateInputBox
@@ -258,12 +195,6 @@ export const HeroAddPaymentEntry = () => {
                       />
                     </div>
                   </PaymentModeRadioWrapper>
-                  <SubLedgerTable
-                    handleSelectChange={handleSelectChange}
-                    handleTextChange={handleTextChange}
-                    handleRemoveEntry={handleRemoveEntry}
-                    tableList={dirPaymentEntries}
-                  />
                   <div className="mt-4 flex items-center gap-5 justify-end">
                     <PrimaryButton
                       onClick={goBack}

@@ -73,7 +73,7 @@ export const HeroAddVendor = () => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                  <InputBox
+                <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.vendor_type_id}

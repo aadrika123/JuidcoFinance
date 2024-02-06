@@ -12,6 +12,7 @@ export type PaymentTableData = {
 };
 
 export interface AddPaymentDetailsData {
+  ledger_code_id: number;
   payment_date: string;
   narration: string;
   payment_type_id: number | string;
@@ -20,7 +21,7 @@ export interface AddPaymentDetailsData {
   adminis_ward_id: number | string;
   grant_id: number | string;
   address: string;
-  amount: number | string;
-  user_common_budget: boolean | string;
+  user_common_budget: boolean;
   payment_mode: string;
+  amount?: number| string;
 }
