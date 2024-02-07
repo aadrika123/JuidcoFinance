@@ -31,16 +31,16 @@ export const HeroVoucherEntry = () => {
     );
   };
   const column = [
-    { name: "id", caption: "Sr. No." },
-    { name: "voucher_no", caption: "Voucher No" },
-    { name: "voucher_date", caption: "Voucher Date" },
-    { name: "voucher_type", caption: "Voucher Type" },
-    { name: "narration", caption: "Narration" },
-    { name: "print", caption: "Print", value: pButton },
+    { name: "id", caption: "Sr. No.", width: "w-[5%]" },
+    { name: "voucher_no", caption: "Voucher No", width: "w-[15%]" },
+    { name: "voucher_date", caption: "Voucher Date", width: "w-[10%]" },
+    { name: "voucher_type", caption: "Voucher Type", width: "w-[15%]" },
+    { name: "narration", caption: "Narration", width: "w-[40%]" },
+    { name: "print", caption: "Print", value: pButton, width: "w-[5%]" },
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,
-      value: tButton,
+      value: tButton, width: "w-[10%]"
     },
   ];
 
@@ -52,7 +52,7 @@ export const HeroVoucherEntry = () => {
         center
         columns={column}
         api={FINANCE_URL.VOUCHER_ENTRY_URL.get || ""}
-        numberOfRowsPerPage={5}
+        numberOfRowsPerPage={10}
       />
     </>
   );

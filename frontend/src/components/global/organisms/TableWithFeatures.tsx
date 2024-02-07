@@ -94,7 +94,7 @@ const TableWithFeatures = <T,>({
   return (
     <>
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <div className="text-secondary text-sub_head font-semibold">
             {title}
           </div>
@@ -110,6 +110,7 @@ const TableWithFeatures = <T,>({
                 columns={columns}
                 data={data}
                 center={center}
+                // scrollable
               />
               <NextPrevPagination
                 page={page}
