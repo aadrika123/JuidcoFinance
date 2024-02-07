@@ -26,7 +26,7 @@ interface FormikControllerProps {
   placeholder?: string | "";
   api?: string;
   type?: string;
-  value?: string | number;
+  value?: number | string;
   error?: string | undefined;
   touched?: boolean | undefined;
   readonly?: boolean;

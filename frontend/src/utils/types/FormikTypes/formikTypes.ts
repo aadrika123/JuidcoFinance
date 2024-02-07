@@ -1,17 +1,13 @@
 import { FormikHelpers } from "formik";
+import { VoucherDataProps } from "../voucher_entry_types";
 
 export interface Choice {
   key: string;
   value: string;
 }
 
-export interface FormValues {
-  email: string;
-  description: string;
-  select_choice: string | number;
-  click_choice: string;
-  check_box_choice: string;
-}
+// Add Types Of All Form Data's
+export type FormValues = VoucherDataProps;
 
 export type FieldTypeProps = {
   CONTROL: "input" | "select" | "checkbox" | "textarea" | "radio";
@@ -21,6 +17,7 @@ export type FieldTypeProps = {
   API?: string;
   OPTIONS?: Choice[];
 };
+
 
 export interface FormikWrapperProps {
   initialValues: object & FormValues;

@@ -33,8 +33,11 @@ interface Select {
 
 const Select: React.FC<SelectProps> = (props) => {
   const [, , helpers] = useField(props.name);
+  const [, , helpers1] = useField(`${props.name}_name`);
  
   const { setValue } = helpers;
+  const { setValue: setValue1 } = helpers1;
+
 
   const fieldId = "id_" + props.name;
 
@@ -56,6 +59,12 @@ const Select: React.FC<SelectProps> = (props) => {
     throw new Error("Fatal Error!");
   }
 
+  const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(parseInt(e.target.value))
+    const selectedOption = e.target.options[e.target.selectedIndex].dataset;
+    setValue1(selectedOption);
+  }
+
   return (
     <>
       <div className="flex flex-col gap-1">
@@ -64,7 +73,7 @@ const Select: React.FC<SelectProps> = (props) => {
         </label>
         <select
           disabled={props.readonly}
-          onChange={(event) => setValue(parseInt(event.target.value))}
+          onChange={(event) => handleChange(event)}
           onBlur={props.onBlur}
           value={props.value}
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
@@ -73,7 +82,7 @@ const Select: React.FC<SelectProps> = (props) => {
         >
           <option selected value="">{props.placeholder}</option>
           {dataList.map((d: Select) => (
-            <option key={d?.id} value={d?.id}>
+            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type}>
               {d?.name || d?.type}
             </option>
           ))}
