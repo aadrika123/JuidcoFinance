@@ -200,8 +200,8 @@ CREATE TABLE "dir_payment_entries" (
 -- CreateTable
 CREATE TABLE "bill_types" (
     "id" SERIAL NOT NULL,
-    "type" TEXT NOT NULL,
-    "remark" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -341,7 +341,7 @@ CREATE TABLE "bill_stages" (
 -- CreateTable
 CREATE TABLE "bill_invoices" (
     "id" SERIAL NOT NULL,
-    "bill_number" INTEGER NOT NULL,
+    "bill_no" INTEGER NOT NULL,
     "type_id" INTEGER NOT NULL,
     "vendor_id" INTEGER NOT NULL,
     "department_id" INTEGER NOT NULL,

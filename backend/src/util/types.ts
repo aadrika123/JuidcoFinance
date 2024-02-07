@@ -114,6 +114,7 @@ interface VoucherEntryRequestData {
   total?: number;
 }
 
+
 export type {
   resObj,
   CandidateType,
@@ -123,5 +124,5 @@ export type {
   ChequebookRequestData,
   DirPaymentEntryRequestData,
   BillPaymentEntryRequestData,
-  VoucherEntryRequestData
+  VoucherEntryRequestData,
 };

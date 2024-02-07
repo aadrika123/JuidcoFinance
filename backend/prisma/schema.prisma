@@ -168,7 +168,7 @@ model adminis_wards {
   remark               String
   dir_payment_entries  dir_payment_entries[]
   bill_payment_entries bill_payment_entries[]
-  receipt_entries       receipt_entries[]
+  receipt_entries      receipt_entries[]
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
   created_at           DateTime               @default(now()) @map("created_at")
@@ -374,7 +374,7 @@ model bill_stages {
 //// Bill Invoice Table : Managed By: Bijoy Paitandi
 model bill_invoices{
   id                      Int             @id @default(autoincrement())
-  bill_number             Int
+  bill_no                 Int
   
   type_id                 Int
   type                    bill_types      @relation(fields: [type_id], references: [id])
