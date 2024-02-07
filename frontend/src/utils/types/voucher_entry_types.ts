@@ -1,5 +1,5 @@
 export interface VoucherDataProps {
-  // id?: number;
+  id?: number | string;
   // voucher_no: number;
   voucher_date: string;
   voucher_type_id: number;

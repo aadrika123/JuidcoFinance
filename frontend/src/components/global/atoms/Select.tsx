@@ -62,7 +62,7 @@ const Select: React.FC<SelectProps> = (props) => {
   const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
     setValue(parseInt(e.target.value))
     const selectedOption = e.target.options[e.target.selectedIndex].dataset;
-    setValue1(selectedOption);
+    setValue1(selectedOption.name);
   }
 
   return (

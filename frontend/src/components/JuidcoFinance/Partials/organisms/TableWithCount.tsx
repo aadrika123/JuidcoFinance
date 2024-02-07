@@ -11,6 +11,7 @@ export interface ColumnProps {
   caption: string | ReactElement;
   value?: (id: string) => ReactNode;
   color?: string;
+  width?: string;
 }
 
 type FooterData = {

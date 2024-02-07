@@ -79,7 +79,14 @@ const Table = <T,>({
                   ? column.value(row["id" as keyof typeof row] as string)
                   : (value as string);
 
-            return <Tdata width={column.width} scrollable key={index2} value={value1} />;
+            return (
+              <Tdata
+                width={column.width}
+                scrollable
+                key={index2}
+                value={value1}
+              />
+            );
           })}
         </Trow>
       );
@@ -91,9 +98,15 @@ const Table = <T,>({
       <div className="overflow-x-auto border-[1px] border-zinc-400">
         <table className={`table table-md`}>
           <thead className="text-[1rem] bg-primary_green text-white">
-            <Trow scrollable={scrollable} className="w-full">{headers}</Trow>
+            <Trow scrollable={scrollable} className="w-full">
+              {headers}
+            </Trow>
           </thead>
-          <tbody className={`${scrollable && `block overflow-y-auto ${height}`}`}>{rows}</tbody>
+          <tbody
+            className={`${scrollable && `block overflow-y-auto ${height}`}`}
+          >
+            {rows}
+          </tbody>
         </table>
       </div>
     </>
