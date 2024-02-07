@@ -72,13 +72,12 @@ class VoucherEntryDao {
         OR: [
           {
             voucher_type: {
-              type: {
-                equals: search,
+              type:{
+                contains: search,
                 mode: "insensitive",
               },
             },
           },
-          { voucher_no: { equals: Number(search) } },
         ],
       };
     }
@@ -89,6 +88,71 @@ class VoucherEntryDao {
     ]);
 
     return generateRes(data, count, page, limit);
+  };
+
+
+
+  // get single voucher entries
+  getById = async (id: number) => {
+    const query: Prisma.voucher_entriesFindManyArgs = {
+      where: {id},
+      select: {
+        id: true,
+        voucher_no: true,
+        voucher_date: true,
+        voucher_type: {
+          select: {
+            id: true,
+            type: true,
+          },
+        },
+        narration: true,
+        department: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+
+        adminis_ward: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+
+        voucher_sub_type: {
+          select: {
+            id: true,
+            type: true,
+          },
+        },
+        sub_ledger: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        amount: true,
+        dr_cr: true,
+        created_at: true,
+        updated_at: true,
+      },
+    };
+
+    const data = prisma.voucher_entries.findFirst(query);
+    return generateRes(data);
+  };
+
+  // update voucher details
+  update = async (req: Request) => {
+    const id: number = req.body.id;
+    return await prisma.voucher_entries.update({
+      where: {
+        id: id,
+      },
+      data: requestData(req),
+    });
   };
 }
 

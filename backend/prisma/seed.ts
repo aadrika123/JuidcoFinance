@@ -8,13 +8,11 @@ import {
   employees,
   grants,
   payment_types,
-  vendor_masters,
   vendor_types,
 } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
-import bill_type_seed from "./seeder/bill_type_seed";
 import receipt_types_seeder from "./seeder/receipt_types_seeder";
 import modules_seeder from "./seeder/modules_seeder";
 import receipts_seeder from "./seeder/receipts_seeder";
@@ -22,6 +20,11 @@ import voucher_types_seed from "./seeder/voucher_types_seed";
 import voucher_sub_types_seed from "./seeder/voucher_sub_type_seed";
 import subledgers_seeder from "./seeder/subledger_list_seeder";
 import voucher_entries_seed from "./seeder/voucher_entries_seed";
+import bill_types_seeder from "./seeder/bill_types_seeder";
+import bill_stages_seeder from "./seeder/bill_stages_seeder";
+import bill_invoices_seeder from "./seeder/bill_invoices_seeder";
+import vendors_seeder from "./seeder/vendors_seeder";
+import vendor_types_seeder from "./seeder/vendor_types_seeder";
 
 
 const prisma = new PrismaClient();
@@ -122,34 +125,8 @@ async function main() {
     id++;
   }
 
-  ///////////////// Vendor Type ////////////////////////
-  function createRandomVendorType(): vendor_types {
-    return {
-      id: faker.datatype.number(),
-      name: faker.company.name(),
-      remark: faker.lorem.sentence(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const vendorTypes = faker.helpers.multiple(createRandomVendorType, {
-    count: 5,
-  });
-
-  let iv = 1;
-  for (const item of vendorTypes) {
-    await prisma.vendor_types.create({
-      data: {
-        id: iv, //item.id,
-        name: item.name,
-        remark: item.remark,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    iv++;
-  }
+    ///////////////// Vendor Types ////////////////////////
+  await vendor_types_seeder()
 
   ///////////////// Employee ////////////////////////
   function createRandomEmployee(): employees {
@@ -273,61 +250,7 @@ async function main() {
   }
 
   ///////////////// Vendor ////////////////////////
-  function createRandomVendor(): vendor_masters {
-    return {
-      id: faker.datatype.number(),
-      vendor_type_id: faker.datatype.number(),
-      vendor_no: faker.random.alphaNumeric(8),
-      name: faker.person.fullName(),
-      mobile_no: faker.phone.number(),
-      tin_no: faker.finance.routingNumber(),
-      pan_no: faker.finance.account(),
-      bank_name: faker.company.name(),
-      ifsc_code: faker.finance.routingNumber(),
-      department_id: faker.datatype.number(),
-      email: faker.internet.email(),
-      contact_address: faker.address.streetAddress(),
-      gst_no: faker.finance.creditCardNumber(),
-      aadhar_no: faker.finance.creditCardNumber(),
-      bank_account_no: faker.finance.account(),
-      bank_branch_name: faker.address.city(),
-      authorized_date: null,
-      is_authorized: false,
-      created_at: faker.date.past(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const vendors = faker.helpers.multiple(createRandomVendor, {
-    count: 20,
-  });
-
-  for (const item of vendors) {
-    await prisma.vendor_masters.create({
-      data: {
-        id: item.id,
-        vendor_type_id: 1, //item.vendor_type_id,
-        vendor_no: item.vendor_no,
-        name: item.name,
-        mobile_no: item.mobile_no,
-        tin_no: item.tin_no,
-        pan_no: item.pan_no,
-        bank_name: item.bank_name,
-        ifsc_code: item.ifsc_code,
-        department_id: 1, //item.department_id,
-        email: item.email,
-        contact_address: item.contact_address,
-        gst_no: item.gst_no,
-        aadhar_no: item.aadhar_no,
-        bank_account_no: item.bank_account_no,
-        bank_branch_name: item.bank_branch_name,
-        authorized_date: null,
-        is_authorized: false,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-  }
+  await vendors_seeder();
 
   ///////////////// Administrative Ward /////////////////////
   function createRandomAdminisWard(): adminis_wards {
@@ -461,7 +384,7 @@ async function main() {
 
 
   //////////////// Bill Types //////////////////////
-  await bill_type_seed();
+  await bill_types_seeder();
 
   /////////////// Bill Payment Entry //////////////////
   await bill_payment_entry_seed();
@@ -480,6 +403,13 @@ async function main() {
 
     //////////////// Voucher Entries //////////////////
   await voucher_entries_seed();
+
+
+  await bill_stages_seeder();
+
+  await bill_invoices_seeder();
+
+
  
 }
 main()
