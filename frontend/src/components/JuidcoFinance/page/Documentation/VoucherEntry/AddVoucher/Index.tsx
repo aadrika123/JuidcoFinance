@@ -6,61 +6,157 @@ import React, { useEffect, useState } from "react";
 import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { useDispatch } from "react-redux";
-import { openPopup } from "@/redux/reducers/PopupReducers";
+import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { VoucherDataProps } from "@/utils/types/voucher_entry_types";
-import {
-  voucherInitialValues,
-  voucherSchema,
-} from "@/utils/validation/documentation/voucher_entry.validation";
+import { voucherSchema } from "@/utils/validation/documentation/voucher_entry.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
+
+interface UpdatedModeType {
+  id: number | string;
+  isOnEdit: boolean;
+}
 
 const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const AddVoucherEntry = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(openPopup());
-  }, []);
-  const [isUpdateMode, setIsUpdateMode] = useState<object>({
-    id: null,
+  const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
+    id: "",
     isOnEdit: false,
   });
   const [data, setData] = useState<VoucherDataProps[]>([]);
+  const [initialData, setInitialData] = useState<VoucherDataProps>({
+    voucher_date: "",
+    voucher_type_id: 0,
+    narration: "",
+    department_id: 0,
+    adminis_ward_id: 0,
+    voucher_sub_id: 0,
+    sub_ledger_id: 0,
+    amount: undefined,
+    dr_cr: 0,
+  });
+
+  /////////////// Show Form Popup on Load //////////////////////
+  useEffect(() => {
+    dispatch(openPopup());
+  }, []);
+  
+
+  ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: VoucherDataProps) => {
     if (!isUpdateMode.isOnEdit) {
       setData((prev) => [...prev, { id: prev.length + 1, ...values }]);
     } else {
-      console.log("first", values);
       setData((prev) => {
         const updatedData = prev.map((item) => {
           if (item.id === isUpdateMode.id) {
             return {
               ...item,
-              adminis_ward_id: 4,
-              adminis_ward_id_name: "Armstrong - Walsh",
-              amount: "076",
-              department_id: 5,
-              department_id_name: "Schmidt - Bode",
-              dr_cr: 4,
-              dr_cr_name: "Haag Inc",
-              narration: "dfghjkg",
-              sub_ledger_id: 3,
-              sub_ledger_id_name: "Prince Movies",
-              voucher_date: "02-10-2004",
-              voucher_sub_id: 4,
-              voucher_sub_id_name: "Ullrich and Sons",
-              voucher_type_id: 5,
-              voucher_type_id_name: "Gibson, Wolf and Ritchie",
+              adminis_ward_id: values.adminis_ward_id,
+              adminis_ward_id_name:
+                values.adminis_ward_id_name || item.adminis_ward_id_name,
+              amount: values.amount,
+              department_id: values.department_id,
+              department_id_name:
+                values.department_id_name || item.department_id_name,
+              dr_cr: values.dr_cr,
+              dr_cr_name: values.dr_cr_name || item.dr_cr_name,
+              narration: values.narration,
+              sub_ledger_id: values.sub_ledger_id,
+              sub_ledger_id_name:
+                values.sub_ledger_id_name || item.sub_ledger_id_name,
+              voucher_date: values.voucher_date,
+              voucher_sub_id: values.voucher_sub_id,
+              voucher_sub_id_name:
+                values.voucher_sub_id_name || item.voucher_sub_id_name,
+              voucher_type_id: values.voucher_type_id,
+              voucher_type_id_name:
+                values.voucher_type_id_name || item.voucher_type_id_name,
             };
+          } else {
+            return item;
           }
-          return item;
         });
-        return [...prev, updatedData];
+        return updatedData;
       });
     }
-    // actions.setSubmitting(false);
+    dispatch(closePopup());
   };
+
+
+  ///////////////// Handling Total Count ///////////////
+  const handleCount = () => {
+    let sum = 0;
+    data.forEach((item) => {
+      sum = sum + Number(item.amount);
+    });
+    return sum;
+  };
+
+  ///////////////// Handling Remove item(row) from list ///////////////
+  const onRemoveButton = (id: string) => {
+    setData((prev) => {
+      const filteredData = prev.filter((item) => item.id !== id);
+
+      return filteredData.map((item, index) => ({
+        ...item,
+        id: index + 1,
+      }));
+    });
+  };
+
+  ///////////////// Handling Edit Functionality ///////////////
+  const onEditButton = (id: string) => {
+    const Id: number = Number(id);
+    setIsUpdateMode((prev) => ({ ...prev, isOnEdit: true, id: Id }));
+    setInitialData((prev) => ({
+      ...prev,
+      voucher_date: data[Id - 1]?.voucher_date,
+      voucher_type_id: data[Id - 1]?.voucher_type_id,
+      narration: data[Id - 1]?.narration,
+      department_id: data[Id - 1]?.department_id,
+      adminis_ward_id: data[Id - 1]?.adminis_ward_id,
+      voucher_sub_id: data[Id - 1]?.voucher_sub_id,
+      sub_ledger_id: data[Id - 1]?.sub_ledger_id,
+      amount: data[Id - 1]?.amount,
+      dr_cr: data[Id - 1]?.dr_cr,
+    }));
+    dispatch(openPopup());
+  };
+
+  ///////////////// Edit and Remove Button JSX ///////////////
+  const addButton = (id: string) => {
+    return (
+      <>
+        <ViewIconButton onClick={() => onEditButton(id)} />
+        <ViewIconButton onClick={() => onRemoveButton(id)} />
+      </>
+    );
+  };
+
+  const columns = [
+    { name: "id", caption: "Sr. No.", width: "w-[10%]" },
+    {
+      name: "sub_ledger_id_name",
+      caption: "Sub-Ledger/Name",
+      width: "w-[25%]",
+    },
+    { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
+    {
+      name: "voucher_type_id_name",
+      caption: "Voucher Type",
+      width: "w-[20%]",
+    },
+    { name: "dr_cr_name", caption: "Dr/Cr", width: "w-[15%]" },
+    {
+      name: "branch",
+      caption: "Edit/Remove",
+      width: "w-[10%]",
+      value: addButton,
+    },
+  ];
 
   const fields: FieldTypeProps[] = [
     {
@@ -68,6 +164,7 @@ export const AddVoucherEntry = () => {
       HEADER: "Voucher Date",
       ACCESSOR: "voucher_date",
       PLACEHOLDER: "DD/MM/YYYY",
+      TYPE:"date"
     },
     {
       CONTROL: "select",
@@ -123,16 +220,9 @@ export const AddVoucherEntry = () => {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
+      TYPE: "number"
     },
   ];
-
-  const handleCount = () => {
-    let sum = 0;
-    data.forEach((item) => {
-      sum = sum + Number(item.amount);
-    });
-    return sum;
-  };
 
   const footerData = [
     {
@@ -140,55 +230,6 @@ export const AddVoucherEntry = () => {
       value: handleCount(),
     },
   ];
-
-  const [initialData, setInitialData] = useState<VoucherDataProps>({
-    voucher_date: "",
-    voucher_type_id: 0,
-    narration: "",
-    department_id: 0,
-    adminis_ward_id: 0,
-    voucher_sub_id: 0,
-    sub_ledger_id: 0,
-    amount: 0,
-    dr_cr: 0,
-  });
-
-  const onRemoveButton = (id: number | string) => {
-    setData((prev) => {
-      const filteredData = prev.filter((item) => item.id !== id);
-
-      return filteredData.map((item, index) => ({
-        ...item,
-        id: index + 1,
-      }));
-    });
-  };
-
-  const onEditButton = (id: number) => {
-    setIsUpdateMode((prev) => ({ ...prev, isOnEdit: true, id: id }));
-    setInitialData((prev) => ({
-      ...prev,
-      voucher_date: data[id - 1]?.voucher_date,
-      voucher_type_id: data[id - 1]?.voucher_type_id,
-      narration: data[id - 1]?.narration,
-      department_id: data[id - 1]?.department_id,
-      adminis_ward_id: data[id - 1]?.adminis_ward_id,
-      voucher_sub_id: data[id - 1]?.voucher_sub_id,
-      sub_ledger_id: data[id - 1]?.sub_ledger_id,
-      amount: data[id - 1]?.amount,
-      dr_cr: data[id - 1]?.dr_cr,
-    }));
-    dispatch(openPopup());
-  };
-
-  const addButton = (id: string | number) => {
-    return (
-      <>
-        <ViewIconButton onClick={() => onEditButton(id)} />
-        <ViewIconButton onClick={() => onRemoveButton(id)} />
-      </>
-    );
-  };
 
   return (
     <>
@@ -202,32 +243,9 @@ export const AddVoucherEntry = () => {
         data={data}
         scrollable
         title="Title 1"
-        columns={[
-          { name: "id", caption: "Sr. No.", width: "w-[10%]" },
-          {
-            name: "sub_ledger_id_name",
-            caption: "Sub-Ledger/Name",
-            width: "w-[25%]",
-          },
-          { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
-          {
-            name: "voucher_type_id_name",
-            caption: "Voucher Type",
-            width: "w-[20%]",
-          },
-          { name: "dr_cr_name", caption: "Dr/Cr", width: "w-[15%]" },
-          {
-            name: "branch",
-            caption: "Edit/Remove",
-            width: "w-[10%]",
-            value: addButton,
-          },
-        ]}
+        columns={columns}
         footerData={footerData}
       />
     </>
   );
 };
-function setIsUpdateMode(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}

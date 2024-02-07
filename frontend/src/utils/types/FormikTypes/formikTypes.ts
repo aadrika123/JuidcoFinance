@@ -16,6 +16,7 @@ export type FieldTypeProps = {
   PLACEHOLDER?: string;
   API?: string;
   OPTIONS?: Choice[];
+  TYPE?: string;
 };
 
 

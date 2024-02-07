@@ -50,6 +50,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                       label={item.HEADER || ""}
                       name={item.ACCESSOR}
                       placeholder={item.PLACEHOLDER}
+                      type={item.TYPE}
                       api={item.API}
                       options={item.OPTIONS || []}
                       onChange={handleChange}
