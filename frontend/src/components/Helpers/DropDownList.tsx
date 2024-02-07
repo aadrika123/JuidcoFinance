@@ -11,7 +11,7 @@ import { useField } from "formik";
  */
 
 interface DropDownListProps {
-  label: React.ReactNode;
+  label?: React.ReactNode;
   name: string;
   placeholder: string | "";
   value: number | string;

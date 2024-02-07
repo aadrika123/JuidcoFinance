@@ -1,12 +1,12 @@
 import Joi from "joi";
 import { VendorRequestData } from "../../../../util/types";
 import { Request } from "express";
+import { generateUniquePaymentNo } from "../../../../util/helper/generateUniqueNo";
 
 // Validating request data
 export const vendorMasterValidation = Joi.object({
   id: Joi.number(),
   vendor_type_id: Joi.number().required(),
-  vendor_no: Joi.string(),
   name: Joi.string().required(),
   mobile_no: Joi.string()
     .pattern(/^[0-9]{10}$/)
@@ -31,7 +31,7 @@ export const vendorMasterValidation = Joi.object({
 export const vendorRequestData = (req: Request): VendorRequestData => {
   return {
     vendor_type_id: req.body.vendor_type_id,
-      vendor_no: "jjjhb55kk",
+      vendor_no: generateUniquePaymentNo("vn"),
       name: req.body.name,
       mobile_no: req.body.mobile_no,
       tin_no: req.body.tin_no,

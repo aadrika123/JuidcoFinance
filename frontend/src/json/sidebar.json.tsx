@@ -88,7 +88,7 @@ export const sidebarLinks: SidebarLinksProps = {
             },
             {
               moduleName: "Bills Payment Entry",
-              path: "/workorder",
+              path: "/finance/transaction/bills-payment-entry",
             },
             {
               moduleName: "Bills Invoice Entry",

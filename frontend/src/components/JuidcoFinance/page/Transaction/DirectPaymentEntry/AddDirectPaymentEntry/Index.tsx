@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import axios from "@/lib/axiosConfig";
 import { useMutation } from "react-query";
 import { Formik } from "formik";
@@ -19,7 +19,6 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import InputBox from "@/components/Helpers/InputBox";
 import DateInputBox from "@/components/Helpers/DateInputBox";
 import DropDownList from "@/components/Helpers/DropDownList";
-import { func } from "joi";
 import CheckBox from "@/components/Helpers/CheckBox";
 import SubLedgerTable from "../SubLedgerTable/SubLedgerTable";
 
@@ -44,6 +43,68 @@ export const HeroAddPaymentEntry = () => {
       alert("there was an error");
     },
   });
+  // Inside your component
+
+  const [dirPaymentEntries, setDirPaymentEntries] = useState<
+    AddPaymentDetailsData[]
+  >([
+    {
+      payment_date: "",
+      narration: "",
+      payment_type_id: "",
+      department_id: "",
+      payee_name: "",
+      adminis_ward_id: "",
+      grant_id: "",
+      address: "",
+      amount: "",
+      user_common_budget: false,
+      payment_mode: "",
+      ledger_code_id: 0,
+    },
+  ]);
+
+  const handleSelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>, index: number
+  ) => {
+    if (e) {
+      e.preventDefault();
+    }
+    setDirPaymentEntries((prev) => {
+      const updatedEntries = [...prev];
+        updatedEntries[index] = { ...updatedEntries[index], ledger_code_id: parseInt(e.target.value) };
+        return updatedEntries;
+
+    });
+  };
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLInputElement>, index: number
+  ) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    setDirPaymentEntries((prev) => {
+      const updatedEntries = [...prev];
+        updatedEntries[index] = { ...updatedEntries[index], amount: e.target.value };
+        return updatedEntries;
+
+    });
+
+  };
+
+  const handleRemoveEntry = (index: number) =>{
+    setDirPaymentEntries((prev) => {
+      const updatedEntries = [...prev];
+      return updatedEntries.filter((i, idx) => {
+        if(idx !== index){
+          return i;
+        }
+        
+      })
+    });
+  }
 
   return (
     <>
@@ -53,8 +114,10 @@ export const HeroAddPaymentEntry = () => {
           <Formik
             initialValues={initialPaymentDetails}
             validationSchema={PaymentDetailsSchema}
-            onSubmit={(value) => {
-              console.log("first dsf dfsd", value);
+            onSubmit={(values, {resetForm}) => {
+              console.log("first dsf dfsd", values);
+              setDirPaymentEntries((prev) => [...prev, values]);
+              resetForm()
               // mutate(values);
             }}
           >
@@ -168,14 +231,14 @@ export const HeroAddPaymentEntry = () => {
                       name="address"
                     />
                     <CheckBox
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.user_common_budget}
-                        error={errors.user_common_budget}
-                        touched={touched.user_common_budget}
-                        name="user_common_budget"
-                        label="User Common Budget *"
-                      />
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.user_common_budget}
+                      error={errors.user_common_budget}
+                      touched={touched.user_common_budget}
+                      name="user_common_budget"
+                      label="User Common Budget *"
+                    />
                   </div>
                 </section>
                 <section className="mt-8 border rounded-lg border-zinc-300 p-6 px-10">
@@ -195,7 +258,12 @@ export const HeroAddPaymentEntry = () => {
                       />
                     </div>
                   </PaymentModeRadioWrapper>
-                  <SubLedgerTable />
+                  <SubLedgerTable
+                    handleSelectChange={handleSelectChange}
+                    handleTextChange={handleTextChange}
+                    handleRemoveEntry={handleRemoveEntry}
+                    tableList={dirPaymentEntries}
+                  />
                   <div className="mt-4 flex items-center gap-5 justify-end">
                     <PrimaryButton
                       onClick={goBack}
@@ -208,7 +276,7 @@ export const HeroAddPaymentEntry = () => {
                     <PrimaryButton buttonType="button" variant="cancel">
                       Reset
                     </PrimaryButton>
-                    <PrimaryButton buttonType="submit" variant="primary">
+                    <PrimaryButton buttonType="button" variant="primary">
                       Save
                     </PrimaryButton>
                   </div>

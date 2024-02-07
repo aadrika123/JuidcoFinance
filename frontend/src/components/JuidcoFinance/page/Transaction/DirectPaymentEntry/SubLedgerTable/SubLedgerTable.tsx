@@ -1,25 +1,30 @@
 "use client";
 
-import { RootState } from "@/redux/store";
 import React from "react";
-import Link from "next/link";
-import { useSelector } from "react-redux";
-import { usePathname } from "next/navigation";
+import { AddPaymentDetailsData } from "@/utils/types/direct_payment_entry_types";
+import TableDropDownList from "@/components/Helpers/TableDropDown";
+import { FINANCE_URL } from "@/utils/api/urls";
+import InputBox2 from "@/components/Helpers/InputBox2";
 
-const SubLedgerTable: React.FC = () => {
-//   const SubLedgerData = useSelector(
-//     (state: RootState) => state.paymentDetails.paymentDetails
-//   );
+interface TableListProps {
+  tableList?: AddPaymentDetailsData[];
+  dropdown?: React.ReactNode;
+  inputBox?: React.ReactNode;
+  handleTextChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => void;
+  handleSelectChange: (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    index: number
+  ) => void;
+  handleRemoveEntry: (index: number) => void;
+}
 
-const SubLedgerData = [
-    {
-        id: 1,
-        ledger_code: 1234,
-        amount: 200
-    }
-]
-
-  const pathName = usePathname();
+const SubLedgerTable: React.FC<TableListProps> = (props) => {
+  //   const SubLedgerData = useSelector(
+  //     (state: RootState) => state.paymentDetails.paymentDetails
+  //   );
 
   return (
     <>
@@ -45,33 +50,59 @@ const SubLedgerData = [
               </th>
 
               <th colSpan={2} className="border  border-zinc-400  font-medium">
-                  <span>Add/Remove</span>
+                <span>Add/Remove</span>
               </th>
             </tr>
           </thead>
           <tbody className="">
-            {SubLedgerData?.map((d, index: number) => (
+            {props.tableList?.map((d, index: number) => (
               <tr key={index} className="border border-zinc-400 text-secondary">
                 {/* ID */}
-                <td className="border border-zinc-400">{d?.id}</td>
-                <td className="border border-zinc-400">{d?.ledger_code}</td>
+                <td className="border border-zinc-400">{index}</td>
+                <td className="border border-zinc-400">
+                  <TableDropDownList
+                    api={`${FINANCE_URL.GRANT_URL.get}`}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      props.handleSelectChange(e, index)
+                    }
+                    placeholder="Select Sub-ledger code"
+                    value={d?.ledger_code_id}
+                    name="1ledger_code_id"
+                    className="border-none outline-none"
+                  />
+                </td>
                 <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">{d?.amount}</div>
+                  <InputBox2
+                    type="number"
+                    placeholder="Enter Amount"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      props.handleTextChange?.(e, index)
+                    }
+                    value={d?.amount}
+                    name="amount"
+                    className="border-none outline-none"
+                  />
+                  {/* {props.inputBox} */}
+                  {/* <div className="flex justify-center">{d?.amount}</div> */}
                 </td>
 
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">
+                    <button type="submit" className="flex justify-center">
                       +
-                    </div>
+                    </button>
                   </div>
                 </td>
 
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">
+                    <button
+                      onClick={() => props.handleRemoveEntry(index)}
+                      type="button"
+                      className="flex justify-center"
+                    >
                       -
-                    </div>
+                    </button>
                   </div>
                 </td>
               </tr>

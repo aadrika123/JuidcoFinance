@@ -110,6 +110,7 @@ const TableWithFeatures = <T,>({
                 columns={columns}
                 data={data}
                 center={center}
+                // scrollable
               />
               <NextPrevPagination
                 page={page}

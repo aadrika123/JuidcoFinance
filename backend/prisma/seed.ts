@@ -15,18 +15,14 @@ import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
 import bill_type_seed from "./seeder/bill_type_seed";
-import receipt_types_seeder from "./receipt_types_seeder";
-import subledgers_seeder from "./subledger_list_seeder";
-import modules_seeder from "./modules_seeder";
-import receipts_seeder from "./receipts_seeder";
-
-
-
-
+import receipt_types_seeder from "./seeder/receipt_types_seeder";
+import modules_seeder from "./seeder/modules_seeder";
+import receipts_seeder from "./seeder/receipts_seeder";
 import voucher_types_seed from "./seeder/voucher_types_seed";
 import voucher_sub_types_seed from "./seeder/voucher_sub_type_seed";
+import subledgers_seeder from "./seeder/subledger_list_seeder";
 import voucher_entries_seed from "./seeder/voucher_entries_seed";
-import sub_ledger_seed from "./seeder/sub_ledger_seed";
+
 
 const prisma = new PrismaClient();
 async function main() {
@@ -431,16 +427,16 @@ async function main() {
   function createRandomDirPaymentEntry(): dir_payment_entries {
     return {
       id: faker.datatype.number(),
-      payment_no: faker.datatype.number(),
+      payment_no: `pn${faker.datatype.number(6)}`,
       payment_date: faker.date.recent(),
-      payment_type_id: faker.datatype.number(),
-      payee_name: faker.person.fullName(),
+      payment_type_id: 1,
+      payee_name_id: 1,
       narration: faker.lorem.sentence(),
-      grant_id: faker.datatype.number(),
+      grant_id: 1,
       user_common_budget: faker.datatype.boolean(),
-      adminis_ward_id: faker.datatype.number(),
+      adminis_ward_id: 2,
       address: faker.address.streetAddress(),
-      department_id: faker.datatype.number(),
+      department_id: 1,
       email: faker.internet.email(),
       payment_mode: faker.internet.email(),
       amount: faker.datatype.number(),
@@ -453,30 +449,9 @@ async function main() {
     count: 20,
   });
 
-  let pn = 1;
-  for (const item of paymentEntries) {
-    await prisma.dir_payment_entries.create({
-      data: {
-        id: item.id,
-        payment_no: pn,
-        payment_date: item.payment_date,
-        payment_type_id: 1,
-        payee_name: item.payee_name,
-        narration: item.narration,
-        grant_id: 1,
-        user_common_budget: item.user_common_budget,
-        adminis_ward_id: 2,
-        address: item.address,
-        department_id: 1,
-        email: item.email,
-        payment_mode: item.payment_mode,
-        amount: item.amount,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    pn++;
-  }
+  await prisma.dir_payment_entries.createMany({
+    data: paymentEntries,
+  });
 
   //////////////// Voucher Type //////////////////
   await voucher_types_seed();
@@ -484,27 +459,28 @@ async function main() {
   //////////////// Voucher sub type //////////////////
   await voucher_sub_types_seed();
 
-    //////////////// Sub Ledger //////////////////
-    await sub_ledger_seed();
 
   //////////////// Bill Types //////////////////////
   await bill_type_seed();
 
   /////////////// Bill Payment Entry //////////////////
-  await await bill_payment_entry_seed();
-
-  /////////////// Receipt Types Seeder //////////////////
-  await receipt_types_seeder();
-
-  await subledgers_seeder();
-
-  await modules_seeder();
-
-  await receipts_seeder();
+  await bill_payment_entry_seed();
 
 
-  //////////////// Voucher Entries //////////////////
+
+   /////////////// Receipt Types Seeder //////////////////
+   await receipt_types_seeder();
+
+   await subledgers_seeder();
+ 
+   await modules_seeder();
+ 
+   await receipts_seeder();
+
+
+    //////////////// Voucher Entries //////////////////
   await voucher_entries_seed();
+ 
 }
 main()
   .then(async () => {

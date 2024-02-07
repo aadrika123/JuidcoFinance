@@ -121,59 +121,6 @@ CREATE TABLE "cheque_book_entries" (
 );
 
 -- CreateTable
-CREATE TABLE "receipt_types" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "remark" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "receipt_types_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "modules" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "remark" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "modules_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "subledgers" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "remark" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "subledgers_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "receipt_entries" (
-    "id" SERIAL NOT NULL,
-    "receipt_no" TEXT NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL,
-    "paid_by" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "module_id" INTEGER NOT NULL,
-    "receipt_type_id" INTEGER NOT NULL,
-    "mobile_no" TEXT NOT NULL,
-    "admin_ward_id" INTEGER NOT NULL,
-    "narration" TEXT NOT NULL,
-    "subledger_id" INTEGER NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "receipt_entries_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "departments" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -231,10 +178,10 @@ CREATE TABLE "grants" (
 -- CreateTable
 CREATE TABLE "dir_payment_entries" (
     "id" SERIAL NOT NULL,
-    "payment_no" INTEGER NOT NULL,
+    "payment_no" TEXT NOT NULL,
     "payment_date" TIMESTAMP(3) NOT NULL,
     "payment_type_id" INTEGER NOT NULL,
-    "payee_name" TEXT NOT NULL,
+    "payee_name_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
     "grant_id" INTEGER NOT NULL,
     "user_common_budget" BOOLEAN NOT NULL,
@@ -243,7 +190,7 @@ CREATE TABLE "dir_payment_entries" (
     "department_id" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
     "payment_mode" TEXT NOT NULL,
-    "amount" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -264,18 +211,22 @@ CREATE TABLE "bill_types" (
 -- CreateTable
 CREATE TABLE "bill_payment_entries" (
     "id" SERIAL NOT NULL,
-    "bill_no" INTEGER NOT NULL,
+    "bill_no" TEXT NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
-    "bill_entry_date" TEXT NOT NULL,
+    "bill_entry_date" TIMESTAMP(3) NOT NULL,
     "department_id" INTEGER NOT NULL,
     "vendor_name" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "payee_name_id" INTEGER NOT NULL,
     "adminis_ward_id" INTEGER NOT NULL,
-    "bill_amount" INTEGER NOT NULL,
-    "advance" INTEGER NOT NULL,
-    "deposit" INTEGER NOT NULL,
-    "other_deductions" INTEGER NOT NULL,
+    "bill_amount" DOUBLE PRECISION NOT NULL,
+    "advance" DOUBLE PRECISION NOT NULL,
+    "deposit" DOUBLE PRECISION NOT NULL,
+    "deductions_amount" DOUBLE PRECISION NOT NULL,
+    "earlier_payment" DOUBLE PRECISION NOT NULL,
+    "payable_amount" DOUBLE PRECISION NOT NULL,
+    "net_amount" DOUBLE PRECISION NOT NULL,
+    "is_approved" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -305,17 +256,6 @@ CREATE TABLE "voucher_sub_types" (
 );
 
 -- CreateTable
-CREATE TABLE "sub_ledger" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "remark" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "sub_ledger_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "voucher_entries" (
     "id" SERIAL NOT NULL,
     "voucher_no" INTEGER NOT NULL,
@@ -334,6 +274,59 @@ CREATE TABLE "voucher_entries" (
     CONSTRAINT "voucher_entries_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "receipt_types" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "receipt_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "modules" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "modules_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subledgers" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "subledgers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "receipt_entries" (
+    "id" SERIAL NOT NULL,
+    "receipt_no" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "paid_by" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "module_id" INTEGER NOT NULL,
+    "receipt_type_id" INTEGER NOT NULL,
+    "mobile_no" TEXT NOT NULL,
+    "admin_ward_id" INTEGER NOT NULL,
+    "narration" TEXT NOT NULL,
+    "subledger_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "receipt_entries_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -344,16 +337,10 @@ ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_department_id_fkey" 
 ALTER TABLE "cheque_book_entries" ADD CONSTRAINT "cheque_book_entries_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_receipt_type_id_fkey" FOREIGN KEY ("receipt_type_id") REFERENCES "receipt_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_payment_type_id_fkey" FOREIGN KEY ("payment_type_id") REFERENCES "payment_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_payee_name_id_fkey" FOREIGN KEY ("payee_name_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_grant_id_fkey" FOREIGN KEY ("grant_id") REFERENCES "grants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -389,4 +376,13 @@ ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_adminis_ward_id_fk
 ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_sub_id_fkey" FOREIGN KEY ("voucher_sub_id") REFERENCES "voucher_sub_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_sub_ledger_id_fkey" FOREIGN KEY ("sub_ledger_id") REFERENCES "sub_ledger"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_sub_ledger_id_fkey" FOREIGN KEY ("sub_ledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_receipt_type_id_fkey" FOREIGN KEY ("receipt_type_id") REFERENCES "receipt_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -2,7 +2,7 @@
 
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
   Choice,
@@ -11,10 +11,16 @@ import {
 } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FormikHelpers } from "formik";
+import { useDispatch } from "react-redux";
+import { openPopup } from "@/redux/reducers/PopupReducers";
 
 const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const AddVoucherEntry = () => {
+  const dispatch = useDispatch()
+  useEffect(()=> {
+    dispatch(openPopup())
+  }, [])
   const [data, setData] = useState<FormValues[]>([]);
   const choices: Choice[] = [
     { key: "Choice a", value: "choicea" },

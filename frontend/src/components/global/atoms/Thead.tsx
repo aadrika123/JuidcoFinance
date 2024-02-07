@@ -6,16 +6,16 @@ interface TheadProps {
   className?: string;
   center?: boolean;
   color?: string;
-  scrollable?: boolean;
+  width?: string;
 }
 
 const Thead: React.FC<TheadProps> = (props) => {
-  const { cellValue, key, className, center, color , scrollable} = props;
+  const { cellValue, key, className, center, color, width} = props;
 
   return (
     <th
       key={`headCell-${key}`}
-      className={` ${className} ${color} ${scrollable && "flex-1"}`}
+      className={`border-l border-zinc-400 ${width} ${className} ${color}`}
     >
       <div
         className={`flex gap-2 font-medium text-center ${

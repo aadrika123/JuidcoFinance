@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
-import { requestData } from "../../requests/transactions/dirPaymentEntryValidation";
+import { multiRequestData, requestData } from "../../requests/transactions/dirPaymentEntryValidation";
 
 const prisma = new PrismaClient();
 
@@ -12,8 +12,8 @@ class DirPaymentEntryDao {
 
   // store payment entry details in DB
   store = async (req: Request) => {
-    return await prisma.dir_payment_entries.create({
-      data: requestData(req),
+    return await prisma.dir_payment_entries.createMany({
+      data: multiRequestData(req),
     });
   };
 
@@ -31,7 +31,12 @@ class DirPaymentEntryDao {
         payment_no: true,
         payment_date: true,
         amount: true,
-        payee_name: true,
+        payee_name: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         payment_type: {
           select: {
             id: true,
@@ -46,11 +51,13 @@ class DirPaymentEntryDao {
         OR: [
           {
             payee_name: {
-              equals: search,
-              mode: "insensitive",
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
             },
           },
-          { payment_no: { equals: Number(search) } },
+          { payment_no: { contains: search } },
         ],
       };
     }
@@ -71,7 +78,12 @@ class DirPaymentEntryDao {
         payment_no: true,
         payment_date: true,
         amount: true,
-        payee_name: true,
+        payee_name: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         payment_type: {
           select: {
             id: true,
@@ -110,12 +122,12 @@ class DirPaymentEntryDao {
   // Update payment entry details
   update = async (req: Request) => {
     const id: number = req.body.id;
-      return await prisma.dir_payment_entries.update({
-        where: {
-          id: id,
-        },
-        data: requestData(req),
-      });
+    return await prisma.dir_payment_entries.update({
+      where: {
+        id: id,
+      },
+      data: requestData(req),
+    });
   };
 }
 
