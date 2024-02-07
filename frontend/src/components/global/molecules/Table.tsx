@@ -64,7 +64,7 @@ const Table = <T,>({
         <Trow
           key={index}
           scrollable
-          className={`border border-zinc-400 text-secondary`}
+          className={` text-secondary`}
         >
           {columns.map((column, index2) => {
             const value = row[column.name as keyof typeof row];

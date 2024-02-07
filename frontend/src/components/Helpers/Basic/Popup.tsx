@@ -14,16 +14,6 @@ const Popup: React.FC<PopupProps> = ({ children, title}) => {
       <SubHeading>{title}</SubHeading>
       <div className="flex flex-col w-full gap-5 mt-5">{children}</div>
       <div className="w-full mt-4 flex items-center justify-end gap-2">
-        {/* <PrimaryButton
-          onClick={closeModal}
-          variant={"cancel"}
-          className={"w-24"}
-        >
-          Close
-        </PrimaryButton>
-        <PrimaryButton variant="primary" className={"w-24"}>
-          Save
-        </PrimaryButton> */}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Thead: React.FC<TheadProps> = (props) => {
   return (
     <th
       key={`headCell-${key}`}
-      className={`border border-zinc-400  ${className} ${color} ${scrollable && "flex-1"}`}
+      className={` ${className} ${color} ${scrollable && "flex-1"}`}
     >
       <div
         className={`flex gap-2 font-medium text-center ${
