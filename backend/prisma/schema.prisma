@@ -91,6 +91,7 @@ model vendor_masters {
   is_authorized    Boolean      @default(false)
 
   bill_invoices    bill_invoices[]
+  bill_payments    bill_payment_entries[]
 
   created_at       DateTime     @default(now()) @map("created_at")
   updated_at       DateTime     @updatedAt @map("updated_at")
@@ -224,16 +225,18 @@ model bill_types {
 /// Bills Payment Entry
 model bill_payment_entries {
   id                Int           @id @default(autoincrement())
-  bill_no           String
-  bill_type         bill_types    @relation(fields: [bill_type_id], references: [id])
+  bill_no           Int
+  
   bill_type_id      Int
+  bill_type         bill_types    @relation(fields: [bill_type_id], references: [id])
   bill_entry_date   DateTime
   department        departments   @relation(fields: [department_id], references: [id])
   department_id     Int
-  vendor_name       String
+  vendor_id         Int
+  vendor            vendor_masters @relation(fields: [vendor_id], references: [id])
   address           String
-  payee_name        employees     @relation(fields: [payee_name_id], references: [id])
-  payee_name_id     Int
+  payee             employees     @relation(fields: [payee_id], references: [id])
+  payee_id          Int
   adminis_ward      adminis_wards @relation(fields: [adminis_ward_id], references: [id])
   adminis_ward_id   Int
   bill_amount       Float
@@ -402,3 +405,5 @@ model bill_invoices{
   created_at              DateTime        @default(now()) @map("created_at")
   updated_at              DateTime        @updatedAt @map("updated_at")
 }
+
+

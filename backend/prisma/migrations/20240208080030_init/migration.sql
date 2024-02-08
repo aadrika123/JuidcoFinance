@@ -211,13 +211,13 @@ CREATE TABLE "bill_types" (
 -- CreateTable
 CREATE TABLE "bill_payment_entries" (
     "id" SERIAL NOT NULL,
-    "bill_no" TEXT NOT NULL,
+    "bill_no" INTEGER NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
     "bill_entry_date" TIMESTAMP(3) NOT NULL,
     "department_id" INTEGER NOT NULL,
-    "vendor_name" TEXT NOT NULL,
+    "vendor_id" INTEGER NOT NULL,
     "address" TEXT NOT NULL,
-    "payee_name_id" INTEGER NOT NULL,
+    "payee_id" INTEGER NOT NULL,
     "adminis_ward_id" INTEGER NOT NULL,
     "bill_amount" DOUBLE PRECISION NOT NULL,
     "advance" DOUBLE PRECISION NOT NULL,
@@ -389,7 +389,10 @@ ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_bill_typ
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_payee_name_id_fkey" FOREIGN KEY ("payee_name_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_vendor_id_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendor_masters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_payee_id_fkey" FOREIGN KEY ("payee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

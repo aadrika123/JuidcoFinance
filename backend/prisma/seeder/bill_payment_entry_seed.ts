@@ -8,13 +8,13 @@ const bill_payment_entry_seed = async () => {
   function createRandomBillPaymentEntry(): bill_payment_entries {
     return {
       id: faker.datatype.number(),
-      bill_no: `bn${faker.datatype.number(6)}`,
+      bill_no: 1,
       bill_type_id: 1,
       bill_entry_date: faker.date.recent(),
       department_id: 1,
-      vendor_name: faker.person.fullName(),
+      vendor_id: 1,
       address: faker.address.streetAddress(),
-      payee_name_id: 1,
+      payee_id: 1,
       adminis_ward_id: 1,
       bill_amount: faker.datatype.number(),
       advance: faker.datatype.number(),

@@ -19,6 +19,7 @@ import VoucherSubTypeRoute from "./route/voucherSubTypeRoute";
 import SubLedgerRoute from "./route/subLedgerRoute";
 import VoucherEntryRoute from "./route/documentation/voucherEntryRoute";
 import BillInvoicesRoute from "./route/transactions/billInvoicesRoute";
+import BillPaymentEntryRoute from "./route/transactions/billPaymentEntryRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +140,8 @@ class FinanceRoute {
 
     // Bill Invoice Entries ///
     (new BillInvoicesRoute()).configure(app, "19");
+
+    (new BillPaymentEntryRoute()).configure(app, "20");
   }
 }
 
