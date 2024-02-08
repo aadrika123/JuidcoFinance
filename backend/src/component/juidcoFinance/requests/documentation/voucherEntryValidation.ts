@@ -16,6 +16,12 @@ export const voucherEntryValidation = Joi.object({
   dr_cr: Joi.number().required(),
 });
 
+
+// Validating request data for update
+export const voucherEntryValidationWithID = voucherEntryValidation.keys({
+  id: Joi.number().required(),
+});
+
 // arrange request data for store and update
 export const requestData = (req: Request): VoucherEntryRequestData => {
   return {

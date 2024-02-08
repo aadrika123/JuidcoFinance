@@ -9,7 +9,7 @@ class BillTypeDao {
     const query: Prisma.bill_typesFindManyArgs = {
       select: {
         id: true,
-        type: true,
+        name: true,
       },
     };
     const data = prisma.bill_types.findMany(query);

@@ -18,6 +18,7 @@ import VoucherTypeRoute from "./route/voucherTypeRoute";
 import VoucherSubTypeRoute from "./route/voucherSubTypeRoute";
 import SubLedgerRoute from "./route/subLedgerRoute";
 import VoucherEntryRoute from "./route/documentation/voucherEntryRoute";
+import BillInvoicesRoute from "./route/transactions/billInvoicesRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -135,6 +136,9 @@ class FinanceRoute {
     // VOUCHER_ENTRY_ROUTES ///
     this.voucherEntryRoute = new VoucherEntryRoute();
     this.voucherEntryRoute.configure(app, "18");
+
+    // Bill Invoice Entries ///
+    (new BillInvoicesRoute()).configure(app, "19");
   }
 }
 

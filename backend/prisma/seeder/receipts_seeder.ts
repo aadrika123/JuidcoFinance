@@ -37,7 +37,7 @@ const receipts_seeder = async () => {
       subledger_id: random_one(subledger_ids),
     };
 
-    console.log(record);
+    // console.log(record);
     await prisma.receipt_entries.create({data: record});
   }
 

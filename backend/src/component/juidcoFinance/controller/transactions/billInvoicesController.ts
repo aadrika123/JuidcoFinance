@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
-import { dirPaymentEntryValidationAlongWithID, dirPaymentEntryValidation } from "../../requests/transactions/dirPaymentEntryValidation";
-import DirPaymentEntryDao from "../../dao/transactions/dirPaymentEntryDao";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resObj } from "../../../../util/types";
 import { resMessage } from "../../responseMessage/commonMessage";
 import Joi from "joi";
+import BillInvoicesDao from "../../dao/transactions/billInvoicesDao";
+import { billInvoicesValidation, billInvoicesValidationWithID } from "../../requests/transactions/billInvoicesValidation";
 
 /**
- * | Author- Sanjiv Kumar
- * | Created On- 25-01-2024
- * | Created for- Direct Payment Entry Controller
- * | Common apiId- 09
+ * | Author- Bijoy Paitandi
+ * | Created On- 07-01-2024
+ * | Created for- Bill Invoices Controller
+ * | Status: open
  */
 
-class DirPaymentEntryController {
-  private dirPaymentEntryDao: DirPaymentEntryDao;
+class BillInvoicesController {
+  private billInvoicesDao: BillInvoicesDao;
   private initMesg: string;
   constructor() {
-    this.dirPaymentEntryDao = new DirPaymentEntryDao();
-    this.initMesg = "Direct Payment Entry";
+    this.billInvoicesDao = new BillInvoicesDao();
+    this.initMesg = "Bill Invoices Entry";
   }
 
   // Create
@@ -33,11 +33,11 @@ class DirPaymentEntryController {
       version: "1.0",
     };
     try {
-      const { error } = dirPaymentEntryValidation.validate(req.body);
+      const { error } = billInvoicesValidation.validate(req.body);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      const data = await this.dirPaymentEntryDao.store(req);
+      const data = await this.billInvoicesDao.store(req);
       return CommonRes.CREATED(
         resMessage(this.initMesg).CREATED,
         data,
@@ -49,7 +49,7 @@ class DirPaymentEntryController {
     }
   };
 
-  // Get limited payment entry list
+  // Get limited bill invoices list
   get = async (
     req: Request,
     res: Response,
@@ -61,7 +61,7 @@ class DirPaymentEntryController {
       version: "1.0",
     };
     try {
-      const data = await this.dirPaymentEntryDao.get(req);
+      const data = await this.billInvoicesDao.get(req);
 
       if (!data)
         return CommonRes.SUCCESS(
@@ -77,7 +77,7 @@ class DirPaymentEntryController {
     }
   };
 
-  // Get single payment entry details by Id
+  // Get single biull invoice details by Id
   getById = async (
     req: Request,
     res: Response,
@@ -98,7 +98,7 @@ class DirPaymentEntryController {
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      const data = await this.dirPaymentEntryDao.getById(id);
+      const data = await this.billInvoicesDao.getById(id);
 
       if (!data)
         return CommonRes.SUCCESS(
@@ -126,11 +126,11 @@ class DirPaymentEntryController {
       version: "1.0",
     };
     try {
-      const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body);
+      const { error } = billInvoicesValidationWithID.validate(req.body);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      const data = await this.dirPaymentEntryDao.update(req);
+      const data = await this.billInvoicesDao.update(req);
       return CommonRes.CREATED(
         resMessage(this.initMesg).UPDATED,
         data,
@@ -143,5 +143,5 @@ class DirPaymentEntryController {
   };
 }
 
-export default DirPaymentEntryController;
+export default BillInvoicesController;
 

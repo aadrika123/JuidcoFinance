@@ -22,6 +22,7 @@ const voucherTypeRoute_1 = __importDefault(require("./route/voucherTypeRoute"));
 const voucherSubTypeRoute_1 = __importDefault(require("./route/voucherSubTypeRoute"));
 const subLedgerRoute_1 = __importDefault(require("./route/subLedgerRoute"));
 const voucherEntryRoute_1 = __importDefault(require("./route/documentation/voucherEntryRoute"));
+const billInvoicesRoute_1 = __importDefault(require("./route/transactions/billInvoicesRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -97,6 +98,8 @@ class FinanceRoute {
         // VOUCHER_ENTRY_ROUTES ///
         this.voucherEntryRoute = new voucherEntryRoute_1.default();
         this.voucherEntryRoute.configure(app, "18");
+        // Bill Invoice Entries ///
+        (new billInvoicesRoute_1.default()).configure(app, "19");
     }
 }
 exports.default = FinanceRoute;
