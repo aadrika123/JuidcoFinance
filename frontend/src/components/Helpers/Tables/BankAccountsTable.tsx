@@ -12,7 +12,7 @@ const BankAccountsTable: React.FC = () => {
   );
 
   const pathName = usePathname();
-  console.log(pathName)
+  console.log(pathName);
 
   return (
     <>

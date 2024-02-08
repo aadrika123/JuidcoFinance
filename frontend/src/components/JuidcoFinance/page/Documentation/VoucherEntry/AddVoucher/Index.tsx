@@ -130,12 +130,13 @@ export const AddVoucherEntry = () => {
   const addButton = (id: string) => {
     return (
       <>
-        <ViewIconButton onClick={() => onEditButton(id)} />
-        <ViewIconButton onClick={() => onRemoveButton(id)} />
+        <ViewIconButton variant="edit" onClick={() => onEditButton(id)} />
+        <ViewIconButton variant="view" onClick={() => onRemoveButton(id)} />
       </>
     );
   };
 
+  // Add Table
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
@@ -158,6 +159,8 @@ export const AddVoucherEntry = () => {
     },
   ];
 
+
+  // Add Input Fields
   const fields: FieldTypeProps[] = [
     {
       CONTROL: "input",
