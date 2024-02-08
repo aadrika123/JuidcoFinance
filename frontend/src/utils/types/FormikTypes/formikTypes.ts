@@ -22,6 +22,7 @@ export type FieldTypeProps = {
 
 export interface FormikWrapperProps {
   initialValues: object & FormValues;
+  enableReinitialize?: boolean;
   validationSchema: object;
   onSubmit: (values: FormValues, actions: FormikHelpers<FormValues>) => void;
   fields: FieldTypeProps[];

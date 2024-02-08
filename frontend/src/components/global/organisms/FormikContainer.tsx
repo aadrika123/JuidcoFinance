@@ -21,9 +21,11 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     onSubmit,
     fields,
     readonly = false,
-    onClose
+    onClose,
+    enableReinitialize
   } = props;
 
+  console.log(initialValues, "xyz")
   return (
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="mt-8">
@@ -31,6 +33,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
+          enableReinitialize={enableReinitialize}
         >
           {({
             values,

@@ -56,7 +56,7 @@ export const sidebarLinks: SidebarLinksProps = {
             { moduleName: "Voucher Entry", path: "/finance/documentation/voucher-entry" },
             {
               moduleName: "Cheque Issue Entry",
-              path: "/vendor",
+              path: "/finance/documentation/cheque-issue-entry",
             },
             {
               moduleName: "Stop Payment Order ",

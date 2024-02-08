@@ -8,7 +8,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export const HeroVoucherEntry = () => {
+export const HeroChequeIssueEntry = () => {
   const pathName = usePathname();
   const router = useRouter();
 
@@ -40,7 +40,7 @@ export const HeroVoucherEntry = () => {
 
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
-    { name: "voucher_no", caption: "Voucher No", width: "w-[15%]" },
+    { name: "voucher_no", caption: "Issue Date", width: "w-[15%]" },
     { name: "voucher_date", caption: "Voucher Date", width: "w-[10%]" },
     { name: "voucher_type", caption: "Voucher Type", width: "w-[15%]" },
     { name: "narration", caption: "Narration", width: "w-[40%]" },
