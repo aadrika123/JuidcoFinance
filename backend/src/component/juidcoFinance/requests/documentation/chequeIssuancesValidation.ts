@@ -13,6 +13,7 @@ export interface ChequeIssuancesRequestData {
     module_id: number,
     issue_date: Date,
     cheque_no: string,
+    amount: number,
 }
 
 const chequeIssuancesSchema = Joi.object({
@@ -27,6 +28,7 @@ const chequeIssuancesSchema = Joi.object({
     module_id: Joi.number().required(),
     issue_date: Joi.date().required(),
     cheque_no: Joi.string().required(),
+    amount: Joi.number().required(),
 })
 
 export const chequeIssuancesValidation = Joi.array().items(
@@ -48,6 +50,7 @@ export const requestData = (req: Request): ChequeIssuancesRequestData => {
         module_id: req.body.module_id,
         issue_date: req.body.issue_date,
         cheque_no: req.body.cheque_no,
+        amount: req.body.amount,
     };
 };
 export const multiRequestData = (req: Request): ChequeIssuancesRequestData[] => {
@@ -65,6 +68,7 @@ export const multiRequestData = (req: Request): ChequeIssuancesRequestData[] => 
             module_id: item.module_id,
             issue_date: item.issue_date,
             cheque_no: item.cheque_no,
+            amount: item.amount,
         });
     }
     return data;

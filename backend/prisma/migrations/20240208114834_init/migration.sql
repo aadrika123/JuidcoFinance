@@ -383,6 +383,7 @@ CREATE TABLE "cheque_issuances" (
     "module_id" INTEGER NOT NULL,
     "issue_date" TIMESTAMP(3) NOT NULL,
     "cheque_no" TEXT NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 

@@ -78,6 +78,7 @@ class ChequeIssuancesDao {
         },
         issue_date: true,
         cheque_no: true,
+        amount: true,
         created_at: true,
         updated_at: true,
 
@@ -188,6 +189,7 @@ class ChequeIssuancesDao {
         },
         issue_date: true,
         cheque_no: true,
+        amount: true,
         created_at: true,
         updated_at: true,
 

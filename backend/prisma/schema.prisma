@@ -454,6 +454,9 @@ model cheque_issuances{
 
 	issue_date          DateTime
 	cheque_no           String
+  amount              Float
+
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
+
