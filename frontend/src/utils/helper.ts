@@ -10,6 +10,11 @@ export default function goBack() {
   window.history.back();
 }
 
+export function DateFormatter(date: string) {
+  return new Date(date).toISOString().split("T")[0];
+}
+
+
 export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
     for (const key in obj) {

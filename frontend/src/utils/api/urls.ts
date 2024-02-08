@@ -62,8 +62,8 @@ export const FINANCE_URL: Urls = {
   VOUCHER_ENTRY_URL: {
     get: "/voucher-entry/get-all",
     create: "/direct-payment-entry/create",
-    update: "",
-    getById: "",
+    update: "/voucher-entry/update",
+    getById: "/voucher-entry/get-by-id",
   },
 
   PAYMENT_TYPE_URL: {

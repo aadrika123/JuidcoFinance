@@ -27,6 +27,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     fields,
     readonly = false,
     onClose,
+    enableReinitialize,
   } = props;
 
 
@@ -96,6 +97,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
+          enableReinitialize={enableReinitialize}
         >
           {({
             values,

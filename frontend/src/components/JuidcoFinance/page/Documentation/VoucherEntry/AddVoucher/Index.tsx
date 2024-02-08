@@ -42,7 +42,6 @@ export const AddVoucherEntry = () => {
   useEffect(() => {
     dispatch(openPopup());
   }, []);
-  
 
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: VoucherDataProps) => {
@@ -84,7 +83,6 @@ export const AddVoucherEntry = () => {
     }
     dispatch(closePopup());
   };
-
 
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
@@ -130,12 +128,13 @@ export const AddVoucherEntry = () => {
   const addButton = (id: string) => {
     return (
       <>
-        <ViewIconButton onClick={() => onEditButton(id)} />
-        <ViewIconButton onClick={() => onRemoveButton(id)} />
+        <ViewIconButton variant="edit" onClick={() => onEditButton(id)} />
+        <ViewIconButton variant="view" onClick={() => onRemoveButton(id)} />
       </>
     );
   };
 
+  // Add Table
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
@@ -158,13 +157,14 @@ export const AddVoucherEntry = () => {
     },
   ];
 
+  // Add Input Fields
   const fields: FieldTypeProps[] = [
     {
       CONTROL: "input",
       HEADER: "Voucher Date",
       ACCESSOR: "voucher_date",
       PLACEHOLDER: "DD/MM/YYYY",
-      TYPE:"date"
+      TYPE: "date",
     },
     {
       CONTROL: "select",
@@ -220,7 +220,7 @@ export const AddVoucherEntry = () => {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
-      TYPE: "number"
+      TYPE: "number",
     },
   ];
 
