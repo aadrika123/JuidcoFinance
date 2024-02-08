@@ -21,6 +21,7 @@ import VoucherEntryRoute from "./route/documentation/voucherEntryRoute";
 import BillInvoicesRoute from "./route/transactions/billInvoicesRoute";
 import BillPaymentEntryRoute from "./route/transactions/billPaymentEntryRoute";
 import ChequeIssuancesRoute from "./route/documentation/ChequeIssuancesRoute";
+import BankRoute from "./route/bankRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -145,6 +146,8 @@ class FinanceRoute {
     (new BillPaymentEntryRoute()).configure(app, "20");
 
     (new ChequeIssuancesRoute()).configure(app, "21");
+
+    (new BankRoute()).configure(app, "22");
   }
 }
 

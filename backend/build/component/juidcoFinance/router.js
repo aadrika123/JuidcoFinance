@@ -25,6 +25,7 @@ const voucherEntryRoute_1 = __importDefault(require("./route/documentation/vouch
 const billInvoicesRoute_1 = __importDefault(require("./route/transactions/billInvoicesRoute"));
 const billPaymentEntryRoute_1 = __importDefault(require("./route/transactions/billPaymentEntryRoute"));
 const ChequeIssuancesRoute_1 = __importDefault(require("./route/documentation/ChequeIssuancesRoute"));
+const bankRoute_1 = __importDefault(require("./route/bankRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -104,6 +105,7 @@ class FinanceRoute {
         (new billInvoicesRoute_1.default()).configure(app, "19");
         (new billPaymentEntryRoute_1.default()).configure(app, "20");
         (new ChequeIssuancesRoute_1.default()).configure(app, "21");
+        (new bankRoute_1.default()).configure(app, "22");
     }
 }
 exports.default = FinanceRoute;
