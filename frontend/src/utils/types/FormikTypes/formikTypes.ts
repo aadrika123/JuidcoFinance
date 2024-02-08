@@ -1,6 +1,14 @@
 import { FormikHelpers } from "formik";
 import { VoucherDataProps } from "../voucher_entry_types";
 
+export interface FormikErrors {
+  [key: string]: string | undefined;
+}
+
+export interface FormikTouched {
+  [key: string]: boolean | undefined;
+}
+
 export interface Choice {
   key: string;
   value: string;
@@ -17,6 +25,8 @@ export type FieldTypeProps = {
   API?: string;
   OPTIONS?: Choice[];
   TYPE?: string;
+  ADDITIONAL?: FieldTypeProps[];
+  TITLE?: string;
 };
 
 
