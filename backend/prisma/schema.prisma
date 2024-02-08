@@ -148,6 +148,7 @@ model employees {
   cheque_book_entries  cheque_book_entries[]
   bill_payment_entries bill_payment_entries[]
   dir_payment_entries  dir_payment_entries[]
+  cheque_issuances     cheque_issuances[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -172,6 +173,7 @@ model adminis_wards {
   receipt_entries      receipt_entries[]
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
+  cheque_issuances     cheque_issuances[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -182,9 +184,12 @@ model grants {
   name                String
   remark              String
   dir_payment_entries dir_payment_entries[]
+  cheque_issuances     cheque_issuances[]
   created_at          DateTime              @default(now()) @map("created_at")
   updated_at          DateTime              @updatedAt @map("updated_at")
 }
+
+
 
 /// Direct Payment Entry
 model dir_payment_entries {
@@ -218,6 +223,7 @@ model bill_types {
   remark               String?
   bill_payment_entries bill_payment_entries[]
   bill_invoice_entries bill_invoices[]
+  cheque_issuances     cheque_issuances[]
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -313,7 +319,8 @@ model modules {
   id         Int             @id @default(autoincrement())
   name       String
   remark     String?
-  // receipts    receipt_entries[]
+  // receipts             receipt_entries[]
+  cheque_issuances     cheque_issuances[]
   created_at DateTime        @default(now()) @map("created_at")
   updated_at DateTime        @updatedAt @map("updated_at")
 }
@@ -374,6 +381,19 @@ model bill_stages {
 }
 
 
+/// Banks
+model banks {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  remark              String
+
+  cheque_issuances     cheque_issuances[]
+  created_at          DateTime              @default(now()) @map("created_at")
+  updated_at          DateTime              @updatedAt @map("updated_at")
+}
+
+
+
 //// Bill Invoice Table : Managed By: Bijoy Paitandi
 model bill_invoices{
   id                      Int             @id @default(autoincrement())
@@ -406,4 +426,34 @@ model bill_invoices{
   updated_at              DateTime        @updatedAt @map("updated_at")
 }
 
+////cheque_issuances: Managed by: Bijoy Paitandi
+model cheque_issuances{
+	id                  Int                 @id @default(autoincrement())
+	voucher_no          Int
+	voucher_date        DateTime
 
+	bill_type_id        Int
+  bill_type           bill_types          @relation(fields: [bill_type_id], references: [id])
+	
+  narration           String
+	
+  admin_ward_id       Int
+	admin_ward         adminis_wards       @relation(fields: [admin_ward_id], references: [id])
+
+  payee_id            Int
+  payee               employees           @relation(fields: [payee_id], references: [id])
+
+	grant_id            Int
+  grant               grants              @relation(fields: [grant_id], references: [id])
+
+	bank_id             Int
+  bank                banks               @relation(fields: [bank_id], references: [id])
+
+	module_id           Int
+  module              modules             @relation(fields: [module_id], references: [id])
+
+	issue_date          DateTime
+	cheque_no           String
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

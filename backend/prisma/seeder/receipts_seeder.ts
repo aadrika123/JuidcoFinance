@@ -19,8 +19,7 @@ const receipts_seeder = async () => {
 
   const number_of_receipts = 10;
   for(let i=0;i<number_of_receipts; i++){
-    const record: receipt_entries ={
-      id: i+1,
+    const record ={
       receipt_no: "R"+(i+1),
       date: faker.date.past(),
       paid_by: faker.company.name(),
@@ -33,7 +32,7 @@ const receipts_seeder = async () => {
 
       admin_ward_id: random_one(admin_ward_ids),
       receipt_type_id: random_one(receipt_type_ids),
-      module_id: random_one(module_ids),
+      module_id: 1,
       subledger_id: random_one(subledger_ids),
     };
 
