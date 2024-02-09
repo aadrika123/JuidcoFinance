@@ -83,7 +83,7 @@ interface DirPaymentEntryRequestData {
 }
 
 interface BillPaymentEntryRequestData {
-  bill_no: number,
+  bill_no: string,
   bill_type_id: number,
   bill_entry_date: string,
   department_id: number,

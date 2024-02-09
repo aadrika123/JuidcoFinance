@@ -236,7 +236,7 @@ model bill_types {
 /// Bills Payment Entry
 model bill_payment_entries {
   id                Int           @id @default(autoincrement())
-  bill_no           Int
+  bill_no           String
   
   bill_type_id      Int
   bill_type         bill_types    @relation(fields: [bill_type_id], references: [id])
@@ -406,7 +406,7 @@ model banks {
 //// Bill Invoice Table : Managed By: Bijoy Paitandi
 model bill_invoices{
   id                      Int             @id @default(autoincrement())
-  bill_no                 Int
+  bill_no                 String
   
   type_id                 Int
   type                    bill_types      @relation(fields: [type_id], references: [id])
