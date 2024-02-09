@@ -30,7 +30,6 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     enableReinitialize,
   } = props;
 
-
   /////////////////////////// Generating Fields ///////////////////////////////
   const generateFields = (
     n: any,

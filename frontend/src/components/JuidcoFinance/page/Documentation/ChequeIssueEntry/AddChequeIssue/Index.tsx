@@ -7,10 +7,10 @@ import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
-import { VoucherDataProps } from "@/utils/types/voucher_entry_types";
-import { voucherSchema } from "@/utils/validation/documentation/voucher_entry.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
+import { ChequeIssueEntryData } from "@/utils/types/cheque_issue_entry_types";
+import { chequeIssueValidationSchema } from "@/utils/validation/documentation/cheque_issue_entry.validation";
 
 interface UpdatedModeType {
   id: number | string;
@@ -19,38 +19,35 @@ interface UpdatedModeType {
 
 const Hoc = PopupFormikHOC(FormikWrapper);
 
-export const AddVoucherEntry = () => {
+export const AddChequeIssueEntry = () => {
   const dispatch = useDispatch();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
     isOnEdit: false,
   });
-  const initialValues: VoucherDataProps = {
+  const [data, setData] = useState<ChequeIssueEntryData[]>([]);
+  const [initialData, setInitialData] = useState<ChequeIssueEntryData>({
+    voucher_no: 0,
     voucher_date: "",
-    voucher_type_id: 0,
+    bill_type_id: 0,
     narration: "",
-    department_id: 0,
-    adminis_ward_id: 0,
-    voucher_sub_id: 0,
-    sub_ledger_id: 0,
-    amount: undefined,
-    dr_cr: 0,
-  };
-  const [data, setData] = useState<VoucherDataProps[]>([]);
-  const [initialData, setInitialData] =
-    useState<VoucherDataProps>(initialValues);
+    admin_ward_id: 0,
+    payee_id: 0,
+    grant_id: 0,
+    bank_id: 0,
+    module_id: 0,
+    issue_date: "",
+    cheque_no: "",
+    amount: 0,
+  });
 
   /////////////// Show Form Popup on Load //////////////////////
   useEffect(() => {
     dispatch(openPopup());
   }, []);
 
-  function resetInitialValue() {
-    setInitialData(initialValues);
-  }
-
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
-  const onSubmit = (values: any) => {
+  const onSubmit = (values: any): void => {
     if (!isUpdateMode.isOnEdit) {
       setData((prev) => [...prev, { id: prev.length + 1, ...values }]);
     } else {
@@ -59,26 +56,26 @@ export const AddVoucherEntry = () => {
           if (item.id === isUpdateMode.id) {
             return {
               ...item,
-              adminis_ward_id: values.adminis_ward_id,
-              adminis_ward_id_name:
-                values.adminis_ward_id_name || item.adminis_ward_id_name,
-              amount: values.amount,
-              department_id: values.department_id,
-              department_id_name:
-                values.department_id_name || item.department_id_name,
-              dr_cr: values.dr_cr,
-              dr_cr_name: values.dr_cr_name || item.dr_cr_name,
-              narration: values.narration,
-              sub_ledger_id: values.sub_ledger_id,
-              sub_ledger_id_name:
-                values.sub_ledger_id_name || item.sub_ledger_id_name,
-              voucher_date: values.voucher_date,
-              voucher_sub_id: values.voucher_sub_id,
-              voucher_sub_id_name:
-                values.voucher_sub_id_name || item.voucher_sub_id_name,
-              voucher_type_id: values.voucher_type_id,
-              voucher_type_id_name:
-                values.voucher_type_id_name || item.voucher_type_id_name,
+              voucher_no: item.voucher_no,
+              voucher_date: item.voucher_date,
+              bill_type_id: item.bill_type_id,
+              bill_type_id_name:
+                values.bill_type_id_name || item.bill_type_id_name,
+              narration: item.narration,
+              admin_ward_id: item.admin_ward_id,
+              admin_ward_id_name:
+                values.admin_ward_id_name || item.admin_ward_id,
+              payee_id: item.payee_id,
+              payee_id_name: values.payee_id_name || item.payee_id_name,
+              grant_id: item.grant_id,
+              grant_id_name: values.grant_id_name || item.grant_id_name,
+              bank_id: item.bank_id,
+              bank_id_name: values.bank_id_name || item.bank_id_name,
+              module_id: item.module_id,
+              module_id_name: values.module_id_name || item.module_id_name,
+              issue_date: item.issue_date,
+              cheque_no: item.cheque_no,
+              amount: item.amount,
             };
           } else {
             return item;
@@ -88,7 +85,6 @@ export const AddVoucherEntry = () => {
       });
     }
     dispatch(closePopup());
-    resetInitialValue();
   };
 
   ///////////////// Handling Total Count ///////////////
@@ -118,15 +114,20 @@ export const AddVoucherEntry = () => {
     setIsUpdateMode((prev) => ({ ...prev, isOnEdit: true, id: Id }));
     setInitialData((prev) => ({
       ...prev,
-      voucher_date: data[Id - 1]?.voucher_date,
-      voucher_type_id: data[Id - 1]?.voucher_type_id,
-      narration: data[Id - 1]?.narration,
-      department_id: data[Id - 1]?.department_id,
-      adminis_ward_id: data[Id - 1]?.adminis_ward_id,
-      voucher_sub_id: data[Id - 1]?.voucher_sub_id,
-      sub_ledger_id: data[Id - 1]?.sub_ledger_id,
-      amount: data[Id - 1]?.amount,
-      dr_cr: data[Id - 1]?.dr_cr,
+      voucher_no: data[Id - 1].voucher_no,
+      voucher_date: data[Id - 1].voucher_date,
+      bill_type_id: data[Id - 1].bill_type_id,
+
+      narration: data[Id - 1].narration,
+      admin_ward_id: data[Id - 1].admin_ward_id,
+
+      payee_id: data[Id - 1].payee_id,
+      grant_id: data[Id - 1].grant_id,
+      bank_id: data[Id - 1].bank_id,
+      module_id: data[Id - 1].module_id,
+      issue_date: data[Id - 1].issue_date,
+      cheque_no: data[Id - 1].cheque_no,
+      amount: data[Id - 1].amount,
     }));
     dispatch(openPopup());
   };
@@ -146,18 +147,18 @@ export const AddVoucherEntry = () => {
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
       name: "sub_ledger_id_name",
-      caption: "Sub-Ledger/Name",
+      caption: "Issue date",
       width: "w-[25%]",
+    },
+    { name: "", caption: "Module Name ", width: "w-[20%]" },
+    {
+      name: "voucher_type_id_name",
+      caption: "Cheque No.",
+      width: "w-[20%]",
     },
     { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
     {
-      name: "voucher_type_id_name",
-      caption: "Voucher Type",
-      width: "w-[20%]",
-    },
-    { name: "dr_cr_name", caption: "Dr/Cr", width: "w-[15%]" },
-    {
-      name: "branch",
+      name: "",
       caption: "Edit/Remove",
       width: "w-[10%]",
       value: addButton,
@@ -168,24 +169,30 @@ export const AddVoucherEntry = () => {
   const fields: FieldTypeProps[] = [
     {
       CONTROL: "input",
-      HEADER: "Voucher Date",
+      HEADER: "Payment Voucher No",
+      ACCESSOR: "voucher_no",
+      PLACEHOLDER: "XYZ Value",
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Payment Voucher Date",
       ACCESSOR: "voucher_date",
-      PLACEHOLDER: "DD/MM/YYYY",
+      PLACEHOLDER: "YYYY-MM-DD",
       TYPE: "date",
     },
     {
       CONTROL: "select",
-      HEADER: "Department Name",
-      ACCESSOR: "department_id",
-      PLACEHOLDER: "Select Department",
-      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Voucher Type",
-      ACCESSOR: "voucher_type_id",
-      PLACEHOLDER: "Select Voucher Type",
+      HEADER: "Type of Bill",
+      ACCESSOR: "bill_type_id",
+      PLACEHOLDER: "Select Bill Type",
       API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+    },
+
+    {
+      CONTROL: "input",
+      HEADER: "Narration",
+      ACCESSOR: "narration",
+      PLACEHOLDER: "XYZ Value",
     },
 
     {
@@ -195,39 +202,59 @@ export const AddVoucherEntry = () => {
       PLACEHOLDER: "Select Administration Ward",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
+
     {
       CONTROL: "select",
-      HEADER: "Voucher Sub Type",
-      ACCESSOR: "voucher_sub_id",
-      PLACEHOLDER: "Select Voucher Sub Type",
-      API: `${FINANCE_URL.VOUCHER_SUB_TYPE_URL.get}`,
+      HEADER: "Payee Name",
+      ACCESSOR: "payee_id",
+      PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
     {
       CONTROL: "select",
-      HEADER: "Dr/Cr",
-      ACCESSOR: "dr_cr",
-      PLACEHOLDER: "Select Dr/Cr",
-      API: "/bill-type/get",
+      HEADER: "Grant",
+      ACCESSOR: "grant_id",
+      PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
     {
       CONTROL: "select",
-      HEADER: "Sub Ledger/Name",
-      ACCESSOR: "sub_ledger_id",
-      PLACEHOLDER: "Select Dr/Cr",
-      API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
+      HEADER: "Bank Name",
+      ACCESSOR: "bank_id",
+      PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
+
     {
-      CONTROL: "textarea",
-      HEADER: "Narration",
-      ACCESSOR: "narration",
+      CONTROL: "select",
+      HEADER: "Module Name",
+      ACCESSOR: "module_id",
+      PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
+
+    {
+      CONTROL: "input",
+      HEADER: "Issue Date",
+      ACCESSOR: "issue_date",
+      PLACEHOLDER: "XYZ Value",
+      TYPE:"date"
+    },
+
+    {
+      CONTROL: "input",
+      HEADER: "Cheque No",
+      ACCESSOR: "cheque_no",
+      PLACEHOLDER: "XYZ Value",
+    },
+
     {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
-      TYPE: "number",
+      PLACEHOLDER: "XYZ Value",
     },
   ];
 
@@ -241,12 +268,10 @@ export const AddVoucherEntry = () => {
   return (
     <>
       <Hoc
-        title="Add New Voucher"
         initialValues={initialData}
-        validationSchema={voucherSchema}
+        validationSchema={chequeIssueValidationSchema}
         onSubmit={onSubmit}
         fields={fields}
-        resetInitialValue={resetInitialValue}
       />
       <TableWithCount
         data={data}

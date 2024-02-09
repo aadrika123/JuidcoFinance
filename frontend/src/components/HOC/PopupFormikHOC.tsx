@@ -25,7 +25,7 @@ const PopupFormikHOC = <P extends FormikWrapperProps>(
         {isPopupOpen && (
           <>
             <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-            <section className="fixed left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[11.73831rem] z-50">
+            <section className="fixed left-1/2 top-[10rem] transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[11.73831rem] z-50">
               <div className="relative z-50 ">
                 <Popup title={props.title || "Add"}>
                   <WrappedComponent {...props} onClose={handleClosePopup} />

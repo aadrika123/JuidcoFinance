@@ -41,9 +41,10 @@ export const HeroChequeIssueEntry = () => {
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
     { name: "voucher_no", caption: "Issue Date", width: "w-[15%]" },
-    { name: "voucher_date", caption: "Voucher Date", width: "w-[10%]" },
-    { name: "voucher_type", caption: "Voucher Type", width: "w-[15%]" },
-    { name: "narration", caption: "Narration", width: "w-[40%]" },
+    { name: "voucher_date", caption: "Module Name", width: "w-[10%]" },
+    { name: "voucher_type", caption: "Cheque No", width: "w-[15%]" },
+    { name: "narration", caption: "Amount", width: "w-[40%]" },
+    { name: "narration", caption: "Department", width: "w-[40%]" },
     // { name: "print", caption: "Print", value: pButton, width: "w-[5%]" },
     {
       name: "View / Edit",
