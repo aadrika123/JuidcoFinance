@@ -3,8 +3,6 @@
 import React from "react";
 
 import ChequebookMasterHeader from "./Header/ChequebookMasterHeader";
-import TableWithSearch from "@/components/molecules/TableWithSearch";
-import APIs from "@/json/apis.json";
 
 
 /**
@@ -16,9 +14,9 @@ import APIs from "@/json/apis.json";
 
 export const HeroChequebookMaster = () => {
 
-  const onViewButtonClick = () => {
-    window.alert("Not defined yet");
-  }
+  // const onViewButtonClick = () => {
+  //   window.alert("Not defined yet");
+  // }
   
   return (
     <>
@@ -29,7 +27,7 @@ export const HeroChequebookMaster = () => {
       <section className="mt-8">
       {/* <ChequebookList title="List of chequebooks" /> */}
 
-      <TableWithSearch
+      {/* <TableWithSearch
         api={`${APIs.chequebook_master$get}`}
         numberOfRowsPerPage={5}
         title="Chequebook List"
@@ -47,7 +45,7 @@ export const HeroChequebookMaster = () => {
           {name: 'issuer_name', caption: "Issuer Name"},
           {name: 'remarks', caption: "Remarks"},
         ]}
-        />
+        /> */}
       </section>
     </>
   );

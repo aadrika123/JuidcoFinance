@@ -32,12 +32,13 @@ interface Employee{
 
 const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
   const [field, meta, helpers] = useField(props.name);
-  const { value } = meta;
   const { setValue } = helpers;
 
   const fieldId = "id_" + props.name;
 
-
+  console.log(field);
+  console.log(meta);
+  
   const fetchData = async (): Promise<Employee[]> => {
     const res = await axios({
       url: props.api,

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "@/lib/axiosConfig";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import Loader from "@/components/Helpers/Basic/Loader";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
@@ -12,7 +12,7 @@ import ChequebookList from "../ChequebokList/ChequebookList";
 import { SubHeading } from "@/components/Helpers/Heading";
 import InputBox from "@/components/Helpers/InputBox";
 import * as Yup from "yup";
-import type { AddBankDetailsData, AccountTableData } from "@/utils/types/types";
+import type { AddBankDetailsData } from "@/utils/types/types";
 import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
 

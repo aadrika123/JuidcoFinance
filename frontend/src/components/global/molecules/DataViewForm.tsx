@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import FilledDisabledInputBox from "../Helpers/FilledDisabledInputBox";
 import axios from "axios";
 import Routes from "@/json/routes.json";
 import { useQuery } from "react-query";
-import Loader from "../Helpers/Basic/Loader";
 import BackButton from "../atoms/BackButton";
 import PrintButton from "../atoms/PrintButton";
+import FilledDisabledInputBox from "@/components/Helpers/FilledDisabledInputBox";
+import Loader from "../atoms/Loader";
 
 interface DropDownListItem{
     caption: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import DataViewForm from "@/components/molecules/DataViewForm";
+import DataViewForm from "@/components/global/molecules/DataViewForm";
 import APIs from "@/json/apis.json";
 import Routes from "@/json/routes.json";
 import React from "react";

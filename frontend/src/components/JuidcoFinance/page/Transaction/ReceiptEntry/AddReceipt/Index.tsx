@@ -3,12 +3,7 @@
 import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import React from "react";
-import { useQuery} from "react-query";
-import axios from "axios";
-import { ReceiptTableData } from "@/utils/types/receipt_entry_types";
-import Loader from "@/components/Helpers/Basic/Loader";
-import ReceiptTable from "@/components/Helpers/Tables/ReceiptTable";
-import APIs from "@/json/apis.json";
+
 import ReceiptTableWithSubtotal from "@/components/Helpers/Tables/ReceiptTableWithSubtotal";
 
 

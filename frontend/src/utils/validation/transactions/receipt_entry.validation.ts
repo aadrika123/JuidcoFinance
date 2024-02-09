@@ -1,4 +1,3 @@
-import * as Yup from "yup";
 
 export const initialReceiptDetails = {
   data: new Date(),
