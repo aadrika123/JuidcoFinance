@@ -4,6 +4,7 @@
  * status: Open
  */
 
+
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"
@@ -14,7 +15,10 @@ type FinanceUrlKeys =
   | "ADMINIS_WARD_URL"
   | "GRANT_URL"
   | "DEPARTMENT_URL"
-  | "VOUCHER_ENTRY_URL";
+  | "VOUCHER_ENTRY_URL"
+  | "VOUCHER_TYPE_URL"
+  | "VOUCHER_SUB_TYPE_URL"
+  | "SUB_LEDGER_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -41,10 +45,6 @@ export const FINANCE_URL: Urls = {
     getById: "/vendor-master/get",
   },
 
-  VENDOT_TYPE_URL: {
-    get: "/vendor-type/get",
-  },
-
   CHEQUEBOOK_MASTER_URL: {
     get: "/vendor-master/get?limit=10",
     create: "/api/finance/add-vendor-details",
@@ -53,17 +53,17 @@ export const FINANCE_URL: Urls = {
   },
 
   DIRECT_PAYMENT_ENTRY_URL: {
-    get: "/direct-payment-entry/get-all?limit=10",
+    get: "/direct-payment-entry/get-all",
     create: "/direct-payment-entry/create",
     update: "/direct-payment-entry/update",
     getById: "direct-payment-entry/get-by-id",
   },
 
   VOUCHER_ENTRY_URL: {
-    get: "/voucher-entry/get?limit=10",
+    get: "/voucher-entry/get-all",
     create: "/direct-payment-entry/create",
-    update: "",
-    getById: "",
+    update: "/voucher-entry/update",
+    getById: "/voucher-entry/get-by-id",
   },
 
   PAYMENT_TYPE_URL: {
@@ -80,5 +80,19 @@ export const FINANCE_URL: Urls = {
 
   DEPARTMENT_URL: {
     get: "/department/get",
+  },
+
+  VOUCHER_TYPE_URL: {
+    get: "/voucher-type/get",
+  },
+
+  VOUCHER_SUB_TYPE_URL: {
+    get: "/voucher-sub-type/get",
+  },
+  VENDOT_TYPE_URL: {
+    get: "/vendor-type/get",
+  },
+  SUB_LEDGER_URL: {
+    get: "/sub-ledger/get",
   },
 };

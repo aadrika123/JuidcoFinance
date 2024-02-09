@@ -1,5 +1,5 @@
 import PageLayout from "@/components/Layouts/PageLayout";
-import { HeroViewChequebook } from "@/components/JuidcoFinance/Masters/ChequebookMaster/ViewChequebook/Index";
+import { HeroViewChequebook } from "@/components/JuidcoFinance/page/Masters/ChequebookMaster/ViewChequebook/Index";
 import React from "react";
 
 export default function Home({ params }: { params: { id: string } }) {
