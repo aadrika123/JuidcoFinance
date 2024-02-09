@@ -43,7 +43,6 @@ export const HeroBillPaymentEntry = () => {
     },
   });
 
-
   return (
     <>
       <Toaster />
@@ -54,7 +53,7 @@ export const HeroBillPaymentEntry = () => {
             validationSchema={PaymentDetailsSchema}
             onSubmit={(values) => {
               console.log("first dsf dfsd", values);
-              
+
               // mutate(values);
             }}
           >

@@ -5,7 +5,7 @@ import React from "react";
 import axios from "@/lib/axiosConfig";
 import InputBox from "@/components/Helpers/InputBox";
 import { useMutation, useQueryClient } from "react-query";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import { Formik } from "formik";
@@ -27,6 +27,7 @@ export const HeroAddVendor = () => {
   const createVendorDetails = async (
     values: VendorDetailsData
   ): Promise<VendorDetailsData> => {
+    console.log(values, "lolo");
     const res = await axios({
       url: `${FINANCE_URL.VENDOR_MASTER_URL.create}`,
       method: "POST",
@@ -43,19 +44,19 @@ export const HeroAddVendor = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries("vendor-list");
-      goBack();
+      setTimeout(() => {
+        goBack();
+      }, 1000);
     },
   });
 
-  console.log(VendorDetailsSchema, "lol");
-
   return (
     <>
+      <Toaster />
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Add Vendor</SubHeading>
         </div>
-
 
         <div className="mt-8">
           <Formik
@@ -224,9 +225,9 @@ export const HeroAddVendor = () => {
                     Back
                   </PrimaryButton>
 
-                  <PrimaryButton buttonType="button" variant={"cancel"}>
+                  {/* <PrimaryButton buttonType="button" variant={"cancel"}>
                     Reset
-                  </PrimaryButton>
+                  </PrimaryButton> */}
 
                   <PrimaryButton buttonType="submit" variant="primary">
                     Save

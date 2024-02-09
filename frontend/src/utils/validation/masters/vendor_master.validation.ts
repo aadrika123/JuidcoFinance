@@ -24,8 +24,8 @@ export const VendorDetailsSchema = Yup.object().shape({
 });
 
 export const initialVendorDetails: VendorDetailsData = {
-  vendor_type_id: 0,
-  department_id: 0,
+  vendor_type_id: "",
+  department_id: "",
   name: "",
   mobile_no: "",
   tin_no: "",

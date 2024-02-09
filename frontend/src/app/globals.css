@@ -19,3 +19,7 @@ table tbody::-webkit-scrollbar {
   /* Set display to none */
   display: none;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

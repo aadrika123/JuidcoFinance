@@ -1,18 +1,24 @@
+/**
+ * Author: Krish
+ * date: 02-09-2024
+ * status: open
+ */
+
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
-import { VoucherDataProps } from "@/utils/types/voucher_entry_types";
-import { voucherSchema } from "@/utils/validation/documentation/voucher_entry.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter } from "@/utils/helper";
+import { DateFormatter, filterValBefStoring } from "@/utils/helper";
 import { QueryClient, useMutation } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
+import { ChequeIssueEntryData } from "@/utils/types/cheque_issue_entry_types";
+import { chequeIssueValidationSchema } from "@/utils/validation/documentation/cheque_issue_entry.validation";
 
 export const EditChequeIssueEntry = ({
   ChequeIssueID,
@@ -21,26 +27,29 @@ export const EditChequeIssueEntry = ({
 }) => {
   const searchParams = useSearchParams().get("mode");
 
-  const [initialData, setInitialData] = useState<VoucherDataProps>({
+  const [initialData, setInitialData] = useState<ChequeIssueEntryData>({
+    voucher_no: 0,
     voucher_date: "",
-    voucher_type_id: 0,
+    bill_type_id: 0,
     narration: "",
-    department_id: 0,
-    adminis_ward_id: 0,
-    voucher_sub_id: 0,
-    sub_ledger_id: 0,
-    amount: undefined,
-    dr_cr: 1,
+    admin_ward_id: 0,
+    payee_id: 0,
+    grant_id: 0,
+    bank_id: 0,
+    module_id: 0,
+    issue_date: "",
+    cheque_no: "",
+    amount: 0,
   });
 
   const queryClient = new QueryClient();
 
-  // Get voucher entry bv ID
+  // Get cheque issue entry bv ID
   useEffect(() => {
     (async function () {
       const res = await axios({
         method: "GET",
-        url: `${FINANCE_URL.VOUCHER_ENTRY_URL.getById}/${ChequeIssueID}`,
+        url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.getById}/${ChequeIssueID}`,
       });
       console.log(res.data.data);
 
@@ -48,43 +57,29 @@ export const EditChequeIssueEntry = ({
         return {
           ...prev,
           voucher_no: res.data.data.voucher_no,
-          adminis_ward_id: res.data.data.adminis_ward.id,
-          // adminis_ward_id_name:
-          //   res.data.data.adminis_ward_id_name ||
-          //   res.data.data.adminis_ward_id_name,
-          amount: res.data.data.amount,
-          department_id: res.data.data.department.id,
-          // department_id_name:
-          //   res.data.data.department_id_name ||
-          //   res.data.data.department_id_name,
-          // dr_cr: res.data.data.dr_cr,
-          // dr_cr_name: res.data.data.dr_cr_name || res.data.data.dr_cr_name,
-          narration: res.data.data.narration,
-          sub_ledger_id: res.data.data.sub_ledger.id,
-          // sub_ledger_id_name:
-          //   res.data.data.sub_ledger_id_name ||
-          //   res.data.data.sub_ledger_id_name,
           voucher_date: DateFormatter(res.data.data.voucher_date),
-          voucher_sub_id: res.data.data.voucher_sub_type.id,
-          // voucher_sub_id_name:
-          //   res.data.data.voucher_sub_id_name ||
-          //   res.data.data.voucher_sub_id_name,
-          voucher_type_id: res.data.data.voucher_type.id,
-          // voucher_type_id_name:
-          //   res.data.data.voucher_type_id_name ||
-          //   res.data.data.voucher_type_id_name,
+          bill_type_id: res.data.data.bill_type.id,
+          narration: res.data.data.narration,
+          admin_ward_id: res.data.data.admin_ward.id,
+          payee_id: res.data.data.payee.id,
+          grant_id: res.data.data.grant.id,
+          bank_id: res.data.data.bank.id,
+          module_id: res.data.data.module.id,
+          issue_date: DateFormatter(res.data.data.issue_date),
+          cheque_no: res.data.data.cheque_no,
+          amount: res.data.data.amount,
         };
       });
     })();
-  }, []);
+  }, [ChequeIssueID]);
 
-  // UPDATE VOUCHER DETAILS
-  const UpdateVoucherEntry = async (
-    values: VoucherDataProps
-  ): Promise<VoucherDataProps> => {
+  // UPDATE Cheque issue entry DETAILS
+  const UpdateChequeIssueEntry = async (
+    values: ChequeIssueEntryData
+  ): Promise<ChequeIssueEntryData> => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.VOUCHER_ENTRY_URL.update}`,
+        url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.update}`,
         method: "POST",
         data: {
           id: Number(ChequeIssueID),
@@ -98,32 +93,29 @@ export const EditChequeIssueEntry = ({
     }
   };
 
-  const { mutate } = useMutation<VoucherDataProps, Error, VoucherDataProps>(
-    UpdateVoucherEntry,
-    {
-      onSuccess: () => {
-        toast.success("Updated Voucher Entry");
-      },
-      onError: () => {
-        alert("Error updating Voucher Entry");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-    }
-  );
+  const { mutate } = useMutation<
+    ChequeIssueEntryData,
+    Error,
+    ChequeIssueEntryData
+  >(UpdateChequeIssueEntry, {
+    onSuccess: () => {
+      toast.success("Updated Voucher Entry");
+    },
+    onError: () => {
+      alert("Error updating Voucher Entry");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+  });
 
-  const onSubmit = (values: VoucherDataProps) => {
-    delete values.adminis_ward_id_name;
-    delete values.department_id_name;
-    delete values.sub_ledger_id_name;
-    delete values.voucher_sub_id_name;
-    delete values.voucher_type_id_name;
+  const onSubmit = (values: any) => {
     values.voucher_date = `${new Date(values.voucher_date).toISOString()}`;
-    mutate(values);
+    values.issue_date = `${new Date(values.issue_date).toISOString()}`;
+    mutate(filterValBefStoring(values));
   };
 
   // Add Input Fields
@@ -131,108 +123,120 @@ export const EditChequeIssueEntry = ({
     {
       CONTROL: "input",
       HEADER: "Payment Voucher No",
+      ACCESSOR: "voucher_no",
+      PLACEHOLDER: "XYZ Value",
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Payment Voucher Date",
       ACCESSOR: "voucher_date",
-      PLACEHOLDER: "DD/MM/YYYY",
+      PLACEHOLDER: "YYYY-MM-DD",
       TYPE: "date",
     },
     {
       CONTROL: "select",
-      HEADER: "Payment Voucher Date",
-      ACCESSOR: "department_id",
-      PLACEHOLDER: "Select Department",
-      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
-    },
-    {
-      CONTROL: "select",
       HEADER: "Type of Bill",
-      ACCESSOR: "voucher_type_id",
-      PLACEHOLDER: "Select Voucher Type",
+      ACCESSOR: "bill_type_id",
+      PLACEHOLDER: "Select Bill Type",
       API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
     },
 
     {
       CONTROL: "input",
       HEADER: "Narration",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "narration",
       PLACEHOLDER: "XYZ Value",
     },
 
     {
       CONTROL: "select",
       HEADER: "Administration Ward",
-      ACCESSOR: "adminis_ward_id",
+      ACCESSOR: "admin_ward_id",
       PLACEHOLDER: "Select Administration Ward",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Payee Name",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "payee_id",
       PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Grant",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "grant_id",
       PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.GRANT_URL.get}`,
     },
 
     {
-      CONTROL: "input",
-      HEADER: "Payment Voucher No",
-      ACCESSOR: "voucher_type_id",
+      CONTROL: "select",
+      HEADER: "Department",
+      ACCESSOR: "department_id",
       PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Bank Name",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "bank_id",
       PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Module Name",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "module_id",
       PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
-  
+
     {
       CONTROL: "input",
       HEADER: "Issue Date",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "issue_date",
       PLACEHOLDER: "XYZ Value",
+      TYPE: "date",
     },
 
     {
       CONTROL: "input",
       HEADER: "Cheque No",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "cheque_no",
       PLACEHOLDER: "XYZ Value",
     },
 
     {
       CONTROL: "input",
       HEADER: "Amount",
-      ACCESSOR: "voucher_type_id",
+      ACCESSOR: "amount",
       PLACEHOLDER: "XYZ Value",
+      TYPE: "number",
     },
   ];
+
+  const page_title =
+    searchParams === "edit"
+      ? "Edit Cheque Issue Entry"
+      : "View Cheque Issue Entry";
 
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Edit Cheque Issue Entry" variant="view" />
+      <HeaderWidget title={page_title} variant="view" />
       <FormikWrapper
         initialValues={initialData}
         enableReinitialize={true}
-        validationSchema={voucherSchema}
+        validationSchema={chequeIssueValidationSchema}
         onSubmit={onSubmit}
         fields={fields}
         readonly={searchParams === "view"}
+        title={""}
       />
     </>
   );

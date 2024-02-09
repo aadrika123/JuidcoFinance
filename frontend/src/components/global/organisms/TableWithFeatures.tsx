@@ -53,7 +53,7 @@ const TableWithFeatures = <T,>({
     });
 
     let data = res.data?.data;
-
+    console.log(data)
     if (data == null) {
       data = { totalPage: 0, data: [] };
     }

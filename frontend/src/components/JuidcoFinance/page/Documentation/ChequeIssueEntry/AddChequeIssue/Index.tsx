@@ -25,8 +25,7 @@ export const AddChequeIssueEntry = () => {
     id: "",
     isOnEdit: false,
   });
-  const [data, setData] = useState<ChequeIssueEntryData[]>([]);
-  const [initialData, setInitialData] = useState<ChequeIssueEntryData>({
+  const initialValues: ChequeIssueEntryData = {
     voucher_no: 0,
     voucher_date: "",
     bill_type_id: 0,
@@ -39,12 +38,19 @@ export const AddChequeIssueEntry = () => {
     issue_date: "",
     cheque_no: "",
     amount: 0,
-  });
+  };
+  const [data, setData] = useState<ChequeIssueEntryData[]>([]);
+  const [initialData, setInitialData] =
+    useState<ChequeIssueEntryData>(initialValues);
 
   /////////////// Show Form Popup on Load //////////////////////
   useEffect(() => {
     dispatch(openPopup());
   }, []);
+
+  function resetInitialValue() {
+    setInitialData(initialValues);
+  }
 
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any): void => {
@@ -85,6 +91,7 @@ export const AddChequeIssueEntry = () => {
       });
     }
     dispatch(closePopup());
+    resetInitialValue();
   };
 
   ///////////////// Handling Total Count ///////////////
@@ -117,10 +124,8 @@ export const AddChequeIssueEntry = () => {
       voucher_no: data[Id - 1].voucher_no,
       voucher_date: data[Id - 1].voucher_date,
       bill_type_id: data[Id - 1].bill_type_id,
-
       narration: data[Id - 1].narration,
       admin_ward_id: data[Id - 1].admin_ward_id,
-
       payee_id: data[Id - 1].payee_id,
       grant_id: data[Id - 1].grant_id,
       bank_id: data[Id - 1].bank_id,
@@ -146,13 +151,13 @@ export const AddChequeIssueEntry = () => {
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
-      name: "sub_ledger_id_name",
+      name: "issue_date",
       caption: "Issue date",
       width: "w-[25%]",
     },
-    { name: "", caption: "Module Name ", width: "w-[20%]" },
+    { name: "module_id_name", caption: "Module Name ", width: "w-[20%]" },
     {
-      name: "voucher_type_id_name",
+      name: "cheque_no",
       caption: "Cheque No.",
       width: "w-[20%]",
     },
@@ -221,6 +226,14 @@ export const AddChequeIssueEntry = () => {
 
     {
       CONTROL: "select",
+      HEADER: "Department",
+      ACCESSOR: "department_id",
+      PLACEHOLDER: "XYZ Value",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+    },
+
+    {
+      CONTROL: "select",
       HEADER: "Bank Name",
       ACCESSOR: "bank_id",
       PLACEHOLDER: "XYZ Value",
@@ -240,7 +253,7 @@ export const AddChequeIssueEntry = () => {
       HEADER: "Issue Date",
       ACCESSOR: "issue_date",
       PLACEHOLDER: "XYZ Value",
-      TYPE:"date"
+      TYPE: "date",
     },
 
     {
@@ -272,6 +285,8 @@ export const AddChequeIssueEntry = () => {
         validationSchema={chequeIssueValidationSchema}
         onSubmit={onSubmit}
         fields={fields}
+        resetInitialValue={resetInitialValue}
+        title={""}
       />
       <TableWithCount
         data={data}

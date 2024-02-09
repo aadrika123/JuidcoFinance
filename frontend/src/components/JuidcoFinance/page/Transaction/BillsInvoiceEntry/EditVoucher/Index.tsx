@@ -14,7 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
 
-export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
+export const EditBillsPaymentEntry = ({ BillsInvoiceID }: { BillsInvoiceID: string }) => {
   const searchParams = useSearchParams().get("mode");
 
   const [initialData, setInitialData] = useState<VoucherDataProps>({
@@ -36,7 +36,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
     (async function () {
       const res = await axios({
         method: "GET",
-        url: `${FINANCE_URL.VOUCHER_ENTRY_URL.getById}/${VoucherID}`,
+        url: `${FINANCE_URL.VOUCHER_ENTRY_URL.getById}/${BillsInvoiceID}`,
       });
       console.log(res.data.data);
 
@@ -83,7 +83,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
         url: `${FINANCE_URL.VOUCHER_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          id: Number(VoucherID),
+          id: Number(BillsInvoiceID),
           ...values,
         },
       });

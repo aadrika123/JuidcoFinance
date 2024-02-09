@@ -4,13 +4,13 @@
  * status: Open
  */
 
-
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"
   | "VENDOT_TYPE_URL"
   | "CHEQUEBOOK_MASTER_URL"
   | "DIRECT_PAYMENT_ENTRY_URL"
+  | "CHEQUE_ISSUE_ENTRY"
   | "PAYMENT_TYPE_URL"
   | "ADMINIS_WARD_URL"
   | "GRANT_URL"
@@ -64,6 +64,13 @@ export const FINANCE_URL: Urls = {
     create: "/direct-payment-entry/create",
     update: "/voucher-entry/update",
     getById: "/voucher-entry/get-by-id",
+  },
+
+  CHEQUE_ISSUE_ENTRY: {
+    get: "/cheque-issuances/get-all",
+    create: "/cheque-issuances/create",
+    update: "/cheque-issuances/update",
+    getById: "/cheque-issuances/get-by-id",
   },
 
   PAYMENT_TYPE_URL: {

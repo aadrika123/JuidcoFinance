@@ -19,7 +19,7 @@ interface UpdatedModeType {
 
 const Hoc = PopupFormikHOC(FormikWrapper);
 
-export const AddVoucherEntry = () => {
+export const AddBillsPaymentEntry = () => {
   const dispatch = useDispatch();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
@@ -49,8 +49,6 @@ export const AddVoucherEntry = () => {
     setInitialData(initialValues);
   }
 
-
-  console.log("first", data)
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
     if (!isUpdateMode.isOnEdit) {
@@ -148,18 +146,20 @@ export const AddVoucherEntry = () => {
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
       name: "sub_ledger_id_name",
-      caption: "Sub-Ledger/Name",
+      caption: "Bill Number",
       width: "w-[25%]",
     },
-    { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
+
     {
       name: "voucher_type_id_name",
-      caption: "Voucher Type",
+      caption: "Vendor Name",
       width: "w-[20%]",
     },
-    { name: "dr_cr_name", caption: "Dr/Cr", width: "w-[15%]" },
+    { name: "dr_cr_name", caption: "Department", width: "w-[15%]" },
+
+    { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
     {
-      name: "branch",
+      name: "edit/remove",
       caption: "Edit/Remove",
       width: "w-[10%]",
       value: addButton,
@@ -168,23 +168,25 @@ export const AddVoucherEntry = () => {
 
   // Add Input Fields
   const fields: FieldTypeProps[] = [
+    // Add Bill/Invoice
+    { TITLE: "Add Bill/Invoice" },
     {
       CONTROL: "input",
-      HEADER: "Voucher Date",
+      HEADER: "Bill Number",
       ACCESSOR: "voucher_date",
-      PLACEHOLDER: "DD/MM/YYYY",
-      TYPE: "date",
+      PLACEHOLDER: "000",
+      TYPE: "number",
     },
     {
       CONTROL: "select",
-      HEADER: "Department Name",
+      HEADER: "Bill Type",
       ACCESSOR: "department_id",
       PLACEHOLDER: "Select Department",
       API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
     {
-      CONTROL: "select",
-      HEADER: "Voucher Type",
+      CONTROL: "input",
+      HEADER: "Vendor Name",
       ACCESSOR: "voucher_type_id",
       PLACEHOLDER: "Select Voucher Type",
       API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
@@ -192,14 +194,62 @@ export const AddVoucherEntry = () => {
 
     {
       CONTROL: "select",
-      HEADER: "Administration Ward",
+      HEADER: "Department",
       ACCESSOR: "adminis_ward_id",
       PLACEHOLDER: "Select Administration Ward",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
     {
+      CONTROL: "input",
+      HEADER: "Bill Entry Date",
+      ACCESSOR: "voucher_sub_id",
+      PLACEHOLDER: "Select Voucher Sub Type",
+      TYPE: "date",
+    },
+
+    {
+      CONTROL: "input",
+      HEADER: "Narration",
+      ACCESSOR: "dr_cr",
+      PLACEHOLDER: "Select Dr/Cr",
+    },
+
+    {
+      CONTROL: "input",
+      HEADER: "Bill Stage",
+      ACCESSOR: "sub_ledger_id",
+      PLACEHOLDER: "Select Dr/Cr",
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Bill Date",
+      ACCESSOR: "narration",
+      TYPE: "date",
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Address",
+      ACCESSOR: "address",
+    },
+    {
       CONTROL: "select",
-      HEADER: "Voucher Sub Type",
+      HEADER: "DepartAdministration Wardment",
+      ACCESSOR: "adminis_ward_id",
+      PLACEHOLDER: "Select Administration Ward",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Bill Amount",
+      ACCESSOR: "amount",
+      TYPE:"number"
+    },
+
+    // Deduction Details
+    { TITLE: "Deduction Details" },
+    {
+      CONTROL: "select",
+      HEADER: "Vendor Name",
       ACCESSOR: "voucher_sub_id",
       PLACEHOLDER: "Select Voucher Sub Type",
       API: `${FINANCE_URL.VOUCHER_SUB_TYPE_URL.get}`,
@@ -207,7 +257,7 @@ export const AddVoucherEntry = () => {
 
     {
       CONTROL: "select",
-      HEADER: "Dr/Cr",
+      HEADER: "Concerned Work",
       ACCESSOR: "dr_cr",
       PLACEHOLDER: "Select Dr/Cr",
       API: "/bill-type/get",
@@ -215,19 +265,19 @@ export const AddVoucherEntry = () => {
 
     {
       CONTROL: "select",
-      HEADER: "Sub Ledger/Name",
+      HEADER: "Advance",
       ACCESSOR: "sub_ledger_id",
       PLACEHOLDER: "Select Dr/Cr",
       API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
     },
     {
-      CONTROL: "textarea",
-      HEADER: "Narration",
+      CONTROL: "input",
+      HEADER: "Amount",
       ACCESSOR: "narration",
     },
     {
       CONTROL: "input",
-      HEADER: "Amount",
+      HEADER: "Deposit",
       ACCESSOR: "amount",
       TYPE: "number",
     },
@@ -248,11 +298,12 @@ export const AddVoucherEntry = () => {
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
+        title=""
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Title 1"
+        title="Bills Invoice Entry Table"
         columns={columns}
         footerData={footerData}
       />

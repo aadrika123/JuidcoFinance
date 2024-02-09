@@ -19,9 +19,9 @@ export interface Choice {
 export type FormValues = VoucherDataProps | ChequeIssueEntryData;
 
 export type FieldTypeProps = {
-  CONTROL: "input" | "select" | "checkbox" | "textarea" | "radio";
-  HEADER: string;
-  ACCESSOR: string;
+  CONTROL?: "input" | "select" | "checkbox" | "textarea" | "radio";
+  HEADER?: string;
+  ACCESSOR?: string;
   PLACEHOLDER?: string;
   API?: string;
   OPTIONS?: Choice[];
@@ -39,4 +39,5 @@ export interface FormikWrapperProps {
   readonly?: boolean;
   onClose?: () => void;
   resetInitialValue?: () => void;
+  title?: string;
 }

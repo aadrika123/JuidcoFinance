@@ -52,7 +52,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             );
             multiD = [];
           }
-          d.push(<span className="text-[22px]">{item.TITLE}</span>);
+          d.push(<h2 className="text-[22px] text-primary my-8">{item.TITLE}</h2>);
           return generateFields(
             n.slice(index + 1),
             handleChange,
@@ -125,9 +125,9 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                   >
                     {onClose ? "Close" : "Back"}
                   </Button>
-                  <Button variant="cancel" buttontype="button">
+                  {/* <Button variant="cancel" buttontype="button">
                     Reset
-                  </Button>
+                  </Button> */}
                   <Button variant="primary" buttontype="submit">
                     Save
                   </Button>
