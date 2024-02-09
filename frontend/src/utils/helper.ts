@@ -19,7 +19,7 @@ export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        if (key.toLowerCase().endsWith("id_name")) {
+        if (key.toLowerCase().endsWith("id_name") || key === "id") {
           delete obj[key];
         }
       }

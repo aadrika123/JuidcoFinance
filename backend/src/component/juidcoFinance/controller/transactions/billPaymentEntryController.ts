@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { dirPaymentEntryValidationAlongWithID, dirPaymentEntryValidation } from "../../requests/transactions/dirPaymentEntryValidation";
 import { sendResponse } from "../../../../util/sendResponse";
-import ResMessage from "../../responseMessage/transactions/dirPaymentEntryMessage";
-import DirPaymentEntryDao from "../../dao/transactions/dirPaymentEntryDao";
+import BillPaymentEntryDao from "../../dao/transactions/billPaymentEntryDao";
+import { resObj } from "../../../../util/types";
+import { billPaymentEntryValidation, billPaymentEntryValidationAlongWithID } from "../../requests/transactions/billPaymentEntryValidation";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resMessage } from "../../responseMessage/commonMessage";
+import Joi from "joi";
 
 /**
  * | Author- Sanjiv Kumar
@@ -11,183 +15,114 @@ import DirPaymentEntryDao from "../../dao/transactions/dirPaymentEntryDao";
  * | Common apiId- 20
  */
 
-class DirPaymentEntryController {
-  private dirPaymentEntryDao: DirPaymentEntryDao;
-  private apiId;
-  constructor(baseId: string) {
-    this.apiId = baseId
-    this.dirPaymentEntryDao = new DirPaymentEntryDao();
+class BillPaymentEntryController {
+  private dao: BillPaymentEntryDao;
+  private initMsg: string;
+  constructor() {
+    this.dao = new BillPaymentEntryDao();
+    this.initMsg = "Bill Payment Entry";
   }
 
-  // Create
-  create = async (req: Request, res: Response): Promise<Response> => {
-    
-    try {
-      const { error } = dirPaymentEntryValidation.validate(req.body);
+  // create
+  create = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId, action: "POST", version: "1.0",
+    };
+    try{
+      const {error} = billPaymentEntryValidation.validate(req.body);
+      if(error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      if (error)
-        return sendResponse(
-          false,
-          error,
-          "",
-          403,
-          "POST",
-          "0901",
-          "1.0",
-          res
-        );
-
-      //   req.body.payment_no = 123;
-
-      const data = await this.dirPaymentEntryDao.store(req);
-      return sendResponse(
-        true,
-        ResMessage.CREATED,
+      const data = await this.dao.store(req);
+      return CommonRes.CREATED(
+        resMessage(this.initMsg).CREATED,
         data,
-        201,
-        "POST",
-        "0901",
-        "1.0",
+        resObj,
         res
       );
-    } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0901",
-        "1.0",
-        res
-      );
+    }catch(error){
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 
-  // Get limited payment entry list
-  get = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const data = await this.dirPaymentEntryDao.get(req);
+  // get bill payment entires
+  get =async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {apiId, action: "GET", version: "1.0"};
+    try{
+      const data = await this.dao.get(req);
 
-      if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
-          data,
-          200,
-          "GET",
-          "0902",
-          "1.0",
-          res
-        );
+      if(!data)
+        return CommonRes.SUCCESS(resMessage(this.initMsg).NOT_FOUND, data, resObj, res);
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
-        data,
-        200,
-        "GET",
-        "0902",
-        "1.0",
-        res
-      );
-    } catch (error: any) {
-      return sendResponse(
-        false,
-        error.message,
-        "",
-        500,
-        "GET",
-        "0902",
-        "1.0",
-        res
-      );
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND,data, resObj,res);
+    }catch(error){
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
-  };
+  }
 
-  // Get single payment entry details by Id
-  getById = async (req: Request, res: Response): Promise<Response> => {
+  // get a single record by id
+  getById = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const id: number = Number(req.params.id);
-      const data = await this.dirPaymentEntryDao.getById(id);
+
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required().greater(0)
+      }).validate({'id': id});
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.dao.getById(id);
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "0903",
-          "1.0",
+          resObj,
           res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
-        data,
-        200,
-        "GET",
-        "0903",
-        "1.0",
-        res
-      );
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "GET",
-        "0903",
-        "1.0",
-        res
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
-  };
+  }; 
 
-  // Update payment entry details by Id
-  update = async (req: Request, res: Response): Promise<Response> => {
-    try {
-      const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body);
-
-      if (error)
-        return sendResponse(
-          false,
-          error,
-          "",
-          403,
-          "POST",
-          "0904",
-          "1.0",
+    // Update payment entry details by Id
+    update = async (
+      req: Request,
+      res: Response,
+      apiId: string
+    ): Promise<Response> => {
+      const resObj: resObj = {
+        apiId,
+        action: "POST",
+        version: "1.0",
+      };
+      try {
+        const { error } = billPaymentEntryValidationAlongWithID.validate(req.body);
+  
+        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+  
+        const data = await this.dao.update(req);
+        return CommonRes.CREATED(
+          resMessage(this.initMsg).UPDATED,
+          data,
+          resObj,
           res
         );
-
-      const data = await this.dirPaymentEntryDao.update(req);
-      return sendResponse(
-        true,
-        ResMessage.UPDATED,
-        data,
-        200,
-        "POST",
-        "0904",
-        "1.0",
-        res
-      );
-    } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0904",
-        "1.0",
-        res
-      );
-    }
-  };
+      } catch (error: any) {
+        return CommonRes.SERVER_ERROR(error, resObj, res);
+      }
+    };
 }
 
-export default DirPaymentEntryController;
+export default BillPaymentEntryController;

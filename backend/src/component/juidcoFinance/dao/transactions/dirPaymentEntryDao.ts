@@ -31,6 +31,12 @@ class DirPaymentEntryDao {
         payment_no: true,
         payment_date: true,
         amount: true,
+        subledger:{
+          select: {
+            id: true,
+            name: true,
+          }
+        },
         payee_name: {
           select: {
             id: true,
@@ -78,6 +84,13 @@ class DirPaymentEntryDao {
         payment_no: true,
         payment_date: true,
         amount: true,
+        subledger:{
+          select: {
+            id: true,
+            name: true,
+            code: true,
+          }
+        },
         payee_name: {
           select: {
             id: true,

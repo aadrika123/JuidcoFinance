@@ -11,6 +11,10 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { DirPaymentDataProps } from "@/utils/types/direct_payment_entry_types";
 import { PaymentDetailsSchema } from "@/utils/validation/transactions/direct_payment.validation";
+import axios from "@/lib/axiosConfig";
+import { QueryClient, useMutation } from "react-query";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import toast from "react-hot-toast";
 
 interface UpdatedModeType {
   id: number | string;
@@ -21,6 +25,7 @@ const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const HeroAddPaymentEntry = () => {
   const dispatch = useDispatch();
+  const queryClient = new QueryClient();
   const initialValue: DirPaymentDataProps = {
     payment_date: "",
     payment_type_id: "",
@@ -28,23 +33,24 @@ export const HeroAddPaymentEntry = () => {
     department_id: "",
     adminis_ward_id: "",
     payee_name_id: "",
-    sub_ledger_id: "",
+    subledger_id: "",
     grant_id: "",
     address: "",
     payment_mode: "",
     user_common_budget: "",
     amount: undefined,
-  }
+  };
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
     isOnEdit: false,
   });
   const [data, setData] = useState<DirPaymentDataProps[]>([]);
-  const [initialData, setInitialData] = useState<DirPaymentDataProps>(initialValue);
+  const [initialData, setInitialData] =
+    useState<DirPaymentDataProps>(initialValue);
   //////////// Reseting InitialData on FormikPopup off //////////////
-  const resetInitialValue = () =>{
+  const resetInitialValue = () => {
     setInitialData(initialValue);
-  }
+  };
 
   /////////////// Show Form Popup on Load //////////////////////
   useEffect(() => {
@@ -53,6 +59,7 @@ export const HeroAddPaymentEntry = () => {
 
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
+    console.log("first", values)
     if (!isUpdateMode.isOnEdit) {
       setData((prev) => [...prev, { id: prev.length + 1, ...values }]);
     } else {
@@ -69,9 +76,9 @@ export const HeroAddPaymentEntry = () => {
               department_id_name:
                 values.department_id_name || item.department_id_name,
               narration: values.narration,
-              sub_ledger_id: values.sub_ledger_id,
-              sub_ledger_id_name:
-                values.sub_ledger_id_name || item.sub_ledger_id_name,
+              subledger_id: values.subledger_id,
+              subledger_id_name:
+                values.subledger_id_name || item.subledger_id_name,
               payment_date: values.payment_date,
               payment_mode: values.payment_mode,
               user_common_budget: values.user_common_budget,
@@ -81,10 +88,9 @@ export const HeroAddPaymentEntry = () => {
               payment_type_id: values.payment_type_id,
               payment_type_id_name:
                 values.payment_type_id_name || item.payment_type_id_name,
-                grant_id: values.grant_id,
-                grant_id_name:
-                  values.grant_id_name || item.grant_id_name, 
-                  address: values.address,
+              grant_id: values.grant_id,
+              grant_id_name: values.grant_id_name || item.grant_id_name,
+              address: values.address,
             };
           } else {
             return item;
@@ -96,6 +102,42 @@ export const HeroAddPaymentEntry = () => {
     resetInitialValue();
     dispatch(closePopup());
   };
+
+  /////////////////// Handle Storing Entries ///////////////////////////
+  const handleStore = async (
+    values: DirPaymentDataProps
+  ): Promise<DirPaymentDataProps> => {
+    try {
+     const res = await axios({
+        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.create}`,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<
+    DirPaymentDataProps,
+    Error,
+    DirPaymentDataProps
+  >(handleStore, {
+    onSuccess: () => {
+      toast.success("Updated Direct Payment Entry");
+    },
+    onError: () => {
+      alert("Error updating Direct Payment Entry");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+  });
 
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
@@ -130,7 +172,7 @@ export const HeroAddPaymentEntry = () => {
       department_id: data[Id - 1]?.department_id,
       adminis_ward_id: data[Id - 1]?.adminis_ward_id,
       payee_name_id: data[Id - 1]?.payee_name_id,
-      sub_ledger_id: data[Id - 1]?.sub_ledger_id,
+      subledger_id: data[Id - 1]?.subledger_id,
       amount: data[Id - 1]?.amount,
       payment_mode: data[Id - 1]?.payment_mode,
       user_common_budget: data[Id - 1]?.user_common_budget || true,
@@ -154,8 +196,8 @@ export const HeroAddPaymentEntry = () => {
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
-      name: "sub_ledger_id_name",
-      caption: "Sub-Ledger/Name",
+      name: "subledger_id_name",
+      caption: "Sub-Ledge Code",
       width: "w-[25%]",
     },
     { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
@@ -239,11 +281,11 @@ export const HeroAddPaymentEntry = () => {
     },
     {
       CONTROL: "select",
-      HEADER: "Sub Ledger/Name",
-      ACCESSOR: "sub_ledger_id",
+      HEADER: "Sub Ledger",
+      ACCESSOR: "subledger_id",
       PLACEHOLDER: "Select Sub Ledger",
-      API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
-    }, 
+      API: `${FINANCE_URL.SUB_LEDGER_URL.getCodes}`,
+    },
     {
       CONTROL: "input",
       HEADER: "Amount",
@@ -289,6 +331,7 @@ export const HeroAddPaymentEntry = () => {
         title="Title 1"
         columns={columns}
         footerData={footerData}
+        handleStore={mutate}
       />
     </>
   );

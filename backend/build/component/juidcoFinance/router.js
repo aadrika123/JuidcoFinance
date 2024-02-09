@@ -23,6 +23,9 @@ const voucherSubTypeRoute_1 = __importDefault(require("./route/voucherSubTypeRou
 const subLedgerRoute_1 = __importDefault(require("./route/subLedgerRoute"));
 const voucherEntryRoute_1 = __importDefault(require("./route/documentation/voucherEntryRoute"));
 const billInvoicesRoute_1 = __importDefault(require("./route/transactions/billInvoicesRoute"));
+const billPaymentEntryRoute_1 = __importDefault(require("./route/transactions/billPaymentEntryRoute"));
+const ChequeIssuancesRoute_1 = __importDefault(require("./route/documentation/ChequeIssuancesRoute"));
+const bankRoute_1 = __importDefault(require("./route/bankRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -94,12 +97,15 @@ class FinanceRoute {
         this.voucherSubTypeRoute.configure(app); // 16
         // VOUCHER_SUB_TYPE ///
         this.subLedgerRoute = new subLedgerRoute_1.default();
-        this.subLedgerRoute.configure(app); // 17
+        this.subLedgerRoute.configure(app, "17"); // 17
         // VOUCHER_ENTRY_ROUTES ///
         this.voucherEntryRoute = new voucherEntryRoute_1.default();
         this.voucherEntryRoute.configure(app, "18");
         // Bill Invoice Entries ///
         (new billInvoicesRoute_1.default()).configure(app, "19");
+        (new billPaymentEntryRoute_1.default()).configure(app, "20");
+        (new ChequeIssuancesRoute_1.default()).configure(app, "21");
+        (new bankRoute_1.default()).configure(app, "22");
     }
 }
 exports.default = FinanceRoute;

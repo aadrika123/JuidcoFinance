@@ -11,6 +11,10 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { BillPaymentDetailsData } from "@/utils/types/bill_payment_entry_types";
 import { BillPaymentDetailsSchema } from "@/utils/validation/transactions/bill_payment.validation";
+import axios from "@/lib/axiosConfig";
+import { QueryClient, useMutation } from "react-query";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import toast from "react-hot-toast";
 
 interface UpdatedModeType {
   id: number | string;
@@ -21,6 +25,7 @@ const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const HeroAddBillPaymentEntry = () => {
   const dispatch = useDispatch();
+  const queryClient = new QueryClient();
   const initialValue: BillPaymentDetailsData = {
     bill_number: "",
     bill_entry_date: "",
@@ -91,6 +96,42 @@ export const HeroAddBillPaymentEntry = () => {
     resetInitialValue();
     dispatch(closePopup());
   };
+
+  /////////////////// Handle Storing Entries ///////////////////////////
+  const handleStore = async (
+    values: BillPaymentDetailsData
+  ): Promise<BillPaymentDetailsData> => {
+    try {
+     const res = await axios({
+        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY.create}`,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<
+    BillPaymentDetailsData,
+    Error,
+    BillPaymentDetailsData
+  >(handleStore, {
+    onSuccess: () => {
+      toast.success("Created Bill Payment Entry");
+    },
+    onError: () => {
+      alert("Error Creating Bill Payment Entry");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+  });
 
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
@@ -277,6 +318,7 @@ export const HeroAddBillPaymentEntry = () => {
         title="Title 1"
         columns={columns}
         footerData={footerData}
+        handleStore={mutate}
       />
     </>
   );

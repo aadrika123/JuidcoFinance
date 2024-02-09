@@ -28,6 +28,7 @@ interface TableHOCProps<T> {
   height?: string;
   title: string;
   footerData: FooterData[];
+  handleStore: (data: unknown[]) => void;
 }
 
 const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
@@ -50,13 +51,13 @@ const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
         <Table {...props} />
         <TotalCountTable footerData={props.footerData} />
         <aside className="flex items-center justify-end py-5 gap-5">
-          <Button onClick={goBack} buttontype="submit" variant="cancel">
+          <Button onClick={goBack} buttontype="button" variant="cancel">
             Back
           </Button>
-          <Button buttontype="submit" variant="cancel">
+          <Button buttontype="button" variant="cancel">
             Reset
           </Button>
-          <Button buttontype="submit" variant="primary">
+          <Button onClick={() => props.handleStore(props.data)} buttontype="button" variant="primary">
             Submit
           </Button>
         </aside>

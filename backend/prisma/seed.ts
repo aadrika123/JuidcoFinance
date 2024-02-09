@@ -25,10 +25,17 @@ import bill_stages_seeder from "./seeder/bill_stages_seeder";
 import bill_invoices_seeder from "./seeder/bill_invoices_seeder";
 import vendors_seeder from "./seeder/vendors_seeder";
 import vendor_types_seeder from "./seeder/vendor_types_seeder";
+import cheque_issuances_seeder from "./seeder/cheque_issuances_seeder";
+import banks_seeder from "./seeder/banks_seeder";
 
 
 const prisma = new PrismaClient();
 async function main() {
+
+  await subledgers_seeder();
+
+
+
   /////// Accounting Code //////////////
   const file_path = "./prisma/data/sample-accounting-code.xlsx";
 
@@ -362,6 +369,7 @@ async function main() {
       department_id: 1,
       email: faker.internet.email(),
       payment_mode: faker.internet.email(),
+      subledger_id: 1,
       amount: faker.datatype.number(),
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
@@ -394,7 +402,6 @@ async function main() {
    /////////////// Receipt Types Seeder //////////////////
    await receipt_types_seeder();
 
-   await subledgers_seeder();
  
    await modules_seeder();
  
@@ -410,6 +417,9 @@ async function main() {
   await bill_invoices_seeder();
 
 
+  await banks_seeder();
+  
+  await cheque_issuances_seeder();
  
 }
 main()

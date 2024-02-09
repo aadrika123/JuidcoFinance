@@ -1,4 +1,4 @@
-import { AddPaymentDetailsData } from "@/utils/types/direct_payment_entry_types";
+import { DirPaymentDataProps } from "@/utils/types/direct_payment_entry_types";
 import * as Yup from "yup";
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
@@ -14,25 +14,25 @@ export const PaymentDetailsSchema = Yup.object().shape({
   amount: Yup.number().required("Amount is required"),
   user_common_budget: Yup.boolean().required("User common budget is required"),
   payment_mode: Yup.string().required("Select Payment of Mode is required"),
-  sub_ledger_id: Yup
+  subledger_id: Yup
     .number()
     .required("Sub ledger ID is required")
     .positive("Sub ledger ID must be positive"),
 });
 
 
-export const initialPaymentDetails: AddPaymentDetailsData = {
+export const initialPaymentDetails: DirPaymentDataProps = {
   payment_date: "",
   narration: "",
   payment_type_id: "",
   department_id: "",
-  payee_name: "",
+  payee_name_id: "",
   adminis_ward_id: "",
   grant_id: "",
   address: "",
   user_common_budget: false,
   payment_mode:"",
-  ledger_code_id: 0
+  subledger_id: 0
 };
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
