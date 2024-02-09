@@ -64,6 +64,7 @@ interface ChequebookRequestData {
   cheque_no_to: string;
   cheque_book_return: boolean;
   cheque_book_return_date: Date;
+  remarks?: string;
 }
 
 interface DirPaymentEntryRequestData {

@@ -13,6 +13,7 @@ export const chequebookValidation = Joi.object({
   bank_branch: Joi.string().required(),
   page_count: Joi.number().required(),
   cheque_no_to: Joi.string().required(),
+  remarks: Joi.string(),
 });
 
 export const chequebookValidationAlongWithID = chequebookValidation.keys({
@@ -34,5 +35,6 @@ export const chequebookRequestData = (req: Request):  ChequebookRequestData=> {
     cheque_no_to: req.body.cheque_no_to,
     cheque_book_return: false,
     cheque_book_return_date: new Date(),
+    remarks: req.body?.remarks,
   };
 };

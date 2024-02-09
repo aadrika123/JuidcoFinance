@@ -16,6 +16,12 @@ const APIs = class {
   static receipt_entry_root = "/api/v1/finance/receipt-entry";
   static receipt_entry$get = this.receipt_entry_root+"/get";
 
+
+  static modules_root = "/modules/get";
+
+  static receipt_type_root = "/receipt-types/get";
+
+  static employee_root = "/employee/get";
 }
 
 

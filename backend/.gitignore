@@ -2,8 +2,3 @@ node_modules
 # Keep environment variables out of version control
 .env
 build
-
-magic.js
-magic_all.js
-magic_get.js
-magic

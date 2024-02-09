@@ -1,5 +1,5 @@
 import { baseUrl } from "../../../../util/common";
-import express from "express";
+import express, { Request, Response } from "express";
 import ReceiptEntryController from "../../controller/masters/receiptEntryController";
 
 
@@ -11,18 +11,18 @@ import ReceiptEntryController from "../../controller/masters/receiptEntryControl
  */
 
 class ReceiptEntryRoute {
-  private receiptEntryController: ReceiptEntryController;
+  private controller: ReceiptEntryController;
   private baseUrl = `${baseUrl}/receipt-entry`;
 
   constructor() {
-    this.receiptEntryController = new ReceiptEntryController();
+    this.controller = new ReceiptEntryController();
   }
   
-  configure(app: express.Application): void {
-    app.route(`${this.baseUrl}/get`).get(this.receiptEntryController.get); //0802
-    app.route(`${this.baseUrl}/get/:receiptId`).get(this.receiptEntryController.getById); // 0804
-    
-    
+  configure(app: express.Application, apiId: string): void {
+    app.route(`${this.baseUrl}/create`).post((req: Request, res: Response) => this.controller.create(req, res, apiId + "01"));
+    app.route(`${this.baseUrl}/get`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "02"));
+    app.route(`${this.baseUrl}/get-by-id/:receiptId`).get((req: Request, res: Response) => this.controller.getById(req, res, apiId + "03"));
+    app.route(`${this.baseUrl}/update`).post((req: Request, res: Response) =>this.controller.update(req, res, apiId + "04"));
   }
 }
 

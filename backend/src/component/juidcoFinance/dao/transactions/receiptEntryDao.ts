@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
 import { generateRes } from "../../../../util/generateRes";
+import { multiRequestData, requestData } from "../../requests/transactions/receiptEntryValidation";
 
 
 
@@ -15,6 +16,14 @@ const prisma = new PrismaClient();
 
 class ReceiptEntryDao {
 
+  // store payment entry details in DB
+  store = async (req: Request) => {
+    return await prisma.receipt_entries.createMany({
+      data: multiRequestData(req),
+    });
+  };
+
+
   // get all receipt data
   get = async (req: Request) => {
     const page: number = Number(req.query.page);
@@ -27,14 +36,40 @@ class ReceiptEntryDao {
       take: limit,
       select: {
         id: true,
-        date: true,
-        receipt_no: true,
-        subledger_id: true,
-        paid_by: true,
-        amount: true,
-        narration: true,
-        created_at: true,
-        updated_at: true,
+          date: true,
+          email: true,
+          receipt_no: true,
+          
+          module:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          receipt_type:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          admin_ward:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          subledger:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          paid_by: true,
+          mobile_no: true,
+          narration: true,
+          amount: true,
+          created_at: true,
+          updated_at: true,
       },
     };
 
@@ -68,13 +103,34 @@ class ReceiptEntryDao {
           date: true,
           email: true,
           receipt_no: true,
-          module_id: true,
+          
+          module:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          receipt_type:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          admin_ward:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
+          subledger:{
+            select:{
+              id: true,
+              name: true,
+            }
+          },
           paid_by: true,
-          receipt_type_id: true,
           mobile_no: true,
-          admin_ward_id: true,
           narration: true,
-          subledger_id: true,
           amount: true,
           created_at: true,
           updated_at: true,
@@ -84,6 +140,17 @@ class ReceiptEntryDao {
       return generateRes(data);
     };
   
+
+     // Update receipt entry details
+  update = async (req: Request) => {
+    const id: number = req.body.id;
+    return await prisma.receipt_entries.update({
+      where: {
+        id: id,
+      },
+      data: requestData(req),
+    });
+  };
   
   
 }

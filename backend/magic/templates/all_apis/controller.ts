@@ -1,42 +1,42 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../../util/sendResponse";
-import ReceiptEntryDao from "../../dao/transactions/receiptEntryDao";
-import Joi from "joi";
-import { resObj } from "../../../../util/types";
-import { receiptValidation, receiptValidationWithID } from "../../requests/transactions/receiptEntryValidation";
 import CommonRes from "../../../../util/helper/commonResponse";
+import { resObj } from "../../../../util/types";
 import { resMessage } from "../../responseMessage/commonMessage";
+import Joi from "joi";
 
 /**
  * | Author- Bijoy Paitandi
- * | Created On- 31-01-2024
- * | Created for- Chequebook Entry
- * | Status- open
+ * | Created for- {{BillInvoices}} Controller
+ * | Status: open
  */
 
-class ReceiptEntryController {
-  private dao: ReceiptEntryDao;
-  private initMsg: string;
+class {{BillInvoices}}Controller {
+  private {{billInvoices}}Dao: {{BillInvoices}}Dao;
+  private initMesg: string;
   constructor() {
-    this.dao = new ReceiptEntryDao();
-    this.initMsg = "Receipt entry";
-
+    this.{{billInvoices}}Dao = new {{BillInvoices}}Dao();
+    this.initMesg = "{{BillInvoices}} Entry";
   }
 
-  create = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+  // Create
+  create = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
     const resObj: resObj = {
       apiId,
       action: "POST",
       version: "1.0",
     };
     try {
-      const { error } = receiptValidation.validate(req.body);
+      const { error } = {{billInvoices}}Validation.validate(req.body);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      const data = await this.dao.store(req);
+      const data = await this.{{billInvoices}}Dao.store(req);
       return CommonRes.CREATED(
-        resMessage(this.initMsg).CREATED,
+        resMessage(this.initMesg).CREATED,
         data,
         resObj,
         res
@@ -46,69 +46,72 @@ class ReceiptEntryController {
     }
   };
 
-  get = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+  // Get limited bill invoices list
+  get = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
     const resObj: resObj = {
       apiId,
       action: "GET",
       version: "1.0",
     };
     try {
-      const data = await this.dao.get(req);
+      const data = await this.{{billInvoices}}Dao.get(req);
 
       if (!data)
         return CommonRes.SUCCESS(
-          resMessage(this.initMsg).NOT_FOUND,
+          resMessage(this.initMesg).NOT_FOUND,
           data,
           resObj,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
 
-
-  // get receipt by ID
-  getById = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-
+  // Get single biull invoice details by Id
+  getById = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
     const resObj: resObj = {
       apiId,
       action: "GET",
       version: "1.0",
     };
-
     try {
-      // get the data
-      const id: number = Number(req.params.receiptId);
+      const id: number = Number(req.params.id);
 
-
-      // validate
+      // validate id
       const { error } = Joi.object({
-        id: Joi.number().required()
-      }).validate({ 'id': id });
+        id: Joi.number().required().greater(0)
+      }).validate({'id': id});
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      const data = await this.dao.getById(id);
+      const data = await this.{{billInvoices}}Dao.getById(id);
 
       if (!data)
         return CommonRes.SUCCESS(
-          resMessage(this.initMsg).NOT_FOUND,
+          resMessage(this.initMesg).NOT_FOUND,
           data,
           resObj,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
-
   };
 
-
+  // Update payment entry details by Id
   update = async (
     req: Request,
     res: Response,
@@ -120,13 +123,13 @@ class ReceiptEntryController {
       version: "1.0",
     };
     try {
-      const { error } = receiptValidationWithID.validate(req.body);
+      const { error } = {{billInvoices}}ValidationWithID.validate(req.body);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      const data = await this.dao.update(req);
+      const data = await this.{{billInvoices}}Dao.update(req);
       return CommonRes.CREATED(
-        resMessage(this.initMsg).UPDATED,
+        resMessage(this.initMesg).UPDATED,
         data,
         resObj,
         res
@@ -135,7 +138,7 @@ class ReceiptEntryController {
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
-
 }
 
-export default ReceiptEntryController;
+export default {{BillInvoices}}Controller;
+

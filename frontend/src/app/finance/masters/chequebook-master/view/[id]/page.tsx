@@ -1,5 +1,5 @@
+import { EditChequebook } from "@/components/JuidcoFinance/page/Masters/ChequebookMaster/EditChequebook";
 import PageLayout from "@/components/Layouts/PageLayout";
-import { HeroViewChequebook } from "@/components/JuidcoFinance/page/Masters/ChequebookMaster/ViewChequebook/Index";
 import React from "react";
 
 export default function Home({ params }: { params: { id: string } }) {
@@ -7,7 +7,7 @@ export default function Home({ params }: { params: { id: string } }) {
   console.log(id);
   return (
     <PageLayout>
-      <HeroViewChequebook chequebookID={id} />
+      <EditChequebook chequebookID={id} />
     </PageLayout>
   );
 }

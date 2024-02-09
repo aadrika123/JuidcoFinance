@@ -33,6 +33,8 @@ const prisma = new PrismaClient();
 async function main() {
 
   await subledgers_seeder();
+  await modules_seeder();
+
 
 
 
@@ -403,7 +405,6 @@ async function main() {
    await receipt_types_seeder();
 
  
-   await modules_seeder();
  
    await receipts_seeder();
 

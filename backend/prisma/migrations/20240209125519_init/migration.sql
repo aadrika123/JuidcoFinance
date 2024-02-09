@@ -451,6 +451,9 @@ ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_sub_id_fke
 ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_sub_ledger_id_fkey" FOREIGN KEY ("sub_ledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_receipt_type_id_fkey" FOREIGN KEY ("receipt_type_id") REFERENCES "receipt_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey

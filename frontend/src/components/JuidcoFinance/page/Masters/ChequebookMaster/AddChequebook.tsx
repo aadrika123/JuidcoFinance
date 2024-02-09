@@ -13,6 +13,7 @@ import DropDownListBox from "@/components/Helpers/DropDownListBox";
 import InputBox from "@/components/Helpers/InputBox";
 import Routes from "@/json/routes.json";
 import APIs from "@/json/apis.json";
+import goBack from "@/utils/helper";
 
 /**
  * | Author- Bijoy Paitandi
@@ -35,7 +36,7 @@ export interface AddChequebookDetailsData {
 }
 
 
-export const HeroAddChequebook = () => {
+export const AddChequebook = () => {
   
 
     const queryClient = useQueryClient();
@@ -62,6 +63,10 @@ export const HeroAddChequebook = () => {
       },
       onSettled: () => {
         queryClient.invalidateQueries("create");
+
+        setTimeout(() => {
+          goBack();
+        }, 2000);
       },
     });
     // ----- FORMIK & YUP FORM VAIDATION ---------- //

@@ -22,6 +22,8 @@ import BillInvoicesRoute from "./route/transactions/billInvoicesRoute";
 import BillPaymentEntryRoute from "./route/transactions/billPaymentEntryRoute";
 import ChequeIssuancesRoute from "./route/documentation/ChequeIssuancesRoute";
 import BankRoute from "./route/bankRoute";
+import ModuleRoute from "./route/moduleRoute";
+import ReceiptTypeRoute from "./route/receiptTypeRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +60,6 @@ class FinanceRoute {
   private voucherSubTypeRoute: VoucherSubTypeRoute;
   private subLedgerRoute: SubLedgerRoute;
   private voucherEntryRoute: VoucherEntryRoute;
-  private receiptsRoute: ReceiptEntryRoute;
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
@@ -118,10 +119,6 @@ class FinanceRoute {
     this.billTypeRoute.configure(app);  // 14
 
 
-    /// RECEIPTS ///
-    this.receiptsRoute = new ReceiptEntryRoute(); 
-    this.receiptsRoute.configure(app); //19
-
     this.billTypeRoute.configure(app); // 14
 
     // VOUCHER_TYPE ///
@@ -148,6 +145,12 @@ class FinanceRoute {
     (new ChequeIssuancesRoute()).configure(app, "21");
 
     (new BankRoute()).configure(app, "22");
+
+    (new ModuleRoute()).configure(app, "23");
+
+    (new ReceiptTypeRoute()).configure(app, "24");
+
+    (new ReceiptEntryRoute()).configure(app,"25");
   }
 }
 
