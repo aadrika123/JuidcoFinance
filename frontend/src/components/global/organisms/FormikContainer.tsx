@@ -126,9 +126,9 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                   >
                     {onClose ? "Close" : "Back"}
                   </Button>
-                  <Button variant="cancel" buttontype="button">
+                  {/* <Button variant="cancel" buttontype="button">
                     Reset
-                  </Button>
+                  </Button> */}
                   <Button variant="primary" buttontype="submit">
                     Save
                   </Button>

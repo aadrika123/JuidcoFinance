@@ -309,10 +309,10 @@ export const HeroAddPaymentEntry = () => {
   ];
 
   const footerData = [
-    {
-      key: "Total",
-      value: handleCount(),
-    },
+    // {
+    //   key: "Total",
+    //   value: handleCount(),
+    // },
   ];
 
   return (

@@ -54,9 +54,9 @@ const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
           <Button onClick={goBack} buttontype="button" variant="cancel">
             Back
           </Button>
-          <Button buttontype="button" variant="cancel">
+          {/* <Button buttontype="button" variant="cancel">
             Reset
-          </Button>
+          </Button> */}
           <Button onClick={() => props.handleStore(props.data)} buttontype="button" variant="primary">
             Submit
           </Button>

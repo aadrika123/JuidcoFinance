@@ -29,6 +29,7 @@ type Urls = {
     getById?: string;
     delete?: string;
     getCodes?: string;
+    getAll?: string;
   };
 };
 
@@ -45,6 +46,7 @@ export const FINANCE_URL: Urls = {
     create: "/vendor-master/create",
     update: "/vendor-master/update",
     getById: "/vendor-master/get",
+    getAll: "vendor-master/get"
   },
 
   CHEQUEBOOK_MASTER_URL: {

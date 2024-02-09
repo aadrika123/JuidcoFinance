@@ -192,12 +192,12 @@ export const HeroAddBillPaymentEntry = () => {
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
-      name: "vendor_name_id_name",
+      name: "vendor_id_name",
       caption: "Vendor Name",
       width: "w-[25%]",
     },
     {
-      name: "payee_name_id_name",
+      name: "payee_id_name",
       caption: "Payee Name",
       width: "w-[20%]",
     },
@@ -244,8 +244,8 @@ export const HeroAddBillPaymentEntry = () => {
       CONTROL: "select",
       HEADER: "Vendor Name",
       ACCESSOR: "vendor_id",
-      PLACEHOLDER: "Select Vendro Name",
-      API: `${FINANCE_URL.PAYMENT_TYPE_URL.get}`,
+      PLACEHOLDER: "Select Vendor Name",
+      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
     {
       CONTROL: "textarea",
@@ -298,10 +298,10 @@ export const HeroAddBillPaymentEntry = () => {
   ];
 
   const footerData = [
-    {
-      key: "Total",
-      value: handleCount(),
-    },
+    // {
+    //   key: "Total",
+    //   value: handleCount(),
+    // },
   ];
 
   return (
