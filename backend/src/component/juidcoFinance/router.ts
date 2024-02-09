@@ -134,7 +134,7 @@ class FinanceRoute {
 
     // VOUCHER_SUB_TYPE ///
     this.subLedgerRoute = new SubLedgerRoute();
-    this.subLedgerRoute.configure(app); // 17
+    this.subLedgerRoute.configure(app, "17"); // 17
 
     // VOUCHER_ENTRY_ROUTES ///
     this.voucherEntryRoute = new VoucherEntryRoute();

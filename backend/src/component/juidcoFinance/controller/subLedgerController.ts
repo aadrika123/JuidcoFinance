@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../../../util/sendResponse";
-import ResMessage from "../responseMessage/vendorTypeMessage";
 import SubledgerDao from "../dao/transactions/subledgerDao";
+import CommonRes from "../../../util/helper/commonResponse";
+import { resObj } from "../../../util/types";
+import { resMessage } from "../responseMessage/commonMessage";
 
 /**
  * | Author- Krish
@@ -11,42 +13,66 @@ import SubledgerDao from "../dao/transactions/subledgerDao";
  */
 
 class SubledgerController {
-  private subledgerDao: SubledgerDao;
+  private dao: SubledgerDao;
+  private initMsg: string;
   constructor() {
-    this.subledgerDao = new SubledgerDao();
+    this.dao = new SubledgerDao();
+    this.initMsg = "Subledgers";
   }
 
-  // Get all vendor Types
-  get = async (req: Request, res: Response): Promise<Response> => {
+  // Get limited subledgers
+  get = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    
     try {
-      const data = await this.subledgerDao.get();
+      
+      const data = await this.dao.get();
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "1701",
-          "1.0",
+          resObj,
           res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
-        data,
-        200,
-        "GET",
-        "1701",
-        "1.0",
-        res
-      );
+        return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "1701", "1.0", res);
+      return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
+
+
+  // Get limited subledgers
+  getCodes = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    
+    try {
+      
+      const data = await this.dao.getCodes();
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+        return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
 }
 
 export default SubledgerController;

@@ -188,6 +188,7 @@ CREATE TABLE "dir_payment_entries" (
     "adminis_ward_id" INTEGER NOT NULL,
     "address" TEXT NOT NULL,
     "department_id" INTEGER NOT NULL,
+    "subledger_id" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
     "payment_mode" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
@@ -300,6 +301,7 @@ CREATE TABLE "modules" (
 CREATE TABLE "subledgers" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -414,6 +416,9 @@ ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_adminis_wa
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_bill_type_id_fkey" FOREIGN KEY ("bill_type_id") REFERENCES "bill_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

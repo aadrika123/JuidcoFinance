@@ -77,6 +77,7 @@ interface DirPaymentEntryRequestData {
   adminis_ward_id: number;
   address: string;
   department_id: number;
+  subledger_id: number;
   email: string;
   payment_mode: string;
   amount: number;

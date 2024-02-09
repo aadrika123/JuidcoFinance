@@ -64,10 +64,7 @@ export const multiRequestData = (
       bill_amount: item.bill_amount,
       advance: item.advance,
       deposit: item.deposit,
-      deductions_amount: item.deductions_amount,
-      earlier_payment: 0,
-      payable_amount: 0,
-      net_amount: 0,
+      deductions_amount: item.deductions_amount
     });
   }
 

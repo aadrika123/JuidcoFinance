@@ -211,6 +211,10 @@ model dir_payment_entries {
   address            String
   department_id      Int
   department         departments   @relation(fields: [department_id], references: [id])
+
+  subledger_id       Int
+  subledger         subledgers     @relation(fields: [subledger_id], references: [id])
+
   email              String
   payment_mode       String
   amount             Float
@@ -240,6 +244,7 @@ model bill_payment_entries {
   bill_entry_date   DateTime
   department        departments   @relation(fields: [department_id], references: [id])
   department_id     Int
+
   vendor_id         Int
   vendor            vendor_masters @relation(fields: [vendor_id], references: [id])
   address           String
@@ -332,9 +337,11 @@ model modules {
 model subledgers {
   id         Int             @id @default(autoincrement())
   name       String
+  code       String
   remark     String?
   receipts    receipt_entries[]
   vouchers    voucher_entries[]
+  dir_payments  dir_payment_entries[]
   created_at DateTime        @default(now()) @map("created_at")
   updated_at DateTime        @updatedAt @map("updated_at")
 }

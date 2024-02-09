@@ -14,8 +14,8 @@ const subledgers_seeder = async () => {
   
   for(let i=0;i<names.length;i++){
     const item = {
-      id: i+1,
       name: names[i],
+      code: faker.random.alphaNumeric(6),
       remark: faker.lorem.sentence(),
       created_at: faker.date.past(),
       updated_at: faker.date.recent()

@@ -16,7 +16,7 @@ const cheque_issuances_seeder = async () => {
             module_id: 1,
             department_id: 1,
             issue_date: faker.date.past(),
-            cheque_no: faker.lorem.sentence(),
+            cheque_no: faker.random.alphaNumeric(12).toUpperCase(),
             amount: faker.datatype.number(),
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),
