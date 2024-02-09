@@ -16,7 +16,7 @@ const modules_seeder = async () => {
       const row = rows[i];
       const record = {
         data: {
-          id: parseInt(row[0].toString()),
+          // id: parseInt(row[0].toString()),
           name: row[1].toString(),
           remark: faker.lorem.sentence(),
           created_at: faker.date.past(),

@@ -29,10 +29,10 @@ class BillPaymentEntryDao {
       take: limit,
       select: {
         id: true,
-        vendor_name: true,
+        vendor_id: true,
         bill_no: true,
         bill_entry_date: true,
-        payee_name: {
+        payee: {
           select: {
             id: true,
             name: true,
@@ -63,14 +63,14 @@ class BillPaymentEntryDao {
       query.where = {
         OR: [
           {
-            payee_name: {
+            payee: {
               name: {
                 contains: search,
                 mode: "insensitive",
               },
             },
           },
-          { bill_no: { contains: search } },
+          
         ],
       };
     }
@@ -88,10 +88,10 @@ class BillPaymentEntryDao {
       where: { id },
       select: {
         id: true,
-        vendor_name: true,
+        vendor_id: true,
         bill_no: true,
         bill_entry_date: true,
-        payee_name: {
+        payee: {
           select: {
             id: true,
             name: true,

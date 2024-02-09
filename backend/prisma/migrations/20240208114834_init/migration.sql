@@ -211,13 +211,13 @@ CREATE TABLE "bill_types" (
 -- CreateTable
 CREATE TABLE "bill_payment_entries" (
     "id" SERIAL NOT NULL,
-    "bill_no" TEXT NOT NULL,
+    "bill_no" INTEGER NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
     "bill_entry_date" TIMESTAMP(3) NOT NULL,
     "department_id" INTEGER NOT NULL,
-    "vendor_name" TEXT NOT NULL,
+    "vendor_id" INTEGER NOT NULL,
     "address" TEXT NOT NULL,
-    "payee_name_id" INTEGER NOT NULL,
+    "payee_id" INTEGER NOT NULL,
     "adminis_ward_id" INTEGER NOT NULL,
     "bill_amount" DOUBLE PRECISION NOT NULL,
     "advance" DOUBLE PRECISION NOT NULL,
@@ -339,6 +339,17 @@ CREATE TABLE "bill_stages" (
 );
 
 -- CreateTable
+CREATE TABLE "banks" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remark" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "banks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "bill_invoices" (
     "id" SERIAL NOT NULL,
     "bill_no" INTEGER NOT NULL,
@@ -356,6 +367,27 @@ CREATE TABLE "bill_invoices" (
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "bill_invoices_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "cheque_issuances" (
+    "id" SERIAL NOT NULL,
+    "voucher_no" INTEGER NOT NULL,
+    "voucher_date" TIMESTAMP(3) NOT NULL,
+    "bill_type_id" INTEGER NOT NULL,
+    "narration" TEXT NOT NULL,
+    "admin_ward_id" INTEGER NOT NULL,
+    "payee_id" INTEGER NOT NULL,
+    "grant_id" INTEGER NOT NULL,
+    "bank_id" INTEGER NOT NULL,
+    "module_id" INTEGER NOT NULL,
+    "issue_date" TIMESTAMP(3) NOT NULL,
+    "cheque_no" TEXT NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "cheque_issuances_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
@@ -389,7 +421,10 @@ ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_bill_typ
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_payee_name_id_fkey" FOREIGN KEY ("payee_name_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_vendor_id_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendor_masters"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_payee_id_fkey" FOREIGN KEY ("payee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_adminis_ward_id_fkey" FOREIGN KEY ("adminis_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -432,3 +467,21 @@ ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_stage_id_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "bill_invoices" ADD CONSTRAINT "bill_invoices_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_bill_type_id_fkey" FOREIGN KEY ("bill_type_id") REFERENCES "bill_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_payee_id_fkey" FOREIGN KEY ("payee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_grant_id_fkey" FOREIGN KEY ("grant_id") REFERENCES "grants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_bank_id_fkey" FOREIGN KEY ("bank_id") REFERENCES "banks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

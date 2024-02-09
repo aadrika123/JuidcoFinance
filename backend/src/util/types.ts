@@ -83,13 +83,13 @@ interface DirPaymentEntryRequestData {
 }
 
 interface BillPaymentEntryRequestData {
-  bill_no: string,
+  bill_no: number,
   bill_type_id: number,
   bill_entry_date: string,
   department_id: number,
-  vendor_name: string,
+  vendor_id: number,
   address: string,
-  payee_name_id: number,
+  payee_id: number,
   adminis_ward_id: number,
   bill_amount: number,
   advance: number,
