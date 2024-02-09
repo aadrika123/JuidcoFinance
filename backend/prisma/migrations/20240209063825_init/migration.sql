@@ -223,9 +223,9 @@ CREATE TABLE "bill_payment_entries" (
     "advance" DOUBLE PRECISION NOT NULL,
     "deposit" DOUBLE PRECISION NOT NULL,
     "deductions_amount" DOUBLE PRECISION NOT NULL,
-    "earlier_payment" DOUBLE PRECISION NOT NULL,
-    "payable_amount" DOUBLE PRECISION NOT NULL,
-    "net_amount" DOUBLE PRECISION NOT NULL,
+    "earlier_payment" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "payable_amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "net_amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "is_approved" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -377,6 +377,7 @@ CREATE TABLE "cheque_issuances" (
     "bill_type_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
     "admin_ward_id" INTEGER NOT NULL,
+    "department_id" INTEGER NOT NULL,
     "payee_id" INTEGER NOT NULL,
     "grant_id" INTEGER NOT NULL,
     "bank_id" INTEGER NOT NULL,
@@ -473,6 +474,9 @@ ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_bill_type_id_fke
 
 -- AddForeignKey
 ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_payee_id_fkey" FOREIGN KEY ("payee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

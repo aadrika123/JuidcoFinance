@@ -13,8 +13,11 @@ class BillPaymentEntryDao {
 
   // store payment entry details in DB
   store = async (req: Request) => {
+    const data = multiRequestData(req);
+    
+
     return await prisma.bill_payment_entries.createMany({
-      data: multiRequestData(req),
+      data: data,
     });
   };
 
@@ -70,7 +73,14 @@ class BillPaymentEntryDao {
               },
             },
           },
-          
+          {
+            bill_type: {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          },
         ],
       };
     }

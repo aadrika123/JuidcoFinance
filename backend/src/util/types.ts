@@ -95,9 +95,9 @@ interface BillPaymentEntryRequestData {
   advance: number,
   deposit: number,
   deductions_amount: number,
-  earlier_payment: number,
-  payable_amount: number,
-  net_amount: number
+  earlier_payment?: number,
+  payable_amount?: number,
+  net_amount?: number
 }
 interface VoucherEntryRequestData {
   id?: number;

@@ -4,4 +4,6 @@ node_modules
 build
 
 magic.js
+magic_all.js
+magic_get.js
 magic

@@ -136,6 +136,8 @@ model departments {
   bill_payment_entries bill_payment_entries[]
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
+  cheque_issuances     cheque_issuances[]
+
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -249,9 +251,10 @@ model bill_payment_entries {
   advance           Float
   deposit           Float
   deductions_amount Float
-  earlier_payment   Float
-  payable_amount    Float
-  net_amount        Float
+  earlier_payment   Float         @default(0)
+  payable_amount    Float         @default(0)
+  net_amount        Float         @default(0)
+
   is_approved       Boolean       @default(false)
   created_at        DateTime      @default(now()) @map("created_at")
   updated_at        DateTime      @updatedAt @map("updated_at")
@@ -440,6 +443,10 @@ model cheque_issuances{
   admin_ward_id       Int
 	admin_ward         adminis_wards       @relation(fields: [admin_ward_id], references: [id])
 
+  department_id       Int
+	department          departments       @relation(fields: [department_id], references: [id])
+
+
   payee_id            Int
   payee               employees           @relation(fields: [payee_id], references: [id])
 
@@ -459,4 +466,3 @@ model cheque_issuances{
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
-
