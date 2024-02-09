@@ -1,5 +1,6 @@
 import { FormikHelpers } from "formik";
 import { VoucherDataProps } from "../voucher_entry_types";
+import { ChequeIssueEntryData } from "../cheque_issue_entry_types";
 
 export interface FormikErrors {
   [key: string]: string | undefined;
@@ -15,7 +16,7 @@ export interface Choice {
 }
 
 // Add Types Of All Form Data's
-export type FormValues = VoucherDataProps;
+export type FormValues = VoucherDataProps | ChequeIssueEntryData;
 
 export type FieldTypeProps = {
   CONTROL: "input" | "select" | "checkbox" | "textarea" | "radio";
@@ -29,7 +30,6 @@ export type FieldTypeProps = {
   TITLE?: string;
 };
 
-
 export interface FormikWrapperProps {
   initialValues: object & FormValues;
   enableReinitialize?: boolean;
@@ -38,4 +38,5 @@ export interface FormikWrapperProps {
   fields: FieldTypeProps[];
   readonly?: boolean;
   onClose?: () => void;
+  resetInitialValue?: () => void;
 }

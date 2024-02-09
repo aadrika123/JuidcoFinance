@@ -30,7 +30,6 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     enableReinitialize,
   } = props;
 
-
   /////////////////////////// Generating Fields ///////////////////////////////
   const generateFields = (
     n: any,
@@ -67,6 +66,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             <span>
               <FormikController
                 readonly={readonly}
+                type={item.TYPE}
                 control={item.CONTROL || ""}
                 label={item.HEADER || ""}
                 name={item.ACCESSOR || ""}
@@ -90,7 +90,6 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     }
   };
 
-  console.log(initialValues, "xyz")
   return (
     <section className="border rounded-lg border-zinc-300 p-6 px-10">
       <div className="mt-8">
