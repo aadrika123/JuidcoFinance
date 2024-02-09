@@ -27,18 +27,18 @@ export const HeroAddBillPaymentEntry = () => {
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
   const initialValue: BillPaymentDetailsData = {
-    bill_number: "",
+    bill_no: "",
     bill_entry_date: "",
     bill_type_id: "",
-    vendor_name_id: "",
+    vendor_id: "",
     department_id: "",
     adminis_ward_id: "",
-    payee_name_id: "",
+    payee_id: "",
     bill_amount: "",
     advance: "",
     address: "",
     deposit: "",
-    other_deduction: "",
+    deductions_amount: "",
   };
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
@@ -67,10 +67,12 @@ export const HeroAddBillPaymentEntry = () => {
           if (item.id === isUpdateMode.id) {
             return {
               ...item,
-              bill_number: values.bill_number,
+              bill_no: values.bill_no,
               bill_entry_date: values.bill_entry_date,
               bill_type_id: values.bill_type_id,
-              vendor_name_id: values.vendor_name_id,
+              vendor_id: values.vendor_id,
+              vendor_id_name:
+                values.vendor_id_name || item.vendor_id_name,
               adminis_ward_id: values.adminis_ward_id,
               adminis_ward_id_name:
                 values.adminis_ward_id_name || item.adminis_ward_id_name,
@@ -78,13 +80,13 @@ export const HeroAddBillPaymentEntry = () => {
               department_id: values.department_id,
               department_id_name:
                 values.department_id_name || item.department_id_name,
-              payee_name_id: values.payee_name_id,
-              payee_name_id_name:
-                values.payee_name_id_name || item.payee_name_id_name,
+              payee_id: values.payee_id,
+              payee_id_name:
+                values.payee_id_name || item.payee_id_name,
               address: values.address,
               advance: values.advance,
               deposit: values.deposit,
-              other_deduction: values.other_deduction,
+              deductions_amount: values.deductions_amount,
             };
           } else {
             return item;
@@ -103,7 +105,7 @@ export const HeroAddBillPaymentEntry = () => {
   ): Promise<BillPaymentDetailsData> => {
     try {
      const res = await axios({
-        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY.create}`,
+        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.create}`,
         method: "POST",
         data: filterValBefStoring(values),
       });
@@ -160,18 +162,18 @@ export const HeroAddBillPaymentEntry = () => {
     setIsUpdateMode((prev) => ({ ...prev, isOnEdit: true, id: Id }));
     setInitialData((prev) => ({
       ...prev,
-      bill_number: data[Id - 1]?.bill_number,
+      bill_no: data[Id - 1]?.bill_no,
     bill_entry_date: data[Id - 1]?.bill_entry_date,
     bill_type_id: data[Id - 1]?.bill_type_id,
-    vendor_name_id: data[Id - 1]?.vendor_name_id,
+    vendor_id: data[Id - 1]?.vendor_id,
     department_id: data[Id - 1]?.department_id,
     adminis_ward_id: data[Id - 1]?.adminis_ward_id,
-    payee_name_id: data[Id - 1]?.payee_name_id,
+    payee_id: data[Id - 1]?.payee_id,
     bill_amount: data[Id - 1]?.bill_amount,
     advance: data[Id - 1]?.advance,
     address: data[Id - 1]?.address,
     deposit: data[Id - 1]?.deposit,
-    other_deduction: data[Id - 1]?.other_deduction,
+    deductions_amount: data[Id - 1]?.deductions_amount,
     }));
     dispatch(openPopup());
   };
@@ -214,7 +216,7 @@ export const HeroAddBillPaymentEntry = () => {
     {
       CONTROL: "input",
       HEADER: "Bill Number",
-      ACCESSOR: "bill_number",
+      ACCESSOR: "bill_no",
       PLACEHOLDER: "Enter Bill Number",
     },
     {
@@ -241,7 +243,7 @@ export const HeroAddBillPaymentEntry = () => {
     {
       CONTROL: "select",
       HEADER: "Vendor Name",
-      ACCESSOR: "vendor_name_id",
+      ACCESSOR: "vendor_id",
       PLACEHOLDER: "Select Vendro Name",
       API: `${FINANCE_URL.PAYMENT_TYPE_URL.get}`,
     },
@@ -254,7 +256,7 @@ export const HeroAddBillPaymentEntry = () => {
     {
       CONTROL: "select",
       HEADER: "Payee Name",
-      ACCESSOR: "payee_name_id",
+      ACCESSOR: "payee_id",
       PLACEHOLDER: "Select Payee Name",
       API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
     },
@@ -289,7 +291,7 @@ export const HeroAddBillPaymentEntry = () => {
     {
       CONTROL: "input",
       HEADER: "Other Deduction",
-      ACCESSOR: "other_deduction",
+      ACCESSOR: "deductions_amount",
       PLACEHOLDER: "Enter Other Deduction",
       TYPE: "number",
     },

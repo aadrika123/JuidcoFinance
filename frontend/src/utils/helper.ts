@@ -14,16 +14,18 @@ export function DateFormatter(date: string) {
   return new Date(date).toISOString().split("T")[0];
 }
 
-
 export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
         if (key.toLowerCase().endsWith("id_name") || key === "id") {
           delete obj[key];
+        } else if (key.toLowerCase().endsWith("date")) {
+          obj[key] = `${new Date(obj[key]).toISOString()}`;
         }
       }
     }
+    console.log("first", obj)
     return obj;
   }
 
