@@ -367,7 +367,6 @@ async function main() {
       adminis_ward_id: 2,
       address: faker.address.streetAddress(),
       department_id: 1,
-      email: faker.internet.email(),
       payment_mode: faker.internet.email(),
       subledger_id: 1,
       amount: faker.datatype.number(),

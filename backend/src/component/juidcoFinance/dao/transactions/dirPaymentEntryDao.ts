@@ -34,7 +34,7 @@ class DirPaymentEntryDao {
         subledger:{
           select: {
             id: true,
-            name: true,
+            code: true,
           }
         },
         payee_name: {
@@ -124,7 +124,6 @@ class DirPaymentEntryDao {
             name: true,
           },
         },
-        email: true,
         payment_mode: true,
       },
     };

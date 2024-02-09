@@ -215,7 +215,6 @@ model dir_payment_entries {
   subledger_id       Int
   subledger         subledgers     @relation(fields: [subledger_id], references: [id])
 
-  email              String
   payment_mode       String
   amount             Float
   created_at         DateTime      @default(now()) @map("created_at")
