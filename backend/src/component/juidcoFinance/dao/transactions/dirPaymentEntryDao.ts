@@ -88,6 +88,7 @@ class DirPaymentEntryDao {
           select: {
             id: true,
             name: true,
+            code: true,
           }
         },
         payee_name: {
