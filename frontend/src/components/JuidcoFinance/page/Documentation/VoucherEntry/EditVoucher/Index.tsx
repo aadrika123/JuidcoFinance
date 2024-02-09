@@ -38,37 +38,20 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
         method: "GET",
         url: `${FINANCE_URL.VOUCHER_ENTRY_URL.getById}/${VoucherID}`,
       });
-      console.log(res.data.data);
+      console.log("jkjkdhsf", res.data.data);
 
       setInitialData((prev) => {
         return {
           ...prev,
           voucher_no: res.data.data.voucher_no,
           adminis_ward_id: res.data.data.adminis_ward.id,
-          // adminis_ward_id_name:
-          //   res.data.data.adminis_ward_id_name ||
-          //   res.data.data.adminis_ward_id_name,
           amount: res.data.data.amount,
           department_id: res.data.data.department.id,
-          // department_id_name:
-          //   res.data.data.department_id_name ||
-          //   res.data.data.department_id_name,
-          // dr_cr: res.data.data.dr_cr,
-          // dr_cr_name: res.data.data.dr_cr_name || res.data.data.dr_cr_name,
           narration: res.data.data.narration,
           sub_ledger_id: res.data.data.sub_ledger.id,
-          // sub_ledger_id_name:
-          //   res.data.data.sub_ledger_id_name ||
-          //   res.data.data.sub_ledger_id_name,
           voucher_date: DateFormatter(res.data.data.voucher_date),
           voucher_sub_id: res.data.data.voucher_sub_type.id,
-          // voucher_sub_id_name:
-          //   res.data.data.voucher_sub_id_name ||
-          //   res.data.data.voucher_sub_id_name,
           voucher_type_id: res.data.data.voucher_type.id,
-          // voucher_type_id_name:
-          //   res.data.data.voucher_type_id_name ||
-          //   res.data.data.voucher_type_id_name,
         };
       });
     })();
@@ -112,7 +95,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
     }
   );
 
-  const onSubmit = (values: VoucherDataProps) => {
+  const onSubmit = (values: any) => {
     delete values.adminis_ward_id_name;
     delete values.department_id_name;
     delete values.sub_ledger_id_name;
@@ -194,6 +177,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
       <Toaster />
       <HeaderWidget title="Edit Voucher Entry" variant="view" />
       <FormikWrapper
+        title=""
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={voucherSchema}

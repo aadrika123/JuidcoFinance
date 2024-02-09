@@ -1,12 +1,12 @@
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
-import { HeroViewPaymentEntry } from "@/components/JuidcoFinance/page/Transaction/DirectPaymentEntry/ViewPaymentEntry/Index";
+import { EditDirectPaymentEntry } from "@/components/JuidcoFinance/page/Transaction/DirectPaymentEntry/EditDirectPaymentEntry";
 
-export default function Home({ params }: { params: { id: string } }) {
+export default function Home ({ params }: { params: { id: string } }) {
   const { id } = params;
   return (
     <PageLayout>
-      <HeroViewPaymentEntry paymentId={id} />
+      <EditDirectPaymentEntry PaymentID={id} />
     </PageLayout>
   );
 }

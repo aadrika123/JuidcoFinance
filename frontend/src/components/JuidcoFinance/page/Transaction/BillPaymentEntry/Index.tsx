@@ -8,7 +8,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export const HeroPaymentEntry = () => {
+export const HeroBillPaymentEntry = () => {
   const pathName = usePathname();
   const router = useRouter();
 
@@ -30,11 +30,13 @@ export const HeroPaymentEntry = () => {
 
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
-    { name: "payment_no", caption: "Payment No", width: "w-[18%]" },
-    { name: "payment_type", caption: "Payment Type", width: "w-[12%]" },
+    { name: "bill_no", caption: "Bill No", width: "w-[18%]" },
+    { name: "bill_date", caption: "Bill Date", width: "w-[12%]" },
     { name: "payee_name", caption: "Payee Name", width: "w-[20%]" },
-    { name: "ledger_code", caption: "Ledger Code", width: "w-[20%]" },
-    { name: "amount", caption: "Amount", width: "w-[15%]" },
+    { name: "vendor_name", caption: "Vendor Name", width: "w-[20%]" },
+    { name: "bill_amount", caption: "Bill Amount", width: "w-[12%]" },
+    { name: "net_amount", caption: "Net Amount", width: "w-[20%]" },
+    { name: "approved", caption: "approved", width: "w-[15%]" },
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,
@@ -45,9 +47,9 @@ export const HeroPaymentEntry = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Direct Payment Entry"} />
+      <HeaderWidget variant="add" title={"Bill Payment Entry"} />
       <TableWithFeatures
-        title="Direct Payment Entry List"
+        title="Bill Payment Entry List"
         center
         columns={column}
         api={FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.get || ""}
@@ -56,3 +58,4 @@ export const HeroPaymentEntry = () => {
     </>
   );
 };
+

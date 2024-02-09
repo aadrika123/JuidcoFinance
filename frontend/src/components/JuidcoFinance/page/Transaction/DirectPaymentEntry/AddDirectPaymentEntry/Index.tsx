@@ -1,291 +1,295 @@
 "use client";
 
-import React, { useState } from "react";
-import axios from "@/lib/axiosConfig";
-import { useMutation } from "react-query";
-import { Formik } from "formik";
-import { SubHeading } from "@/components/Helpers/Heading";
-import toast, { Toaster } from "react-hot-toast";
-import PrimaryButton from "@/components/Helpers/Button";
-import goBack from "@/utils/helper";
-import { AddPaymentDetailsData } from "@/utils/types/direct_payment_entry_types";
-import PaymentModeRadioWrapper from "@/components/Helpers/PaymentModeRadioWrapper";
-import PaymentModeRadioButton from "@/components/Helpers/PaymentModeRadioButton";
-import {
-  PaymentDetailsSchema,
-  initialPaymentDetails,
-} from "@/utils/validation/transactions/direct_payment.validation";
+import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
+import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
+import React, { useEffect, useState } from "react";
+import { Choice, FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import FormikWrapper from "@/components/global/organisms/FormikContainer";
+import { useDispatch } from "react-redux";
+import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
-import InputBox from "@/components/Helpers/InputBox";
-import DateInputBox from "@/components/Helpers/DateInputBox";
-import DropDownList from "@/components/Helpers/DropDownList";
-import CheckBox from "@/components/Helpers/CheckBox";
-import SubLedgerTable from "../SubLedgerTable/SubLedgerTable";
+import ViewIconButton from "@/components/global/atoms/ViewIconButton";
+import { DirPaymentDataProps } from "@/utils/types/direct_payment_entry_types";
+import { PaymentDetailsSchema } from "@/utils/validation/transactions/direct_payment.validation";
+
+interface UpdatedModeType {
+  id: number | string;
+  isOnEdit: boolean;
+}
+
+const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const HeroAddPaymentEntry = () => {
-  // Add New Payment Details
-  const createPaymentDetails = async (
-    values: AddPaymentDetailsData
-  ): Promise<AddPaymentDetailsData> => {
-    const res = await axios({
-      url: FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.create,
-      method: "POST",
-      data: values,
-    });
-    return res.data;
-  };
-  const { mutate } = useMutation(createPaymentDetails, {
-    onSuccess: (data) => {
-      console.log(data);
-      toast.success("Successfully Added New Payment");
-    },
-    onError: () => {
-      alert("there was an error");
-    },
-  });
-  // Inside your component
-
-  const [dirPaymentEntries, setDirPaymentEntries] = useState<
-    AddPaymentDetailsData[]
-  >([
-    {
-      payment_date: "",
-      narration: "",
-      payment_type_id: "",
-      department_id: "",
-      payee_name: "",
-      adminis_ward_id: "",
-      grant_id: "",
-      address: "",
-      amount: "",
-      user_common_budget: false,
-      payment_mode: "",
-      ledger_code_id: 0,
-    },
-  ]);
-
-  const handleSelectChange = (
-    e: React.ChangeEvent<HTMLSelectElement>, index: number
-  ) => {
-    if (e) {
-      e.preventDefault();
-    }
-    setDirPaymentEntries((prev) => {
-      const updatedEntries = [...prev];
-        updatedEntries[index] = { ...updatedEntries[index], ledger_code_id: parseInt(e.target.value) };
-        return updatedEntries;
-
-    });
-  };
-
-  const handleTextChange = (
-    e: React.ChangeEvent<HTMLInputElement>, index: number
-  ) => {
-    if (e) {
-      e.preventDefault();
-    }
-
-    setDirPaymentEntries((prev) => {
-      const updatedEntries = [...prev];
-        updatedEntries[index] = { ...updatedEntries[index], amount: e.target.value };
-        return updatedEntries;
-
-    });
-
-  };
-
-  const handleRemoveEntry = (index: number) =>{
-    setDirPaymentEntries((prev) => {
-      const updatedEntries = [...prev];
-      return updatedEntries.filter((i, idx) => {
-        if(idx !== index){
-          return i;
-        }
-        
-      })
-    });
+  const dispatch = useDispatch();
+  const initialValue: DirPaymentDataProps = {
+    payment_date: "",
+    payment_type_id: "",
+    narration: "",
+    department_id: "",
+    adminis_ward_id: "",
+    payee_name_id: "",
+    sub_ledger_id: "",
+    grant_id: "",
+    address: "",
+    payment_mode: "",
+    user_common_budget: "",
+    amount: undefined,
   }
+  const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
+    id: "",
+    isOnEdit: false,
+  });
+  const [data, setData] = useState<DirPaymentDataProps[]>([]);
+  const [initialData, setInitialData] = useState<DirPaymentDataProps>(initialValue);
+  //////////// Reseting InitialData on FormikPopup off //////////////
+  const resetInitialValue = () =>{
+    setInitialData(initialValue);
+  }
+
+  /////////////// Show Form Popup on Load //////////////////////
+  useEffect(() => {
+    dispatch(openPopup());
+  }, []);
+
+  ///////////////// Handling on Form Submit or on Form Edit ///////////////
+  const onSubmit = (values: any) => {
+    if (!isUpdateMode.isOnEdit) {
+      setData((prev) => [...prev, { id: prev.length + 1, ...values }]);
+    } else {
+      setData((prev) => {
+        const updatedData = prev.map((item) => {
+          if (item.id === isUpdateMode.id) {
+            return {
+              ...item,
+              adminis_ward_id: values.adminis_ward_id,
+              adminis_ward_id_name:
+                values.adminis_ward_id_name || item.adminis_ward_id_name,
+              amount: values.amount,
+              department_id: values.department_id,
+              department_id_name:
+                values.department_id_name || item.department_id_name,
+              narration: values.narration,
+              sub_ledger_id: values.sub_ledger_id,
+              sub_ledger_id_name:
+                values.sub_ledger_id_name || item.sub_ledger_id_name,
+              payment_date: values.payment_date,
+              payment_mode: values.payment_mode,
+              user_common_budget: values.user_common_budget,
+              payee_name_id: values.payee_name_id,
+              payee_name_id_name:
+                values.payee_name_id_name || item.payee_name_id_name,
+              payment_type_id: values.payment_type_id,
+              payment_type_id_name:
+                values.payment_type_id_name || item.payment_type_id_name,
+                grant_id: values.grant_id,
+                grant_id_name:
+                  values.grant_id_name || item.grant_id_name, 
+                  address: values.address,
+            };
+          } else {
+            return item;
+          }
+        });
+        return updatedData;
+      });
+    }
+    resetInitialValue();
+    dispatch(closePopup());
+  };
+
+  ///////////////// Handling Total Count ///////////////
+  const handleCount = () => {
+    let sum = 0;
+    data.forEach((item) => {
+      sum = sum + Number(item.amount);
+    });
+    return sum;
+  };
+
+  ///////////////// Handling Remove item(row) from list ///////////////
+  const onRemoveButton = (id: string) => {
+    setData((prev) => {
+      const filteredData = prev.filter((item) => item.id !== id);
+
+      return filteredData.map((item, index) => ({
+        ...item,
+        id: index + 1,
+      }));
+    });
+  };
+
+  ///////////////// Handling Edit Functionality ///////////////
+  const onEditButton = (id: string) => {
+    const Id: number = Number(id);
+    setIsUpdateMode((prev) => ({ ...prev, isOnEdit: true, id: Id }));
+    setInitialData((prev) => ({
+      ...prev,
+      payment_date: data[Id - 1]?.payment_date,
+      payment_type_id: data[Id - 1]?.payment_type_id,
+      narration: data[Id - 1]?.narration,
+      department_id: data[Id - 1]?.department_id,
+      adminis_ward_id: data[Id - 1]?.adminis_ward_id,
+      payee_name_id: data[Id - 1]?.payee_name_id,
+      sub_ledger_id: data[Id - 1]?.sub_ledger_id,
+      amount: data[Id - 1]?.amount,
+      payment_mode: data[Id - 1]?.payment_mode,
+      user_common_budget: data[Id - 1]?.user_common_budget || true,
+      address: data[Id - 1]?.address,
+      grant_id: data[Id - 1]?.grant_id,
+    }));
+    dispatch(openPopup());
+  };
+
+  ///////////////// Edit and Remove Button JSX ///////////////
+  const addButton = (id: string) => {
+    return (
+      <>
+        <ViewIconButton variant="edit" onClick={() => onEditButton(id)} />
+        <ViewIconButton variant="view" onClick={() => onRemoveButton(id)} />
+      </>
+    );
+  };
+
+  // Add Table
+  const columns = [
+    { name: "id", caption: "Sr. No.", width: "w-[10%]" },
+    {
+      name: "sub_ledger_id_name",
+      caption: "Sub-Ledger/Name",
+      width: "w-[25%]",
+    },
+    { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
+    {
+      name: "payment_mode",
+      caption: "Payment Mode",
+      width: "w-[20%]",
+    },
+    {
+      name: "button",
+      caption: "Edit/Remove",
+      width: "w-[10%]",
+      value: addButton,
+    },
+  ];
+
+  /////  Radio buttons list
+  const choices: Choice[] = [
+    { key: "Cash", value: "cash" },
+    { key: "Cheque", value: "cheque" },
+    { key: "NFT/RTGS", value: "NFT/RTGS" },
+  ];
+
+  // Add Input Fields
+  const fields: FieldTypeProps[] = [
+    {
+      CONTROL: "input",
+      HEADER: "Payment Date",
+      ACCESSOR: "payment_date",
+      PLACEHOLDER: "DD/MM/YYYY",
+      TYPE: "date",
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Grant",
+      ACCESSOR: "grant_id",
+      PLACEHOLDER: "Select Grant",
+      API: `${FINANCE_URL.GRANT_URL.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Payment Type",
+      ACCESSOR: "payment_type_id",
+      PLACEHOLDER: "Select Payment Type",
+      API: `${FINANCE_URL.PAYMENT_TYPE_URL.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Department Name",
+      ACCESSOR: "department_id",
+      PLACEHOLDER: "Select Department",
+      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Payee Name",
+      ACCESSOR: "payee_name_id",
+      PLACEHOLDER: "Select Payee Name",
+      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+    },
+
+    {
+      CONTROL: "select",
+      HEADER: "Administration Ward",
+      ACCESSOR: "adminis_ward_id",
+      PLACEHOLDER: "Select Administration Ward",
+      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+    },
+
+    {
+      CONTROL: "textarea",
+      HEADER: "Narration",
+      ACCESSOR: "narration",
+      PLACEHOLDER: "Enter Narration",
+    },
+    {
+      CONTROL: "textarea",
+      HEADER: "Address",
+      ACCESSOR: "address",
+      PLACEHOLDER: "Enter Address",
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Sub Ledger/Name",
+      ACCESSOR: "sub_ledger_id",
+      PLACEHOLDER: "Select Sub Ledger",
+      API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
+    }, 
+    {
+      CONTROL: "input",
+      HEADER: "Amount",
+      ACCESSOR: "amount",
+      PLACEHOLDER: "Amount",
+      TYPE: "number",
+    },
+    {
+      CONTROL: "checkbox",
+      HEADER: "User Common Budget",
+      ACCESSOR: "user_common_budget",
+      TYPE: "checkbox",
+    },
+    {
+      CONTROL: "radio",
+      HEADER: "Payment Mode",
+      ACCESSOR: "payment_mode",
+      OPTIONS: choices,
+      TYPE: "radio",
+    },
+  ];
+
+  const footerData = [
+    {
+      key: "Total",
+      value: handleCount(),
+    },
+  ];
 
   return (
     <>
-      <Toaster />
-      <section>
-        <div className="mt-8">
-          <Formik
-            initialValues={initialPaymentDetails}
-            validationSchema={PaymentDetailsSchema}
-            onSubmit={(values, {resetForm}) => {
-              console.log("first dsf dfsd", values);
-              setDirPaymentEntries((prev) => [...prev, values]);
-              resetForm()
-              // mutate(values);
-            }}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <section className="border rounded-lg border-zinc-300 p-6 px-10">
-                  <div className="flex justify-between">
-                    <SubHeading>Add New Payment</SubHeading>
-                  </div>
-                  <div className="mt-8 grid grid-cols-2 gap-x-6 gap-4 ">
-                    {/* <DateInputBox
-                    label="Payment Date"
-                    name="payment_date"
-                    value={values.payment_date}
-                    error={errors.payment_date}
-                    touched={touched.payment_date}
-                  /> */}
-                    <InputBox
-                      type="date"
-                      placeholder="Enter Narration"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.payment_date}
-                      error={errors.payment_date}
-                      touched={touched.payment_date}
-                      label="Payment Date"
-                      name="payment_date"
-                    />
-                    <InputBox
-                      type="text"
-                      placeholder="Enter Narration"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.narration}
-                      error={errors.narration}
-                      touched={touched.narration}
-                      label="Narration"
-                      name="narration"
-                    />
-                    <DropDownList
-                      api={`${FINANCE_URL.PAYMENT_TYPE_URL.get}`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="Select payment type"
-                      value={values.payment_type_id}
-                      error={errors.payment_type_id}
-                      touched={touched.payment_type_id}
-                      label="Payment Type"
-                      name="payment_type_id"
-                    />
-                    <DropDownList
-                      api={`${FINANCE_URL.DEPARTMENT_URL.get}`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="Select department"
-                      value={values.department_id}
-                      error={errors.department_id}
-                      touched={touched.department_id}
-                      label="Department"
-                      name="department_id"
-                    />
-                    <InputBox
-                      type="text"
-                      placeholder="Enter Payee Name"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.payee_name}
-                      error={errors.payee_name}
-                      touched={touched.payee_name}
-                      label="Payee Name"
-                      name="payee_name"
-                    />
-                    <DropDownList
-                      api={`${FINANCE_URL.ADMINIS_WARD_URL.get}`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="Select administrative ward"
-                      value={values.adminis_ward_id}
-                      error={errors.adminis_ward_id}
-                      touched={touched.adminis_ward_id}
-                      label="Administrative Ward"
-                      name="adminis_ward_id"
-                    />
-                    <DropDownList
-                      api={`${FINANCE_URL.GRANT_URL.get}`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="Select grant"
-                      value={values.grant_id}
-                      error={errors.grant_id}
-                      touched={touched.grant_id}
-                      label="Grant"
-                      name="grant_id"
-                    />
-                    <InputBox
-                      type="text"
-                      placeholder="Enter Address"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.address}
-                      error={errors.address}
-                      touched={touched.address}
-                      label="Address"
-                      name="address"
-                    />
-                    <CheckBox
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.user_common_budget}
-                      error={errors.user_common_budget}
-                      touched={touched.user_common_budget}
-                      name="user_common_budget"
-                      label="User Common Budget *"
-                    />
-                  </div>
-                </section>
-                <section className="mt-8 border rounded-lg border-zinc-300 p-6 px-10">
-                  <div className="mb-8 flex justify-between">
-                    <SubHeading>Sub-Leger Details</SubHeading>
-                  </div>
-                  <PaymentModeRadioWrapper label="Select Mode of Payment">
-                    <div className="grid grid-cols-2">
-                      <PaymentModeRadioButton
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.payment_mode}
-                        error={errors.payment_mode}
-                        touched={touched.payment_mode}
-                        name="payment_mode"
-                        label="Select Mode of Payment"
-                      />
-                    </div>
-                  </PaymentModeRadioWrapper>
-                  <SubLedgerTable
-                    handleSelectChange={handleSelectChange}
-                    handleTextChange={handleTextChange}
-                    handleRemoveEntry={handleRemoveEntry}
-                    tableList={dirPaymentEntries}
-                  />
-                  <div className="mt-4 flex items-center gap-5 justify-end">
-                    <PrimaryButton
-                      onClick={goBack}
-                      buttonType="button"
-                      variant="cancel"
-                    >
-                      Back
-                    </PrimaryButton>
-
-                    <PrimaryButton buttonType="button" variant="cancel">
-                      Reset
-                    </PrimaryButton>
-                    <PrimaryButton buttonType="button" variant="primary">
-                      Save
-                    </PrimaryButton>
-                  </div>
-                </section>
-              </form>
-            )}
-          </Formik>
-        </div>
-      </section>
+      <Hoc
+        initialValues={initialData}
+        validationSchema={PaymentDetailsSchema}
+        resetInitialValue={resetInitialValue}
+        onSubmit={onSubmit}
+        fields={fields}
+        title="Add New Entry"
+      />
+      <TableWithCount
+        data={data}
+        scrollable
+        title="Title 1"
+        columns={columns}
+        footerData={footerData}
+      />
     </>
   );
 };

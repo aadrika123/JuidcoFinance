@@ -53,7 +53,7 @@ export const FINANCE_URL: Urls = {
   },
 
   DIRECT_PAYMENT_ENTRY_URL: {
-    get: "/direct-payment-entry/get-all?limit=10",
+    get: "/direct-payment-entry/get-all",
     create: "/direct-payment-entry/create",
     update: "/direct-payment-entry/update",
     getById: "direct-payment-entry/get-by-id",
