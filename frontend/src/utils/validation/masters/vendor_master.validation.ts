@@ -18,7 +18,9 @@ export const VendorDetailsSchema = Yup.object().shape({
     .email("Invalid email address")
     .required("Email is required"),
   contact_address: Yup.string().required("Office address is required"),
-  aadhar_no: Yup.string().required("Aaadhaar number is required"),
+  aadhar_no: Yup.string()
+    .matches(/^\d{12}$/, "Must be 12 digits")
+    .required("Aaadhaar number is required"),
   bank_account_no: Yup.string().required("Bank account no. is required"),
   bank_branch_name: Yup.string().required("Bank Branch Name is required"),
 });
