@@ -6,7 +6,7 @@ import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { DateFormatter } from "@/utils/helper";
 import { QueryClient, useMutation } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
@@ -28,7 +28,7 @@ export const EditDirectPaymentEntry = ({
     department_id: "",
     adminis_ward_id: "",
     payee_name_id: "",
-    sub_ledger_id: "",
+    subledger_id: "",
     grant_id: "",
     address: "",
     payment_mode: "",
@@ -55,7 +55,7 @@ export const EditDirectPaymentEntry = ({
           department_id: res.data.data.department.id,
           adminis_ward_id: res.data.data.adminis_ward.id,
           payee_name_id: res.data.data.payee_name.id,
-          // sub_ledger_id: res.data.data.sub_ledge.id || 1,
+          subledger_id: res.data.data.subledger.id || 1,
           amount: res.data.data.amount,
           payment_mode: res.data.data.payment_mode,
           user_common_budget: res.data.data.user_common_budget || true,
@@ -106,8 +106,8 @@ export const EditDirectPaymentEntry = ({
   });
 
   const onSubmit = (values: any) => {
-    values.voucher_date = `${new Date(values.voucher_date).toISOString()}`;
-    mutate(filterValBefStoring(values));
+    values.payment_date = `${new Date(values.payment_date).toISOString()}`;
+    mutate(values);
   };
 
   /////  Radio buttons list
@@ -177,10 +177,10 @@ export const EditDirectPaymentEntry = ({
     },
     {
       CONTROL: "select",
-      HEADER: "Sub Ledger/Name",
-      ACCESSOR: "sub_ledger_id",
+      HEADER: "Sub Ledger",
+      ACCESSOR: "subledger_id",
       PLACEHOLDER: "Select Sub Ledger",
-      API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
+      API: `${FINANCE_URL.SUB_LEDGER_URL.getCodes}`,
     },
     {
       CONTROL: "input",

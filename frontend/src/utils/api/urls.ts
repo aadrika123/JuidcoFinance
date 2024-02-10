@@ -4,13 +4,13 @@
  * status: Open
  */
 
-
 type FinanceUrlKeys =
   | "BANK_MASTER_URL"
   | "VENDOR_MASTER_URL"
   | "VENDOT_TYPE_URL"
   | "CHEQUEBOOK_MASTER_URL"
   | "DIRECT_PAYMENT_ENTRY_URL"
+  | "CHEQUE_ISSUE_ENTRY"
   | "PAYMENT_TYPE_URL"
   | "ADMINIS_WARD_URL"
   | "GRANT_URL"
@@ -18,7 +18,9 @@ type FinanceUrlKeys =
   | "VOUCHER_ENTRY_URL"
   | "VOUCHER_TYPE_URL"
   | "VOUCHER_SUB_TYPE_URL"
-  | "SUB_LEDGER_URL";
+  | "SUB_LEDGER_URL"
+  | "BILL_PAYMENT_ENTRY_URL"
+  | "RECEIPT_ENTRY_URL"
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -27,6 +29,8 @@ type Urls = {
     update?: string;
     getById?: string;
     delete?: string;
+    getCodes?: string;
+    getAll?: string;
   };
 };
 
@@ -43,6 +47,7 @@ export const FINANCE_URL: Urls = {
     create: "/vendor-master/create",
     update: "/vendor-master/update",
     getById: "/vendor-master/get",
+    getAll: "vendor-master/get"
   },
 
   CHEQUEBOOK_MASTER_URL: {
@@ -64,6 +69,13 @@ export const FINANCE_URL: Urls = {
     create: "/direct-payment-entry/create",
     update: "/voucher-entry/update",
     getById: "/voucher-entry/get-by-id",
+  },
+
+  CHEQUE_ISSUE_ENTRY: {
+    get: "/cheque-issuances/get-all",
+    create: "/cheque-issuances/create",
+    update: "/cheque-issuances/update",
+    getById: "/cheque-issuances/get-by-id",
   },
 
   PAYMENT_TYPE_URL: {
@@ -94,5 +106,19 @@ export const FINANCE_URL: Urls = {
   },
   SUB_LEDGER_URL: {
     get: "/sub-ledger/get",
+    getCodes: "/sub-ledger/get-codes",
   },
+
+  BILL_PAYMENT_ENTRY_URL:{
+    create: "/bill-payment-entry/create",
+    get: "/bill-payment-entry/get-all",
+    update: "/bill-payment-entry/update",
+    getById: "/bill-payment-entry/get-by-id",
+  },
+  RECEIPT_ENTRY_URL:{
+    create: "/receipt-entry/create",
+    get: "/receipt-entry/get-all",
+    update: "/receipt-entry/update",
+    getById: "/receipt-entry/get-by-id",
+  }
 };

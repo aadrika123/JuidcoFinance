@@ -40,8 +40,8 @@ export interface DirPaymentDataProps {
   adminis_ward_id_name?: string;
   payee_name_id: number | string;
   payee_name_id_name?: string;
-  sub_ledger_id: number | string;
-  sub_ledger_id_name?: string;
+  subledger_id: number | string;
+  subledger_id_name?: string;
   grant_id: number | string;
   grant_id_name?: string;
   amount?: number;
@@ -60,7 +60,7 @@ export interface ResponseData {
       department: { id: number };
       adminis_ward: { id: number };
       payee_name: { id: number };
-      sub_ledge: { id: number };
+      subledger: { id: number };
       amount: number;
       payment_mode: string;
       user_common_budget?: boolean;

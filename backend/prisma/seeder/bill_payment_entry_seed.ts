@@ -8,7 +8,7 @@ const bill_payment_entry_seed = async () => {
   function createRandomBillPaymentEntry(): bill_payment_entries {
     return {
       id: faker.datatype.number(),
-      bill_no: 1,
+      bill_no: "1",
       bill_type_id: 1,
       bill_entry_date: faker.date.recent(),
       department_id: 1,

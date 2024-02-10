@@ -14,21 +14,21 @@ export type BillPaymentTableData = {
 export interface BillPaymentDetailsData {
   id?: number | string;
   bill_entry_date: string;
-  bill_number: string;
+  bill_no: string;
   bill_type_id: number | string;
   department_id: number | string;
   department_id_name?: string;
-  payee_name_id: number | string;
-  payee_name_id_name?: string;
+  payee_id: number | string;
+  payee_id_name?: string;
   adminis_ward_id: number | string;
   adminis_ward_id_name?: string;
-  vendor_name_id: number | string;
-  vendor_name_id_name?: string;
+  vendor_id: number | string;
+  vendor_id_name?: string;
   address: string;
   bill_amount: number | string;
   advance: number | string;
   deposit: number | string;
-  other_deduction: number | string;
+  deductions_amount: number | string;
 }
 
 ///////////// Response Data ////////////////////
@@ -37,15 +37,15 @@ export interface ResponseData {
     data: {
       bill_entry_date: string;
       bill_type: { id: number };
-      bill_number: string;
+      bill_no: string;
       department: { id: number };
       adminis_ward: { id: number };
-      payee_name: { id: number };
-      vendor_name: { id: number };
+      payee: { id: number };
+      vendor: { id: number };
       bill_amount: number;
       address: string;
       deposit: number;
-      other_deduction: number;
+      deductions_amount: number;
       advance: number;
     };
   };

@@ -1,3 +1,9 @@
+/**
+ * Author: Krish
+ * date: 02-09-2024
+ * status: open
+ */
+
 "use client";
 
 import React from "react";
@@ -28,23 +34,13 @@ export const HeroChequeIssueEntry = () => {
     );
   };
 
-  // -------------Print Button ( Upcomming Print Feature )-----------------//
-  // const pButton = (id: string) => {
-  //   return (
-  //     <>
-  //       <ViewIconButton onClick={() => onViewButtonClick1(id)} />
-  //     </>
-  //   );
-  // };
-  // -------------Print Button ( Upcomming Print Feature )-----------------//
-
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
-    { name: "voucher_no", caption: "Issue Date", width: "w-[15%]" },
-    { name: "voucher_date", caption: "Module Name", width: "w-[10%]" },
-    { name: "voucher_type", caption: "Cheque No", width: "w-[15%]" },
-    { name: "narration", caption: "Amount", width: "w-[40%]" },
-    { name: "narration", caption: "Department", width: "w-[40%]" },
+    { name: "issue_date", caption: "Issue Date", width: "w-[15%]" },
+    { name: "module", caption: "Module Name", width: "w-[10%]" },
+    { name: "cheque_no", caption: "Cheque No", width: "w-[25%]" },
+    { name: "amount", caption: "Amount", width: "w-[20%]" },
+    { name: "narration", caption: "Department", width: "w-[30%]" },
     // { name: "print", caption: "Print", value: pButton, width: "w-[5%]" },
     {
       name: "View / Edit",
@@ -56,12 +52,12 @@ export const HeroChequeIssueEntry = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Voucher Entry"} />
+      <HeaderWidget variant="add" title={"Cheque Issue Entry"} />
       <TableWithFeatures
-        title="Title 1"
+        title="Cheque Issue List"
         center
         columns={column}
-        api={FINANCE_URL.VOUCHER_ENTRY_URL.get || ""}
+        api={FINANCE_URL.CHEQUE_ISSUE_ENTRY.get || ""}
         numberOfRowsPerPage={10}
       />
     </>

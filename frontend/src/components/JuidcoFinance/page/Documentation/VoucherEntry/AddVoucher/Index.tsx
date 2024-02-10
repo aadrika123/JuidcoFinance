@@ -49,6 +49,8 @@ export const AddVoucherEntry = () => {
     setInitialData(initialValues);
   }
 
+
+  console.log("first", data)
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
     if (!isUpdateMode.isOnEdit) {

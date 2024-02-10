@@ -1,6 +1,8 @@
 import { FormikHelpers } from "formik";
 import { VoucherDataProps } from "../voucher_entry_types";
-import { ChequeIssueEntryData } from "../cheque_issue_entry_types";
+import { DirPaymentDataProps } from "../direct_payment_entry_types";
+import { BillPaymentDetailsData } from "../bill_payment_entry_types";
+import { ChequeIssueEntryData } from "../cheque_issue_entry_types"
 import { ReceiptDataProps } from "../receipt_entry_types";
 import { ChequebookDataProps } from "../chequebook_master_types";
 
@@ -18,12 +20,12 @@ export interface Choice {
 }
 
 // Add Types Of All Form Data's
-export type FormValues = VoucherDataProps | ChequeIssueEntryData | ReceiptDataProps | ChequebookDataProps;
+export type FormValues = VoucherDataProps | DirPaymentDataProps | BillPaymentDetailsData | ChequeIssueEntryData | ChequebookDataProps | ReceiptDataProps; 
 
 export type FieldTypeProps = {
-  CONTROL: "input" | "select" | "checkbox" | "textarea" | "radio";
-  HEADER: string;
-  ACCESSOR: string;
+  CONTROL?: "input" | "select" | "checkbox" | "textarea" | "radio";
+  HEADER?: string;
+  ACCESSOR?: string;
   PLACEHOLDER?: string;
   API?: string;
   OPTIONS?: Choice[];
@@ -40,5 +42,6 @@ export interface FormikWrapperProps {
   fields: FieldTypeProps[];
   readonly?: boolean;
   onClose?: () => void;
-  resetInitialValue?: () => void;
+  title: string;
+  resetInitialValue?:() => void;
 }

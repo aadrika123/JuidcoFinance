@@ -11,17 +11,22 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { ReceiptDataProps } from "@/utils/types/receipt_entry_types";
 import APIs from "@/json/apis.json";
 import { ReceiptDetailsSchema } from "@/utils/validation/transactions/receipt_entry.validation";
-import FormikWrapperV from "@/components/global/organisms/FormikContainerV";
+import FormikWrapper from "@/components/global/organisms/FormikContainer";
+import axios from "@/lib/axiosConfig";
+import { QueryClient, useMutation } from "react-query";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import toast from "react-hot-toast";
 
 interface UpdatedModeType {
   id: number | string;
   isOnEdit: boolean;
 }
 
-const Hoc = PopupFormikHOC(FormikWrapperV);
+const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const AddReceipt = () => {
   const dispatch = useDispatch();
+  const queryClient = new QueryClient();
   const initialValue: ReceiptDataProps = {
     date: "",
     email: "",
@@ -106,6 +111,42 @@ export const AddReceipt = () => {
     return sum;
   };
 
+  /////////////////// Handle Storing Entries ///////////////////////////
+  const handleStore = async (
+    values: ReceiptDataProps
+  ): Promise<ReceiptDataProps> => {
+    try {
+     const res = await axios({
+        url: `${FINANCE_URL.RECEIPT_ENTRY_URL.create}`,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<
+  ReceiptDataProps,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      toast.success("Updated Receipt Payment Entry");
+    },
+    onError: () => {
+      alert("Error updating Receipt Payment Entry");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+  });
+
   ///////////////// Handling Remove item(row) from list ///////////////
   const onRemoveButton = (id: string) => {
     setData((prev) => {
@@ -138,6 +179,11 @@ export const AddReceipt = () => {
     }));
     dispatch(openPopup());
   };
+
+  //////////////////// Handle Reset Table List //////////////////
+  const handleResetTable = () =>{
+    setData([]);
+  }
 
   ///////////////// Edit and Remove Button JSX ///////////////
   const addButton = (id: string) => {
@@ -271,9 +317,11 @@ export const AddReceipt = () => {
       <TableWithCount
         data={data}
         scrollable
-        title="Title 1"
+        title="Add New Entry"
         columns={columns}
         footerData={footerData}
+        handleStore={mutate}
+        handleResetTable={handleResetTable}
       />
     </>
   );

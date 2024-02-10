@@ -5,7 +5,7 @@ import { generateUniquePaymentNo } from "../../../../util/helper/generateUniqueN
 
 // Validating request data
 export const billPaymentEntrySchema = Joi.object({
-  bill_no: Joi.number().required(),
+  bill_no: Joi.string().required(),
   bill_type_id: Joi.number().required(),
   bill_entry_date: Joi.date().required(),
   department_id: Joi.number().required(),

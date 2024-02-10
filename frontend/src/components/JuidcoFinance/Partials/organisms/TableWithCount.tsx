@@ -27,7 +27,9 @@ interface TableHOCProps<T> {
   scrollable?: boolean;
   height?: string;
   title: string;
-  footerData: FooterData[];
+  footerData?: FooterData[];
+  handleStore: (data: T[] | undefined) => void;
+  handleResetTable: () => void;
 }
 
 const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
@@ -48,15 +50,25 @@ const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
           </Button>
         </div>
         <Table {...props} />
-        <TotalCountTable footerData={props.footerData} />
+        {props.footerData && props.footerData.length > 0 && (
+          <TotalCountTable footerData={props.footerData} />
+        )}
         <aside className="flex items-center justify-end py-5 gap-5">
-          <Button onClick={goBack} buttontype="submit" variant="cancel">
+          <Button onClick={goBack} buttontype="button" variant="cancel">
             Back
           </Button>
-          <Button buttontype="submit" variant="cancel">
+          <Button
+            onClick={props.handleResetTable}
+            buttontype="button"
+            variant="cancel"
+          >
             Reset
           </Button>
-          <Button buttontype="submit" variant="primary">
+          <Button
+            onClick={() => props.handleStore(props.data)}
+            buttontype="button"
+            variant="primary"
+          >
             Submit
           </Button>
         </aside>

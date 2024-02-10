@@ -33,7 +33,7 @@ export const HeroPaymentEntry = () => {
     { name: "payment_no", caption: "Payment No", width: "w-[18%]" },
     { name: "payment_type", caption: "Payment Type", width: "w-[12%]" },
     { name: "payee_name", caption: "Payee Name", width: "w-[20%]" },
-    { name: "ledger_code", caption: "Ledger Code", width: "w-[20%]" },
+    { name: "subledger", caption: "Ledger Code", width: "w-[20%]" },
     { name: "amount", caption: "Amount", width: "w-[15%]" },
     {
       name: "View / Edit",

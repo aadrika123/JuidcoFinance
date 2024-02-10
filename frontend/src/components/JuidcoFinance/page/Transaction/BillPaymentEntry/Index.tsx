@@ -31,12 +31,12 @@ export const HeroBillPaymentEntry = () => {
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
     { name: "bill_no", caption: "Bill No", width: "w-[18%]" },
-    { name: "bill_date", caption: "Bill Date", width: "w-[12%]" },
-    { name: "payee_name", caption: "Payee Name", width: "w-[20%]" },
-    { name: "vendor_name", caption: "Vendor Name", width: "w-[20%]" },
+    { name: "bill_entry_date", caption: "Bill Date", width: "w-[12%]" },
+    { name: "payee", caption: "Payee Name", width: "w-[20%]" },
+    { name: "vendor", caption: "Vendor Name", width: "w-[20%]" },
     { name: "bill_amount", caption: "Bill Amount", width: "w-[12%]" },
     { name: "net_amount", caption: "Net Amount", width: "w-[20%]" },
-    { name: "approved", caption: "approved", width: "w-[15%]" },
+    { name: "is_approved", caption: "Approved", width: "w-[15%]" },
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,
@@ -52,7 +52,7 @@ export const HeroBillPaymentEntry = () => {
         title="Bill Payment Entry List"
         center
         columns={column}
-        api={FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.get || ""}
+        api={FINANCE_URL.BILL_PAYMENT_ENTRY_URL.get || ""}
         numberOfRowsPerPage={10}
       />
     </>

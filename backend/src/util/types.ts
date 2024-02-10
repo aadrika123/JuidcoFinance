@@ -79,13 +79,12 @@ interface DirPaymentEntryRequestData {
   address: string;
   department_id: number;
   subledger_id: number;
-  email: string;
   payment_mode: string;
   amount: number;
 }
 
 interface BillPaymentEntryRequestData {
-  bill_no: number,
+  bill_no: string,
   bill_type_id: number,
   bill_entry_date: string,
   department_id: number,

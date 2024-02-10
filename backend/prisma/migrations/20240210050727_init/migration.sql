@@ -189,7 +189,6 @@ CREATE TABLE "dir_payment_entries" (
     "address" TEXT NOT NULL,
     "department_id" INTEGER NOT NULL,
     "subledger_id" INTEGER NOT NULL,
-    "email" TEXT NOT NULL,
     "payment_mode" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -212,7 +211,7 @@ CREATE TABLE "bill_types" (
 -- CreateTable
 CREATE TABLE "bill_payment_entries" (
     "id" SERIAL NOT NULL,
-    "bill_no" INTEGER NOT NULL,
+    "bill_no" TEXT NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
     "bill_entry_date" TIMESTAMP(3) NOT NULL,
     "department_id" INTEGER NOT NULL,
@@ -354,7 +353,7 @@ CREATE TABLE "banks" (
 -- CreateTable
 CREATE TABLE "bill_invoices" (
     "id" SERIAL NOT NULL,
-    "bill_no" INTEGER NOT NULL,
+    "bill_no" TEXT NOT NULL,
     "type_id" INTEGER NOT NULL,
     "vendor_id" INTEGER NOT NULL,
     "department_id" INTEGER NOT NULL,

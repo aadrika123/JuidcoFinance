@@ -33,6 +33,7 @@ type ObjectContent = {
   id: number;
   type?: string;
   name?: string;
+  code?: string;
 };
 
 const Table = <T,>({
@@ -55,8 +56,8 @@ const Table = <T,>({
   });
 
   const rows = !data?.length ? (
-    <Trow scrollable={scrollable}>
-      <Tdata scrollable={scrollable} value="No data" colSpan={columns.length} />
+    <Trow className="flex items-center justify-center" scrollable={scrollable}>
+      <Tdata className="border-none" scrollable={scrollable} value="No data" colSpan={columns.length} />
     </Trow>
   ) : (
     data?.map((row, index) => {
@@ -74,10 +75,16 @@ const Table = <T,>({
             const value1: ReactNode | string = isoDatePattern.test(`${value}`)
               ? dayjs(`${value}`).format("DD MMM YYYY")
               : typeof value === "object"
-                ? (value as ObjectContent).type || (value as ObjectContent).name
+                ? (value as ObjectContent).type ||
+                  (value as ObjectContent).name ||
+                  (value as ObjectContent).code
                 : column.value
                   ? column.value(row["id" as keyof typeof row] as string)
-                  : (value as string);
+                  : typeof value === "boolean"
+                    ? value
+                      ? "Yes"
+                      : "No"
+                    : (value as string);
 
             return (
               <Tdata

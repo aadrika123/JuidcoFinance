@@ -11,8 +11,8 @@ import { QueryClient, useMutation } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
-import { PaymentDetailsSchema } from "@/utils/validation/transactions/direct_payment.validation";
 import { BillPaymentDetailsData, ResponseData } from "@/utils/types/bill_payment_entry_types";
+import { BillPaymentDetailsSchema } from "@/utils/validation/transactions/bill_payment.validation";
 
 export const EditBillPaymentEntry = ({
   BillPaymentID,
@@ -22,18 +22,18 @@ export const EditBillPaymentEntry = ({
   const searchParams = useSearchParams().get("mode");
 
   const [initialData, setInitialData] = useState<BillPaymentDetailsData>({
-    bill_number: "",
+    bill_no: "",
     bill_entry_date: "",
     bill_type_id: "",
-    vendor_name_id: "",
+    vendor_id: "",
     department_id: "",
     adminis_ward_id: "",
-    payee_name_id: "",
+    payee_id: "",
     bill_amount: "",
     advance: "",
     address: "",
     deposit: "",
-    other_deduction: "",
+    deductions_amount: "",
   });
 
   const queryClient = new QueryClient();
@@ -43,7 +43,7 @@ export const EditBillPaymentEntry = ({
     (async function () {
       const res: ResponseData = await axios({
         method: "GET",
-        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.getById}/${BillPaymentID}`,
+        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.getById}/${BillPaymentID}`,
       });
 
       setInitialData((prev: BillPaymentDetailsData) => {
@@ -51,28 +51,29 @@ export const EditBillPaymentEntry = ({
           ...prev,
           bill_entry_date: DateFormatter(res.data.data.bill_entry_date),
           bill_type_id: res.data.data.bill_type.id,
-          bill_number: res.data.data.bill_number,
+          bill_no: res.data.data.bill_no,
           department_id: res.data.data.department.id,
           adminis_ward_id: res.data.data.adminis_ward.id,
-          payee_name_id: res.data.data.payee_name.id,
-          vendor_name_id: res.data.data.vendor_name.id,
+          payee_id: res.data.data.payee.id,
+          vendor_id: res.data.data.vendor.id,
           bill_amount: res.data.data.bill_amount,
           address: res.data.data.address,
           deposit: res.data.data.deposit,
-          other_deduction: res.data.data.other_deduction,
+          deductions_amount: res.data.data.deductions_amount,
           advance: res.data.data.advance,
         };
       });
     })();
   }, []);
 
-  // UPDATE DIRECT PAYMENT ENTRY
+  // UPDATE BILL PAYMENT ENTRY
   const UpdateBillPaymentEntry = async (
     values: BillPaymentDetailsData
   ): Promise<BillPaymentDetailsData> => {
+    console.log("first", values)
     try {
       const res = await axios({
-        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.update}`,
+        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.update}`,
         method: "POST",
         data: {
           id: Number(BillPaymentID),
@@ -92,10 +93,10 @@ export const EditBillPaymentEntry = ({
     BillPaymentDetailsData
   >(UpdateBillPaymentEntry, {
     onSuccess: () => {
-      toast.success("Updated Direct Payment Entry");
+      toast.success("Updated Bill Payment Entry");
     },
     onError: () => {
-      alert("Error updating Direct Payment Entry");
+      alert("Error updating Bill Payment Entry");
     },
     onSettled: () => {
       queryClient.invalidateQueries();
@@ -106,7 +107,8 @@ export const EditBillPaymentEntry = ({
   });
 
   const onSubmit = (values: any) => {
-    values.voucher_date = `${new Date(values.voucher_date).toISOString()}`;
+    values.bill_entry_date = `${new Date(values.bill_entry_date).toISOString()}`;
+    console.log("sf ls df", values)
     mutate(filterValBefStoring(values));
   };
 
@@ -115,7 +117,7 @@ export const EditBillPaymentEntry = ({
     {
       CONTROL: "input",
       HEADER: "Bill Number",
-      ACCESSOR: "bill_number",
+      ACCESSOR: "bill_no",
       PLACEHOLDER: "Enter Bill Number",
     },
     {
@@ -142,9 +144,9 @@ export const EditBillPaymentEntry = ({
     {
       CONTROL: "select",
       HEADER: "Vendor Name",
-      ACCESSOR: "vendor_name_id",
+      ACCESSOR: "vendor_id",
       PLACEHOLDER: "Select Vendro Name",
-      API: `${FINANCE_URL.PAYMENT_TYPE_URL.get}`,
+      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
     {
       CONTROL: "textarea",
@@ -155,7 +157,7 @@ export const EditBillPaymentEntry = ({
     {
       CONTROL: "select",
       HEADER: "Payee Name",
-      ACCESSOR: "payee_name_id",
+      ACCESSOR: "payee_id",
       PLACEHOLDER: "Select Payee Name",
       API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
     },
@@ -190,7 +192,7 @@ export const EditBillPaymentEntry = ({
     {
       CONTROL: "input",
       HEADER: "Other Deduction",
-      ACCESSOR: "other_deduction",
+      ACCESSOR: "deductions_amount",
       PLACEHOLDER: "Enter Other Deduction",
       TYPE: "number",
     },
@@ -199,12 +201,12 @@ export const EditBillPaymentEntry = ({
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Edit Direct Payment Entry" variant="view" />
+      <HeaderWidget title="Edit Bill Payment Entry" variant="view" />
       <FormikWrapper
         title=""
         initialValues={initialData}
         enableReinitialize={true}
-        validationSchema={PaymentDetailsSchema}
+        validationSchema={BillPaymentDetailsSchema}
         onSubmit={onSubmit}
         fields={fields}
         readonly={searchParams === "view"}

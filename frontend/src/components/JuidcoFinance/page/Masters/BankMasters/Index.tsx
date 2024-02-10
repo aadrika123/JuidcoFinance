@@ -240,9 +240,9 @@ export const HeroBankMasters = () => {
                         >
                           Close
                         </PrimaryButton>
-                        <PrimaryButton buttonType="button" variant="cancel">
+                        {/* <PrimaryButton buttonType="button" variant="cancel">
                           Reset
-                        </PrimaryButton>
+                        </PrimaryButton> */}
                         <PrimaryButton buttonType="submit" variant="primary">
                           Save
                         </PrimaryButton>

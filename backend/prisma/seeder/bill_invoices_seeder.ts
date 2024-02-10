@@ -21,7 +21,7 @@ const bill_invoices_seeder = async () => {
   const number_of_receipts = 10;
   for(let i=0;i<number_of_receipts; i++){
     const record ={
-      bill_no: faker.number.float(),
+      bill_no: "1",
       type_id: random_one(bill_types),
       vendor_id: random_one(vendor_ids),
       department_id: random_one(department_id),
