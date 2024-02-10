@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../../util/sendResponse";
 import ReceiptEntryDao from "../../dao/transactions/receiptEntryDao";
 import Joi from "joi";
 import { resObj } from "../../../../util/types";
@@ -30,6 +29,9 @@ class ReceiptEntryController {
       version: "1.0",
     };
     try {
+
+      console.log(req.body);
+
       const { error } = receiptValidation.validate(req.body);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
@@ -42,6 +44,7 @@ class ReceiptEntryController {
         res
       );
     } catch (error: any) {
+      console.log(error);
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };

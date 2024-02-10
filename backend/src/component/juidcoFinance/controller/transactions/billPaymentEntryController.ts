@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { dirPaymentEntryValidationAlongWithID, dirPaymentEntryValidation } from "../../requests/transactions/dirPaymentEntryValidation";
-import { sendResponse } from "../../../../util/sendResponse";
 import BillPaymentEntryDao from "../../dao/transactions/billPaymentEntryDao";
 import { resObj } from "../../../../util/types";
 import { billPaymentEntryValidation, billPaymentEntryValidationAlongWithID } from "../../requests/transactions/billPaymentEntryValidation";

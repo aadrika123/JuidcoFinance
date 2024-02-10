@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
 import SubledgerDao from "../dao/transactions/subledgerDao";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resObj } from "../../../util/types";

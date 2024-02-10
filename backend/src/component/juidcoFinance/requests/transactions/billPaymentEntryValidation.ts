@@ -1,7 +1,6 @@
 import Joi from "joi";
 import { BillPaymentEntryRequestData } from "../../../../util/types";
-import { Request } from "express";
-import { generateUniquePaymentNo } from "../../../../util/helper/generateUniqueNo";
+import { Request } from "express"
 
 // Validating request data
 export const billPaymentEntrySchema = Joi.object({

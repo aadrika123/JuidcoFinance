@@ -3,7 +3,6 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
 import { requestData } from "../../requests/transactions/billPaymentEntryValidation";
 import { multiRequestData } from "../../requests/transactions/billPaymentEntryValidation";
-import { BillPaymentEntryRequestData } from "../../../../util/types";
 
 const prisma = new PrismaClient();
 

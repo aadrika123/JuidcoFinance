@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import VoucherEntryDao from "../../dao/documentation/voucherEntryDao";
-import { sendResponse } from "../../../../util/sendResponse";
 import { resMessage } from "../../../../util/common";
 import { voucherEntryValidation, voucherEntryValidationWithID } from "../../requests/documentation/voucherEntryValidation";
 import CommonRes from "../../../../util/helper/commonResponse";

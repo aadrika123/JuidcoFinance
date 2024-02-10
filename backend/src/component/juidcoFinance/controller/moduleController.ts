@@ -1,7 +1,6 @@
 "use strict";
 
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resMessage } from "../responseMessage/commonMessage";
 import { resObj } from "../../../util/types";
