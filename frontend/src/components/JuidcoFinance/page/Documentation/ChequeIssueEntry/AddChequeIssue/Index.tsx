@@ -11,6 +11,10 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { ChequeIssueEntryData } from "@/utils/types/cheque_issue_entry_types";
 import { chequeIssueValidationSchema } from "@/utils/validation/documentation/cheque_issue_entry.validation";
+import { useMutation, QueryClient } from "react-query";
+import toast from "react-hot-toast";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import axios from "@/lib/axiosConfig";
 
 interface UpdatedModeType {
   id: number | string;
@@ -92,6 +96,47 @@ export const AddChequeIssueEntry = () => {
     }
     dispatch(closePopup());
     resetInitialValue();
+  };
+
+  const queryClient = new QueryClient();
+  // store multiple data in row
+  const handleStore = async (
+    values: ChequeIssueEntryData
+  ): Promise<ChequeIssueEntryData> => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.create}`,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<ChequeIssueEntryData, Error, any>(
+    handleStore,
+    {
+      onSuccess: () => {
+        toast.success("Updated Direct Payment Entry");
+      },
+      onError: () => {
+        alert("Error updating Direct Payment Entry");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries();
+        setTimeout(() => {
+          goBack();
+        }, 1000);
+      },
+    }
+  );
+
+  //////////////////// Handle Reset Table List //////////////////
+  const handleResetTable = () => {
+    setData([]);
   };
 
   ///////////////// Handling Total Count ///////////////
@@ -176,13 +221,13 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "input",
       HEADER: "Payment Voucher No",
       ACCESSOR: "voucher_no",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter payment voucher no",
+      TYPE: "number",
     },
     {
       CONTROL: "input",
       HEADER: "Payment Voucher Date",
       ACCESSOR: "voucher_date",
-      PLACEHOLDER: "YYYY-MM-DD",
       TYPE: "date",
     },
     {
@@ -190,7 +235,7 @@ export const AddChequeIssueEntry = () => {
       HEADER: "Type of Bill",
       ACCESSOR: "bill_type_id",
       PLACEHOLDER: "Select Bill Type",
-      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+      API: `${FINANCE_URL.BILL_TYPE.get}`,
     },
 
     {
@@ -203,7 +248,7 @@ export const AddChequeIssueEntry = () => {
     {
       CONTROL: "select",
       HEADER: "Administration Ward",
-      ACCESSOR: "adminis_ward_id",
+      ACCESSOR: "admin_ward_id",
       PLACEHOLDER: "Select Administration Ward",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
@@ -212,31 +257,31 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "select",
       HEADER: "Payee Name",
       ACCESSOR: "payee_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select payee name",
+      API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
     },
 
     {
       CONTROL: "select",
       HEADER: "Grant",
       ACCESSOR: "grant_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select grant",
+      API: `${FINANCE_URL.GRANT_URL.get}`,
     },
 
     {
       CONTROL: "select",
       HEADER: "Department",
       ACCESSOR: "department_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select department",
+      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
 
     {
       CONTROL: "select",
       HEADER: "Bank Name",
       ACCESSOR: "bank_id",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Select bank name",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
@@ -244,7 +289,7 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "select",
       HEADER: "Module Name",
       ACCESSOR: "module_id",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Select module name",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
 
@@ -252,7 +297,6 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "input",
       HEADER: "Issue Date",
       ACCESSOR: "issue_date",
-      PLACEHOLDER: "XYZ Value",
       TYPE: "date",
     },
 
@@ -260,14 +304,15 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "input",
       HEADER: "Cheque No",
       ACCESSOR: "cheque_no",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter cheque no",
     },
 
     {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter amount",
+      TYPE: "number",
     },
   ];
 
@@ -291,9 +336,11 @@ export const AddChequeIssueEntry = () => {
       <TableWithCount
         data={data}
         scrollable
-        title="Title 1"
+        title="Add Cheque Issue"
         columns={columns}
         footerData={footerData}
+        handleStore={mutate}
+        handleResetTable={handleResetTable}
       />
     </>
   );

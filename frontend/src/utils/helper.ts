@@ -37,7 +37,7 @@ export const filterValBefStoring = (values: any) => {
         }
       }
     }
-    console.log("first", obj)
+    console.log("first", obj);
     return obj;
   }
 

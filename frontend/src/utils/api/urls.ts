@@ -19,6 +19,8 @@ type FinanceUrlKeys =
   | "VOUCHER_TYPE_URL"
   | "VOUCHER_SUB_TYPE_URL"
   | "SUB_LEDGER_URL"
+  | "EMPLOYEE_URL"
+  | "BILL_TYPE"
   | "BILL_PAYMENT_ENTRY_URL"
   | "RECEIPT_ENTRY_URL"
 
@@ -47,7 +49,7 @@ export const FINANCE_URL: Urls = {
     create: "/vendor-master/create",
     update: "/vendor-master/update",
     getById: "/vendor-master/get",
-    getAll: "vendor-master/get"
+    getAll: "vendor-master/get",
   },
 
   CHEQUEBOOK_MASTER_URL: {
@@ -66,7 +68,7 @@ export const FINANCE_URL: Urls = {
 
   VOUCHER_ENTRY_URL: {
     get: "/voucher-entry/get-all",
-    create: "/direct-payment-entry/create",
+    create: "/voucher-entry/create",
     update: "/voucher-entry/update",
     getById: "/voucher-entry/get-by-id",
   },
@@ -90,8 +92,15 @@ export const FINANCE_URL: Urls = {
     get: "/grant/get",
   },
 
+  BILL_TYPE: {
+    get: "/bill-type/get",
+  },
+
   DEPARTMENT_URL: {
     get: "/department/get",
+  },
+  EMPLOYEE_URL: {
+    get: "/employee/get",
   },
 
   VOUCHER_TYPE_URL: {
@@ -109,7 +118,7 @@ export const FINANCE_URL: Urls = {
     getCodes: "/sub-ledger/get-codes",
   },
 
-  BILL_PAYMENT_ENTRY_URL:{
+  BILL_PAYMENT_ENTRY_URL: {
     create: "/bill-payment-entry/create",
     get: "/bill-payment-entry/get-all",
     update: "/bill-payment-entry/update",

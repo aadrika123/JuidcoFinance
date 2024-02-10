@@ -7,7 +7,7 @@ const voucher_entries_seed = async () => {
   function createRandomVoucherEntries(): voucher_entries {
     return {
       id: faker.datatype.number(),
-      voucher_no: faker.datatype.number(),
+      voucher_no: faker.string.uuid(),
       voucher_date: faker.date.recent(),
       voucher_type_id: faker.datatype.number(),
       narration: faker.lorem.sentence(),
@@ -16,9 +16,9 @@ const voucher_entries_seed = async () => {
       voucher_sub_id: faker.datatype.number(),
       sub_ledger_id: faker.datatype.number(),
       amount: faker.datatype.number(),
-      dr_cr: faker.datatype.number(),
+      dr_cr: "dr",
       created_at: faker.date.recent(),
-      updated_at: faker.date.recent()
+      updated_at: faker.date.recent(),
     };
   }
 
@@ -41,7 +41,7 @@ const voucher_entries_seed = async () => {
         amount: item.amount,
         dr_cr: item.dr_cr,
         created_at: item.created_at,
-        updated_at: item.updated_at
+        updated_at: item.updated_at,
       },
     });
   }

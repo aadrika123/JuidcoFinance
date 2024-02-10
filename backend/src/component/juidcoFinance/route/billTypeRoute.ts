@@ -15,7 +15,7 @@ class BillTypeRoute {
   }
 
   configure(app: express.Application): void {
-    app.route(`${baseUrl}/Bill-type/get`).get(this.billTypeController.getBillTypes);  //1401
+    app.route(`${baseUrl}/bill-type/get`).get(this.billTypeController.getBillTypes);  //1401
   }
 }
 

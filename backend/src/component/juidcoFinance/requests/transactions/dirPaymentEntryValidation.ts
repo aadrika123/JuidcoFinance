@@ -16,7 +16,7 @@ const dirPaymentEntrySchema = Joi.object({
   department_id: Joi.number().required(),
   payment_mode: Joi.string().required(),
   subledger_id: Joi.number().required(),
-  amount: Joi.number().required(),
+  amount: Joi.number().required(),   
 });
 export const dirPaymentEntryValidation = Joi.array().items(
   dirPaymentEntrySchema
