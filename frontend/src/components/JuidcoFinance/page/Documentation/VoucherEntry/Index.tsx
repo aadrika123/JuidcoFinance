@@ -57,7 +57,7 @@ export const HeroVoucherEntry = () => {
     <>
       <HeaderWidget variant="add" title={"Voucher Entry"} />
       <TableWithFeatures
-        title="Title 1"
+        title="Voucher List"
         center
         columns={column}
         api={FINANCE_URL.VOUCHER_ENTRY_URL.get || ""}

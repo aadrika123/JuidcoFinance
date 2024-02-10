@@ -28,7 +28,6 @@ import vendor_types_seeder from "./seeder/vendor_types_seeder";
 import cheque_issuances_seeder from "./seeder/cheque_issuances_seeder";
 import banks_seeder from "./seeder/banks_seeder";
 
-
 const prisma = new PrismaClient();
 async function main() {
 
@@ -132,8 +131,8 @@ async function main() {
     id++;
   }
 
-    ///////////////// Vendor Types ////////////////////////
-  await vendor_types_seeder()
+  ///////////////// Vendor Types ////////////////////////
+  await vendor_types_seeder();
 
   ///////////////// Employee ////////////////////////
   function createRandomEmployee(): employees {
@@ -389,37 +388,31 @@ async function main() {
   //////////////// Voucher sub type //////////////////
   await voucher_sub_types_seed();
 
-
   //////////////// Bill Types //////////////////////
   await bill_types_seeder();
 
   /////////////// Bill Payment Entry //////////////////
   await bill_payment_entry_seed();
 
+  /////////////// Receipt Types Seeder //////////////////
+  await receipt_types_seeder();
 
+  await subledgers_seeder();
 
-   /////////////// Receipt Types Seeder //////////////////
-   await receipt_types_seeder();
+  await modules_seeder();
 
- 
-   await modules_seeder();
- 
-   await receipts_seeder();
+  await receipts_seeder();
 
-
-    //////////////// Voucher Entries //////////////////
+  //////////////// Voucher Entries //////////////////
   await voucher_entries_seed();
-
 
   await bill_stages_seeder();
 
   await bill_invoices_seeder();
 
-
   await banks_seeder();
-  
+
   await cheque_issuances_seeder();
- 
 }
 main()
   .then(async () => {

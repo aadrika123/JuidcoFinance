@@ -14,7 +14,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export const HeroChequeIssueEntry = () => {
+export const HeroBillsInvoiceEntry = () => {
   const pathName = usePathname();
   const router = useRouter();
 
@@ -36,11 +36,14 @@ export const HeroChequeIssueEntry = () => {
 
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
-    { name: "issue_date", caption: "Issue Date", width: "w-[15%]" },
-    { name: "module", caption: "Module Name", width: "w-[10%]" },
-    { name: "cheque_no", caption: "Cheque No", width: "w-[25%]" },
-    { name: "amount", caption: "Amount", width: "w-[20%]" },
-    { name: "narration", caption: "Department", width: "w-[30%]" },
+    { name: "issue_date", caption: "Vendor Name", width: "w-[15%]" },
+    { name: "module", caption: "Bill Type", width: "w-[10%]" },
+    { name: "cheque_no", caption: "Bill Number", width: "w-[15%]" },
+    { name: "amount", caption: "Department", width: "w-[40%]" },
+    { name: "narration", caption: "Concerned Work", width: "w-[40%]" },
+    { name: "narration", caption: "Bill Date ", width: "w-[40%]" },
+    { name: "narration", caption: "Narration ", width: "w-[40%]" },
+    { name: "narration", caption: "Is Authorized ", width: "w-[40%]" },
     // { name: "print", caption: "Print", value: pButton, width: "w-[5%]" },
     {
       name: "View / Edit",
@@ -52,9 +55,9 @@ export const HeroChequeIssueEntry = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Cheque Issue Entry"} />
+      <HeaderWidget variant="add" title={"Bills Invoice Entry"} />
       <TableWithFeatures
-        title="Cheque Issue List"
+        title="Bills Invoice List"
         center
         columns={column}
         api={FINANCE_URL.CHEQUE_ISSUE_ENTRY.get || ""}

@@ -11,7 +11,7 @@ const PopupFormikHOC = <P extends FormikWrapperProps>(
   WrappedComponent: React.ComponentType<P>
 ): React.FC<P> => {
   const HOCComponent: React.FC<P> = (props) => {
-    const { resetInitialValue } = props;
+    const { resetInitialValue, title } = props;
     const dispatch = useDispatch();
     const isPopupOpen = useSelector((state: RootState) => state.popup.isOpen);
     const handleClosePopup = () => {
@@ -25,9 +25,9 @@ const PopupFormikHOC = <P extends FormikWrapperProps>(
         {isPopupOpen && (
           <>
             <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-            <section className="fixed left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[11.73831rem] z-50">
+            <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-50 rounded-xl hide-scrollbar">
               <div className="relative z-50 ">
-                <Popup title={props.title || "Add"}>
+                <Popup title={title}>
                   <WrappedComponent {...props} onClose={handleClosePopup} />
                 </Popup>
               </div>

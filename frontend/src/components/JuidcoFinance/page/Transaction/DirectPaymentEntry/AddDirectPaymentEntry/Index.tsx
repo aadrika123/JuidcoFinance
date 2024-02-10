@@ -59,7 +59,6 @@ export const HeroAddPaymentEntry = () => {
 
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
-    console.log("first", values)
     if (!isUpdateMode.isOnEdit) {
       setData((prev) => [...prev, { id: prev.length + 1, ...values }]);
     } else {
@@ -123,7 +122,7 @@ export const HeroAddPaymentEntry = () => {
   const { mutate } = useMutation<
     DirPaymentDataProps,
     Error,
-    DirPaymentDataProps
+    any
   >(handleStore, {
     onSuccess: () => {
       toast.success("Updated Direct Payment Entry");
@@ -138,6 +137,11 @@ export const HeroAddPaymentEntry = () => {
       }, 1000);
     },
   });
+
+   //////////////////// Handle Reset Table List //////////////////
+   const handleResetTable = () =>{
+    setData([]);
+  }
 
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
@@ -187,7 +191,7 @@ export const HeroAddPaymentEntry = () => {
     return (
       <>
         <ViewIconButton variant="edit" onClick={() => onEditButton(id)} />
-        <ViewIconButton variant="view" onClick={() => onRemoveButton(id)} />
+        <ViewIconButton variant="delete" onClick={() => onRemoveButton(id)} />
       </>
     );
   };
@@ -198,13 +202,13 @@ export const HeroAddPaymentEntry = () => {
     {
       name: "subledger_id_name",
       caption: "Sub-Ledge Code",
-      width: "w-[25%]",
+      width: "w-[30%]",
     },
     { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
     {
       name: "payment_mode",
       caption: "Payment Mode",
-      width: "w-[20%]",
+      width: "w-[30%]",
     },
     {
       name: "button",
@@ -309,10 +313,10 @@ export const HeroAddPaymentEntry = () => {
   ];
 
   const footerData = [
-    // {
-    //   key: "Total",
-    //   value: handleCount(),
-    // },
+    {
+      key: "Total",
+      value: handleCount(),
+    },
   ];
 
   return (
@@ -328,10 +332,11 @@ export const HeroAddPaymentEntry = () => {
       <TableWithCount
         data={data}
         scrollable
-        title="Title 1"
+        title="Add New Entry"
         columns={columns}
         footerData={footerData}
         handleStore={mutate}
+        handleResetTable={handleResetTable}
       />
     </>
   );

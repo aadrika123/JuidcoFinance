@@ -30,7 +30,6 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     enableReinitialize,
   } = props;
 
-
   /////////////////////////// Generating Fields ///////////////////////////////
   const generateFields = (
     n: any,
@@ -53,7 +52,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             );
             multiD = [];
           }
-          d.push(<span className="text-[22px]">{item.TITLE}</span>);
+          d.push(<h2 className="text-[22px] text-primary my-8">{item.TITLE}</h2>);
           return generateFields(
             n.slice(index + 1),
             handleChange,
@@ -92,7 +91,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
   };
 
   return (
-    <section className="border rounded-lg border-zinc-300 p-6 px-10">
+    <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
       <div className="mt-8">
         <Formik
           initialValues={initialValues}
@@ -107,6 +106,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             handleChange,
             handleBlur,
             handleSubmit,
+            resetForm
           }) => (
             <form onSubmit={handleSubmit}>
               {generateFields(
@@ -126,9 +126,9 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                   >
                     {onClose ? "Close" : "Back"}
                   </Button>
-                  {/* <Button variant="cancel" buttontype="button">
+                  {onClose && <Button onClick={resetForm} variant="cancel" buttontype="button">
                     Reset
-                  </Button> */}
+                  </Button>}
                   <Button variant="primary" buttontype="submit">
                     Save
                   </Button>

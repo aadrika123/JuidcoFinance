@@ -119,7 +119,7 @@ export const HeroAddBillPaymentEntry = () => {
   const { mutate } = useMutation<
     BillPaymentDetailsData,
     Error,
-    BillPaymentDetailsData
+    any
   >(handleStore, {
     onSuccess: () => {
       toast.success("Created Bill Payment Entry");
@@ -135,14 +135,10 @@ export const HeroAddBillPaymentEntry = () => {
     },
   });
 
-  ///////////////// Handling Total Count ///////////////
-  const handleCount = () => {
-    let sum = 0;
-    data.forEach((item) => {
-      sum = sum + Number(item.bill_amount);
-    });
-    return sum;
-  };
+  //////////////////// Handle Reset Table List //////////////////
+  const handleResetTable = () =>{
+    setData([]);
+  }
 
   ///////////////// Handling Remove item(row) from list ///////////////
   const onRemoveButton = (id: string) => {
@@ -183,7 +179,7 @@ export const HeroAddBillPaymentEntry = () => {
     return (
       <>
         <ViewIconButton variant="edit" onClick={() => onEditButton(id)} />
-        <ViewIconButton variant="view" onClick={() => onRemoveButton(id)} />
+        <ViewIconButton variant="delete" onClick={() => onRemoveButton(id)} />
       </>
     );
   };
@@ -194,7 +190,7 @@ export const HeroAddBillPaymentEntry = () => {
     {
       name: "vendor_id_name",
       caption: "Vendor Name",
-      width: "w-[25%]",
+      width: "w-[30%]",
     },
     {
       name: "payee_id_name",
@@ -206,7 +202,7 @@ export const HeroAddBillPaymentEntry = () => {
     {
       name: "button",
       caption: "Edit/Remove",
-      width: "w-[10%]",
+      width: "w-[5%]",
       value: addButton,
     },
   ];
@@ -297,13 +293,6 @@ export const HeroAddBillPaymentEntry = () => {
     },
   ];
 
-  const footerData = [
-    // {
-    //   key: "Total",
-    //   value: handleCount(),
-    // },
-  ];
-
   return (
     <>
       <Hoc
@@ -317,10 +306,10 @@ export const HeroAddBillPaymentEntry = () => {
       <TableWithCount
         data={data}
         scrollable
-        title="Title 1"
+        title="Add New Entry"
         columns={columns}
-        footerData={footerData}
         handleStore={mutate}
+        handleResetTable={handleResetTable}
       />
     </>
   );

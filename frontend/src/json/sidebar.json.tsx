@@ -92,7 +92,7 @@ export const sidebarLinks: SidebarLinksProps = {
             },
             {
               moduleName: "Bills Invoice Entry",
-              path: "/chequebook",
+              path: "/finance/transaction/bills-invoice-entry",
             },
           ],
         },

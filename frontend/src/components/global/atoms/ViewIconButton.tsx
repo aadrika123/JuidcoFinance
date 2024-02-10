@@ -1,6 +1,6 @@
 import React from "react";
 
-type Variant = "print" | "edit" | "view";
+type Variant = "print" | "edit" | "view" | "delete";
 interface ViewIconButtonProps {
   onClick: () => void;
   variant: Variant;
@@ -64,7 +64,7 @@ const tableBtnVariant = {
           fillOpacity="0.41"
         />
       </svg>
-    </>   
+    </>
   ),
   view: (
     <>
@@ -92,6 +92,32 @@ const tableBtnVariant = {
       </svg>
     </>
   ),
+  delete: (
+    <>
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 20 19"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          x="0.730527"
+          y="0.554746"
+          width="18.0645"
+          height="17.8905"
+          rx="4.99271"
+          stroke="#726E6E"
+          strokeWidth="1.10949"
+        />
+        <path
+          d="M13.0035 6.17813H11.341L10.866 5.70312H8.49102L8.01602 6.17813H6.35352V7.12813H13.0035M6.82852 13.3031C6.82852 13.5551 6.9286 13.7967 7.10676 13.9749C7.28492 14.153 7.52656 14.2531 7.77852 14.2531H11.5785C11.8305 14.2531 12.0721 14.153 12.2503 13.9749C12.4284 13.7967 12.5285 13.5551 12.5285 13.3031V7.60313H6.82852V13.3031Z"
+          fill="black"
+          fillOpacity="0.41"
+        />
+      </svg>
+    </>
+  ),
 };
 
 const ViewIconButton: React.FC<ViewIconButtonProps> = ({
@@ -104,6 +130,7 @@ const ViewIconButton: React.FC<ViewIconButtonProps> = ({
         {variant === "view" ? tableBtnVariant.view : null}
         {variant === "edit" ? tableBtnVariant.edit : null}
         {variant === "print" ? tableBtnVariant.print : null}
+        {variant === "delete" ? tableBtnVariant.delete : null}
       </span>
     </button>
   );

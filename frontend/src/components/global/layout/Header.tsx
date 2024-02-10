@@ -1,12 +1,36 @@
-'use client'
+"use client";
 import React from "react";
 import Image from "next/image";
-import SearchBox from "@/components/Helpers/SearchBox";
+import { usePathname } from "next/navigation";
+import { formatString } from "@/utils/helper";
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;
 }
 
 const Header: React.FC<SideBarProps> = (props) => {
+  const pathName = usePathname();
+
+  // _________ Bread Crumb ________________//
+  const breadCrumb = pathName
+    .split("/")
+    .filter((k) => k !== "")
+    .map((part, index) => {
+      const replaced = part.includes("finance")
+        ? part.replace("finance", "Financial Accounts Management System")
+        : part;
+
+      const bread = replaced.replace(/\d+$/, "");
+
+      return (
+        <React.Fragment key={index}>
+          {index > 0 && (
+            <img className="px-2" src="/icons/svg/right.svg" alt=">" />
+          )}
+          {formatString(bread)}
+        </React.Fragment>
+      );
+    });
+  // _________ Bread Crumb ________________//
 
   return (
     <div {...props}>
@@ -19,15 +43,12 @@ const Header: React.FC<SideBarProps> = (props) => {
             <li>
               <a className="text-primary font-medium">E-Governance</a>
             </li>
-            <li>
-              <a>Financial Accounts Management System</a>
-            </li>
-            <li>Charts of Account</li>
+            <li>{breadCrumb}</li>
           </ul>
         </div>
       </div>
       <div className="flex items-center gap-5">
-        <SearchBox />
+        {/* <SearchBox /> */}
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"

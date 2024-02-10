@@ -14,6 +14,18 @@ export function DateFormatter(date: string) {
   return new Date(date).toISOString().split("T")[0];
 }
 
+/**
+ * | Author- Krish
+ * | Created On- 09-02-2024
+ * | Created for- Format String
+ * | Status- closed
+ */
+export function formatString(input: string): string {
+  const regex = /(?:^|-)([a-z])/g;
+  const result = input?.replace(regex, (_, match) => ` ${match.toUpperCase()}`);
+  return result;
+}
+
 export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
     for (const key in obj) {

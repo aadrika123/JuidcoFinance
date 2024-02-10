@@ -3,9 +3,8 @@
 import React from "react";
 
 import ChequebookMasterHeader from "./Header/ChequebookMasterHeader";
-import TableWithSearch from "@/components/molecules/TableWithSearch";
+import TableWithSearch from "@/components/global/molecules/TableWithSearch";
 import APIs from "@/json/apis.json";
-
 
 /**
  * | Author- Bijoy Paitandi
@@ -15,11 +14,10 @@ import APIs from "@/json/apis.json";
  */
 
 export const HeroChequebookMaster = () => {
-
   const onViewButtonClick = () => {
     window.alert("Not defined yet");
-  }
-  
+  };
+
   return (
     <>
       <section>
@@ -27,26 +25,25 @@ export const HeroChequebookMaster = () => {
       </section>
 
       <section className="mt-8">
-      {/* <ChequebookList title="List of chequebooks" /> */}
+        {/* <ChequebookList title="List of chequebooks" /> */}
 
-      <TableWithSearch
-        api={`${APIs.chequebook_master$get}`}
-        numberOfRowsPerPage={5}
-        title="Chequebook List"
-        onViewButtonClick={onViewButtonClick}
-
-        columns={[
-          {name: 'id', caption: "Sr. No."},
-          {name: 'date', caption: "Issue Date"},
-          {name: 'bank_branch', caption: "Bank Branch"},
-          {name: 'bank_name', caption: "Bank Name"},
-          {name: 'bank_account_no', caption: "Bank Account No"},
-          {name: 'cheque_no_from', caption: "Cheque Number From"},
-          {name: 'cheque_no_to', caption: "Cheque Number To"},
-          {name: 'employee_name', caption: "Employee Name"},
-          {name: 'issuer_name', caption: "Issuer Name"},
-          {name: 'remarks', caption: "Remarks"},
-        ]}
+        <TableWithSearch
+          api={`${APIs.chequebook_master$get}`}
+          numberOfRowsPerPage={5}
+          title="Chequebook List"
+          onViewButtonClick={onViewButtonClick}
+          columns={[
+            { name: "id", caption: "Sr. No." },
+            { name: "date", caption: "Issue Date" },
+            { name: "bank_branch", caption: "Bank Branch" },
+            { name: "bank_name", caption: "Bank Name" },
+            { name: "bank_account_no", caption: "Bank Account No" },
+            { name: "cheque_no_from", caption: "Cheque Number From" },
+            { name: "cheque_no_to", caption: "Cheque Number To" },
+            { name: "employee_name", caption: "Employee Name" },
+            { name: "issuer_name", caption: "Issuer Name" },
+            { name: "remarks", caption: "Remarks" },
+          ]}
         />
       </section>
     </>
