@@ -5,7 +5,7 @@ import { generateUniquePaymentNo } from "../../../../util/helper/generateUniqueN
 
 // Validating request data
 export const billPaymentEntrySchema = Joi.object({
-  bill_no: Joi.number().required(),
+  bill_no: Joi.string().required(),
   bill_type_id: Joi.number().required(),
   bill_entry_date: Joi.date().required(),
   department_id: Joi.number().required(),
@@ -17,9 +17,6 @@ export const billPaymentEntrySchema = Joi.object({
   advance: Joi.number().required(),
   deposit: Joi.number().required(),
   deductions_amount: Joi.number().required(),
-  earlier_payment: Joi.number().required(),
-  payable_amount: Joi.number().required(),
-  net_amount: Joi.number().required(),
 });
 export const billPaymentEntryValidation = Joi.array().items(
   billPaymentEntrySchema
@@ -46,9 +43,6 @@ export const requestData = (req: Request): BillPaymentEntryRequestData => {
     advance: req.body.advance,
     deposit: req.body.deposit,
     deductions_amount: req.body.deductions_amount,
-    earlier_payment: req.body.earlier_payment,
-    payable_amount: req.body.payable_amount,
-    net_amount: req.body.net_amount,
   };
 };
 
@@ -70,10 +64,7 @@ export const multiRequestData = (
       bill_amount: item.bill_amount,
       advance: item.advance,
       deposit: item.deposit,
-      deductions_amount: item.deductions_amount,
-      earlier_payment: item.earlier_payment,
-      payable_amount: item.payable_amount,
-      net_amount: item.net_amount,
+      deductions_amount: item.deductions_amount
     });
   }
 

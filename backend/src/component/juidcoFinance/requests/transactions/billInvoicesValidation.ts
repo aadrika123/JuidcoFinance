@@ -3,7 +3,7 @@ import { Request } from "express";
 
 
 export interface BillInvoicesRequestData {
-  bill_no: number,
+  bill_no: string,
   type_id: number,
   vendor_id: number,
   department_id: number,
@@ -18,7 +18,7 @@ export interface BillInvoicesRequestData {
 
 // Validating request data
 const billInvoicesSchema = Joi.object({
-  bill_no: Joi.number().required(),
+  bill_no: Joi.string().required(),
   type_id: Joi.number().required(),
   vendor_id: Joi.number().required(),
   department_id: Joi.number().required(),

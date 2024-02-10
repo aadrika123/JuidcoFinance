@@ -18,7 +18,8 @@ type FinanceUrlKeys =
   | "VOUCHER_ENTRY_URL"
   | "VOUCHER_TYPE_URL"
   | "VOUCHER_SUB_TYPE_URL"
-  | "SUB_LEDGER_URL";
+  | "SUB_LEDGER_URL"
+  | "BILL_PAYMENT_ENTRY_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -27,6 +28,7 @@ type Urls = {
     update?: string;
     getById?: string;
     delete?: string;
+    getCodes?: string;
   };
 };
 
@@ -53,7 +55,7 @@ export const FINANCE_URL: Urls = {
   },
 
   DIRECT_PAYMENT_ENTRY_URL: {
-    get: "/direct-payment-entry/get-all?limit=10",
+    get: "/direct-payment-entry/get-all",
     create: "/direct-payment-entry/create",
     update: "/direct-payment-entry/update",
     getById: "direct-payment-entry/get-by-id",
@@ -101,5 +103,13 @@ export const FINANCE_URL: Urls = {
   },
   SUB_LEDGER_URL: {
     get: "/sub-ledger/get",
+    getCodes: "/sub-ledger/get-codes",
   },
+
+  BILL_PAYMENT_ENTRY_URL:{
+    create: "/bill-payment-entry/create",
+    get: "/bill-payment-entry/get-all",
+    update: "/bill-payment-entry/update",
+    getById: "/bill-payment-entry/get-by-id",
+  }
 };

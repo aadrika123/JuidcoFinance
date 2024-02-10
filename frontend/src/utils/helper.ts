@@ -30,11 +30,14 @@ export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        if (key.toLowerCase().endsWith("id_name")) {
+        if (key.toLowerCase().endsWith("id_name") || key === "id") {
           delete obj[key];
+        } else if (key.toLowerCase().endsWith("date")) {
+          obj[key] = `${new Date(obj[key]).toISOString()}`;
         }
       }
     }
+    console.log("first", obj);
     return obj;
   }
 

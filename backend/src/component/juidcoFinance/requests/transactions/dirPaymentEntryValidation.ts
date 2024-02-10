@@ -13,9 +13,9 @@ const dirPaymentEntrySchema = Joi.object({
   user_common_budget: Joi.boolean().required(),
   adminis_ward_id: Joi.number().required(),
   address: Joi.string().required(),
-  email: Joi.string().email().required(),
   department_id: Joi.number().required(),
   payment_mode: Joi.string().required(),
+  subledger_id: Joi.number().required(),
   amount: Joi.number().required(),
 });
 export const dirPaymentEntryValidation = Joi.array().items(
@@ -40,8 +40,8 @@ export const requestData = (req: Request): DirPaymentEntryRequestData => {
     adminis_ward_id: req.body.adminis_ward_id,
     address: req.body.address,
     department_id: req.body.department_id,
-    email: req.body.email,
     payment_mode: req.body.payment_mode,
+    subledger_id: req.body.subledger_id,
     amount: req.body.amount,
   };
 };
@@ -61,8 +61,8 @@ export const multiRequestData = (req: Request): DirPaymentEntryRequestData[] => 
       adminis_ward_id: item.adminis_ward_id,
       address: item.address,
       department_id: item.department_id,
-      email: item.email,
       payment_mode: item.payment_mode,
+      subledger_id: item.subledger_id,
       amount: item.amount,
     });
   }

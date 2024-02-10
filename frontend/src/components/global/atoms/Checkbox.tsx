@@ -23,10 +23,13 @@ interface CheckboxProps {
 const Checkboxes: React.FC<CheckboxProps> = (props) => {
   const { label, name, ...rest } = props;
   const fieldId = "id_" + name;
+
   return (
     <div>
       <div className="flex items-center">
-        <input disabled={props.readonly} className="mr-1" name={name} type="checkbox" id={fieldId} {...rest} />
+        <input disabled={props.readonly} checked={props.value? true: false} className="mr-1" name={name} type="checkbox" id={fieldId} 
+        {...rest}
+        />
         <label className="text-secondary text-sm" htmlFor={fieldId}>{label}</label>
       </div>
       {props.touched && props.error && (

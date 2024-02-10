@@ -136,6 +136,8 @@ model departments {
   bill_payment_entries bill_payment_entries[]
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
+  cheque_issuances     cheque_issuances[]
+
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -209,7 +211,10 @@ model dir_payment_entries {
   address            String
   department_id      Int
   department         departments   @relation(fields: [department_id], references: [id])
-  email              String
+
+  subledger_id       Int
+  subledger         subledgers     @relation(fields: [subledger_id], references: [id])
+
   payment_mode       String
   amount             Float
   created_at         DateTime      @default(now()) @map("created_at")
@@ -231,13 +236,14 @@ model bill_types {
 /// Bills Payment Entry
 model bill_payment_entries {
   id                Int           @id @default(autoincrement())
-  bill_no           Int
+  bill_no           String
   
   bill_type_id      Int
   bill_type         bill_types    @relation(fields: [bill_type_id], references: [id])
   bill_entry_date   DateTime
   department        departments   @relation(fields: [department_id], references: [id])
   department_id     Int
+
   vendor_id         Int
   vendor            vendor_masters @relation(fields: [vendor_id], references: [id])
   address           String
@@ -249,9 +255,10 @@ model bill_payment_entries {
   advance           Float
   deposit           Float
   deductions_amount Float
-  earlier_payment   Float
-  payable_amount    Float
-  net_amount        Float
+  earlier_payment   Float         @default(0)
+  payable_amount    Float         @default(0)
+  net_amount        Float         @default(0)
+
   is_approved       Boolean       @default(false)
   created_at        DateTime      @default(now()) @map("created_at")
   updated_at        DateTime      @updatedAt @map("updated_at")
@@ -329,9 +336,11 @@ model modules {
 model subledgers {
   id         Int             @id @default(autoincrement())
   name       String
+  code       String
   remark     String?
   receipts    receipt_entries[]
   vouchers    voucher_entries[]
+  dir_payments  dir_payment_entries[]
   created_at DateTime        @default(now()) @map("created_at")
   updated_at DateTime        @updatedAt @map("updated_at")
 }
@@ -397,7 +406,7 @@ model banks {
 //// Bill Invoice Table : Managed By: Bijoy Paitandi
 model bill_invoices{
   id                      Int             @id @default(autoincrement())
-  bill_no                 Int
+  bill_no                 String
   
   type_id                 Int
   type                    bill_types      @relation(fields: [type_id], references: [id])
@@ -440,6 +449,10 @@ model cheque_issuances{
   admin_ward_id       Int
 	admin_ward         adminis_wards       @relation(fields: [admin_ward_id], references: [id])
 
+  department_id       Int
+	department          departments       @relation(fields: [department_id], references: [id])
+
+
   payee_id            Int
   payee               employees           @relation(fields: [payee_id], references: [id])
 
@@ -459,4 +472,3 @@ model cheque_issuances{
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
-

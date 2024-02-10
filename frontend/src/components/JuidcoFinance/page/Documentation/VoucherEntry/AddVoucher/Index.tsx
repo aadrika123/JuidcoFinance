@@ -243,6 +243,7 @@ export const AddVoucherEntry = () => {
   return (
     <>
       <Hoc
+        title="Add New Voucher"
         initialValues={initialData}
         validationSchema={voucherSchema}
         onSubmit={onSubmit}

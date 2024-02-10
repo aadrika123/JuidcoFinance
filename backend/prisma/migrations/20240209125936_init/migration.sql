@@ -188,7 +188,7 @@ CREATE TABLE "dir_payment_entries" (
     "adminis_ward_id" INTEGER NOT NULL,
     "address" TEXT NOT NULL,
     "department_id" INTEGER NOT NULL,
-    "email" TEXT NOT NULL,
+    "subledger_id" INTEGER NOT NULL,
     "payment_mode" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -211,7 +211,7 @@ CREATE TABLE "bill_types" (
 -- CreateTable
 CREATE TABLE "bill_payment_entries" (
     "id" SERIAL NOT NULL,
-    "bill_no" INTEGER NOT NULL,
+    "bill_no" TEXT NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
     "bill_entry_date" TIMESTAMP(3) NOT NULL,
     "department_id" INTEGER NOT NULL,
@@ -223,9 +223,9 @@ CREATE TABLE "bill_payment_entries" (
     "advance" DOUBLE PRECISION NOT NULL,
     "deposit" DOUBLE PRECISION NOT NULL,
     "deductions_amount" DOUBLE PRECISION NOT NULL,
-    "earlier_payment" DOUBLE PRECISION NOT NULL,
-    "payable_amount" DOUBLE PRECISION NOT NULL,
-    "net_amount" DOUBLE PRECISION NOT NULL,
+    "earlier_payment" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "payable_amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "net_amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "is_approved" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -300,6 +300,7 @@ CREATE TABLE "modules" (
 CREATE TABLE "subledgers" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -352,7 +353,7 @@ CREATE TABLE "banks" (
 -- CreateTable
 CREATE TABLE "bill_invoices" (
     "id" SERIAL NOT NULL,
-    "bill_no" INTEGER NOT NULL,
+    "bill_no" TEXT NOT NULL,
     "type_id" INTEGER NOT NULL,
     "vendor_id" INTEGER NOT NULL,
     "department_id" INTEGER NOT NULL,
@@ -377,6 +378,7 @@ CREATE TABLE "cheque_issuances" (
     "bill_type_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
     "admin_ward_id" INTEGER NOT NULL,
+    "department_id" INTEGER NOT NULL,
     "payee_id" INTEGER NOT NULL,
     "grant_id" INTEGER NOT NULL,
     "bank_id" INTEGER NOT NULL,
@@ -413,6 +415,9 @@ ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_adminis_wa
 
 -- AddForeignKey
 ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "dir_payment_entries" ADD CONSTRAINT "dir_payment_entries_subledger_id_fkey" FOREIGN KEY ("subledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bill_payment_entries" ADD CONSTRAINT "bill_payment_entries_bill_type_id_fkey" FOREIGN KEY ("bill_type_id") REFERENCES "bill_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -473,6 +478,9 @@ ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_bill_type_id_fke
 
 -- AddForeignKey
 ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_payee_id_fkey" FOREIGN KEY ("payee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

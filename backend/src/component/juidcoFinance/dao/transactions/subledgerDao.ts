@@ -12,6 +12,16 @@ class SubledgerDao {
     });
     return generateRes(data);
   };
+
+  getCodes = async () => {
+    const data = prisma.subledgers.findMany({
+      select: {
+        id: true,
+        code: true,
+      },
+    });
+    return generateRes(data);
+  };
 }
 
 export default SubledgerDao;

@@ -77,13 +77,13 @@ interface DirPaymentEntryRequestData {
   adminis_ward_id: number;
   address: string;
   department_id: number;
-  email: string;
+  subledger_id: number;
   payment_mode: string;
   amount: number;
 }
 
 interface BillPaymentEntryRequestData {
-  bill_no: number,
+  bill_no: string,
   bill_type_id: number,
   bill_entry_date: string,
   department_id: number,
@@ -95,9 +95,9 @@ interface BillPaymentEntryRequestData {
   advance: number,
   deposit: number,
   deductions_amount: number,
-  earlier_payment: number,
-  payable_amount: number,
-  net_amount: number
+  earlier_payment?: number,
+  payable_amount?: number,
+  net_amount?: number
 }
 interface VoucherEntryRequestData {
   id?: number;

@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
 import { requestData } from "../../requests/transactions/billPaymentEntryValidation";
 import { multiRequestData } from "../../requests/transactions/billPaymentEntryValidation";
+import { BillPaymentEntryRequestData } from "../../../../util/types";
 
 const prisma = new PrismaClient();
 
@@ -13,8 +14,16 @@ class BillPaymentEntryDao {
 
   // store payment entry details in DB
   store = async (req: Request) => {
+    const data = multiRequestData(req);
+    
+    data.forEach(item => {
+      item['earlier_payment'] = 10;
+      item['payable_amount'] = 10;
+      item['net_amount'] = 20;
+    });
+
     return await prisma.bill_payment_entries.createMany({
-      data: multiRequestData(req),
+      data: data,
     });
   };
 
@@ -29,7 +38,12 @@ class BillPaymentEntryDao {
       take: limit,
       select: {
         id: true,
-        vendor_id: true,
+        vendor: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
         bill_no: true,
         bill_entry_date: true,
         payee: {
@@ -70,7 +84,14 @@ class BillPaymentEntryDao {
               },
             },
           },
-          
+          {
+            bill_type: {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          },
         ],
       };
     }
