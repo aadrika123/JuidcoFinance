@@ -258,7 +258,7 @@ CREATE TABLE "voucher_sub_types" (
 -- CreateTable
 CREATE TABLE "voucher_entries" (
     "id" SERIAL NOT NULL,
-    "voucher_no" INTEGER NOT NULL,
+    "voucher_no" TEXT NOT NULL,
     "voucher_date" TIMESTAMP(3) NOT NULL,
     "voucher_type_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,
@@ -267,7 +267,7 @@ CREATE TABLE "voucher_entries" (
     "voucher_sub_id" INTEGER NOT NULL,
     "sub_ledger_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
-    "dr_cr" INTEGER NOT NULL,
+    "dr_cr" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 

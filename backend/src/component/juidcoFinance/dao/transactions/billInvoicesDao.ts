@@ -50,6 +50,12 @@ class BillInvoicesDao {
             name: true,
           }
         },
+        type: {
+          select:{
+            id: true,
+            name: true,
+          }
+        },
         address: true,
         amount: true,
         narration: true,
@@ -59,7 +65,7 @@ class BillInvoicesDao {
             name: true,
           }
         },
-        
+        is_authorized: true
       },
     };
 
@@ -121,6 +127,12 @@ class BillInvoicesDao {
             name: true,
           }
         },
+        type: {
+          select:{
+            id: true,
+            name: true,
+          }
+        },
         address: true,
         amount: true,
         narration: true,
@@ -130,7 +142,7 @@ class BillInvoicesDao {
             name: true,
           }
         },
-        
+        is_authorized: true
       },
     };
     const data = await prisma.bill_invoices.findFirst(query);
