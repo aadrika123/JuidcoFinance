@@ -23,6 +23,7 @@ type FinanceUrlKeys =
   | "BILL_TYPE"
   | "BILL_PAYMENT_ENTRY_URL"
   | "RECEIPT_ENTRY_URL"
+  | "BILL_INVOICE_ENTRY_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -117,17 +118,22 @@ export const FINANCE_URL: Urls = {
     get: "/sub-ledger/get",
     getCodes: "/sub-ledger/get-codes",
   },
-
   BILL_PAYMENT_ENTRY_URL: {
     create: "/bill-payment-entry/create",
     get: "/bill-payment-entry/get-all",
     update: "/bill-payment-entry/update",
     getById: "/bill-payment-entry/get-by-id",
   },
-  RECEIPT_ENTRY_URL:{
+  RECEIPT_ENTRY_URL: {
     create: "/receipt-entry/create",
     get: "/receipt-entry/get-all",
     update: "/receipt-entry/update",
     getById: "/receipt-entry/get-by-id",
-  }
+  },
+  BILL_INVOICE_ENTRY_URL: {
+    create: "/bill-invoices/create",
+    get: "/bill-invoices/get-all",
+    update: "/bill-invoices/update",
+    getById: "bill-invoices/get-by-id",
+  },
 };

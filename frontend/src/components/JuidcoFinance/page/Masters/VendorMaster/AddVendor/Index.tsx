@@ -53,7 +53,7 @@ export const HeroAddVendor = () => {
   return (
     <>
       <Toaster />
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
+      <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Add Vendor</SubHeading>
         </div>
@@ -74,6 +74,7 @@ export const HeroAddVendor = () => {
               handleChange,
               handleBlur,
               handleSubmit,
+              handleReset
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -96,6 +97,7 @@ export const HeroAddVendor = () => {
                     touched={touched.mobile_no}
                     label="Contact Number *"
                     name="mobile_no"
+                    placeholder="Enter Contact Number"
                   />
 
                   <DropDownList
@@ -117,6 +119,7 @@ export const HeroAddVendor = () => {
                     touched={touched.email}
                     label="Email Address"
                     name="email"
+                    placeholder="Enter Eamil Id"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -126,6 +129,7 @@ export const HeroAddVendor = () => {
                     touched={touched.name}
                     label="Vendor Name"
                     name="name"
+                    placeholder="Enter Vendor Name"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -135,6 +139,7 @@ export const HeroAddVendor = () => {
                     touched={touched.bank_name}
                     label="Name of the bank"
                     name="bank_name"
+                    placeholder="Enter Bank Name"
                   />
 
                   <InputBox
@@ -145,6 +150,7 @@ export const HeroAddVendor = () => {
                     touched={touched.contact_address}
                     label="Contact Address"
                     name="contact_address"
+                    placeholder="Enter Contact Address"
                   />
 
                   <InputBox
@@ -155,6 +161,7 @@ export const HeroAddVendor = () => {
                     touched={touched.ifsc_code}
                     label="IFSC Code *"
                     name="ifsc_code"
+                    placeholder="Enter IFSC Code"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -164,6 +171,7 @@ export const HeroAddVendor = () => {
                     touched={touched.tin_no}
                     label="TIN No."
                     name="tin_no"
+                    placeholder="Enter TIN No"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -173,6 +181,7 @@ export const HeroAddVendor = () => {
                     touched={touched.bank_account_no}
                     label="Bank Account No."
                     name="bank_account_no"
+                    placeholder="Enter Bank Account No"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -182,6 +191,7 @@ export const HeroAddVendor = () => {
                     touched={touched.gst_no}
                     label="GST No."
                     name="gst_no"
+                    placeholder="Enter GST No"
                   />
                   <InputBox
                     onChange={handleChange}
@@ -191,6 +201,7 @@ export const HeroAddVendor = () => {
                     touched={touched.bank_branch_name}
                     name="bank_branch_name"
                     label="Bank Branch"
+                    placeholder="Enter Bank Branch"
                   />
 
                   <InputBox
@@ -201,6 +212,7 @@ export const HeroAddVendor = () => {
                     touched={touched.aadhar_no}
                     name="aadhar_no"
                     label="Aadhaar No."
+                    placeholder="Enter Aadhaar no"
                   />
                   <span></span>
                   <InputBox
@@ -211,6 +223,7 @@ export const HeroAddVendor = () => {
                     touched={touched.pan_no}
                     name="pan_no"
                     label="Pan No."
+                    placeholder="Enter PAN no"
                   />
                 </div>
 
@@ -218,16 +231,14 @@ export const HeroAddVendor = () => {
                   <PrimaryButton
                     buttonType="button"
                     variant={"cancel"}
-                    onClick={() => {
-                      history.back();
-                    }}
+                    onClick={goBack}
                   >
                     Back
                   </PrimaryButton>
 
-                  {/* <PrimaryButton buttonType="button" variant={"cancel"}>
+                  <PrimaryButton onClick={handleReset} buttonType="button" variant={"cancel"}>
                     Reset
-                  </PrimaryButton> */}
+                  </PrimaryButton>
 
                   <PrimaryButton buttonType="submit" variant="primary">
                     Save

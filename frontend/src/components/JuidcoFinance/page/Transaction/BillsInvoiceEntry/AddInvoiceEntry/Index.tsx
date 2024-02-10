@@ -7,10 +7,14 @@ import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
-import { VoucherDataProps } from "@/utils/types/voucher_entry_types";
-import { voucherSchema } from "@/utils/validation/documentation/voucher_entry.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
+import { BillInvoiceDetailsData } from "@/utils/types/bills_invoice_entry_types";
+import { BillInvoiceDetailsSchema } from "@/utils/validation/transactions/bill_invoice.validation";
+import axios from "@/lib/axiosConfig";
+import { QueryClient, useMutation } from "react-query";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import toast from "react-hot-toast";
 
 interface UpdatedModeType {
   id: number | string;
@@ -21,24 +25,27 @@ const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const AddBillsPaymentEntry = () => {
   const dispatch = useDispatch();
+  const queryClient = new QueryClient();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
     isOnEdit: false,
   });
-  const initialValues: VoucherDataProps = {
-    voucher_date: "",
-    voucher_type_id: 0,
+  const initialValues: BillInvoiceDetailsData = {
+    entry_date: "",
+    type_id: "",
+    bill_no: "",
+    department_id: "",
+    admin_ward_id: "",
+    bill_date: "",
+    stage_id: "",
+    vendor_id: "",
+    amount: "",
+    address: "",
     narration: "",
-    department_id: 0,
-    adminis_ward_id: 0,
-    voucher_sub_id: 0,
-    sub_ledger_id: 0,
-    amount: undefined,
-    dr_cr: 0,
   };
-  const [data, setData] = useState<VoucherDataProps[]>([]);
+  const [data, setData] = useState<BillInvoiceDetailsData[]>([]);
   const [initialData, setInitialData] =
-    useState<VoucherDataProps>(initialValues);
+    useState<BillInvoiceDetailsData>(initialValues);
 
   /////////////// Show Form Popup on Load //////////////////////
   useEffect(() => {
@@ -59,26 +66,24 @@ export const AddBillsPaymentEntry = () => {
           if (item.id === isUpdateMode.id) {
             return {
               ...item,
-              adminis_ward_id: values.adminis_ward_id,
-              adminis_ward_id_name:
-                values.adminis_ward_id_name || item.adminis_ward_id_name,
+              bill_no: values.bill_no,
+              bill_date: values.bill_date,
+              address: values.address,
+              admin_ward_id: values.admin_ward_id,
+              admin_ward_id_name:
+                values.admin_ward_id_name || item.admin_ward_id_name,
               amount: values.amount,
               department_id: values.department_id,
               department_id_name:
                 values.department_id_name || item.department_id_name,
-              dr_cr: values.dr_cr,
-              dr_cr_name: values.dr_cr_name || item.dr_cr_name,
               narration: values.narration,
-              sub_ledger_id: values.sub_ledger_id,
-              sub_ledger_id_name:
-                values.sub_ledger_id_name || item.sub_ledger_id_name,
-              voucher_date: values.voucher_date,
-              voucher_sub_id: values.voucher_sub_id,
-              voucher_sub_id_name:
-                values.voucher_sub_id_name || item.voucher_sub_id_name,
-              voucher_type_id: values.voucher_type_id,
-              voucher_type_id_name:
-                values.voucher_type_id_name || item.voucher_type_id_name,
+              stage_id: values.stage_id,
+              stage_id_name: values.stage_id_name || item.stage_id_name,
+              entry_date: values.entry_date,
+              vendor_id: values.vendor_id,
+              vendor_id_name: values.vendor_id_name || item.vendor_id_name,
+              type_id: values.type_id,
+              type_id_name: values.type_id_name || item.type_id_name,
             };
           } else {
             return item;
@@ -89,6 +94,46 @@ export const AddBillsPaymentEntry = () => {
     }
     dispatch(closePopup());
     resetInitialValue();
+  };
+
+  /////////////////// Handle Storing Entries ///////////////////////////
+  const handleStore = async (
+    values: BillInvoiceDetailsData
+  ): Promise<BillInvoiceDetailsData> => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.create}`,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<BillInvoiceDetailsData, Error, any>(
+    handleStore,
+    {
+      onSuccess: () => {
+        toast.success("Updated Direct Payment Entry");
+      },
+      onError: () => {
+        alert("Error updating Direct Payment Entry");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries();
+        setTimeout(() => {
+          goBack();
+        }, 1000);
+      },
+    }
+  );
+
+  //////////////////// Handle Reset Table List //////////////////
+  const handleResetTable = () => {
+    setData([]);
   };
 
   ///////////////// Handling Total Count ///////////////
@@ -118,15 +163,17 @@ export const AddBillsPaymentEntry = () => {
     setIsUpdateMode((prev) => ({ ...prev, isOnEdit: true, id: Id }));
     setInitialData((prev) => ({
       ...prev,
-      voucher_date: data[Id - 1]?.voucher_date,
-      voucher_type_id: data[Id - 1]?.voucher_type_id,
+      entry_date: data[Id - 1]?.entry_date,
+      bill_date: data[Id - 1]?.bill_date,
+      type_id: data[Id - 1]?.type_id,
       narration: data[Id - 1]?.narration,
       department_id: data[Id - 1]?.department_id,
-      adminis_ward_id: data[Id - 1]?.adminis_ward_id,
-      voucher_sub_id: data[Id - 1]?.voucher_sub_id,
-      sub_ledger_id: data[Id - 1]?.sub_ledger_id,
+      admin_ward_id: data[Id - 1]?.admin_ward_id,
+      vendor_id: data[Id - 1]?.vendor_id,
+      stage_id: data[Id - 1]?.stage_id,
       amount: data[Id - 1]?.amount,
-      dr_cr: data[Id - 1]?.dr_cr,
+      address: data[Id - 1]?.address,
+      bill_no: data[Id - 1]?.bill_no,
     }));
     dispatch(openPopup());
   };
@@ -145,17 +192,17 @@ export const AddBillsPaymentEntry = () => {
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
     {
-      name: "sub_ledger_id_name",
+      name: "bill_no",
       caption: "Bill Number",
       width: "w-[25%]",
     },
 
     {
-      name: "voucher_type_id_name",
+      name: "vendor_id_name",
       caption: "Vendor Name",
       width: "w-[20%]",
     },
-    { name: "dr_cr_name", caption: "Department", width: "w-[15%]" },
+    { name: "department_id_name", caption: "Department", width: "w-[15%]" },
 
     { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
     {
@@ -173,68 +220,68 @@ export const AddBillsPaymentEntry = () => {
     {
       CONTROL: "input",
       HEADER: "Bill Number",
-      ACCESSOR: "voucher_date",
-      PLACEHOLDER: "000",
-      TYPE: "number",
+      ACCESSOR: "bill_no",
+      PLACEHOLDER: "Enter Bill Number",
     },
     {
       CONTROL: "select",
       HEADER: "Bill Type",
+      ACCESSOR: "type_id",
+      PLACEHOLDER: "Select Bill Type",
+      API: `${FINANCE_URL.BILL_TYPE.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Vendor Name",
+      ACCESSOR: "vendor_id",
+      PLACEHOLDER: "Select Vendor Type",
+      API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
+    },
+
+    {
+      CONTROL: "select",
+      HEADER: "Department",
       ACCESSOR: "department_id",
       PLACEHOLDER: "Select Department",
       API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
     {
       CONTROL: "input",
-      HEADER: "Vendor Name",
-      ACCESSOR: "voucher_type_id",
-      PLACEHOLDER: "Select Voucher Type",
-      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
-    },
-
-    {
-      CONTROL: "select",
-      HEADER: "Department",
-      ACCESSOR: "adminis_ward_id",
-      PLACEHOLDER: "Select Administration Ward",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
-    },
-    {
-      CONTROL: "input",
       HEADER: "Bill Entry Date",
-      ACCESSOR: "voucher_sub_id",
-      PLACEHOLDER: "Select Voucher Sub Type",
+      ACCESSOR: "entry_date",
       TYPE: "date",
     },
 
     {
       CONTROL: "input",
       HEADER: "Narration",
-      ACCESSOR: "dr_cr",
-      PLACEHOLDER: "Select Dr/Cr",
+      ACCESSOR: "narration",
+      PLACEHOLDER: "Enter Narration",
     },
 
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Bill Stage",
-      ACCESSOR: "sub_ledger_id",
-      PLACEHOLDER: "Select Dr/Cr",
+      ACCESSOR: "stage_id",
+      PLACEHOLDER: "Select Bill State",
+      API: `${FINANCE_URL.BILL_TYPE.get}`,
     },
     {
       CONTROL: "input",
       HEADER: "Bill Date",
-      ACCESSOR: "narration",
+      ACCESSOR: "bill_date",
       TYPE: "date",
     },
     {
       CONTROL: "input",
       HEADER: "Address",
       ACCESSOR: "address",
+      PLACEHOLDER: "Enter Address",
     },
     {
       CONTROL: "select",
-      HEADER: "DepartAdministration Wardment",
-      ACCESSOR: "adminis_ward_id",
+      HEADER: "Administration Ward",
+      ACCESSOR: "admin_ward_id",
       PLACEHOLDER: "Select Administration Ward",
       API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
     },
@@ -242,45 +289,49 @@ export const AddBillsPaymentEntry = () => {
       CONTROL: "input",
       HEADER: "Bill Amount",
       ACCESSOR: "amount",
-      TYPE:"number"
+      TYPE: "number",
+      PLACEHOLDER: "Enter amount",
     },
 
     // Deduction Details
-    { TITLE: "Deduction Details" },
-    {
-      CONTROL: "select",
-      HEADER: "Vendor Name",
-      ACCESSOR: "voucher_sub_id",
-      PLACEHOLDER: "Select Voucher Sub Type",
-      API: `${FINANCE_URL.VOUCHER_SUB_TYPE_URL.get}`,
-    },
+    // { TITLE: "Deduction Details" },
+    // {
+    //   CONTROL: "select",
+    //   HEADER: "Vendor Name",
+    //   ACCESSOR: "voucher_id",
+    //   PLACEHOLDER: "Select Vendor Name",
+    //   API: `${FINANCE_URL.VOUCHER_SUB_TYPE_URL.get}`,
+    // },
 
-    {
-      CONTROL: "select",
-      HEADER: "Concerned Work",
-      ACCESSOR: "dr_cr",
-      PLACEHOLDER: "Select Dr/Cr",
-      API: "/bill-type/get",
-    },
-
-    {
-      CONTROL: "select",
-      HEADER: "Advance",
-      ACCESSOR: "sub_ledger_id",
-      PLACEHOLDER: "Select Dr/Cr",
-      API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Amount",
-      ACCESSOR: "narration",
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Deposit",
-      ACCESSOR: "amount",
-      TYPE: "number",
-    },
+    // {
+    //   CONTROL: "input",
+    //   HEADER: "Concerned Work",
+    //   ACCESSOR: "dr_cr",
+    //   PLACEHOLDER: "Select Dr/Cr",
+    //   API: "/bill-type/get",
+    // },
+    // {
+    //   CONTROL: "input",
+    //   HEADER: "Advance",
+    //   ACCESSOR: "advance",
+    //   PLACEHOLDER: "Enter Advance",
+    //   TYPE: "number",
+      
+    // },
+    // {
+    //   CONTROL: "input",
+    //   HEADER: "Amount",
+    //   ACCESSOR: "amount1",
+    //   TYPE: "number",
+    //   PLACEHOLDER: "Enter amount",
+    // },
+    // {
+    //   CONTROL: "input",
+    //   HEADER: "Deposit",
+    //   ACCESSOR: "deposit",
+    //   TYPE: "number",
+    //   PLACEHOLDER: "Enter deposit",
+    // },
   ];
 
   const footerData = [
@@ -294,7 +345,7 @@ export const AddBillsPaymentEntry = () => {
     <>
       <Hoc
         initialValues={initialData}
-        validationSchema={voucherSchema}
+        validationSchema={BillInvoiceDetailsSchema}
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
@@ -306,6 +357,8 @@ export const AddBillsPaymentEntry = () => {
         title="Bills Invoice Entry Table"
         columns={columns}
         footerData={footerData}
+        handleStore={mutate}
+        handleResetTable={handleResetTable}
       />
     </>
   );

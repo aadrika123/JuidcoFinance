@@ -26,7 +26,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
     voucher_sub_id: 0,
     sub_ledger_id: 0,
     amount: undefined,
-    dr_cr: 1,
+    dr_cr: "",
   });
 
   const queryClient = new QueryClient();

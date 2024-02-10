@@ -1,6 +1,6 @@
 'use client'
 
-import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import { usePathname, useRouter } from "next/navigation";
@@ -29,12 +29,12 @@ export const ReceiptsHome = () => {
 
   const columns=[
     {name: 'id', caption: "Sr. No.", width: "w-[5%]"},
-    {name: 'receipt_no', caption: "Receipt No", width: "w-[5%]"},
-    {name: 'date', caption: "Receipt Date", width: "w-[5%]"},
-    {name: 'subledger', caption: "Subledger", width: "w-[5%]"},
-    {name: 'paid_by', caption: "Paid By", width: "w-[5%]"},
+    {name: 'receipt_no', caption: "Receipt No", width: "w-[10%]"},
+    {name: 'date', caption: "Receipt Date", width: "w-[10%]"},
+    {name: 'subledger', caption: "Subledger", width: "w-[15%]"},
+    {name: 'paid_by', caption: "Paid By", width: "w-[15%]"},
     {name: 'amount', caption: "Amount", width: "w-[5%]"},
-    {name: 'narration', caption: "Narration", width: "w-[5%]"},
+    {name: 'narration', caption: "Narration", width: "w-[25%]"},
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,
@@ -46,7 +46,7 @@ export const ReceiptsHome = () => {
 
   return (
     <>
-      <HeaderWidgetV variant="add" title={"Receipt"} />
+      <HeaderWidget variant="add" title={"Receipt"} />
       <TableWithFeatures
         title="Receipt List"
         center

@@ -58,19 +58,19 @@ export const sidebarLinks: SidebarLinksProps = {
               moduleName: "Cheque Issue Entry",
               path: "/finance/documentation/cheque-issue-entry",
             },
-            {
-              moduleName: "Stop Payment Order ",
-              path: "/workorder",
-            },
-            {
-              moduleName: "Cancellation / Re-issue of Cheque",
-              path: "/chequebook",
-            },
+            // {
+            //   moduleName: "Stop Payment Order ",
+            //   path: "/workorder",
+            // },
+            // {
+            //   moduleName: "Cancellation / Re-issue of Cheque",
+            //   path: "/chequebook",
+            // },
           ],
         },
 
         {
-          moduleName: "Transaction",
+          moduleName: "Transactions",
           icon: (
             <Image
               src="/icons/sidebar/transaction.svg"

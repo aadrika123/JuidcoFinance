@@ -106,7 +106,8 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             handleChange,
             handleBlur,
             handleSubmit,
-            resetForm
+            handleReset,
+            dirty
           }) => (
             <form onSubmit={handleSubmit}>
               {generateFields(
@@ -117,23 +118,27 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                 errors,
                 touched
               )}
-              {!readonly && (
-                <div className="mt-4 flex items-center justify-end gap-2">
-                  <Button
-                    onClick={onClose || goBack}
-                    variant="cancel"
-                    buttontype="button"
-                  >
-                    {onClose ? "Close" : "Back"}
-                  </Button>
-                  {onClose && <Button onClick={resetForm} variant="cancel" buttontype="button">
-                    Reset
-                  </Button>}
-                  <Button variant="primary" buttontype="submit">
-                    Save
-                  </Button>
-                </div>
-              )}
+               <div className="mt-4 flex items-center justify-end gap-2">
+                <Button
+                  onClick={onClose || goBack}
+                  variant="cancel"
+                  buttontype="button"
+                >
+                  {onClose ? "Close" : "Back"}
+                </Button>
+
+
+                {!readonly && dirty && (
+                  <>
+                    <Button variant="cancel" buttontype="button" onClick={handleReset}>
+                      Reset
+                    </Button>
+                    <Button variant="primary" buttontype="submit">
+                      Save
+                    </Button>
+                  </>
+                )}
+              </div>
             </form>
           )}
         </Formik>

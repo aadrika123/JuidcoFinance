@@ -9,10 +9,10 @@
 import React from "react";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 
 export const HeroChequeIssueEntry = () => {
   const pathName = usePathname();

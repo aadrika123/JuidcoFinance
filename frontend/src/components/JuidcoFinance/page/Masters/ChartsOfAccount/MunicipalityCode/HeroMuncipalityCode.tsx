@@ -14,7 +14,7 @@ type HeroMuncipalityCodeProps = {
 
 const HeroMuncipalityCode: React.FC<HeroMuncipalityCodeProps> = (props) => {
   return (
-    <section className="border rounded-lg border-zinc-300 p-6 px-10">
+    <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
       <SubHeading>Municipality Codes</SubHeading>
 
       <div className="mt-8">

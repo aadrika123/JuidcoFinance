@@ -9,10 +9,10 @@ import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
 import APIs from "@/json/apis.json";
-import FormikWrapperV from "@/components/global/organisms/FormikContainerV";
-import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { ChequebookDataProps, ResponseData } from "@/utils/types/chequebook_master_types";
 import { ChequebookDetailsSchema } from "@/utils/validation/masters/chequebook_master.validation";
+import FormikWrapper from "@/components/global/organisms/FormikContainer";
 
 export const EditChequebook = ({
   chequebookID,
@@ -183,8 +183,8 @@ export const EditChequebook = ({
   return (
     <>
       <Toaster />
-      <HeaderWidgetV title="Chequebook" variant={searchParams == "view"? "view" : "edit"} />
-      <FormikWrapperV
+      <HeaderWidget title="Chequebook" variant={searchParams == "view"? "view" : "edit"} />
+      <FormikWrapper
         title=""
         initialValues={initialData}
         enableReinitialize={true}

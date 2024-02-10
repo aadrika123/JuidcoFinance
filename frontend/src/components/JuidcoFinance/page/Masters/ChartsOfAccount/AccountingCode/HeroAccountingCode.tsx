@@ -2,19 +2,19 @@ import React from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
 import PrimaryButton from "@/components/Helpers/Button";
 import AccountingTable from "@/components/Helpers/Tables/AccountingTable";
-import type { AccountingData, Pagination } from "@/utils/types/types";
+import type { AccountingTableData, Pagination } from "@/utils/types/types";
 
 type PrimaryAccountingProps = {
   nextPage: () => void;
   prevPage: () => void;
-  data: AccountingData[];
+  data: AccountingTableData[];
   pages: Pagination;
 };
 
 const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
   return (
     <>
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
+      <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
         <SubHeading>Primary Accounting Codes</SubHeading>
 
         <div className="mt-8">

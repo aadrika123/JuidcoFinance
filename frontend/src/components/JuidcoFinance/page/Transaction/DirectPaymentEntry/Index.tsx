@@ -6,7 +6,7 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 
 export const HeroPaymentEntry = () => {
   const pathName = usePathname();
@@ -45,7 +45,7 @@ export const HeroPaymentEntry = () => {
 
   return (
     <>
-      <HeaderWidgetV variant="add" title={"Direct Payments"} />
+      <HeaderWidget variant="add" title={"Direct Payments"} />
       <TableWithFeatures
         title="Direct Payment Entry List"
         center

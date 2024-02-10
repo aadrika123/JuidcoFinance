@@ -68,7 +68,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
   return (
     <>
       <Toaster />
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
+      <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Edit Vendor</SubHeading>
         </div>
@@ -105,6 +105,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
               handleChange,
               handleBlur,
               handleSubmit,
+              handleReset
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -252,7 +253,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                   >
                     Close
                   </PrimaryButton>
-                  <PrimaryButton buttonType="button" variant="cancel">
+                  <PrimaryButton onClick={handleReset} buttonType="button" variant="cancel">
                     Reset
                   </PrimaryButton>
                   <PrimaryButton buttonType="submit" variant="primary">

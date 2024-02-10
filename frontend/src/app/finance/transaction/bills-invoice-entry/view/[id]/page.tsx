@@ -1,4 +1,4 @@
-import { EditBillsPaymentEntry } from "@/components/JuidcoFinance/page/Transaction/BillsInvoiceEntry/EditVoucher/Index";
+import { EditBillsPaymentEntry } from "@/components/JuidcoFinance/page/Transaction/BillsInvoiceEntry/EditInvoiceEntry/Index";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

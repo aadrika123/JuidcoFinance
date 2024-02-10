@@ -12,11 +12,10 @@ const BankAccountsTable: React.FC = () => {
   );
 
   const pathName = usePathname();
-  console.log(pathName);
 
   return (
     <>
-      <div className="overflow-x-auto border-[2px] border-zinc-400">
+      <div className="overflow-x-auto border-[2px] bg-white border-zinc-400">
         <table className="table table-md">
           <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
             <tr>
@@ -76,43 +75,6 @@ const BankAccountsTable: React.FC = () => {
                   </span>
                 </div>
               </th>
-
-              <th className="border  border-zinc-400  font-medium">
-                <div className="flex gap-2">
-                  <span>Print </span>
-                  <span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="19"
-                      height="19"
-                      viewBox="0 0 19 19"
-                      fill="none"
-                    >
-                      <path
-                        d="M5.03514 13.9453H3.57031C3.18181 13.9453 2.80922 13.7909 2.53451 13.5162C2.2598 13.2415 2.10547 12.8689 2.10547 12.4804V8.81835C2.10547 8.42985 2.2598 8.05727 2.53451 7.78256C2.80922 7.50785 3.18181 7.35352 3.57031 7.35352H15.289C15.6775 7.35352 16.0501 7.50785 16.3248 7.78256C16.5995 8.05727 16.7538 8.42985 16.7538 8.81835V12.4804C16.7538 12.8689 16.5995 13.2415 16.3248 13.5162C16.0501 13.7909 15.6775 13.9453 15.289 13.9453H13.8242"
-                        stroke="white"
-                        strokeWidth="1.7578"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M13.8242 11.0156H5.03516V16.875H13.8242V11.0156Z"
-                        stroke="white"
-                        strokeWidth="1.7578"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M5.03516 7.35349V2.22656H13.8242V7.35349"
-                        stroke="white"
-                        strokeWidth="1.7578"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </th>
             </tr>
           </thead>
           <tbody className="">
@@ -156,43 +118,6 @@ const BankAccountsTable: React.FC = () => {
                       </span>
                     </div>
                   </Link>
-                </td>
-
-                {/* Print */}
-                <td className="border border-zinc-400 ">
-                  <div className="flex justify-center">
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="19"
-                        height="19"
-                        viewBox="0 0 19 19"
-                        fill="none"
-                      >
-                        <path
-                          d="M5.03514 13.9453H3.57031C3.18181 13.9453 2.80922 13.7909 2.53451 13.5162C2.2598 13.2415 2.10547 12.8689 2.10547 12.4804V8.81835C2.10547 8.42985 2.2598 8.05727 2.53451 7.78256C2.80922 7.50785 3.18181 7.35352 3.57031 7.35352H15.289C15.6775 7.35352 16.0501 7.50785 16.3248 7.78256C16.5995 8.05727 16.7538 8.42985 16.7538 8.81835V12.4804C16.7538 12.8689 16.5995 13.2415 16.3248 13.5162C16.0501 13.7909 15.6775 13.9453 15.289 13.9453H13.8242"
-                          stroke="black"
-                          strokeWidth="1.7578"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M13.8242 11.0156H5.03516V16.875H13.8242V11.0156Z"
-                          stroke="black"
-                          strokeWidth="1.7578"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M5.03516 7.35349V2.22656H13.8242V7.35349"
-                          stroke="black"
-                          strokeWidth="1.7578"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </div>
                 </td>
               </tr>
             ))}

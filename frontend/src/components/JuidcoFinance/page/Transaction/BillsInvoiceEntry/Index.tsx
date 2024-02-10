@@ -9,10 +9,10 @@
 import React from "react";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 
 export const HeroBillsInvoiceEntry = () => {
   const pathName = usePathname();
@@ -36,14 +36,14 @@ export const HeroBillsInvoiceEntry = () => {
 
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
-    { name: "issue_date", caption: "Vendor Name", width: "w-[15%]" },
-    { name: "module", caption: "Bill Type", width: "w-[10%]" },
-    { name: "cheque_no", caption: "Bill Number", width: "w-[15%]" },
-    { name: "amount", caption: "Department", width: "w-[40%]" },
-    { name: "narration", caption: "Concerned Work", width: "w-[40%]" },
-    { name: "narration", caption: "Bill Date ", width: "w-[40%]" },
-    { name: "narration", caption: "Narration ", width: "w-[40%]" },
-    { name: "narration", caption: "Is Authorized ", width: "w-[40%]" },
+    { name: "vendor", caption: "Vendor Name", width: "w-[10%]" },
+    { name: "type", caption: "Bill Type", width: "w-[10%]" },
+    { name: "bill_no", caption: "Bill Number", width: "w-[10%]" },
+    { name: "department", caption: "Department", width: "w-[15%]" },
+    // { name: "concerned", caption: "Concerned Work", width: "w-[15%]" },
+    { name: "bill_date", caption: "Bill Date ", width: "w-[10%]" },
+    { name: "narration", caption: "Narration ", width: "w-[25%]" },
+    { name: "is_authorized", caption: "Is Authorized ", width: "w-[5%]" },
     // { name: "print", caption: "Print", value: pButton, width: "w-[5%]" },
     {
       name: "View / Edit",
@@ -60,7 +60,7 @@ export const HeroBillsInvoiceEntry = () => {
         title="Bills Invoice List"
         center
         columns={column}
-        api={FINANCE_URL.CHEQUE_ISSUE_ENTRY.get || ""}
+        api={FINANCE_URL.BILL_INVOICE_ENTRY_URL.get || ""}
         numberOfRowsPerPage={10}
       />
     </>

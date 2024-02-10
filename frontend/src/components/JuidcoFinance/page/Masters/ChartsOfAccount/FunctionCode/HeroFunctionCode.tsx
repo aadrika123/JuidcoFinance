@@ -14,7 +14,7 @@ type FunctionCodeProps = {
 const FunctionCode: React.FC<FunctionCodeProps> = (props) => {
   return (
     <>
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
+      <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
         <SubHeading>Function codes</SubHeading>
 
         <div className="mt-8">

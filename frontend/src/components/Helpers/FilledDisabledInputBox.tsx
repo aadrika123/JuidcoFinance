@@ -2,7 +2,7 @@ import React from "react";
 
 interface InputBoxProps {
   label: React.ReactNode;
-  value: string | number;
+  value?: string | number;
 }
 
 const FilledDisabledInputBox: React.FC<InputBoxProps> = (props) => {

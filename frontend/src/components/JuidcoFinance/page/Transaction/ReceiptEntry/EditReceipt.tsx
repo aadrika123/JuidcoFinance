@@ -12,8 +12,8 @@ import { useSearchParams } from "next/navigation";
 import { ReceiptDataProps, ResponseData } from "@/utils/types/receipt_entry_types";
 import { ReceiptDetailsSchema } from "@/utils/validation/transactions/receipt_entry.validation";
 import APIs from "@/json/apis.json";
-import FormikWrapperV from "@/components/global/organisms/FormikContainerV";
-import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
+import FormikWrapper from "@/components/global/organisms/FormikContainer";
 
 export const EditReceipt = ({
   receiptID,
@@ -193,8 +193,8 @@ export const EditReceipt = ({
   return (
     <>
       <Toaster />
-      <HeaderWidgetV title="Receipt" variant={searchParams == "view"? "view" : "edit"} />
-      <FormikWrapperV
+      <HeaderWidget title="Receipt" variant={searchParams == "view"? "view" : "edit"} />
+      <FormikWrapper
         title=""
         initialValues={initialData}
         enableReinitialize={true}

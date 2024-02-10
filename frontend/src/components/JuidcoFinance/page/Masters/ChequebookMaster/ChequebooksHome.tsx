@@ -4,8 +4,8 @@ import React from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 
 
 /**
@@ -58,7 +58,7 @@ export const ChequebooksHome = () => {
 
   return (
     <>
-      <HeaderWidgetV variant="add" title={"Chequebook"} />
+      <HeaderWidget variant="add" title={"Chequebook"} />
       <TableWithFeatures
         title="Chequebook List"
         center

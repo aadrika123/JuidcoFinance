@@ -108,8 +108,8 @@ export const HeroBankMasters = () => {
       {isAddBankAccountOpen && (
         <>
           <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-[2rem] transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[11.73831rem] z-50">
-            <div className="relative z-50 scale-75">
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-50 rounded-xl hide-scrollbar">
+            <div className="relative z-50">
               <Popup
                 closeModal={handleOpenAddBankAccount}
                 title="Add Bank Account"
@@ -140,6 +140,7 @@ export const HeroBankMasters = () => {
                           touched={touched.bank_name}
                           label="Name of Bank *"
                           name="bank_name"
+                          placeholder="Enter Bank Name"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -149,6 +150,7 @@ export const HeroBankMasters = () => {
                           touched={touched.ifsc_code}
                           label="IFSC Code *"
                           name="ifsc_code"
+                          placeholder="Enter IFSC Code"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -158,6 +160,7 @@ export const HeroBankMasters = () => {
                           touched={touched.branch}
                           label="Bank Branch *"
                           name="branch"
+                          placeholder="Bank Branch"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -167,6 +170,7 @@ export const HeroBankMasters = () => {
                           touched={touched.micr_code}
                           label="MICR Code"
                           name="micr_code"
+                          placeholder="Enter MICR Code"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -176,6 +180,7 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_address}
                           label="Bank Branch Address"
                           name="branch_address"
+                          placeholder="Enter Bank Address"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -185,6 +190,7 @@ export const HeroBankMasters = () => {
                           touched={touched.contact_no}
                           label="Contact Number"
                           name="contact_no"
+                          placeholder="Enter Contact Number"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -194,6 +200,7 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_city}
                           label="Bank Branch City"
                           name="branch_city"
+                          placeholder="Enter Bank City"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -203,6 +210,7 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_district}
                           label="Bank Branch District"
                           name="branch_district"
+                          placeholder="Bank Branch District"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -212,6 +220,7 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_state}
                           label="Bank Branch State "
                           name="branch_state"
+                          placeholder="Enter Bank State"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -221,6 +230,7 @@ export const HeroBankMasters = () => {
                           touched={touched.email}
                           label="Email Id"
                           name="email"
+                          placeholder="Enter Email Id"
                         />
                         <InputBox
                           onChange={handleChange}
@@ -230,6 +240,7 @@ export const HeroBankMasters = () => {
                           touched={touched.contact_person_name}
                           name="contact_person_name"
                           label="Contact Person Name / Designation"
+                          placeholder="Enter Contact Person Name"
                         />
                       </div>
                       <div className="mt-4 flex items-center gap-5 justify-end">

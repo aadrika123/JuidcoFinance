@@ -12,7 +12,7 @@ import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
 import { DirPaymentDataProps, ResponseData } from "@/utils/types/direct_payment_entry_types";
 import { PaymentDetailsSchema } from "@/utils/validation/transactions/direct_payment.validation";
-import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 
 export const EditDirectPaymentEntry = ({
   PaymentID,
@@ -207,7 +207,7 @@ export const EditDirectPaymentEntry = ({
   return (
     <>
       <Toaster />
-      <HeaderWidgetV title="Direct Payment" variant={searchParams == "view"? "view" : "edit"} />
+      <HeaderWidget title="Direct Payment" variant={searchParams == "view"? "view" : "edit"} />
       <FormikWrapper
         title=""
         initialValues={initialData}

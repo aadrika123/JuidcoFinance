@@ -12,6 +12,7 @@ import goBack from "@/utils/helper";
 import { useMutation } from "react-query";
 import { QueryClient } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
+import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 
 const EditBankAccount = ({ bankID }: { bankID: string }) => {
   const [bankAccountDetails, setBankAccountDetails] =
@@ -78,6 +79,11 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
   return (
     <>
       <Toaster />
+      <HeaderWidget
+        title="Bank Details"
+        variant="edit"
+      />
+      <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
       <Formik
         initialValues={initialBankDetailsValues}
         validationSchema={AddBankDetailsSchema}
@@ -94,6 +100,7 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
           handleChange,
           handleBlur,
           handleSubmit,
+          handleReset
         }) => (
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -203,9 +210,9 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
                 variant="cancel"
                 onClick={goBack}
               >
-                Close
+                Back
               </PrimaryButton>
-              <PrimaryButton buttonType="button" variant="cancel">
+              <PrimaryButton onClick={handleReset} buttonType="button" variant="cancel">
                 Reset
               </PrimaryButton>
               <PrimaryButton buttonType="submit" variant="primary">
@@ -215,6 +222,7 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
           </form>
         )}
       </Formik>
+      </section>
     </>
   );
 };

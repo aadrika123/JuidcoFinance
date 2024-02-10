@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import Loader from "@/components/Helpers/Basic/Loader";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
+import dayjs from "dayjs";
 
 type VendorType = {
   id: BigInteger;
@@ -68,7 +69,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
 
   return (
     <>
-      <section className="border rounded-lg border-zinc-300 p-6 px-10">
+      <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>View Vendor</SubHeading>
         </div>
@@ -134,10 +135,10 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
                 <div className="grid grid-cols-3 gap-x-6 gap-4">
                   <FilledDisabledInputBox
                     label="Date Created"
-                    value={vendorData?.created_at}
+                    value={dayjs(`${vendorData?.created_at}`).format("DD MMM YYYY")}
                   />
-                  <FilledDisabledInputBox label="Date Authorized" value={vendorData?.authorized_date} />
-                  <FilledDisabledInputBox label="Date Modified" value={vendorData?.updated_at} />
+                  <FilledDisabledInputBox label="Date Authorized" value={vendorData?.authorized_date ? dayjs(`${vendorData?.authorized_date}`).format("DD MMM YYYY") : ""} />
+                  <FilledDisabledInputBox label="Date Modified" value={dayjs(`${vendorData?.updated_at}`).format("DD MMM YYYY") } />
                 </div>
                 <FilledDisabledInputBox
                   label="Pan No."
