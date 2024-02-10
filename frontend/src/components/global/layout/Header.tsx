@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import SearchBox from "@/components/Helpers/SearchBox";
 import { usePathname } from "next/navigation";
 import { formatString } from "@/utils/helper";
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -49,7 +48,7 @@ const Header: React.FC<SideBarProps> = (props) => {
         </div>
       </div>
       <div className="flex items-center gap-5">
-        <SearchBox />
+        {/* <SearchBox /> */}
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -43,7 +43,7 @@ export const EditBillPaymentEntry = ({
     (async function () {
       const res: ResponseData = await axios({
         method: "GET",
-        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.getById}/${BillPaymentID}`,
+        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.getById}/${BillPaymentID}`,
       });
 
       setInitialData((prev: BillPaymentDetailsData) => {
@@ -51,7 +51,7 @@ export const EditBillPaymentEntry = ({
           ...prev,
           bill_entry_date: DateFormatter(res.data.data.bill_entry_date),
           bill_type_id: res.data.data.bill_type.id,
-          bill_number: res.data.data.bill_no,
+          bill_no: res.data.data.bill_no,
           department_id: res.data.data.department.id,
           adminis_ward_id: res.data.data.adminis_ward.id,
           payee_id: res.data.data.payee.id,
@@ -66,13 +66,14 @@ export const EditBillPaymentEntry = ({
     })();
   }, []);
 
-  // UPDATE DIRECT PAYMENT ENTRY
+  // UPDATE BILL PAYMENT ENTRY
   const UpdateBillPaymentEntry = async (
     values: BillPaymentDetailsData
   ): Promise<BillPaymentDetailsData> => {
+    console.log("first", values)
     try {
       const res = await axios({
-        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.update}`,
+        url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.update}`,
         method: "POST",
         data: {
           id: Number(BillPaymentID),
@@ -92,10 +93,10 @@ export const EditBillPaymentEntry = ({
     BillPaymentDetailsData
   >(UpdateBillPaymentEntry, {
     onSuccess: () => {
-      toast.success("Updated Direct Payment Entry");
+      toast.success("Updated Bill Payment Entry");
     },
     onError: () => {
-      alert("Error updating Direct Payment Entry");
+      alert("Error updating Bill Payment Entry");
     },
     onSettled: () => {
       queryClient.invalidateQueries();
@@ -106,7 +107,8 @@ export const EditBillPaymentEntry = ({
   });
 
   const onSubmit = (values: any) => {
-    values.voucher_date = `${new Date(values.voucher_date).toISOString()}`;
+    values.bill_entry_date = `${new Date(values.bill_entry_date).toISOString()}`;
+    console.log("sf ls df", values)
     mutate(filterValBefStoring(values));
   };
 
@@ -115,7 +117,7 @@ export const EditBillPaymentEntry = ({
     {
       CONTROL: "input",
       HEADER: "Bill Number",
-      ACCESSOR: "bill_number",
+      ACCESSOR: "bill_no",
       PLACEHOLDER: "Enter Bill Number",
     },
     {
@@ -144,7 +146,7 @@ export const EditBillPaymentEntry = ({
       HEADER: "Vendor Name",
       ACCESSOR: "vendor_id",
       PLACEHOLDER: "Select Vendro Name",
-      API: `${FINANCE_URL.PAYMENT_TYPE_URL.get}`,
+      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
     {
       CONTROL: "textarea",
@@ -199,7 +201,7 @@ export const EditBillPaymentEntry = ({
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Edit Direct Payment Entry" variant="view" />
+      <HeaderWidget title="Edit Bill Payment Entry" variant="view" />
       <FormikWrapper
         title=""
         initialValues={initialData}

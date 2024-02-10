@@ -91,7 +91,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
   };
 
   return (
-    <section className="border rounded-lg border-zinc-300 p-6 px-10">
+    <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
       <div className="mt-8">
         <Formik
           initialValues={initialValues}
@@ -106,6 +106,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             handleChange,
             handleBlur,
             handleSubmit,
+            resetForm
           }) => (
             <form onSubmit={handleSubmit}>
               {generateFields(
@@ -125,9 +126,9 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                   >
                     {onClose ? "Close" : "Back"}
                   </Button>
-                  {/* <Button variant="cancel" buttontype="button">
+                  {onClose && <Button onClick={resetForm} variant="cancel" buttontype="button">
                     Reset
-                  </Button> */}
+                  </Button>}
                   <Button variant="primary" buttontype="submit">
                     Save
                   </Button>

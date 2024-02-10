@@ -11,6 +11,11 @@ interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Sidebar: React.FC<SideBarProps> = (props) => {
   const pathName = usePathname();
+  const data = localStorage.getItem('openPage');
+  const handleClick = (moduleName: string) => {
+    localStorage.setItem('openPage', moduleName);
+  };
+
   return (
     <div {...props}>
       <section>
@@ -23,7 +28,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
             return (
               <div key={index}>
                 <ul className="w-full menu menu-xs p-0 overflow-hidden">
-                  <ul className="bg-zinc-100">
+                  <ul className="h-lvh">
                     <li>
                       <details open className="w-full">
                         <summary className="text-[1.125rem] p-2 px-6 whitespace-nowrap bg-[#12743B] hover:bg-[#12743B] rounded-none font-semibold text-white">
@@ -35,7 +40,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                         <ul>
                           {link.subModules?.map((sub, index: number) => (
                             <li key={index} className="mt-5 w-[90%]">
-                              <details>
+                              <details open={data === sub?.moduleName} >
                                 <summary
                                   className={`${
                                     pathName.startsWith(sub.path)
@@ -50,7 +55,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                 </summary>
                                 <ul>
                                   {sub.subModules?.map((link, i: number) => (
-                                    <li key={i} className={`mt-3 ml-5`}>
+                                    <li onClick={() => handleClick(sub.moduleName)} key={i} className={`mt-3 ml-5`}>
                                       <Link
                                         className={`text-[0.9375rem] p-2 ${
                                           pathName === link.path

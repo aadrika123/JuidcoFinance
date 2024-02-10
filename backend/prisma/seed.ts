@@ -397,11 +397,11 @@ async function main() {
   /////////////// Receipt Types Seeder //////////////////
   await receipt_types_seeder();
 
- 
-   await modules_seeder();
- 
-   await receipts_seeder();
+  await subledgers_seeder();
 
+  await modules_seeder();
+
+  await receipts_seeder();
 
   //////////////// Voucher Entries //////////////////
   await voucher_entries_seed();

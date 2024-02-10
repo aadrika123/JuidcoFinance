@@ -109,7 +109,12 @@ class BillPaymentEntryDao {
       where: { id },
       select: {
         id: true,
-        vendor_id: true,
+        vendor: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
         bill_no: true,
         bill_entry_date: true,
         payee: {
