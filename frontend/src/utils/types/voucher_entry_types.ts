@@ -14,7 +14,6 @@ export interface VoucherDataProps {
   sub_ledger_id: number;
   sub_ledger_id_name?: string;
   amount?: number;
-  dr_cr: number | string;
-  dr_cr_name?: string;
+  dr_cr: string;
   // total?: number;
 }

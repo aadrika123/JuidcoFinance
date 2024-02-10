@@ -1,10 +1,9 @@
 import Joi from "joi";
 import type { VoucherEntryRequestData } from "../../../../util/types";
 import { Request } from "express";
-
+import { generateUniquePaymentNo } from "../../../../util/helper/generateUniqueNo";
 // Validating request data
-export const voucherEntryValidation = Joi.object({
-  voucher_no: Joi.number().required(),
+export const voucherEntrySchema = Joi.object({
   voucher_date: Joi.string().required(),
   voucher_type_id: Joi.number().required(),
   narration: Joi.string().required(),
@@ -13,12 +12,13 @@ export const voucherEntryValidation = Joi.object({
   voucher_sub_id: Joi.number().required(),
   sub_ledger_id: Joi.number().required(),
   amount: Joi.number().required(),
-  dr_cr: Joi.number().required(),
+  dr_cr: Joi.string().valid('dr', 'cr').required(),
 });
 
+export const voucherEntryValidation = Joi.array().items(voucherEntrySchema);
 
 // Validating request data for update
-export const voucherEntryValidationWithID = voucherEntryValidation.keys({
+export const voucherEntryValidationWithID = voucherEntrySchema.keys({
   id: Joi.number().required(),
 });
 
@@ -36,4 +36,25 @@ export const requestData = (req: Request): VoucherEntryRequestData => {
     amount: req.body.amount,
     dr_cr: req.body.dr_cr,
   };
+};
+
+// arrange request data for store
+export const multiRequestData = (req: Request): VoucherEntryRequestData[] => {
+  const data = [];
+  for (const item of req.body) {
+    data.push({
+      voucher_no: generateUniquePaymentNo("vn"),
+      voucher_date: item.voucher_date,
+      voucher_type_id: item.voucher_type_id,
+      narration: item.narration,
+      department_id: item.department_id,
+      adminis_ward_id: item.adminis_ward_id,
+      voucher_sub_id: item.voucher_sub_id,
+      sub_ledger_id: item.sub_ledger_id,
+      amount: item.amount,
+      dr_cr: item.dr_cr,
+    });
+  }
+
+  return data;
 };

@@ -108,7 +108,7 @@ export const HeroAddPaymentEntry = () => {
   ): Promise<DirPaymentDataProps> => {
     try {
      const res = await axios({
-        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.create}`,
+        url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.create}`,  
         method: "POST",
         data: filterValBefStoring(values),
       });

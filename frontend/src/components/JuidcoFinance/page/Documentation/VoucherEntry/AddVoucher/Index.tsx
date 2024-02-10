@@ -11,6 +11,10 @@ import { VoucherDataProps } from "@/utils/types/voucher_entry_types";
 import { voucherSchema } from "@/utils/validation/documentation/voucher_entry.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
+import axios from "@/lib/axiosConfig";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation } from "react-query";
+import toast from "react-hot-toast";
 
 interface UpdatedModeType {
   id: number | string;
@@ -34,7 +38,7 @@ export const AddVoucherEntry = () => {
     voucher_sub_id: 0,
     sub_ledger_id: 0,
     amount: undefined,
-    dr_cr: 0,
+    dr_cr: "",
   };
   const [data, setData] = useState<VoucherDataProps[]>([]);
   const [initialData, setInitialData] =
@@ -48,9 +52,6 @@ export const AddVoucherEntry = () => {
   function resetInitialValue() {
     setInitialData(initialValues);
   }
-
-
-  console.log("first", data)
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
     if (!isUpdateMode.isOnEdit) {
@@ -69,7 +70,6 @@ export const AddVoucherEntry = () => {
               department_id_name:
                 values.department_id_name || item.department_id_name,
               dr_cr: values.dr_cr,
-              dr_cr_name: values.dr_cr_name || item.dr_cr_name,
               narration: values.narration,
               sub_ledger_id: values.sub_ledger_id,
               sub_ledger_id_name:
@@ -91,6 +91,44 @@ export const AddVoucherEntry = () => {
     }
     dispatch(closePopup());
     resetInitialValue();
+  };
+
+  const queryClient = new QueryClient();
+  // store multiple data in row
+  const handleStore = async (
+    values: VoucherDataProps
+  ): Promise<VoucherDataProps> => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.VOUCHER_ENTRY_URL.create}`,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useMutation<VoucherDataProps, Error, any>(handleStore, {
+    onSuccess: () => {
+      toast.success("Updated Direct Payment Entry");
+    },
+    onError: () => {
+      alert("Error updating Direct Payment Entry");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+  });
+
+  //////////////////// Handle Reset Table List //////////////////
+  const handleResetTable = () => {
+    setData([]);
   };
 
   ///////////////// Handling Total Count ///////////////
@@ -206,30 +244,32 @@ export const AddVoucherEntry = () => {
     },
 
     {
-      CONTROL: "select",
+      CONTROL: "input",
       HEADER: "Dr/Cr",
       ACCESSOR: "dr_cr",
-      PLACEHOLDER: "Select Dr/Cr",
-      API: "/bill-type/get",
+      PLACEHOLDER: "Enter Dr/Cr",
+      TYPE: "text"
     },
 
     {
       CONTROL: "select",
       HEADER: "Sub Ledger/Name",
       ACCESSOR: "sub_ledger_id",
-      PLACEHOLDER: "Select Dr/Cr",
+      PLACEHOLDER: "Select Sub Ledger",
       API: `${FINANCE_URL.SUB_LEDGER_URL.get}`,
     },
     {
       CONTROL: "textarea",
       HEADER: "Narration",
       ACCESSOR: "narration",
+      PLACEHOLDER: "Enter Narration",
     },
     {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
       TYPE: "number",
+      PLACEHOLDER: "Enter amount",
     },
   ];
 
@@ -253,9 +293,11 @@ export const AddVoucherEntry = () => {
       <TableWithCount
         data={data}
         scrollable
-        title="Title 1"
+        title="Add Voucher"
         columns={columns}
         footerData={footerData}
+        handleResetTable={handleResetTable}
+        handleStore={mutate}
       />
     </>
   );

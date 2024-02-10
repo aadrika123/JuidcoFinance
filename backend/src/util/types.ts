@@ -83,25 +83,25 @@ interface DirPaymentEntryRequestData {
 }
 
 interface BillPaymentEntryRequestData {
-  bill_no: string,
-  bill_type_id: number,
-  bill_entry_date: string,
-  department_id: number,
-  vendor_id: number,
-  address: string,
-  payee_id: number,
-  adminis_ward_id: number,
-  bill_amount: number,
-  advance: number,
-  deposit: number,
-  deductions_amount: number,
-  earlier_payment?: number,
-  payable_amount?: number,
-  net_amount?: number
+  bill_no: string;
+  bill_type_id: number;
+  bill_entry_date: string;
+  department_id: number;
+  vendor_id: number;
+  address: string;
+  payee_id: number;
+  adminis_ward_id: number;
+  bill_amount: number;
+  advance: number;
+  deposit: number;
+  deductions_amount: number;
+  earlier_payment?: number;
+  payable_amount?: number;
+  net_amount?: number;
 }
 interface VoucherEntryRequestData {
   id?: number;
-  voucher_no: number;
+  voucher_no: string;
   voucher_date: Date;
   voucher_type_id: number;
   narration: string;
@@ -110,10 +110,8 @@ interface VoucherEntryRequestData {
   voucher_sub_id: number;
   sub_ledger_id: number;
   amount: number;
-  dr_cr: number;
-  total?: number;
+  dr_cr: string;
 }
-
 
 export type {
   resObj,

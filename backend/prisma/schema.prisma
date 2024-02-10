@@ -90,11 +90,11 @@ model vendor_masters {
   authorized_date  DateTime? // Use DateTime? for nullable date fields
   is_authorized    Boolean      @default(false)
 
-  bill_invoices    bill_invoices[]
-  bill_payments    bill_payment_entries[]
+  bill_invoices bill_invoices[]
+  bill_payments bill_payment_entries[]
 
-  created_at       DateTime     @default(now()) @map("created_at")
-  updated_at       DateTime     @updatedAt @map("updated_at")
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }
 
 //// Vendor Type
@@ -126,6 +126,7 @@ model cheque_book_entries {
   created_at              DateTime  @default(now()) @map("created_at")
   updated_at              DateTime  @updatedAt @map("updated_at")
 }
+
 /// Department
 model departments {
   id                   Int                    @id @default(autoincrement())
@@ -138,8 +139,8 @@ model departments {
   bill_invoices        bill_invoices[]
   cheque_issuances     cheque_issuances[]
 
-  created_at           DateTime               @default(now()) @map("created_at")
-  updated_at           DateTime               @updatedAt @map("updated_at")
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }
 
 /// Employee
@@ -186,12 +187,10 @@ model grants {
   name                String
   remark              String
   dir_payment_entries dir_payment_entries[]
-  cheque_issuances     cheque_issuances[]
+  cheque_issuances    cheque_issuances[]
   created_at          DateTime              @default(now()) @map("created_at")
   updated_at          DateTime              @updatedAt @map("updated_at")
 }
-
-
 
 /// Direct Payment Entry
 model dir_payment_entries {
@@ -212,13 +211,13 @@ model dir_payment_entries {
   department_id      Int
   department         departments   @relation(fields: [department_id], references: [id])
 
-  subledger_id       Int
-  subledger         subledgers     @relation(fields: [subledger_id], references: [id])
+  subledger_id Int
+  subledger    subledgers @relation(fields: [subledger_id], references: [id])
 
-  payment_mode       String
-  amount             Float
-  created_at         DateTime      @default(now()) @map("created_at")
-  updated_at         DateTime      @updatedAt @map("updated_at")
+  payment_mode String
+  amount       Float
+  created_at   DateTime @default(now()) @map("created_at")
+  updated_at   DateTime @updatedAt @map("updated_at")
 }
 
 /// Bill Types
@@ -235,35 +234,32 @@ model bill_types {
 
 /// Bills Payment Entry
 model bill_payment_entries {
-  id                Int           @id @default(autoincrement())
-  bill_no           String
-  
-  bill_type_id      Int
-  bill_type         bill_types    @relation(fields: [bill_type_id], references: [id])
-  bill_entry_date   DateTime
-  department        departments   @relation(fields: [department_id], references: [id])
-  department_id     Int
+  id      Int    @id @default(autoincrement())
+  bill_no String
 
+  bill_type_id      Int
+  bill_type         bill_types     @relation(fields: [bill_type_id], references: [id])
+  bill_entry_date   DateTime
+  department        departments    @relation(fields: [department_id], references: [id])
+  department_id     Int
   vendor_id         Int
   vendor            vendor_masters @relation(fields: [vendor_id], references: [id])
   address           String
-  payee             employees     @relation(fields: [payee_id], references: [id])
+  payee             employees      @relation(fields: [payee_id], references: [id])
   payee_id          Int
-  adminis_ward      adminis_wards @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward      adminis_wards  @relation(fields: [adminis_ward_id], references: [id])
   adminis_ward_id   Int
   bill_amount       Float
   advance           Float
   deposit           Float
   deductions_amount Float
-  earlier_payment   Float         @default(0)
-  payable_amount    Float         @default(0)
-  net_amount        Float         @default(0)
-
-  is_approved       Boolean       @default(false)
-  created_at        DateTime      @default(now()) @map("created_at")
-  updated_at        DateTime      @updatedAt @map("updated_at")
+  earlier_payment   Float          @default(0)
+  payable_amount    Float          @default(0)
+  net_amount        Float          @default(0)
+  is_approved       Boolean        @default(false)
+  created_at        DateTime       @default(now()) @map("created_at")
+  updated_at        DateTime       @updatedAt @map("updated_at")
 }
-
 
 // ----------------------------------------------------------------  //
 // * | Author- Krish
@@ -271,204 +267,175 @@ model bill_payment_entries {
 // * | Created for- Documentation & Record Keeping
 
 model voucher_types {
-  id                   Int                    @id @default(autoincrement())
-  type                 String
-  remark               String?
-  voucher_entries      voucher_entries[]
-  created_at           DateTime               @default(now()) @map("created_at")
-  updated_at           DateTime               @updatedAt @map("updated_at")
+  id              Int               @id @default(autoincrement())
+  type            String
+  remark          String?
+  voucher_entries voucher_entries[]
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @updatedAt @map("updated_at")
 }
 
 model voucher_sub_types {
-  id                   Int                    @id @default(autoincrement())
-  type                 String
-  remark               String?
-  voucher_entries      voucher_entries[]
-  created_at           DateTime               @default(now()) @map("created_at")
-  updated_at           DateTime               @updatedAt @map("updated_at")
+  id              Int               @id @default(autoincrement())
+  type            String
+  remark          String?
+  voucher_entries voucher_entries[]
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @updatedAt @map("updated_at")
 }
 
-
 model voucher_entries {
-  id               Int           @id @default(autoincrement())
-  voucher_no       Int          
+  id               Int               @id @default(autoincrement())
+  voucher_no       String
   voucher_date     DateTime
-  voucher_type     voucher_types @relation(fields: [voucher_type_id], references: [id])
+  voucher_type     voucher_types     @relation(fields: [voucher_type_id], references: [id])
   voucher_type_id  Int
   narration        String
-  department       departments   @relation(fields: [department_id], references: [id])
+  department       departments       @relation(fields: [department_id], references: [id])
   department_id    Int
-  adminis_ward     adminis_wards @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward     adminis_wards     @relation(fields: [adminis_ward_id], references: [id])
   adminis_ward_id  Int
   voucher_sub_type voucher_sub_types @relation(fields: [voucher_sub_id], references: [id])
   voucher_sub_id   Int
-  sub_ledger       subledgers    @relation(fields: [sub_ledger_id], references: [id])
+  sub_ledger       subledgers        @relation(fields: [sub_ledger_id], references: [id])
   sub_ledger_id    Int
   amount           Float
-  dr_cr            Int
-  created_at       DateTime      @default(now()) @map("created_at")
-  updated_at       DateTime      @updatedAt @map("updated_at")
+  dr_cr            String
+  created_at       DateTime          @default(now()) @map("created_at")
+  updated_at       DateTime          @updatedAt @map("updated_at")
 }
-
 
 //// Receipt Type
 model receipt_types {
-  id         Int             @id @default(autoincrement())
+  id         Int               @id @default(autoincrement())
   name       String
   remark     String?
-  receipts    receipt_entries[]
-  created_at DateTime        @default(now()) @map("created_at")
-  updated_at DateTime        @updatedAt @map("updated_at")
+  receipts   receipt_entries[]
+  created_at DateTime          @default(now()) @map("created_at")
+  updated_at DateTime          @updatedAt @map("updated_at")
 }
 
 //// Modules
 model modules {
-  id         Int             @id @default(autoincrement())
-  name       String
-  remark     String?
+  id               Int                @id @default(autoincrement())
+  name             String
+  remark           String?
   // receipts             receipt_entries[]
-  cheque_issuances     cheque_issuances[]
-  created_at DateTime        @default(now()) @map("created_at")
-  updated_at DateTime        @updatedAt @map("updated_at")
+  cheque_issuances cheque_issuances[]
+  created_at       DateTime           @default(now()) @map("created_at")
+  updated_at       DateTime           @updatedAt @map("updated_at")
 }
 
 //// subledgers
 model subledgers {
-  id         Int             @id @default(autoincrement())
-  name       String
-  code       String
-  remark     String?
-  receipts    receipt_entries[]
-  vouchers    voucher_entries[]
-  dir_payments  dir_payment_entries[]
-  created_at DateTime        @default(now()) @map("created_at")
-  updated_at DateTime        @updatedAt @map("updated_at")
+  id           Int                   @id @default(autoincrement())
+  name         String
+  code         String
+  remark       String?
+  receipts     receipt_entries[]
+  vouchers     voucher_entries[]
+  dir_payments dir_payment_entries[]
+  created_at   DateTime              @default(now()) @map("created_at")
+  updated_at   DateTime              @updatedAt @map("updated_at")
 }
-
 
 //// Receipt Entry
-model receipt_entries{
-  id                  Int @id @default(autoincrement())
-  receipt_no          String
-  date                DateTime
-  paid_by             String
-  email               String
-  
-  module_id           Int
+model receipt_entries {
+  id         Int      @id @default(autoincrement())
+  receipt_no String
+  date       DateTime
+  paid_by    String
+  email      String
+
+  module_id Int
   // module              modules @relation(fields: [module_id], references: [id])
-  
-  receipt_type        receipt_types @relation(fields: [receipt_type_id], references: [id])
-  receipt_type_id     Int
-  
-  mobile_no           String
-  
-  admin_ward_id       Int
-  admin_ward          adminis_wards @relation(fields: [admin_ward_id], references: [id])
-  
-  narration           String
-  
-  subledger_id        Int
-  subledger           subledgers @relation(fields: [subledger_id], references: [id])    
-  amount              Float
 
-  created_at          DateTime        @default(now()) @map("created_at")
-  updated_at          DateTime        @updatedAt @map("updated_at")
+  receipt_type    receipt_types @relation(fields: [receipt_type_id], references: [id])
+  receipt_type_id Int
 
+  mobile_no String
+
+  admin_ward_id Int
+  admin_ward    adminis_wards @relation(fields: [admin_ward_id], references: [id])
+
+  narration String
+
+  subledger_id Int
+  subledger    subledgers @relation(fields: [subledger_id], references: [id])
+  amount       Float
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }
-
 
 /// Bill Stages
 model bill_stages {
-  id                   Int                    @id @default(autoincrement())
-  name                 String
-  remark               String?
-  created_at           DateTime               @default(now()) @map("created_at")
-  updated_at           DateTime               @updatedAt @map("updated_at")
+  id         Int      @id @default(autoincrement())
+  name       String
+  remark     String?
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 
-
-  bill_invoices        bill_invoices[]
+  bill_invoices bill_invoices[]
 }
-
 
 /// Banks
 model banks {
-  id                  Int                   @id @default(autoincrement())
-  name                String
-  remark              String
+  id     Int    @id @default(autoincrement())
+  name   String
+  remark String
 
-  cheque_issuances     cheque_issuances[]
-  created_at          DateTime              @default(now()) @map("created_at")
-  updated_at          DateTime              @updatedAt @map("updated_at")
+  cheque_issuances cheque_issuances[]
+  created_at       DateTime           @default(now()) @map("created_at")
+  updated_at       DateTime           @updatedAt @map("updated_at")
 }
 
-
-
 //// Bill Invoice Table : Managed By: Bijoy Paitandi
-model bill_invoices{
-  id                      Int             @id @default(autoincrement())
-  bill_no                 String
-  
-  type_id                 Int
-  type                    bill_types      @relation(fields: [type_id], references: [id])
-
-  vendor_id               Int
-  vendor                  vendor_masters  @relation(fields: [vendor_id], references: [id])
-
-  department_id           Int
-  department              departments     @relation(fields: [department_id], references: [id])
-
-  bill_date               DateTime
-  entry_date              DateTime
-
-  stage_id                Int
-  bill_stage              bill_stages     @relation(fields: [stage_id], references: [id])
-
-  address                 String
-  narration               String
-
-  admin_ward_id           Int
-  admin_ward              adminis_wards   @relation(fields: [admin_ward_id], references: [id])
-
-  amount                  Float
-
-  created_at              DateTime        @default(now()) @map("created_at")
-  updated_at              DateTime        @updatedAt @map("updated_at")
+model bill_invoices {
+  id            Int            @id @default(autoincrement())
+  bill_no       String
+  type_id       Int
+  type          bill_types     @relation(fields: [type_id], references: [id])
+  vendor_id     Int
+  vendor        vendor_masters @relation(fields: [vendor_id], references: [id])
+  department_id Int
+  department    departments    @relation(fields: [department_id], references: [id])
+  bill_date     DateTime
+  entry_date    DateTime
+  stage_id      Int
+  bill_stage    bill_stages    @relation(fields: [stage_id], references: [id])
+  address       String
+  narration     String
+  admin_ward_id Int
+  admin_ward    adminis_wards  @relation(fields: [admin_ward_id], references: [id])
+  amount        Float
+  created_at    DateTime       @default(now()) @map("created_at")
+  updated_at    DateTime       @updatedAt @map("updated_at")
 }
 
 ////cheque_issuances: Managed by: Bijoy Paitandi
-model cheque_issuances{
-	id                  Int                 @id @default(autoincrement())
-	voucher_no          Int
-	voucher_date        DateTime
-
-	bill_type_id        Int
-  bill_type           bill_types          @relation(fields: [bill_type_id], references: [id])
-	
-  narration           String
-	
-  admin_ward_id       Int
-	admin_ward         adminis_wards       @relation(fields: [admin_ward_id], references: [id])
-
-  department_id       Int
-	department          departments       @relation(fields: [department_id], references: [id])
-
-
-  payee_id            Int
-  payee               employees           @relation(fields: [payee_id], references: [id])
-
-	grant_id            Int
-  grant               grants              @relation(fields: [grant_id], references: [id])
-
-	bank_id             Int
-  bank                banks               @relation(fields: [bank_id], references: [id])
-
-	module_id           Int
-  module              modules             @relation(fields: [module_id], references: [id])
-
-	issue_date          DateTime
-	cheque_no           String
-  amount              Float
-
-	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
+model cheque_issuances {
+  id            Int           @id @default(autoincrement())
+  voucher_no    Int
+  voucher_date  DateTime
+  bill_type_id  Int
+  bill_type     bill_types    @relation(fields: [bill_type_id], references: [id])
+  narration     String
+  admin_ward_id Int
+  admin_ward    adminis_wards @relation(fields: [admin_ward_id], references: [id])
+  department_id Int
+  department    departments   @relation(fields: [department_id], references: [id])
+  payee_id      Int
+  payee         employees     @relation(fields: [payee_id], references: [id])
+  grant_id      Int
+  grant         grants        @relation(fields: [grant_id], references: [id])
+  bank_id       Int
+  bank          banks         @relation(fields: [bank_id], references: [id])
+  module_id     Int
+  module        modules       @relation(fields: [module_id], references: [id])
+  issue_date    DateTime
+  cheque_no     String
+  amount        Float
+  created_at    DateTime      @default(now()) @map("created_at")
+  updated_at    DateTime      @updatedAt @map("updated_at")
 }

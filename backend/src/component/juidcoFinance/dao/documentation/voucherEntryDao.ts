@@ -1,15 +1,18 @@
 import { Request } from "express";
 import { PrismaClient, Prisma } from ".prisma/client";
 import { generateRes } from "../../../../util/generateRes";
-import { requestData } from "../../requests/documentation/voucherEntryValidation";
+import {
+  multiRequestData,
+  requestData,
+} from "../../requests/documentation/voucherEntryValidation";
 
 const prisma = new PrismaClient();
 
 class VoucherEntryDao {
   // store voucher entries on db;
   store = async (req: Request) => {
-    return await prisma.voucher_entries.create({
-      data: requestData(req),
+    return await prisma.voucher_entries.createMany({
+      data: multiRequestData(req),
     });
   };
 
@@ -18,7 +21,7 @@ class VoucherEntryDao {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
-    const skip = (page -1 ) * limit;
+    const skip = (page - 1) * limit;
 
     const query: Prisma.voucher_entriesFindManyArgs = {
       skip: skip,
@@ -72,7 +75,7 @@ class VoucherEntryDao {
         OR: [
           {
             voucher_type: {
-              type:{
+              type: {
                 contains: search,
                 mode: "insensitive",
               },
@@ -90,12 +93,10 @@ class VoucherEntryDao {
     return generateRes(data, count, page, limit);
   };
 
-
-
   // get single voucher entries
   getById = async (id: number) => {
     const query: Prisma.voucher_entriesFindManyArgs = {
-      where: {id},
+      where: { id },
       select: {
         id: true,
         voucher_no: true,
