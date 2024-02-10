@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { sidebarLinks } from "@/json/sidebar.json";
@@ -11,7 +11,11 @@ interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Sidebar: React.FC<SideBarProps> = (props) => {
   const pathName = usePathname();
-  const data = localStorage.getItem('openPage');
+  const [data, setData] = useState<string | null>();
+
+  useEffect(()=> {
+    setData(localStorage.getItem('openPage'));
+  },[])
   const handleClick = (moduleName: string) => {
     localStorage.setItem('openPage', moduleName);
   };

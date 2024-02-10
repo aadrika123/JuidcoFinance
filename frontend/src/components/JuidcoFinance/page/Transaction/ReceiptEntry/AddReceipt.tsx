@@ -272,7 +272,7 @@ export const AddReceipt = () => {
         CONTROL: "select",
         HEADER: "Admin Ward",
         ACCESSOR: "admin_ward_id",
-        PLACEHOLDER: "",
+        PLACEHOLDER: "Select administrative ward",
         API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
       },
       {
@@ -292,7 +292,8 @@ export const AddReceipt = () => {
         CONTROL: "input",
         HEADER: "Amount",
         ACCESSOR: "amount",
-        PLACEHOLDER: "Example: 3283838"
+        PLACEHOLDER: "Example: 3283838",
+        TYPE: "number"
       },
     ];
   

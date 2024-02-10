@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
-import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import { DateFormatter, filterValBefStoring } from "@/utils/helper";
 import { QueryClient, useMutation } from "react-query";

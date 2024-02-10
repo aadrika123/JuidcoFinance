@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Choice, FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import axios from "@/lib/axiosConfig";
 import { DateFormatter } from "@/utils/helper";
 import { QueryClient, useMutation } from "react-query";
@@ -13,6 +12,7 @@ import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
 import { DirPaymentDataProps, ResponseData } from "@/utils/types/direct_payment_entry_types";
 import { PaymentDetailsSchema } from "@/utils/validation/transactions/direct_payment.validation";
+import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
 
 export const EditDirectPaymentEntry = ({
   PaymentID,
@@ -207,7 +207,7 @@ export const EditDirectPaymentEntry = ({
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Edit Direct Payment Entry" variant="view" />
+      <HeaderWidgetV title="Direct Payment" variant={searchParams == "view"? "view" : "edit"} />
       <FormikWrapper
         title=""
         initialValues={initialData}

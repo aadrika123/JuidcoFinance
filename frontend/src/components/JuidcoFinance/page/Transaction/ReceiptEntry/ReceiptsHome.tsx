@@ -1,6 +1,5 @@
 'use client'
 
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";

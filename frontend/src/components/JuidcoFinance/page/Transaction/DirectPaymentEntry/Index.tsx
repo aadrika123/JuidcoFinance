@@ -3,10 +3,10 @@
 import React from "react";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { HeaderWidgetV } from "@/components/Helpers/Widgets/HeaderWidgetV";
 
 export const HeroPaymentEntry = () => {
   const pathName = usePathname();
@@ -45,7 +45,7 @@ export const HeroPaymentEntry = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Direct Payment Entry"} />
+      <HeaderWidgetV variant="add" title={"Direct Payments"} />
       <TableWithFeatures
         title="Direct Payment Entry List"
         center

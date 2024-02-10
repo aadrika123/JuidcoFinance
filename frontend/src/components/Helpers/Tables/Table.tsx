@@ -1,8 +1,8 @@
+import { MuncipalityTableData } from "@/utils/types/types";
 import React from "react";
-import { TableData } from "@/components/ChartsOfAccount/MunicipalityCode/HeroMuncipalityCode";
 
 interface TableDataProps {
-  data: TableData[];
+  data: MuncipalityTableData[];
 }
 
 const Table: React.FC<TableDataProps> = (props) => {

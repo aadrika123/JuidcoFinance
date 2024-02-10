@@ -1,8 +1,8 @@
+import { FunctionTableData } from "@/utils/types/types";
 import React from "react";
-import { FunctionTableProps } from "@/components/ChartsOfAccount/FunctionCode/HeroFunctionCode";
 
 interface FunctionCodeProps {
-  data: FunctionTableProps[];
+  data: FunctionTableData[];
 }
 const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
   return (
