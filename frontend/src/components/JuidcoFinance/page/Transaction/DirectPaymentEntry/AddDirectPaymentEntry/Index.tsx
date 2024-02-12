@@ -3,7 +3,6 @@
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
 import React, { useEffect, useState } from "react";
-import { Choice, FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
@@ -15,6 +14,7 @@ import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
+import { fields } from "../DirPaymentFormFields";
 
 interface UpdatedModeType {
   id: number | string;
@@ -125,16 +125,16 @@ export const HeroAddPaymentEntry = () => {
     any
   >(handleStore, {
     onSuccess: () => {
-      toast.success("Updated Direct Payment Entry");
-    },
-    onError: () => {
-      alert("Error updating Direct Payment Entry");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries();
+      toast.success("Direct Payment Entry Added Successfully!!");
       setTimeout(() => {
         goBack();
       }, 1000);
+    },
+    onError: () => {
+      alert("Something is wrong!!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
     },
   });
 
@@ -215,100 +215,6 @@ export const HeroAddPaymentEntry = () => {
       caption: "Edit/Remove",
       width: "w-[10%]",
       value: addButton,
-    },
-  ];
-
-  /////  Radio buttons list
-  const choices: Choice[] = [
-    { key: "Cash", value: "cash" },
-    { key: "Cheque", value: "cheque" },
-    { key: "NFT/RTGS", value: "NFT/RTGS" },
-  ];
-
-  // Add Input Fields
-  const fields: FieldTypeProps[] = [
-    {
-      CONTROL: "input",
-      HEADER: "Payment Date",
-      ACCESSOR: "payment_date",
-      PLACEHOLDER: "DD/MM/YYYY",
-      TYPE: "date",
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Grant",
-      ACCESSOR: "grant_id",
-      PLACEHOLDER: "Select Grant",
-      API: `${FINANCE_URL.GRANT_URL.get}`,
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Payment Type",
-      ACCESSOR: "payment_type_id",
-      PLACEHOLDER: "Select Payment Type",
-      API: `${FINANCE_URL.PAYMENT_TYPE_URL.get}`,
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Department Name",
-      ACCESSOR: "department_id",
-      PLACEHOLDER: "Select Department",
-      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Payee Name",
-      ACCESSOR: "payee_name_id",
-      PLACEHOLDER: "Select Payee Name",
-      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
-    },
-
-    {
-      CONTROL: "select",
-      HEADER: "Administration Ward",
-      ACCESSOR: "adminis_ward_id",
-      PLACEHOLDER: "Select Administration Ward",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
-    },
-
-    {
-      CONTROL: "textarea",
-      HEADER: "Narration",
-      ACCESSOR: "narration",
-      PLACEHOLDER: "Enter Narration",
-    },
-    {
-      CONTROL: "textarea",
-      HEADER: "Address",
-      ACCESSOR: "address",
-      PLACEHOLDER: "Enter Address",
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Sub Ledger",
-      ACCESSOR: "subledger_id",
-      PLACEHOLDER: "Select Sub Ledger",
-      API: `${FINANCE_URL.SUB_LEDGER_URL.getCodes}`,
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Amount",
-      ACCESSOR: "amount",
-      PLACEHOLDER: "Amount",
-      TYPE: "number",
-    },
-    {
-      CONTROL: "checkbox",
-      HEADER: "User Common Budget",
-      ACCESSOR: "user_common_budget",
-      TYPE: "checkbox",
-    },
-    {
-      CONTROL: "radio",
-      HEADER: "Payment Mode",
-      ACCESSOR: "payment_mode",
-      OPTIONS: choices,
-      TYPE: "radio",
     },
   ];
 

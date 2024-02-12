@@ -28,17 +28,17 @@ export function formatString(input: string): string {
 
 export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
+    const modifiedObj = {...obj};
     for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (Object.prototype.hasOwnProperty.call(modifiedObj, key)) {
         if (key.toLowerCase().endsWith("id_name") || key === "id") {
-          delete obj[key];
+          delete modifiedObj[key];
         } else if (key.toLowerCase().endsWith("date")) {
-          obj[key] = `${new Date(obj[key]).toISOString()}`;
+          modifiedObj[key] = `${new Date(modifiedObj[key]).toISOString()}`;
         }
       }
     }
-    console.log("first", obj);
-    return obj;
+    return modifiedObj;
   }
 
   if (values.length > 0) {
