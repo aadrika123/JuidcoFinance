@@ -27,16 +27,27 @@ buildThem(){
     npm --prefix ./frontend run build
 }
 
+startServices(){
+    cd ./backend
+    pm2 start npm --name "jfinance-back" -- start
+    cd ../frontend
+    pm2 start npm --name "jfinance-front" -- start
+
+    cd ..
+    pm2 list
+}
+
 installModules
 resetDatabases
 buildThem
+startServices
 
 
 echo "things to do now: "
 echo "modify the frontend next.config.js file to indicate the server port"
 echo "modify the frontend package.json file to set the port (-p 4000), in the start command"
 echo "use pm2 to start the frontend and backend separately, hint: "
-echo "pm2 start npm --name "jfinance-front" -- start"
+echo "pm2 start npm --name "jfinance-back" -- start"
 echo "pm2 start npm --name "jfinance-front" -- start"
 echo "make sure services are running: "
 echo "pm2 list"
