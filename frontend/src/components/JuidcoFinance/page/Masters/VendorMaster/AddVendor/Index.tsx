@@ -74,7 +74,7 @@ export const HeroAddVendor = () => {
               handleChange,
               handleBlur,
               handleSubmit,
-              handleReset
+              handleReset,
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -236,7 +236,11 @@ export const HeroAddVendor = () => {
                     Back
                   </PrimaryButton>
 
-                  <PrimaryButton onClick={handleReset} buttonType="button" variant={"cancel"}>
+                  <PrimaryButton
+                    onClick={handleReset}
+                    buttonType="button"
+                    variant={"cancel"}
+                  >
                     Reset
                   </PrimaryButton>
 

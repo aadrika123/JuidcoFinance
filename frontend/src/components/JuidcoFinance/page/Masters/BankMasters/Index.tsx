@@ -7,7 +7,7 @@ import AccountList from "./AccountList/AccountList";
 import AddBankHeader from "./AddBank/AddBank";
 import Popup from "@/components/Helpers/Basic/Popup";
 import InputBox from "@/components/Helpers/InputBox";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, QueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "@/components/Helpers/Basic/Loader";
 import { Formik } from "formik";
@@ -24,6 +24,7 @@ import type {
 } from "@/utils/types/bank_master_types";
 import type { MasterProps } from "@/utils/types/types";
 import { FINANCE_URL } from "@/utils/api/urls";
+import goBack from "@/utils/helper";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -49,7 +50,7 @@ export const HeroBankMasters = () => {
   console.log(fetchQuery);
 
   // ----- FETCH DATA ------////
-  const queryClient = useQueryClient();
+  const queryClient = new QueryClient();
 
   const fetchBankData = async (): Promise<MasterProps<AccountTableData>> => {
     const res = await axios({
@@ -88,8 +89,7 @@ export const HeroBankMasters = () => {
   const { mutate } = useMutation<AddBankDetailsData, Error, AddBankDetailsData>(
     createBankDetails,
     {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
         handleOpenAddBankAccount();
         toast.success("Successfully Added Bank Details!");
       },
@@ -97,7 +97,10 @@ export const HeroBankMasters = () => {
         alert("there was an error");
       },
       onSettled: () => {
-        queryClient.invalidateQueries("bank-list");
+        queryClient.invalidateQueries();
+        setTimeout(() => {
+          goBack();
+        }, 1000);
       },
     }
   );
