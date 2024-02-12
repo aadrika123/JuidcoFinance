@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { Formik } from "formik";
 import FormikController from "../molecules/FormikController";
 import {
@@ -30,65 +30,118 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     enableReinitialize,
   } = props;
 
-  /////////////////////////// Generating Fields ///////////////////////////////
-  const generateFields = (
-    n: any,
+  const formikController = (
+    item: any,
     handleChange: (e: React.ChangeEvent<unknown>) => void,
     handleBlur: (e: React.FocusEvent<unknown>) => void,
     values: any,
     errors: FormikErrors,
     touched: FormikTouched
   ) => {
-    const d: JSX.Element[] = [];
-    if (n.length > 0) {
-      let multiD: JSX.Element[] = [];
+    return (
+      <FormikController
+        readonly={readonly}
+        type={item.TYPE}
+        control={item.CONTROL || ""}
+        label={item.HEADER || ""}
+        name={item.ACCESSOR || ""}
+        placeholder={item.PLACEHOLDER}
+        api={item.API}
+        options={item.OPTIONS || []}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values[item.ACCESSOR as keyof typeof values]}
+        error={errors[item.ACCESSOR as keyof typeof errors]}
+        touched={touched[item.ACCESSOR as keyof typeof touched]}
+      />
+    );
+  };
+
+  /////////////////////////// Generating Fields ///////////////////////////////
+  const generateFields = useCallback(
+    (
+      n: any,
+      handleChange: (e: React.ChangeEvent<unknown>) => void,
+      handleBlur: (e: React.FocusEvent<unknown>) => void,
+      values: any,
+      errors: FormikErrors,
+      touched: FormikTouched
+    ) => {
+      const d: JSX.Element[] = [];
+      let d1: JSX.Element[] = [];
+
+      ///////////////////////// Push the Individual Fields in d[] /////////////////
+      function pushD1(item: JSX.Element[]) {
+        if (item.length > 0) {
+          d.push(
+            <div className="mt-2 grid grid-cols-2 gap-x-6 gap-4 ">{...d1}</div>
+          );
+          d1 = [];
+        }
+      }
+
       n.forEach((item: FieldTypeProps, index: number) => {
         if (item.TITLE) {
-          if (multiD.length > 0) {
-            d.push(
-              <div className="mt-2 grid grid-cols-2 gap-x-6 gap-4 ">
-                {...multiD}
-              </div>
-            );
-            multiD = [];
-          }
-          d.push(<h2 className="text-[22px] text-primary my-8">{item.TITLE}</h2>);
-          return generateFields(
-            n.slice(index + 1),
-            handleChange,
-            handleBlur,
-            values,
-            errors,
-            touched
+          pushD1(d1); /// Pushing D1[] into D[]
+          d.push(
+            <div key={index}>
+              <h2 className="text-[22px] text-primary my-8">{item.TITLE}</h2>
+              {item?.CHILDRENS && item?.CHILDRENS?.length > 0 && (
+                <div className="mt-2 grid grid-cols-2 gap-x-6 gap-4">
+                  {item.CHILDRENS.map(
+                    (innerItem: FieldTypeProps, index: number) => {
+                      return (
+                        <div key={index}>
+                          {formikController(
+                            innerItem,
+                            handleChange,
+                            handleBlur,
+                            values,
+                            errors,
+                            touched
+                          )}
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        } else if (item.CONTROL === "checkbox" || item.CONTROL === "radio") {
+          pushD1(d1); /// Pushing D1[] into D[]
+          d.push(
+            <div key={index} className="mt-2">
+              {formikController(
+                item,
+                handleChange,
+                handleBlur,
+                values,
+                errors,
+                touched
+              )}
+            </div>
           );
         } else {
-          multiD.push(
-            <span>
-              <FormikController
-                readonly={readonly}
-                type={item.TYPE}
-                control={item.CONTROL || ""}
-                label={item.HEADER || ""}
-                name={item.ACCESSOR || ""}
-                placeholder={item.PLACEHOLDER}
-                api={item.API}
-                options={item.OPTIONS || []}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values[item.ACCESSOR as keyof typeof values]}
-                error={errors[item.ACCESSOR as keyof typeof errors]}
-                touched={touched[item.ACCESSOR as keyof typeof touched]}
-              />
-            </span>
+          d1.push(
+            <div key={index}>
+              {formikController(
+                item,
+                handleChange,
+                handleBlur,
+                values,
+                errors,
+                touched
+              )}
+            </div>
           );
         }
       });
-      d.push(
-        <div className="mt-2 grid grid-cols-2 gap-x-6 gap-4 ">{...multiD}</div>
-      );
+      pushD1(d1); /// Pushing D1[] into D[]
       return d;
-    }
-  };
+    },
+    [fields]
+  );
 
   return (
     <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
@@ -107,7 +160,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
             handleBlur,
             handleSubmit,
             handleReset,
-            dirty
+            dirty,
           }) => (
             <form onSubmit={handleSubmit}>
               {generateFields(
@@ -118,7 +171,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                 errors,
                 touched
               )}
-               <div className="mt-4 flex items-center justify-end gap-2">
+              <div className="mt-4 flex items-center justify-end gap-2">
                 <Button
                   onClick={onClose || goBack}
                   variant="cancel"
@@ -127,10 +180,13 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                   {onClose ? "Close" : "Back"}
                 </Button>
 
-
                 {!readonly && dirty && (
                   <>
-                    <Button variant="cancel" buttontype="button" onClick={handleReset}>
+                    <Button
+                      variant="cancel"
+                      buttontype="button"
+                      onClick={handleReset}
+                    >
                       Reset
                     </Button>
                     <Button variant="primary" buttontype="submit">
@@ -147,4 +203,4 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
   );
 };
 
-export default FormikWrapper;
+export default memo(FormikWrapper);

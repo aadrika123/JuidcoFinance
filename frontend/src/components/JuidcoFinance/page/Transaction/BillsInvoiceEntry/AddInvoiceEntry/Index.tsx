@@ -3,7 +3,6 @@
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
 import React, { useEffect, useState } from "react";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
@@ -15,6 +14,7 @@ import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
+import { fields } from "../BillInvoiceFormFields";
 
 interface UpdatedModeType {
   id: number | string;
@@ -23,7 +23,7 @@ interface UpdatedModeType {
 
 const Hoc = PopupFormikHOC(FormikWrapper);
 
-export const AddBillsPaymentEntry = () => {
+export const AddBillsInvoiceEntry = () => {
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
@@ -117,16 +117,16 @@ export const AddBillsPaymentEntry = () => {
     handleStore,
     {
       onSuccess: () => {
-        toast.success("Updated Direct Payment Entry");
-      },
-      onError: () => {
-        alert("Error updating Direct Payment Entry");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
+        toast.success("Direct Payment Entry Added Successfully!!");
         setTimeout(() => {
           goBack();
         }, 1000);
+      },
+      onError: () => {
+        alert("Something went wrong!!!");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries();
       },
     }
   );
@@ -211,127 +211,6 @@ export const AddBillsPaymentEntry = () => {
       width: "w-[10%]",
       value: addButton,
     },
-  ];
-
-  // Add Input Fields
-  const fields: FieldTypeProps[] = [
-    // Add Bill/Invoice
-    { TITLE: "Add Bill/Invoice" },
-    {
-      CONTROL: "input",
-      HEADER: "Bill Number",
-      ACCESSOR: "bill_no",
-      PLACEHOLDER: "Enter Bill Number",
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Bill Type",
-      ACCESSOR: "type_id",
-      PLACEHOLDER: "Select Bill Type",
-      API: `${FINANCE_URL.BILL_TYPE.get}`,
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Vendor Name",
-      ACCESSOR: "vendor_id",
-      PLACEHOLDER: "Select Vendor Type",
-      API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
-    },
-
-    {
-      CONTROL: "select",
-      HEADER: "Department",
-      ACCESSOR: "department_id",
-      PLACEHOLDER: "Select Department",
-      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Bill Entry Date",
-      ACCESSOR: "entry_date",
-      TYPE: "date",
-    },
-
-    {
-      CONTROL: "input",
-      HEADER: "Narration",
-      ACCESSOR: "narration",
-      PLACEHOLDER: "Enter Narration",
-    },
-
-    {
-      CONTROL: "select",
-      HEADER: "Bill Stage",
-      ACCESSOR: "stage_id",
-      PLACEHOLDER: "Select Bill State",
-      API: `${FINANCE_URL.BILL_TYPE.get}`,
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Bill Date",
-      ACCESSOR: "bill_date",
-      TYPE: "date",
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Address",
-      ACCESSOR: "address",
-      PLACEHOLDER: "Enter Address",
-    },
-    {
-      CONTROL: "select",
-      HEADER: "Administration Ward",
-      ACCESSOR: "admin_ward_id",
-      PLACEHOLDER: "Select Administration Ward",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
-    },
-    {
-      CONTROL: "input",
-      HEADER: "Bill Amount",
-      ACCESSOR: "amount",
-      TYPE: "number",
-      PLACEHOLDER: "Enter amount",
-    },
-
-    // Deduction Details
-    // { TITLE: "Deduction Details" },
-    // {
-    //   CONTROL: "select",
-    //   HEADER: "Vendor Name",
-    //   ACCESSOR: "voucher_id",
-    //   PLACEHOLDER: "Select Vendor Name",
-    //   API: `${FINANCE_URL.VOUCHER_SUB_TYPE_URL.get}`,
-    // },
-
-    // {
-    //   CONTROL: "input",
-    //   HEADER: "Concerned Work",
-    //   ACCESSOR: "dr_cr",
-    //   PLACEHOLDER: "Select Dr/Cr",
-    //   API: "/bill-type/get",
-    // },
-    // {
-    //   CONTROL: "input",
-    //   HEADER: "Advance",
-    //   ACCESSOR: "advance",
-    //   PLACEHOLDER: "Enter Advance",
-    //   TYPE: "number",
-      
-    // },
-    // {
-    //   CONTROL: "input",
-    //   HEADER: "Amount",
-    //   ACCESSOR: "amount1",
-    //   TYPE: "number",
-    //   PLACEHOLDER: "Enter amount",
-    // },
-    // {
-    //   CONTROL: "input",
-    //   HEADER: "Deposit",
-    //   ACCESSOR: "deposit",
-    //   TYPE: "number",
-    //   PLACEHOLDER: "Enter deposit",
-    // },
   ];
 
   const footerData = [

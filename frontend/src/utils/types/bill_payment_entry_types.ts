@@ -1,16 +1,3 @@
-type PaymentType = {
-  id: number;
-  type: string;
-};
-
-export type BillPaymentTableData = {
-  id: number;
-  payment_no: number;
-  payee_name: string;
-  payment_type: PaymentType;
-  amount: number;
-};
-
 export interface BillPaymentDetailsData {
   id?: number | string;
   bill_entry_date: string;

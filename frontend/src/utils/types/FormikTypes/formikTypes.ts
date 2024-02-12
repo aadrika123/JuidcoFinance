@@ -33,6 +33,7 @@ export type FieldTypeProps = {
   TYPE?: string;
   ADDITIONAL?: FieldTypeProps[];
   TITLE?: string;
+  CHILDRENS?: FieldTypeProps[]
 };
 
 export interface FormikWrapperProps {
