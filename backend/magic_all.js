@@ -13,10 +13,14 @@ const creator_name = "Bijoy Paitandi";
 
 
 const prismaFolder = './prisma';
-const daoFolder = "./src/component/juidcoFinance/dao/documentation";
-const validationFolder = "./src/component/juidcoFinance/requests/documentation";
-const controllerFolder = "./src/component/juidcoFinance/controller/documentation";
-const routeFolder = "./src/component/juidcoFinance/route/documentation";
+
+const subFolder = "budgeting";
+
+const seederFolder = `${prismaFolder}/seeder/${subFolder}`;
+const daoFolder = `./src/component/juidcoFinance/dao/${subFolder}`;
+const validationFolder = `./src/component/juidcoFinance/requests/${subFolder}`;
+const controllerFolder = `./src/component/juidcoFinance/controller/${subFolder}`;
+const routeFolder = `./src/component/juidcoFinance/route/${subFolder}`;
 
 
 const toPascalCase = (s) => {
@@ -62,7 +66,7 @@ const generatePrismaSchema = (modelDetails) => {
 
 const generateSeeder = (modelDetails, recordCount) => {
     const seederName = `${modelDetails.name}_seeder`;
-    const seederFilePath = `${prismaFolder}/seeder/${seederName}.ts`;
+    const seederFilePath = `${seederFolder}/${seederName}.ts`;
     let data = "";
     data += 'import { PrismaClient  } from "@prisma/client";\n';
     data += 'import { faker } from "@faker-js/faker";\n';
@@ -224,28 +228,11 @@ const generateRouteFile = (modelDetails) => {
     console.log("Route file: " + routeFilePath);
 }
 
-// Modify the modelDetails below
-const modelDetails = {
-    name: "cheque_issuances",
-    fields: [
-        {name: 'id', type: 'Int', constraint: '@id @default(autoincrement())'},
-        {name: 'voucher_no', type: 'Int'},
-        {name: 'voucher_date', type: 'DateTime'},
-        {name: 'bill_type_id', type: 'Int'},
-        {name: 'narration', type: 'String'},
-        {name: 'admin_ward_id', type: 'Int'},
-        {name: 'payee_id', type: 'Int'},
-        {name: 'grant_id', type: 'Int'},
-        {name: 'bank_id', type: 'Int'},
-        {name: 'module_id', type: 'Int'},
-        {name: 'issue_date', type: 'DateTime'},
-        {name: 'cheque_no', type: 'String'},
-        {name: 'amount', type: 'Float'},
 
-        {name: 'created_at', type: 'DateTime', constraint: '@default(now()) @map("created_at")'},
-        {name: 'updated_at', type: 'DateTime', constraint: '@updatedAt @map("updated_at")'},
-    ]
-};
+
+const modelDetails = require("./magic/schema/sprint2/budget_reappropriations");
+
+
 generatePrismaSchema(modelDetails);
 generateSeeder(modelDetails, 10);
 generateDao(modelDetails);

@@ -4,18 +4,19 @@ import { Request, Response } from "express";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resMessage } from "../responseMessage/commonMessage";
 import { resObj } from "../../../util/types";
+import BudgetTypesDao from "../dao/BudgetTypesDao";
 
 /**
  * | Author- Bijoy Paitandi
  * | Created for- Bank Controller
  */
 
-class {{Bank}}Controller{
-  private dao: {{Bank}}Dao;
+class BudgetTypesController{
+  private dao: BudgetTypesDao;
   private initMsg: string;
   constructor() {
-    this.dao = new {{Bank}}Dao();
-    this.initMsg = "{{Bank}}";
+    this.dao = new BudgetTypesDao();
+    this.initMsg = "BudgetTypes";
   }
 
   // Get limited banks
@@ -45,4 +46,4 @@ class {{Bank}}Controller{
   };
 }
 
-export default {{Bank}}Controller;
+export default BudgetTypesController;

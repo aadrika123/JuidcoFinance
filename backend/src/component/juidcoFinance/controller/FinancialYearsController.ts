@@ -4,18 +4,19 @@ import { Request, Response } from "express";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resMessage } from "../responseMessage/commonMessage";
 import { resObj } from "../../../util/types";
+import FinancialYearsDao from "../dao/FinancialYearsDao";
 
 /**
  * | Author- Bijoy Paitandi
  * | Created for- Bank Controller
  */
 
-class {{Bank}}Controller{
-  private dao: {{Bank}}Dao;
+class FinancialYearsController{
+  private dao: FinancialYearsDao;
   private initMsg: string;
   constructor() {
-    this.dao = new {{Bank}}Dao();
-    this.initMsg = "{{Bank}}";
+    this.dao = new FinancialYearsDao();
+    this.initMsg = "FinancialYears";
   }
 
   // Get limited banks
@@ -45,4 +46,4 @@ class {{Bank}}Controller{
   };
 }
 
-export default {{Bank}}Controller;
+export default FinancialYearsController;

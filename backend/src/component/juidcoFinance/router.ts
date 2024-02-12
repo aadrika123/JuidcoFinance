@@ -24,6 +24,12 @@ import ChequeIssuancesRoute from "./route/documentation/ChequeIssuancesRoute";
 import BankRoute from "./route/bankRoute";
 import ModuleRoute from "./route/moduleRoute";
 import ReceiptTypeRoute from "./route/receiptTypeRoute";
+import BudgetTypesRoute from "./route/BudgetTypesRoute";
+import FinancialYearsRoute from "./route/FinancialYearsRoute";
+import BudgetAppropriationsRoute from "./route/documentation/BudgetAppropriationsRoute";
+import ReceiptBudgetsRoute from "./route/documentation/ReceiptBudgetsRoute";
+import BudgetReappropriationsController from "./controller/documentation/BudgetReappropriationsController";
+import BudgetReappropriationsRoute from "./route/documentation/BudgetReappropriationsRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -151,6 +157,16 @@ class FinanceRoute {
     (new ReceiptTypeRoute()).configure(app, "24");
 
     (new ReceiptEntryRoute()).configure(app,"25");
+
+    (new BudgetTypesRoute()).configure(app, "26");
+    
+    (new FinancialYearsRoute()).configure(app, "27");
+
+    (new ReceiptBudgetsRoute()).configure(app, "28");
+
+    (new BudgetAppropriationsRoute()).configure(app, "29");
+
+    (new BudgetReappropriationsRoute()).configure(app, "30");
   }
 }
 

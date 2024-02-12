@@ -12,6 +12,7 @@ class AccountingCodeDao {
       take: limit,
       select: {
         id: true,
+        code: true,
         major_head: true,
         minor_head: true,
         detail_code: true,

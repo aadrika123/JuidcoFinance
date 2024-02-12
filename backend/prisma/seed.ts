@@ -27,12 +27,20 @@ import vendors_seeder from "./seeder/vendors_seeder";
 import vendor_types_seeder from "./seeder/vendor_types_seeder";
 import cheque_issuances_seeder from "./seeder/cheque_issuances_seeder";
 import banks_seeder from "./seeder/banks_seeder";
+import budget_types_seeder from "./seeder/budget_types_seeder";
+import financial_years_seeder from "./seeder/financial_years_seeder";
+import budget_appropriations_seeder from "./seeder/budget_appropriations_seeder";
+import receipt_budgets_seeder from "./seeder/receipt_budgets_seeder";
+import budget_reappropriations_seeder from "./seeder/budget_reappropriations_seeder";
+import budget_names_seeder from "./seeder/budget_names_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
 
   await subledgers_seeder();
   await modules_seeder();
+  await budget_types_seeder();
+  await financial_years_seeder();
 
 
 
@@ -48,6 +56,7 @@ async function main() {
       await prisma.account_codes.create({
         data: {
           id: parseInt(row[0].toString()),
+          code: row[1].toString() + row[2].toString() + row[3].toString(),
           major_head: row[1].toString(),
           minor_head: row[2].toString(),
           detail_code: row[3].toString(),
@@ -415,6 +424,14 @@ async function main() {
   await banks_seeder();
 
   await cheque_issuances_seeder();
+
+  await budget_appropriations_seeder();
+
+  await receipt_budgets_seeder();
+
+  await budget_names_seeder();
+  
+  await budget_reappropriations_seeder();
 }
 main()
   .then(async () => {

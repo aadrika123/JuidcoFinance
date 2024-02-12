@@ -128,11 +128,10 @@ const generateController = (modelDetails) => {
 
     const controllerClassName = nameInPascalCase + "Controller";
     const controllerFilePath = `${controllerFolder}/${controllerClassName}.ts`;
-    var templateData = fs.readFileSync('./magic/templates/all_apis/controller.ts').toString();
+    var templateData = fs.readFileSync('./magic/templates/only_get/controller.ts').toString();
 
-    templateData = templateData.replaceAll("{{BillInvoices}}", nameInPascalCase);
-    templateData = templateData.replaceAll("{{billInvoices}}", nameInCamelCase);
-
+    templateData = templateData.replaceAll("{{Bank}}", `${nameInPascalCase}`);
+    
     fs.writeFileSync(controllerFilePath, templateData, {encoding: 'utf8', flag: 'w'});
     console.log("Controller file: " + controllerFilePath);
 }
@@ -145,10 +144,10 @@ const generateRouteFile = (modelDetails) => {
     const routeClassName = nameInPascalCase + "Route";
     const routeFilePath = `${routeFolder}/${routeClassName}.ts`;
 
-    let templateData = fs.readFileSync('./magic/templates/all_apis/route.ts').toString();
+    let templateData = fs.readFileSync('./magic/templates/only_get/route.ts').toString();
 
-    templateData = templateData.replaceAll("{{BillInvoices}}", nameInPascalCase);
-    templateData = templateData.replaceAll("{{bill-invoices}}", apiRouteName);
+    templateData = templateData.replaceAll("{{Bank}}", nameInPascalCase);
+    templateData = templateData.replaceAll("{{banks}}", apiRouteName);
 
     fs.writeFileSync(routeFilePath, templateData, {encoding: 'utf8', flag: 'w'});
     console.log("Route file: " + routeFilePath);
@@ -156,7 +155,7 @@ const generateRouteFile = (modelDetails) => {
 
 // Modify the modelDetails below
 const modelDetails = {
-    name: "chickens",
+    name: "budget_names",
     fields: [
         {name: 'id', type: 'Int', constraint: '@id @default(autoincrement())'},
         {name: 'name', type: 'String'},
@@ -169,8 +168,8 @@ const modelDetails = {
 generatePrismaSchema(modelDetails);
 generateSeeder(modelDetails, 10);
 generateDao(modelDetails);
-//generateController(modelDetails);
-//generateRouteFile(modelDetails);
+generateController(modelDetails);
+generateRouteFile(modelDetails);
 
 console.log("\n\nThings to do now: \n");
 console.log("review the generated schema in schema.prisma file, add relations to other tables if required")

@@ -28,6 +28,11 @@ const ChequeIssuancesRoute_1 = __importDefault(require("./route/documentation/Ch
 const bankRoute_1 = __importDefault(require("./route/bankRoute"));
 const moduleRoute_1 = __importDefault(require("./route/moduleRoute"));
 const receiptTypeRoute_1 = __importDefault(require("./route/receiptTypeRoute"));
+const BudgetTypesRoute_1 = __importDefault(require("./route/BudgetTypesRoute"));
+const FinancialYearsRoute_1 = __importDefault(require("./route/FinancialYearsRoute"));
+const BudgetAppropriationsRoute_1 = __importDefault(require("./route/documentation/BudgetAppropriationsRoute"));
+const ReceiptBudgetsRoute_1 = __importDefault(require("./route/documentation/ReceiptBudgetsRoute"));
+const BudgetReappropriationsRoute_1 = __importDefault(require("./route/documentation/BudgetReappropriationsRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -108,6 +113,11 @@ class FinanceRoute {
         (new moduleRoute_1.default()).configure(app, "23");
         (new receiptTypeRoute_1.default()).configure(app, "24");
         (new receiptEntryRoute_1.default()).configure(app, "25");
+        (new BudgetTypesRoute_1.default()).configure(app, "26");
+        (new FinancialYearsRoute_1.default()).configure(app, "27");
+        (new ReceiptBudgetsRoute_1.default()).configure(app, "28");
+        (new BudgetAppropriationsRoute_1.default()).configure(app, "29");
+        (new BudgetReappropriationsRoute_1.default()).configure(app, "30");
     }
 }
 exports.default = FinanceRoute;
