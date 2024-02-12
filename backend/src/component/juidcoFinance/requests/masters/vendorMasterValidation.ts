@@ -31,7 +31,7 @@ export const vendorMasterValidation = Joi.object({
 export const vendorRequestData = (req: Request): VendorRequestData => {
   return {
     vendor_type_id: req.body.vendor_type_id,
-      vendor_no: generateUniquePaymentNo("vn"),
+      vendor_no: req.body.vendor_no || generateUniquePaymentNo("vn"),
       name: req.body.name,
       mobile_no: req.body.mobile_no,
       tin_no: req.body.tin_no,
