@@ -72,6 +72,7 @@ class VendorMasterDao {
       where: { id },
       select: {
         id: true,
+        vendor_no:true,
         vendor_type: {
           select: {
             id: true,

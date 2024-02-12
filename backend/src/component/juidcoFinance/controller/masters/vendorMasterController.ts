@@ -22,16 +22,7 @@ class VendorMasterController {
     try {
       const { error } = vendorMasterValidation.validate(req.body);
       if (error)
-        return sendResponse(
-          false,
-          error,
-          "",
-          400,
-          "POST",
-          "0701",
-          "1.0",
-          res
-        );
+        return sendResponse(false, error, "", 400, "POST", "0701", "1.0", res);
 
       const data = await this.vendorMasterDao.store(req);
       return sendResponse(
@@ -45,16 +36,7 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0701",
-        "1.0",
-        res
-      );
+      return sendResponse(false, error, "", 500, "POST", "0701", "1.0", res);
     }
   };
 
@@ -86,16 +68,7 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "GET",
-        "0702",
-        "1.0",
-        res
-      );
+      return sendResponse(false, error, "", 500, "GET", "0702", "1.0", res);
     }
   };
 
@@ -128,16 +101,7 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "GET",
-        "0703",
-        "1.0",
-        res
-      );
+      return sendResponse(false, error, "", 500, "GET", "0703", "1.0", res);
     }
   };
 
@@ -147,16 +111,10 @@ class VendorMasterController {
       const { error } = vendorMasterValidation.validate(req.body);
 
       if (error)
-        return sendResponse(
-          false,
-          error,
-          "",
-          403,
-          "POST",
-          "0704",
-          "1.0",
-          res
-        );
+        return sendResponse(false, error, "", 403, "POST", "0704", "1.0", res);
+
+      const data1 = await this.vendorMasterDao.getById(req.body.id);
+      req.body.vendor_no = data1.vendor_no;
 
       const data = await this.vendorMasterDao.update(req);
 
@@ -171,16 +129,7 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0704",
-        "1.0",
-        res
-      );
+      return sendResponse(false, error, "", 500, "POST", "0704", "1.0", res);
     }
   };
 }
