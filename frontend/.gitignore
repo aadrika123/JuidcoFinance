@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#
+/magic
+/magic-run.js
+/magic-run.rar
+/magic.rar

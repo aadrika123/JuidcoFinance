@@ -30,10 +30,10 @@ export const sidebarLinks: SidebarLinksProps = {
           subModules: [
             { moduleName: " Charts of Account", path: "/finance/masters" },
             { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
-            {
-              moduleName: "Vendor Masters",
-              path: "/finance/masters/vendor-master",
-            },
+            // {
+            //   moduleName: "Vendor Masters",
+            //   path: "/finance/masters/vendor-master",
+            // },
             {
               moduleName: "Cheque Book Entry",
               path: "/finance/masters/chequebook-master",
@@ -93,6 +93,41 @@ export const sidebarLinks: SidebarLinksProps = {
             {
               moduleName: "Bills Invoice Entry",
               path: "/finance/transaction/bills-invoice-entry",
+            },
+          ],
+        },
+        {
+          moduleName: "Budgeting",
+          icon: (
+            <Image
+              src="/icons/sidebar/transaction.svg"
+              alt="budgeting"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/budgeting",
+          subModules: [
+            { moduleName: "Receipt Budget", path: "/finance/budgeting/receipt-budget" },
+            {
+              moduleName: "Budget Appropriations",
+              path: "/finance/budgeting/budget-appropriations",
+            },
+            {
+              moduleName: "Budget Re-Appropriations",
+              path: "/finance/budgeting/budget-re-appropriations",
+            },
+            {
+              moduleName: "Opening Balance Entry",
+              path: "/finance/budgeting/opening-balance",
+            },
+            {
+              moduleName: "Revised Budget",
+              path: "/finance/budgeting/revised-budget",
+            },
+            {
+              moduleName: "Investments",
+              path: "/finance/budgeting/investments",
             },
           ],
         },
