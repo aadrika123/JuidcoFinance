@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import AccountCodeController from "../../controller/masters/accountCodeController";
 import { baseUrl } from "../../../../util/common";
 
@@ -13,10 +13,9 @@ class AccountCodeRoute {
     this.accountingCodeController = new AccountCodeController();
   }
 
-  configure(app: express.Application): void {
-    app
-      .route(`${baseUrl}/get-account-code`)
-      .get(this.accountingCodeController.getAccountCode); //0101
+  configure(app: express.Application, apiId: string): void {
+    app.route(`${baseUrl}/get-account-code`).get((req: Request, res: Response) => this.accountingCodeController.getAccountCode(req, res, apiId + "01"));
+    app.route(`${baseUrl}/get-all-account-code`).get((req: Request, res: Response) => this.accountingCodeController.getAllAccountingCode(req, res, apiId + "02"));
   }
 }
 

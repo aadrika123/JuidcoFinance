@@ -21,12 +21,19 @@ model account_codes {
   remark      String?
 
   receipt_budgets             receipt_budgets[]
+  investments                 investments[]
   
   budget_appropriations             budget_appropriations[]
   budget_appropriations_from        budget_appropriations[] @relation("from")
 
   budget_reappropriations           budget_reappropriations[]
   budget_reappropriations_from      budget_reappropriations[] @relation("from")
+  opening_balances                  opening_balances[]
+  revised_budgets                   revised_budgets[]
+  balance_trackings                 balance_trackings[]
+
+  grant_entries grant_entries[]
+
 
   created_at  DateTime @default(now()) @map("created_at")
   updated_at  DateTime @updatedAt @map("updated_at")
@@ -54,6 +61,10 @@ model municipality_codes {
   category      String
   code          String
   remark        String?
+
+  investments   investments[]
+  grant_entries grant_entries[]
+
   created_at    DateTime @default(now()) @map("created_at")
   updated_at    DateTime @updatedAt @map("updated_at")
 }
@@ -160,10 +171,16 @@ model employees {
   id                   Int                    @id @default(autoincrement())
   name                 String
   email                String
+  designation          String
+  
   cheque_book_entries  cheque_book_entries[]
   bill_payment_entries bill_payment_entries[]
   dir_payment_entries  dir_payment_entries[]
   cheque_issuances     cheque_issuances[]
+  investments          investments[]
+  grant_entries grant_entries[]
+
+
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -202,6 +219,9 @@ model grants {
   remark              String
   dir_payment_entries dir_payment_entries[]
   cheque_issuances    cheque_issuances[]
+  grant_entries grant_entries[]
+
+
   created_at          DateTime              @default(now()) @map("created_at")
   updated_at          DateTime              @updatedAt @map("updated_at")
 }
@@ -315,6 +335,11 @@ model voucher_entries {
   sub_ledger_id    Int
   amount           Float
   dr_cr            String
+
+
+  grant_entries grant_entries[]
+
+
   created_at       DateTime          @default(now()) @map("created_at")
   updated_at       DateTime          @updatedAt @map("updated_at")
 }
@@ -492,6 +517,7 @@ model financial_years{
   receipt_budgets             receipt_budgets[]
   budget_appropriations       budget_appropriations[]
   budget_reappropriations     budget_reappropriations[]
+  opening_balances            opening_balances[]
 
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
@@ -571,6 +597,183 @@ model budget_reappropriations{
 	remark              String
 	
   created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+
+////opening_balances: Managed by: Bijoy Paitandi
+model opening_balances{
+	id                  Int                 @id @default(autoincrement())
+
+	fin_year_id         Int
+  fin_year                    financial_years     @relation(fields: [fin_year_id], references: [id])
+
+	dr_cr               String
+
+	primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+	amount              Float
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////revised_budgets: Managed by: Bijoy Paitandi
+model revised_budgets{
+	id                  Int                 @id @default(autoincrement())
+	
+  primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+	
+  approved_amount     Int
+	revised_amount      Float
+	remarks             String
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////investment_types: Managed by: Bijoy Paitandi
+model investment_types{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+  investments         investments[]
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+
+////investments: Managed by: Bijoy Paitandi
+model investments{
+	id                  Int                 @id @default(autoincrement())
+
+	ulb_id              Int
+  ulb                         municipality_codes  @relation(fields: [ulb_id], references: [id])
+  
+	
+  primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+	investment_no       String
+	authorization_date  DateTime
+	investment_date     DateTime
+	particulars         String
+	
+  investment_type_id  Int
+  investment_type     investment_types      @relation(fields: [investment_type_id], references: [id])
+
+
+	purchase_amount     Float
+	face_value_amount   Float
+	interest_due_date   DateTime
+	interest_due_amount Float
+
+	employee_id         Int
+  employee            employees             @relation(fields: [employee_id], references: [id])
+
+	interest_recovered_amount Float
+	interest_recovery_date    DateTime
+	acc_adj_recovery_date     DateTime
+	realization_final_amount  Float
+	realization_date          DateTime
+	acc_adj_realization_date  DateTime
+	remarks             String
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////grant_entries: Managed by: Bijoy Paitandi
+model grant_entries{
+	id                  Int                 @id @default(autoincrement())
+
+	ulb_id              Int
+  ulb                 municipality_codes  @relation(fields: [ulb_id], references: [id])
+  
+	primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+
+	grant_id            Int
+  grant             grants       @relation(fields: [grant_id], references: [id])
+
+
+	sanction_number     String
+
+	grant_nature_id     Int
+  grant_nature        grant_natures   @relation(fields: [grant_nature_id], references: [id])
+
+	grant_from_date     DateTime
+	grant_to_date       DateTime
+	sanctioned_amount   Float
+	
+  advance_rcving_date DateTime
+	advance_amount      Float
+
+
+	expenditure_date    DateTime
+
+	voucher_id          Int
+  voucher             voucher_entries       @relation(fields: [voucher_id], references: [id])
+
+	expndtre_nature_id  Int
+  expndtre_nature     expenditure_natures   @relation(fields: [expndtre_nature_id], references: [id])
+
+	blnce_trckng_id     Int
+  blnce_trckng        balance_trackings     @relation(fields: [blnce_trckng_id], references: [id])
+
+	refund_date         DateTime
+	refund_amount       Float
+
+	employee_id         Int
+  employee            employees            @relation(fields: [employee_id], references: [id])
+
+	signature           String
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////grant_natures: Managed by: Bijoy Paitandi
+model grant_natures{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+  grant_entries grant_entries[]
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////expenditure_natures: Managed by: Bijoy Paitandi
+model expenditure_natures{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+  grant_entries grant_entries[]
+
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////balance_trackings: Managed by: Bijoy Paitandi
+model balance_trackings{
+	id                  Int                 @id @default(autoincrement())
+	
+  primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+
+	balance_amount      Float
+
+  grant_entries grant_entries[]
+
+
+	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
 

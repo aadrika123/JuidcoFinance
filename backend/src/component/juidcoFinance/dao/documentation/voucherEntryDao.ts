@@ -155,6 +155,17 @@ class VoucherEntryDao {
       data: requestData(req),
     });
   };
+
+  getVoucherNumber = async () => {
+    const query: Prisma.voucher_entriesFindManyArgs = {
+      select: {
+        id: true,
+        voucher_no: true,
+      },
+    };
+    const data = prisma.voucher_entries.findMany(query);
+    return generateRes(data);
+  };
 }
 
 export default VoucherEntryDao;

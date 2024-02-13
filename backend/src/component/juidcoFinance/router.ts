@@ -11,7 +11,6 @@ import DirPaymentEntryRoute from "./route/transactions/dirPaymentEntryRoute";
 import PaymentTypeRoute from "./route/paymentTypeRoute";
 import AdministrativeWardRoute from "./route/adminisWardRoute";
 import GrantRoute from "./route/grantRoute";
-import EmployeeRoute from "./route/employeeRoute";
 import BillTypeRoute from "./route/billTypeRoute";
 import ReceiptEntryRoute from "./route/masters/receiptEntryRoute";
 import VoucherTypeRoute from "./route/voucherTypeRoute";
@@ -24,12 +23,22 @@ import ChequeIssuancesRoute from "./route/documentation/ChequeIssuancesRoute";
 import BankRoute from "./route/bankRoute";
 import ModuleRoute from "./route/moduleRoute";
 import ReceiptTypeRoute from "./route/receiptTypeRoute";
-import BudgetTypesRoute from "./route/BudgetTypesRoute";
-import FinancialYearsRoute from "./route/FinancialYearsRoute";
-import BudgetAppropriationsRoute from "./route/documentation/BudgetAppropriationsRoute";
-import ReceiptBudgetsRoute from "./route/documentation/ReceiptBudgetsRoute";
-import BudgetReappropriationsController from "./controller/documentation/BudgetReappropriationsController";
-import BudgetReappropriationsRoute from "./route/documentation/BudgetReappropriationsRoute";
+import BudgetTypesRoute from "./route/budgeting/BudgetTypesRoute";
+import FinancialYearsRoute from "./route/budgeting/FinancialYearsRoute";
+import BudgetAppropriationsRoute from "./route/budgeting/BudgetAppropriationsRoute";
+import ReceiptBudgetsRoute from "./route/budgeting/ReceiptBudgetsRoute";
+import BudgetReappropriationsController from "./controller/budgeting/BudgetReappropriationsController";
+import BudgetReappropriationsRoute from "./route/budgeting/BudgetReappropriationsRoute";
+import OpeningBalancesRoute from "./route/budgeting/OpeningBalancesRoute";
+import RevisedBudgetsRoute from "./route/budgeting/RevisedBudgetsRoute";
+import InvestmentTypesRoute from "./route/budgeting/InvestmentTypesRoute";
+import InvestmentsRoute from "./route/budgeting/InvestmentsRoute";
+import BalanceTrackingsRoute from "./route/budgeting/BalanceTrackingsRoute";
+import GrantEntriesRoute from "./route/budgeting/GrantEntriesRoute";
+import GrantNaturesRoute from "./route/budgeting/GrantNaturesRoute";
+import ExpenditureNaturesRoute from "./route/budgeting/ExpenditureNaturesRoute";
+import EmployeesRoute from "./route/budgeting/EmployeesRoute";
+import BudgetNamesRoute from "./route/budgeting/BudgetNamesRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -48,9 +57,7 @@ import BudgetReappropriationsRoute from "./route/documentation/BudgetReappropria
  */
 
 class FinanceRoute {
-  private accountCodeRoute: AccountCodeRoute;
   private funCodeRoute: FunCodeRoute;
-  private muncipalityCodeRoute: MuncipalityCodeRoute;
   private bankMasterRoute: BankMasterRoute;
   private vendorTypeRoute: VendorTypeRoute;
   private departmentRoute: DepartmentRoute;
@@ -60,7 +67,6 @@ class FinanceRoute {
   private paymentTypeRoute: PaymentTypeRoute;
   private adminisWardRoute: AdministrativeWardRoute;
   private grantRoute: GrantRoute;
-  private employeeRoute: EmployeeRoute;
   private billTypeRoute: BillTypeRoute;
   private voucherTypeRoute: VoucherTypeRoute;
   private voucherSubTypeRoute: VoucherSubTypeRoute;
@@ -69,16 +75,14 @@ class FinanceRoute {
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
-    this.accountCodeRoute = new AccountCodeRoute();
-    this.accountCodeRoute.configure(app); // 01
+    (new AccountCodeRoute()).configure(app, "01");
 
     /// FUNCTION_CODE_ROUTER ///
     this.funCodeRoute = new FunCodeRoute();
     this.funCodeRoute.configure(app); // 02
 
     //  MUNCIPALITY_CODE_ROUTER ///
-    this.muncipalityCodeRoute = new MuncipalityCodeRoute();
-    this.muncipalityCodeRoute.configure(app); // 03
+    (new MuncipalityCodeRoute()).configure(app, "03");
 
     /// BANK_MASTER_ROUTE ///
     this.bankMasterRoute = new BankMasterRoute();
@@ -117,8 +121,7 @@ class FinanceRoute {
     this.grantRoute.configure(app); // 12
 
     /// EMPLOYEE ///
-    this.employeeRoute = new EmployeeRoute();
-    this.employeeRoute.configure(app); // 13
+    (new EmployeesRoute()).configure(app, "13");
 
     /// BILL TYPE ///
     this.billTypeRoute = new BillTypeRoute();
@@ -143,7 +146,6 @@ class FinanceRoute {
     this.voucherEntryRoute = new VoucherEntryRoute();
     this.voucherEntryRoute.configure(app, "18");
 
-    // Bill Invoice Entries ///
     (new BillInvoicesRoute()).configure(app, "19");
 
     (new BillPaymentEntryRoute()).configure(app, "20");
@@ -167,6 +169,24 @@ class FinanceRoute {
     (new BudgetAppropriationsRoute()).configure(app, "29");
 
     (new BudgetReappropriationsRoute()).configure(app, "30");
+
+    (new OpeningBalancesRoute()).configure(app, "31");
+
+    (new RevisedBudgetsRoute()).configure(app, "32");
+
+    (new InvestmentTypesRoute()).configure(app, "33");
+
+    (new InvestmentsRoute()).configure(app, "34");
+
+    (new BalanceTrackingsRoute()).configure(app, "35");
+
+    (new GrantEntriesRoute()).configure(app, "36");
+
+    (new GrantNaturesRoute()).configure(app, "37");
+
+    (new ExpenditureNaturesRoute()).configure(app, "38");
+
+    (new BudgetNamesRoute()).configure(app, "39");
   }
 }
 

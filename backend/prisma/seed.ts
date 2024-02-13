@@ -27,20 +27,38 @@ import vendors_seeder from "./seeder/vendors_seeder";
 import vendor_types_seeder from "./seeder/vendor_types_seeder";
 import cheque_issuances_seeder from "./seeder/cheque_issuances_seeder";
 import banks_seeder from "./seeder/banks_seeder";
-import budget_types_seeder from "./seeder/budget_types_seeder";
-import financial_years_seeder from "./seeder/financial_years_seeder";
-import budget_appropriations_seeder from "./seeder/budget_appropriations_seeder";
-import receipt_budgets_seeder from "./seeder/receipt_budgets_seeder";
-import budget_reappropriations_seeder from "./seeder/budget_reappropriations_seeder";
-import budget_names_seeder from "./seeder/budget_names_seeder";
+import budget_names_seeder from "./seeder/budgeting/budget_names_seeder";
+import financial_years_seeder from "./seeder/budgeting/financial_years_seeder";
+import budget_types_seeder from "./seeder/budgeting/budget_types_seeder"
+import budget_appropriations_seeder from "./seeder/budgeting/budget_appropriations_seeder";
+import receipt_budgets_seeder from "./seeder/budgeting/receipt_budgets_seeder";
+import budget_reappropriations_seeder from "./seeder/budgeting/budget_reappropriations_seeder";
+import opening_balances_seeder from "./seeder/budgeting/opening_balances_seeder";
+import revised_budgets_seeder from "./seeder/budgeting/revised_budgets_seeder";
+import investment_types_seeder from "./seeder/budgeting/investment_types_seeder";
+import investments_seeder from "./seeder/budgeting/investments_seeder";
+import expenditure_natures_seeder from "./seeder/budgeting/expenditure_natures_seeder";
+import grant_natures_seeder from "./seeder/budgeting/grant_natures_seeder";
+import balance_trackings_seeder from "./seeder/budgeting/balance_trackings_seeder";
+import grant_entries_seeder from "./seeder/budgeting/grant_entries_seeder";
+import grants_seeder from "./seeder/grants_seeder";
+import employees_seeder from "./seeder/employees_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
+
+  await grants_seeder();
 
   await subledgers_seeder();
   await modules_seeder();
   await budget_types_seeder();
   await financial_years_seeder();
+  await budget_names_seeder();
+  await investment_types_seeder();
+  await expenditure_natures_seeder();
+  await grant_natures_seeder();
+  
+
 
 
 
@@ -146,33 +164,7 @@ async function main() {
   await vendor_types_seeder();
 
   ///////////////// Employee ////////////////////////
-  function createRandomEmployee(): employees {
-    return {
-      id: faker.datatype.number(),
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const employees = faker.helpers.multiple(createRandomEmployee, {
-    count: 5,
-  });
-
-  let iid = 1;
-  for (const item of employees) {
-    await prisma.employees.create({
-      data: {
-        id: iid,
-        name: item.name,
-        email: item.email,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    iid++;
-  }
+  await employees_seeder();
 
   ///////////////// Bank Master ////////////////////////
   function createRandomUser(): bank_masters {
@@ -334,35 +326,7 @@ async function main() {
     ip++;
   }
 
-  /////////////// Grants //////////////////////////
-  function createRandomGrant(): grants {
-    return {
-      id: faker.datatype.number(),
-      name: faker.company.name(),
-      remark: faker.lorem.sentence(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const grants = faker.helpers.multiple(createRandomGrant, {
-    count: 5,
-  });
-
-  let ig = 1;
-  for (const item of grants) {
-    await prisma.grants.create({
-      data: {
-        id: ig, //item.id,
-        name: item.name,
-        remark: item.remark,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    ig++;
-  }
-
+ 
   ///////////////// Direct Payment Entry ////////////////////////
   function createRandomDirPaymentEntry(): dir_payment_entries {
     return {
@@ -392,6 +356,8 @@ async function main() {
   await prisma.dir_payment_entries.createMany({
     data: paymentEntries,
   });
+
+  await balance_trackings_seeder();
 
   //////////////// Voucher Type //////////////////
   await voucher_types_seed();
@@ -428,10 +394,17 @@ async function main() {
   await budget_appropriations_seeder();
 
   await receipt_budgets_seeder();
-
-  await budget_names_seeder();
   
   await budget_reappropriations_seeder();
+
+  await opening_balances_seeder();
+
+  await revised_budgets_seeder();
+
+  await investments_seeder();
+
+  await grant_entries_seeder();
+
 }
 main()
   .then(async () => {

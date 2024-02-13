@@ -15,7 +15,6 @@ const dirPaymentEntryRoute_1 = __importDefault(require("./route/transactions/dir
 const paymentTypeRoute_1 = __importDefault(require("./route/paymentTypeRoute"));
 const adminisWardRoute_1 = __importDefault(require("./route/adminisWardRoute"));
 const grantRoute_1 = __importDefault(require("./route/grantRoute"));
-const employeeRoute_1 = __importDefault(require("./route/employeeRoute"));
 const billTypeRoute_1 = __importDefault(require("./route/billTypeRoute"));
 const receiptEntryRoute_1 = __importDefault(require("./route/masters/receiptEntryRoute"));
 const voucherTypeRoute_1 = __importDefault(require("./route/voucherTypeRoute"));
@@ -28,11 +27,21 @@ const ChequeIssuancesRoute_1 = __importDefault(require("./route/documentation/Ch
 const bankRoute_1 = __importDefault(require("./route/bankRoute"));
 const moduleRoute_1 = __importDefault(require("./route/moduleRoute"));
 const receiptTypeRoute_1 = __importDefault(require("./route/receiptTypeRoute"));
-const BudgetTypesRoute_1 = __importDefault(require("./route/BudgetTypesRoute"));
-const FinancialYearsRoute_1 = __importDefault(require("./route/FinancialYearsRoute"));
-const BudgetAppropriationsRoute_1 = __importDefault(require("./route/documentation/BudgetAppropriationsRoute"));
-const ReceiptBudgetsRoute_1 = __importDefault(require("./route/documentation/ReceiptBudgetsRoute"));
-const BudgetReappropriationsRoute_1 = __importDefault(require("./route/documentation/BudgetReappropriationsRoute"));
+const BudgetTypesRoute_1 = __importDefault(require("./route/budgeting/BudgetTypesRoute"));
+const FinancialYearsRoute_1 = __importDefault(require("./route/budgeting/FinancialYearsRoute"));
+const BudgetAppropriationsRoute_1 = __importDefault(require("./route/budgeting/BudgetAppropriationsRoute"));
+const ReceiptBudgetsRoute_1 = __importDefault(require("./route/budgeting/ReceiptBudgetsRoute"));
+const BudgetReappropriationsRoute_1 = __importDefault(require("./route/budgeting/BudgetReappropriationsRoute"));
+const OpeningBalancesRoute_1 = __importDefault(require("./route/budgeting/OpeningBalancesRoute"));
+const RevisedBudgetsRoute_1 = __importDefault(require("./route/budgeting/RevisedBudgetsRoute"));
+const InvestmentTypesRoute_1 = __importDefault(require("./route/budgeting/InvestmentTypesRoute"));
+const InvestmentsRoute_1 = __importDefault(require("./route/budgeting/InvestmentsRoute"));
+const BalanceTrackingsRoute_1 = __importDefault(require("./route/budgeting/BalanceTrackingsRoute"));
+const GrantEntriesRoute_1 = __importDefault(require("./route/budgeting/GrantEntriesRoute"));
+const GrantNaturesRoute_1 = __importDefault(require("./route/budgeting/GrantNaturesRoute"));
+const ExpenditureNaturesRoute_1 = __importDefault(require("./route/budgeting/ExpenditureNaturesRoute"));
+const EmployeesRoute_1 = __importDefault(require("./route/budgeting/EmployeesRoute"));
+const BudgetNamesRoute_1 = __importDefault(require("./route/budgeting/BudgetNamesRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,14 +60,12 @@ const BudgetReappropriationsRoute_1 = __importDefault(require("./route/documenta
 class FinanceRoute {
     constructor(app) {
         /// ACCOUNTING_CODE_ROUTER ///
-        this.accountCodeRoute = new accountCodeRoute_1.default();
-        this.accountCodeRoute.configure(app); // 01
+        (new accountCodeRoute_1.default()).configure(app, "01");
         /// FUNCTION_CODE_ROUTER ///
         this.funCodeRoute = new funCodeRoute_1.default();
         this.funCodeRoute.configure(app); // 02
         //  MUNCIPALITY_CODE_ROUTER ///
-        this.muncipalityCodeRoute = new munciCodeRoute_1.default();
-        this.muncipalityCodeRoute.configure(app); // 03
+        (new munciCodeRoute_1.default()).configure(app, "03");
         /// BANK_MASTER_ROUTE ///
         this.bankMasterRoute = new bankMasterRoute_1.default();
         this.bankMasterRoute.configure(app); // 04
@@ -87,8 +94,7 @@ class FinanceRoute {
         this.grantRoute = new grantRoute_1.default();
         this.grantRoute.configure(app); // 12
         /// EMPLOYEE ///
-        this.employeeRoute = new employeeRoute_1.default();
-        this.employeeRoute.configure(app); // 13
+        (new EmployeesRoute_1.default()).configure(app, "13");
         /// BILL TYPE ///
         this.billTypeRoute = new billTypeRoute_1.default();
         this.billTypeRoute.configure(app); // 14
@@ -105,7 +111,6 @@ class FinanceRoute {
         // VOUCHER_ENTRY_ROUTES ///
         this.voucherEntryRoute = new voucherEntryRoute_1.default();
         this.voucherEntryRoute.configure(app, "18");
-        // Bill Invoice Entries ///
         (new billInvoicesRoute_1.default()).configure(app, "19");
         (new billPaymentEntryRoute_1.default()).configure(app, "20");
         (new ChequeIssuancesRoute_1.default()).configure(app, "21");
@@ -118,6 +123,15 @@ class FinanceRoute {
         (new ReceiptBudgetsRoute_1.default()).configure(app, "28");
         (new BudgetAppropriationsRoute_1.default()).configure(app, "29");
         (new BudgetReappropriationsRoute_1.default()).configure(app, "30");
+        (new OpeningBalancesRoute_1.default()).configure(app, "31");
+        (new RevisedBudgetsRoute_1.default()).configure(app, "32");
+        (new InvestmentTypesRoute_1.default()).configure(app, "33");
+        (new InvestmentsRoute_1.default()).configure(app, "34");
+        (new BalanceTrackingsRoute_1.default()).configure(app, "35");
+        (new GrantEntriesRoute_1.default()).configure(app, "36");
+        (new GrantNaturesRoute_1.default()).configure(app, "37");
+        (new ExpenditureNaturesRoute_1.default()).configure(app, "38");
+        (new BudgetNamesRoute_1.default()).configure(app, "39");
     }
 }
 exports.default = FinanceRoute;

@@ -230,7 +230,7 @@ const generateRouteFile = (modelDetails) => {
 
 
 
-const modelDetails = require("./magic/schema/sprint2/budget_reappropriations");
+const modelDetails = require("./magic/schema/sprint2/balance_trackings");
 
 
 generatePrismaSchema(modelDetails);

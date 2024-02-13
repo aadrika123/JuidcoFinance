@@ -27,6 +27,17 @@ class MuncipalityCodeDao {
 
     return generateRes(data, count, page, limit );
   };
+
+  get_all = async () => {
+    const query: Prisma.municipality_codesFindManyArgs = {
+      select: {
+        id: true,
+        ulbs: true,
+      },
+    };
+    const data = prisma.municipality_codes.findMany(query);
+    return generateRes(data);
+  };
 }
 
 export default MuncipalityCodeDao;

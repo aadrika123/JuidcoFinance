@@ -12,9 +12,14 @@ const creator_name = "Bijoy Paitandi";
 
 
 const prismaFolder = './prisma';
-const daoFolder = "./src/component/juidcoFinance/dao";
-const controllerFolder = "./src/component/juidcoFinance/controller";
-const routeFolder = "./src/component/juidcoFinance/route";
+
+const subFolder = "budgeting";
+
+const seederFolder = `${prismaFolder}/seeder/${subFolder}`;
+const daoFolder = `./src/component/juidcoFinance/dao/${subFolder}`;
+const validationFolder = `./src/component/juidcoFinance/requests/${subFolder}`;
+const controllerFolder = `./src/component/juidcoFinance/controller/${subFolder}`;
+const routeFolder = `./src/component/juidcoFinance/route/${subFolder}`;
 
 
 const toPascalCase = (s) => {
@@ -60,7 +65,7 @@ const generatePrismaSchema = (modelDetails) => {
 
 const generateSeeder = (modelDetails, recordCount) => {
     const seederName = `${modelDetails.name}_seeder`;
-    const seederFilePath = `${prismaFolder}/seeder/${seederName}.ts`;
+    const seederFilePath = `${seederFolder}/${seederName}.ts`;
     let data = "";
     data += 'import { PrismaClient  } from "@prisma/client";\n';
     data += 'import { faker } from "@faker-js/faker";\n';
@@ -155,11 +160,10 @@ const generateRouteFile = (modelDetails) => {
 
 // Modify the modelDetails below
 const modelDetails = {
-    name: "budget_names",
+    name: "employees",
     fields: [
         {name: 'id', type: 'Int', constraint: '@id @default(autoincrement())'},
         {name: 'name', type: 'String'},
-        {name: 'remarks', type: 'String'},
         
         {name: 'created_at', type: 'DateTime', constraint: '@default(now()) @map("created_at")'},
         {name: 'updated_at', type: 'DateTime', constraint: '@updatedAt @map("updated_at")'},
