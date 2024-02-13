@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE "account_codes" (
     "id" SERIAL NOT NULL,
+    "code" TEXT NOT NULL,
     "major_head" TEXT NOT NULL,
     "minor_head" TEXT NOT NULL,
     "detail_code" TEXT NOT NULL,
@@ -136,6 +137,7 @@ CREATE TABLE "employees" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "designation" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -393,6 +395,213 @@ CREATE TABLE "cheque_issuances" (
     CONSTRAINT "cheque_issuances_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "budget_names" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "budget_names_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "budget_types" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "budget_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "financial_years" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "financial_years_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "receipt_budgets" (
+    "id" SERIAL NOT NULL,
+    "fin_year_id" INTEGER NOT NULL,
+    "department_id" INTEGER NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "admin_ward_id" INTEGER NOT NULL,
+    "budget_type_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "receipt_budgets_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "budget_appropriations" (
+    "id" SERIAL NOT NULL,
+    "fin_year_id" INTEGER NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "remark" TEXT NOT NULL,
+    "from_primary_acc_code_id" INTEGER NOT NULL,
+    "approved_amount" INTEGER NOT NULL,
+    "transfer_amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "budget_appropriations_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "budget_reappropriations" (
+    "id" SERIAL NOT NULL,
+    "fin_year_id" INTEGER NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "transaction_date" TIMESTAMP(3) NOT NULL,
+    "budget_name_id" INTEGER NOT NULL,
+    "actual_amount" DOUBLE PRECISION NOT NULL,
+    "from_primary_acc_code_id" INTEGER NOT NULL,
+    "approved_amount" INTEGER NOT NULL,
+    "balance_amount" INTEGER NOT NULL,
+    "transfer_amount" DOUBLE PRECISION NOT NULL,
+    "remark" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "budget_reappropriations_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "opening_balances" (
+    "id" SERIAL NOT NULL,
+    "fin_year_id" INTEGER NOT NULL,
+    "dr_cr" TEXT NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "opening_balances_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "revised_budgets" (
+    "id" SERIAL NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "approved_amount" INTEGER NOT NULL,
+    "revised_amount" DOUBLE PRECISION NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "revised_budgets_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "investment_types" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "investment_types_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "investments" (
+    "id" SERIAL NOT NULL,
+    "ulb_id" INTEGER NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "investment_no" TEXT NOT NULL,
+    "authorization_date" TIMESTAMP(3) NOT NULL,
+    "investment_date" TIMESTAMP(3) NOT NULL,
+    "particulars" TEXT NOT NULL,
+    "investment_type_id" INTEGER NOT NULL,
+    "purchase_amount" DOUBLE PRECISION NOT NULL,
+    "face_value_amount" DOUBLE PRECISION NOT NULL,
+    "interest_due_date" TIMESTAMP(3) NOT NULL,
+    "interest_due_amount" DOUBLE PRECISION NOT NULL,
+    "employee_id" INTEGER NOT NULL,
+    "interest_recovered_amount" DOUBLE PRECISION NOT NULL,
+    "interest_recovery_date" TIMESTAMP(3) NOT NULL,
+    "acc_adj_recovery_date" TIMESTAMP(3) NOT NULL,
+    "realization_final_amount" DOUBLE PRECISION NOT NULL,
+    "realization_date" TIMESTAMP(3) NOT NULL,
+    "acc_adj_realization_date" TIMESTAMP(3) NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "investments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "grant_entries" (
+    "id" SERIAL NOT NULL,
+    "ulb_id" INTEGER NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "grant_id" INTEGER NOT NULL,
+    "sanction_number" TEXT NOT NULL,
+    "grant_nature_id" INTEGER NOT NULL,
+    "grant_from_date" TIMESTAMP(3) NOT NULL,
+    "grant_to_date" TIMESTAMP(3) NOT NULL,
+    "sanctioned_amount" DOUBLE PRECISION NOT NULL,
+    "advance_rcving_date" TIMESTAMP(3) NOT NULL,
+    "advance_amount" DOUBLE PRECISION NOT NULL,
+    "expenditure_date" TIMESTAMP(3) NOT NULL,
+    "voucher_id" INTEGER NOT NULL,
+    "expndtre_nature_id" INTEGER NOT NULL,
+    "blnce_trckng_id" INTEGER NOT NULL,
+    "refund_date" TIMESTAMP(3) NOT NULL,
+    "refund_amount" DOUBLE PRECISION NOT NULL,
+    "employee_id" INTEGER NOT NULL,
+    "signature" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "grant_entries_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "grant_natures" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "grant_natures_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "expenditure_natures" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "remarks" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "expenditure_natures_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "balance_trackings" (
+    "id" SERIAL NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "balance_amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "balance_trackings_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -497,3 +706,87 @@ ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_bank_id_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_budget_type_id_fkey" FOREIGN KEY ("budget_type_id") REFERENCES "budget_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_appropriations" ADD CONSTRAINT "budget_appropriations_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_appropriations" ADD CONSTRAINT "budget_appropriations_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_appropriations" ADD CONSTRAINT "budget_appropriations_from_primary_acc_code_id_fkey" FOREIGN KEY ("from_primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_reappropriations" ADD CONSTRAINT "budget_reappropriations_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_reappropriations" ADD CONSTRAINT "budget_reappropriations_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_reappropriations" ADD CONSTRAINT "budget_reappropriations_budget_name_id_fkey" FOREIGN KEY ("budget_name_id") REFERENCES "budget_names"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "budget_reappropriations" ADD CONSTRAINT "budget_reappropriations_from_primary_acc_code_id_fkey" FOREIGN KEY ("from_primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "opening_balances" ADD CONSTRAINT "opening_balances_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "opening_balances" ADD CONSTRAINT "opening_balances_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "revised_budgets" ADD CONSTRAINT "revised_budgets_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "investments" ADD CONSTRAINT "investments_ulb_id_fkey" FOREIGN KEY ("ulb_id") REFERENCES "municipality_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "investments" ADD CONSTRAINT "investments_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "investments" ADD CONSTRAINT "investments_investment_type_id_fkey" FOREIGN KEY ("investment_type_id") REFERENCES "investment_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "investments" ADD CONSTRAINT "investments_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_ulb_id_fkey" FOREIGN KEY ("ulb_id") REFERENCES "municipality_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_grant_id_fkey" FOREIGN KEY ("grant_id") REFERENCES "grants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_grant_nature_id_fkey" FOREIGN KEY ("grant_nature_id") REFERENCES "grant_natures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_voucher_id_fkey" FOREIGN KEY ("voucher_id") REFERENCES "voucher_entries"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_expndtre_nature_id_fkey" FOREIGN KEY ("expndtre_nature_id") REFERENCES "expenditure_natures"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_blnce_trckng_id_fkey" FOREIGN KEY ("blnce_trckng_id") REFERENCES "balance_trackings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "balance_trackings" ADD CONSTRAINT "balance_trackings_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

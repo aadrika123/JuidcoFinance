@@ -10,12 +10,12 @@ import { resObj } from "../../../util/types";
  * | Created for- Bank Controller
  */
 
-class {{BankController}} {
-  private dao: {{BankDao}};
+class {{Bank}}Controller{
+  private dao: {{Bank}}Dao;
   private initMsg: string;
   constructor() {
-    this.dao = new {{BankDao}}();
-    this.initMsg = "{{Banks}}";
+    this.dao = new {{Bank}}Dao();
+    this.initMsg = "{{Bank}}";
   }
 
   // Get limited banks
@@ -45,4 +45,4 @@ class {{BankController}} {
   };
 }
 
-export default {{BankController}};
+export default {{Bank}}Controller;

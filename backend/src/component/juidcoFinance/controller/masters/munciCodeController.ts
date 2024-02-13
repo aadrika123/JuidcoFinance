@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { sendResponse } from "../../../../util/sendResponse";
 import MuncipalityCodeDao from "../../dao/masters/munciCodeDao";
 import ResMessage from "../../responseMessage/masters/municCodeMessage";
+import { resObj } from "../../../../util/types";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resMessage } from "../../responseMessage/commonMessage";
 
 /**
  * | Author- Krish Vishwakarma
@@ -11,19 +14,21 @@ import ResMessage from "../../responseMessage/masters/municCodeMessage";
  */
 
 class MuncipalityCodeController {
-  private muncipalityCodeDao: MuncipalityCodeDao;
-
+  private dao: MuncipalityCodeDao;
+  private initMsg: string;
   constructor() {
-    this.muncipalityCodeDao = new MuncipalityCodeDao();
+    this.dao = new MuncipalityCodeDao();
+    this.initMsg = "Municipality Codes";
   }
 
   // Muncipality Code Controller
   getMuncipalityCode = async (
     req: Request,
-    res: Response
+    res: Response,
+    apiId: string
   ): Promise<Response> => {
     try {
-      const data = await this.muncipalityCodeDao.get(
+      const data = await this.dao.get(
         Number(req.query.page),
         Number(req.query.limit)
       );
@@ -35,7 +40,7 @@ class MuncipalityCodeController {
           data,
           200,
           "GET",
-          "0301",
+          apiId,
           "1.0",
           res
         );
@@ -46,7 +51,7 @@ class MuncipalityCodeController {
         data,
         200,
         "GET",
-        "0301",
+        apiId,
         "1.0",
         res
       );
@@ -57,12 +62,38 @@ class MuncipalityCodeController {
         "",
         500,
         "GET",
-        "0301",
+        apiId,
         "1.0",
         res
       );
     }
   };
+
+      // Get limited account codes
+      getAllMunicipalityCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+        const resObj: resObj = {
+          apiId,
+          action: "GET",
+          version: "1.0",
+        };
+        
+        try {
+          
+          const data = await this.dao.get_all();
+    
+          if (!data)
+            return CommonRes.SUCCESS(
+              resMessage(this.initMsg).NOT_FOUND,
+              data,
+              resObj,
+              res
+            );
+    
+            return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+        } catch (error: any) {
+          return CommonRes.SERVER_ERROR(error, resObj, res);
+        }
+      };
 }
 
 export default MuncipalityCodeController;

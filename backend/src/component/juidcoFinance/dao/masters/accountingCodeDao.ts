@@ -12,6 +12,7 @@ class AccountingCodeDao {
       take: limit,
       select: {
         id: true,
+        code: true,
         major_head: true,
         minor_head: true,
         detail_code: true,
@@ -24,6 +25,19 @@ class AccountingCodeDao {
     ]);
 
     return generateRes(data, count, page, limit );
+  };
+
+
+  get_all = async () => {
+    const query: Prisma.account_codesFindManyArgs = {
+      select: {
+        id: true,
+        code: true,
+        description: true,
+      },
+    };
+    const data = prisma.account_codes.findMany(query);
+    return generateRes(data);
   };
 }
 

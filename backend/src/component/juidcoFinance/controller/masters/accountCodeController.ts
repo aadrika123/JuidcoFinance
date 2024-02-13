@@ -2,6 +2,9 @@ import { sendResponse } from "../../../../util/sendResponse";
 import { Request, Response } from "express";
 import AccountingCodeDao from "../../dao/masters/accountingCodeDao";
 import ResMessage from "../../responseMessage/masters/accountCodeMessage";
+import { resObj } from "../../../../util/types";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resMessage } from "../../responseMessage/commonMessage";
 
 /**
  * | Author- Krish Vishwakarma
@@ -11,15 +14,17 @@ import ResMessage from "../../responseMessage/masters/accountCodeMessage";
  */
 
 class AccountCodeController {
-  private accountCodeDao: AccountingCodeDao;
-
+  private dao: AccountingCodeDao;
+  private initMsg;
   constructor() {
-    this.accountCodeDao = new AccountingCodeDao();
+    this.dao = new AccountingCodeDao();
+    this.initMsg = "Accounting Codes";
+
   }
 
-  getAccountCode = async (req: Request, res: Response): Promise<Response> => {
+  getAccountCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
     try {
-      const data = await this.accountCodeDao.get(
+      const data = await this.dao.get(
         Number(req.query.page),
         Number(req.query.limit)
       );
@@ -31,7 +36,7 @@ class AccountCodeController {
           data,
           200,
           "GET",
-          "0201",
+          apiId,
           "1.0",
           res
         );
@@ -42,7 +47,7 @@ class AccountCodeController {
         data,
         200,
         "GET",
-        "0201",
+        apiId,
         "1.0",
         res
       );
@@ -53,12 +58,39 @@ class AccountCodeController {
         "",
         500,
         "GET",
-        "0201",
+        apiId,
         "1.0",
         res
       );
     }
   };
+
+
+    // Get limited account codes
+    getAllAccountingCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+      const resObj: resObj = {
+        apiId,
+        action: "GET",
+        version: "1.0",
+      };
+      
+      try {
+        
+        const data = await this.dao.get_all();
+  
+        if (!data)
+          return CommonRes.SUCCESS(
+            resMessage(this.initMsg).NOT_FOUND,
+            data,
+            resObj,
+            res
+          );
+  
+          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      } catch (error: any) {
+        return CommonRes.SERVER_ERROR(error, resObj, res);
+      }
+    };
 }
 
 export default AccountCodeController;

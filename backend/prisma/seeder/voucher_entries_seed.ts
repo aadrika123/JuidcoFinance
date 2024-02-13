@@ -29,7 +29,6 @@ const voucher_entries_seed = async () => {
   for (const item of voucherEntry) {
     await prisma.voucher_entries.create({
       data: {
-        id: item.id,
         voucher_no: item.voucher_no,
         voucher_date: item.voucher_date,
         voucher_type_id: 1,

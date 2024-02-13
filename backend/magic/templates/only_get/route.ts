@@ -4,10 +4,10 @@ import { baseUrl } from "../../../util/common";
 import express, { Request, Response } from "express";
 
 
-class {{BankRoute}} {
-  private controller: {{BankController}};
+class {{Bank}}Route {
+  private controller: {{Bank}}Controller;
   constructor() {
-    this.controller = new {{BankController}}();
+    this.controller = new {{Bank}}Controller();
   }
 
   configure(app: express.Application, apiId: string): void {
@@ -15,4 +15,4 @@ class {{BankRoute}} {
   }
 }
 
-export default {{BankRoute}};
+export default {{Bank}}Route;

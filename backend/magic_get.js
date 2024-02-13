@@ -12,9 +12,14 @@ const creator_name = "Bijoy Paitandi";
 
 
 const prismaFolder = './prisma';
-const daoFolder = "./src/component/juidcoFinance/dao";
-const controllerFolder = "./src/component/juidcoFinance/controller";
-const routeFolder = "./src/component/juidcoFinance/route";
+
+const subFolder = "budgeting";
+
+const seederFolder = `${prismaFolder}/seeder/${subFolder}`;
+const daoFolder = `./src/component/juidcoFinance/dao/${subFolder}`;
+const validationFolder = `./src/component/juidcoFinance/requests/${subFolder}`;
+const controllerFolder = `./src/component/juidcoFinance/controller/${subFolder}`;
+const routeFolder = `./src/component/juidcoFinance/route/${subFolder}`;
 
 
 const toPascalCase = (s) => {
@@ -60,7 +65,7 @@ const generatePrismaSchema = (modelDetails) => {
 
 const generateSeeder = (modelDetails, recordCount) => {
     const seederName = `${modelDetails.name}_seeder`;
-    const seederFilePath = `${prismaFolder}/seeder/${seederName}.ts`;
+    const seederFilePath = `${seederFolder}/${seederName}.ts`;
     let data = "";
     data += 'import { PrismaClient  } from "@prisma/client";\n';
     data += 'import { faker } from "@faker-js/faker";\n';
@@ -128,11 +133,10 @@ const generateController = (modelDetails) => {
 
     const controllerClassName = nameInPascalCase + "Controller";
     const controllerFilePath = `${controllerFolder}/${controllerClassName}.ts`;
-    var templateData = fs.readFileSync('./magic/templates/all_apis/controller.ts').toString();
+    var templateData = fs.readFileSync('./magic/templates/only_get/controller.ts').toString();
 
-    templateData = templateData.replaceAll("{{BillInvoices}}", nameInPascalCase);
-    templateData = templateData.replaceAll("{{billInvoices}}", nameInCamelCase);
-
+    templateData = templateData.replaceAll("{{Bank}}", `${nameInPascalCase}`);
+    
     fs.writeFileSync(controllerFilePath, templateData, {encoding: 'utf8', flag: 'w'});
     console.log("Controller file: " + controllerFilePath);
 }
@@ -145,10 +149,10 @@ const generateRouteFile = (modelDetails) => {
     const routeClassName = nameInPascalCase + "Route";
     const routeFilePath = `${routeFolder}/${routeClassName}.ts`;
 
-    let templateData = fs.readFileSync('./magic/templates/all_apis/route.ts').toString();
+    let templateData = fs.readFileSync('./magic/templates/only_get/route.ts').toString();
 
-    templateData = templateData.replaceAll("{{BillInvoices}}", nameInPascalCase);
-    templateData = templateData.replaceAll("{{bill-invoices}}", apiRouteName);
+    templateData = templateData.replaceAll("{{Bank}}", nameInPascalCase);
+    templateData = templateData.replaceAll("{{banks}}", apiRouteName);
 
     fs.writeFileSync(routeFilePath, templateData, {encoding: 'utf8', flag: 'w'});
     console.log("Route file: " + routeFilePath);
@@ -156,11 +160,10 @@ const generateRouteFile = (modelDetails) => {
 
 // Modify the modelDetails below
 const modelDetails = {
-    name: "chickens",
+    name: "employees",
     fields: [
         {name: 'id', type: 'Int', constraint: '@id @default(autoincrement())'},
         {name: 'name', type: 'String'},
-        {name: 'remarks', type: 'String'},
         
         {name: 'created_at', type: 'DateTime', constraint: '@default(now()) @map("created_at")'},
         {name: 'updated_at', type: 'DateTime', constraint: '@updatedAt @map("updated_at")'},
@@ -169,8 +172,8 @@ const modelDetails = {
 generatePrismaSchema(modelDetails);
 generateSeeder(modelDetails, 10);
 generateDao(modelDetails);
-//generateController(modelDetails);
-//generateRouteFile(modelDetails);
+generateController(modelDetails);
+generateRouteFile(modelDetails);
 
 console.log("\n\nThings to do now: \n");
 console.log("review the generated schema in schema.prisma file, add relations to other tables if required")
