@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 import StoreProvider from "./storeProvider";
-import type { Viewport } from 'next'
 
 
 const inter = Inter({ subsets: ["latin"] });

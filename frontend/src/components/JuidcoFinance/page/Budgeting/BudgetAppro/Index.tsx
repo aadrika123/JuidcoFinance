@@ -82,7 +82,7 @@ export const HeroBudgetAppro = () => {
         center
         columns={column}
         api={FINANCE_URL.BUDGET_APPRO_URL.get || ""}
-        numberOfRowsPerPage={5}
+        numberOfRowsPerPage={10}
       />
     </>
   );

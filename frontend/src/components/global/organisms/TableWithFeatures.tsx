@@ -48,7 +48,7 @@ const TableWithFeatures = <T,>({
 
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1`,
       method: "GET",
     });
 

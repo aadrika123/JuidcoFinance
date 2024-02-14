@@ -31,7 +31,7 @@ export const HeroBillPaymentEntry = () => {
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
     { name: "bill_no", caption: "Bill No", width: "w-[18%]" },
-    { name: "bill_entry_date", caption: "Bill Date", width: "w-[12%]" },
+    { name: "bill_entry_date", caption: "Bill Date", width: "w-[20%]" },
     { name: "payee", caption: "Payee Name", width: "w-[20%]" },
     { name: "vendor", caption: "Vendor Name", width: "w-[20%]" },
     { name: "bill_amount", caption: "Bill Amount", width: "w-[12%]" },
