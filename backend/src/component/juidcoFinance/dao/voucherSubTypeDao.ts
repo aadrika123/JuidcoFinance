@@ -7,7 +7,7 @@ class VoucherSubTypeDao {
     const data = prisma.voucher_sub_types.findMany({
       select: {
         id: true,
-        type: true,
+        name: true,
       },
     });
     return generateRes(data);

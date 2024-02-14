@@ -16,6 +16,8 @@ class AccountCodeRoute {
   configure(app: express.Application, apiId: string): void {
     app.route(`${baseUrl}/get-account-code`).get((req: Request, res: Response) => this.accountingCodeController.getAccountCode(req, res, apiId + "01"));
     app.route(`${baseUrl}/get-all-account-code`).get((req: Request, res: Response) => this.accountingCodeController.getAllAccountingCode(req, res, apiId + "02"));
+    app.route(`${baseUrl}/get-main-account-codes`).get((req: Request, res: Response) => this.accountingCodeController.getMainAccountingCode(req, res, apiId + "02"));
+    app.route(`${baseUrl}/get-sub-account-codes`).get((req: Request, res: Response) => this.accountingCodeController.getSubAccountingCode(req, res, apiId + "02"));
   }
 }
 

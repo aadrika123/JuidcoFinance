@@ -39,6 +39,66 @@ class AccountingCodeDao {
     const data = prisma.account_codes.findMany(query);
     return generateRes(data);
   };
+
+
+  getMainCodes = async () => {
+    const query: Prisma.account_codesFindManyArgs = {
+      select: {
+        id: true,
+        code: true,
+        description: true,
+      },
+    };
+
+    query.where = {
+      AND: [
+        {
+          detail_code: {
+            equals: "00",
+          },
+
+          minor_head: {
+            not: "00",
+          },
+          
+        },
+      ],
+    }
+
+    const data = prisma.account_codes.findMany(query);
+    return generateRes(data);
+  }
+
+  getSubCodes = async () => {
+    const query: Prisma.account_codesFindManyArgs = {
+      select: {
+        id: true,
+        code: true,
+        description: true,
+      },
+    };
+
+    query.where = {
+      NOT: [{
+        AND: [
+          {
+            detail_code: {
+              equals: "00",
+            },
+  
+            minor_head: {
+              not: "00",
+            },
+            
+          },
+        ],
+      }],
+    }
+
+    const data = prisma.account_codes.findMany(query);
+    return generateRes(data);
+  }
+
 }
 
 export default AccountingCodeDao;
