@@ -33,7 +33,7 @@ class VoucherEntryDao {
         voucher_type: {
           select: {
             id: true,
-            type: true,
+            name: true,
           },
         },
         narration: true,
@@ -54,7 +54,7 @@ class VoucherEntryDao {
         voucher_sub_type: {
           select: {
             id: true,
-            type: true,
+            name: true,
           },
         },
         sub_ledger: {
@@ -75,7 +75,7 @@ class VoucherEntryDao {
         OR: [
           {
             voucher_type: {
-              type: {
+              name: {
                 contains: search,
                 mode: "insensitive",
               },
@@ -104,7 +104,7 @@ class VoucherEntryDao {
         voucher_type: {
           select: {
             id: true,
-            type: true,
+            name: true,
           },
         },
         narration: true,
@@ -125,7 +125,7 @@ class VoucherEntryDao {
         voucher_sub_type: {
           select: {
             id: true,
-            type: true,
+            name: true,
           },
         },
         sub_ledger: {

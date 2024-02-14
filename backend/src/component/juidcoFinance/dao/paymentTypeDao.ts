@@ -9,7 +9,7 @@ class PaymentTypeDao {
     const query: Prisma.payment_typesFindManyArgs = {
       select: {
         id: true,
-        type: true,
+        name: true,
       },
     };
     const data = prisma.payment_types.findMany(query);

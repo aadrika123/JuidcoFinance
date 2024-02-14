@@ -46,7 +46,7 @@ class DirPaymentEntryDao {
         payment_type: {
           select: {
             id: true,
-            type: true,
+            name: true,
           },
         },
       },
@@ -100,7 +100,7 @@ class DirPaymentEntryDao {
         payment_type: {
           select: {
             id: true,
-            type: true,
+            name: true,
           },
         },
         narration: true,
