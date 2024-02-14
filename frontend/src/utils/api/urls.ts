@@ -23,7 +23,19 @@ type FinanceUrlKeys =
   | "BILL_TYPE"
   | "BILL_PAYMENT_ENTRY_URL"
   | "RECEIPT_ENTRY_URL"
-  | "BILL_INVOICE_ENTRY_URL";
+  | "BILL_INVOICE_ENTRY_URL"
+  | "RECEIPT_BUDGET_URL"
+  | "BUDGET_TYPE_URL"
+  | "FINANCIAL_YEAR_URL"
+  | "ACCOUNTING_CODE_URL"
+  | "BUDGET_APPRO_URL"
+  | "BUDGET_RE_APPRO_URL"
+  | "OPENING_BALANCE_ENTRY_URL"
+  | "INVESTMENT_URL"
+  | "GRANT_MANAGEMENT_URL"
+  | "MUNICIPILATY_CODE_URL"
+  | "BUDGET_NAME_URL"
+  | "INVESTMENT_TYPE_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -135,5 +147,59 @@ export const FINANCE_URL: Urls = {
     get: "/bill-invoices/get-all",
     update: "/bill-invoices/update",
     getById: "bill-invoices/get-by-id",
+  },
+  RECEIPT_BUDGET_URL: {
+    create: "/receipt-budgets/create",
+    get: "/receipt-budgets/get-all",
+    update: "/receipt-budgets/update",
+    getById: "receipt-budgets/get-by-id",
+  },
+  BUDGET_APPRO_URL: {
+    create: "/budget-appropriations/create",
+    get: "/budget-appropriations/get-all",
+    update: "/budget-appropriations/update",
+    getById: "budget-appropriations/get-by-id",
+  },
+  BUDGET_RE_APPRO_URL: {
+    create: "/budget-reappropriations/create",
+    get: "/budget-reappropriations/get-all",
+    update: "/budget-reappropriations/update",
+    getById: "budget-reappropriations/get-by-id",
+  },
+  OPENING_BALANCE_ENTRY_URL: {
+    create: "/opening-balances/create",
+    get: "/opening-balances/get-all",
+    update: "/opening-balances/update",
+    getById: "opening-balances/get-by-id",
+  },
+  INVESTMENT_URL: {
+    create: "/investments/create",
+    get: "/investments/get-all",
+    update: "/investments/update",
+    getById: "investments/get-by-id",
+  },
+  GRANT_MANAGEMENT_URL: {
+    create: "/investments/create",
+    get: "/investments/get-all",
+    update: "/investments/update",
+    getById: "investments/get-by-id",
+  },
+  BUDGET_TYPE_URL: {
+    get: "/budget-types/get",
+  },
+  FINANCIAL_YEAR_URL: {
+    get: "/financial-years/get",
+  },
+  ACCOUNTING_CODE_URL: {
+    getAll: "/accounting-code-list/get-all",
+  },
+  MUNICIPILATY_CODE_URL: {
+    getAll: "/get-all-munci-code",
+  },
+  BUDGET_NAME_URL: {
+    getAll: "/budget-names/get",
+  },
+  INVESTMENT_TYPE_URL: {
+    getAll: "/investment-types/get",
   },
 };
