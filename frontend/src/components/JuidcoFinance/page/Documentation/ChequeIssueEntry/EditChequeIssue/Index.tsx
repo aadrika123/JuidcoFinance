@@ -220,15 +220,13 @@ export const EditChequeIssueEntry = ({
     },
   ];
 
-  const page_title =
-    searchParams === "edit"
-      ? "Edit Cheque Issue Entry"
-      : "View Cheque Issue Entry";
-
   return (
     <>
       <Toaster />
-      <HeaderWidget title={page_title} variant="view" />
+      <HeaderWidget
+        title="Cheque Issue Entry"
+        variant={searchParams == "view" ? "view" : "edit"}
+      />
       <FormikWrapper
         initialValues={initialData}
         enableReinitialize={true}

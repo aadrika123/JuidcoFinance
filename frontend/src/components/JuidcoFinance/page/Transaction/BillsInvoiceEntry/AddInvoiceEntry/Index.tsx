@@ -228,7 +228,7 @@ export const AddBillsInvoiceEntry = () => {
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
-        title=""
+        title="Add Bill Invoice Entry"
       />
       <TableWithCount
         data={data}

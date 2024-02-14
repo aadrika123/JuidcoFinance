@@ -30,11 +30,11 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
         <div>
           {sidebarLinks.modules?.map((link, index: number) => {
             return (
-              <div key={index}>
-                <ul className="w-full menu menu-xs p-0 overflow-hidden">
+              <div className="h-[100%]" key={index}>
+                <ul className="w-full menu menu-xs p-0 ">
                   <ul className="h-lvh">
                     <li>
-                      <details open className="w-full">
+                      <details open className="w-full h-[100%]">
                         <summary className="text-[1.125rem] p-2 px-6 whitespace-nowrap bg-[#12743B] hover:bg-[#12743B] rounded-none font-semibold text-white">
                           <i className="w-8 bg-white rounded-md p-1">
                             {link.icon}

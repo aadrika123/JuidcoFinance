@@ -20,13 +20,12 @@ interface SelectProps {
   name: string;
   placeholder?: string;
   value?: number | string;
-  data: Option[] | [];
+  options: Option[] | [];
   error?: string | undefined;
   type?: string;
   touched?: boolean | undefined;
   readonly?: boolean;
   className?: string;
-  handler?: ()=> void;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
 }
@@ -35,7 +34,7 @@ interface SelectProps {
 
 const SelectForNoApi: React.FC<SelectProps> = (props) => {
   const [, , helpers] = useField(props.name);
-  const [, , helpers1] = useField(`${props.name}_s_name`);
+  const [, , helpers1] = useField(`${props.name}_name`);
  
   const { setValue } = helpers;
   const { setValue: setValue1 } = helpers1;
@@ -44,10 +43,6 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
   const fieldId = "id_" + props.name;
 
   const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    if(props.handler){
-      props.handler();
-    }
-   
     setValue(parseInt(e.target.value))
     const selectedOption = e.target.options[e.target.selectedIndex].dataset;
     setValue1(selectedOption.name);
@@ -69,7 +64,7 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
           id={fieldId}
         >
           <option selected value="">{props.placeholder}</option>
-          {props?.data.map((d: Option) => (
+          {props?.options.map((d: Option) => (
             <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || d?.code}>
               {d?.name || d?.type || d?.code}
             </option>

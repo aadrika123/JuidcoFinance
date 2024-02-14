@@ -21,7 +21,7 @@ const APIs = class {
 
   static receipt_type_root = "/receipt-types/get";
 
-  static employee_root = "/employee/get";
+  static employee_root = "/employees/get";
 }
 
 

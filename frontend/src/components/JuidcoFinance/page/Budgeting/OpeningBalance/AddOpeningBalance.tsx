@@ -207,7 +207,7 @@ export const AddOpeningBalance = () => {
       <TableWithCount
         data={data}
         scrollable
-        title="Add Opening Balance Table"
+        title="Add Opening Balance"
         columns={columns}
         footerData={footerData}
         handleStore={mutate}

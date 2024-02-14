@@ -231,12 +231,12 @@ export const AddReceipt = () => {
         resetInitialValue={resetInitialValue}
         onSubmit={onSubmit}
         fields={fields}
-        title="Add New Entry"
+        title="Add New Receipt Entry"
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Add New Entry"
+        title="Add New Receipt Entry"
         columns={columns}
         footerData={footerData}
         handleStore={mutate}

@@ -44,8 +44,14 @@ export type FormValues =
   | InvestmentsDetailsData
   | GrantManagementDetailsData;
 
+
+type Data = {
+  id: number;
+  name: string;
+}  
+
 export type FieldTypeProps = {
-  CONTROL?: "input" | "select" | "checkbox" | "textarea" | "radio";
+  CONTROL?: "input" | "select" | "checkbox" | "textarea" | "radio" | "selectForNoApi";
   HEADER?: string;
   ACCESSOR?: string;
   PLACEHOLDER?: string;
@@ -55,6 +61,7 @@ export type FieldTypeProps = {
   ADDITIONAL?: FieldTypeProps[];
   TITLE?: string;
   CHILDRENS?: FieldTypeProps[];
+  DATA?: Data[];
 };
 
 export interface FormikWrapperProps {

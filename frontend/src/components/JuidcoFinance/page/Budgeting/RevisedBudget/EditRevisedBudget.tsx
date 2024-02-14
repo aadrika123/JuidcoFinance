@@ -97,11 +97,11 @@ export const EditRevisedBudget = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Revised Budget"
+        title="Revised Budget"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Revised Budget"
+        title="Revised Budget"
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={revisedBudgetDetailsSchema}

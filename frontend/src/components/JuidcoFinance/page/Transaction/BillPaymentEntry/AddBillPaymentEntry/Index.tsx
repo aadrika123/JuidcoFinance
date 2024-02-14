@@ -216,12 +216,12 @@ export const HeroAddBillPaymentEntry = () => {
         resetInitialValue={resetInitialValue}
         onSubmit={onSubmit}
         fields={fields}
-        title="Add New Entry"
+        title="Add New Bill Payment Entry"
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Add New Entry"
+        title="Add Bill Payment Entry"
         columns={columns}
         handleStore={mutate}
         handleResetTable={handleResetTable}

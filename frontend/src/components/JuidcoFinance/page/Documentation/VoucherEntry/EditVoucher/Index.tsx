@@ -175,7 +175,10 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Edit Voucher Entry" variant="view" />
+      <HeaderWidget
+        title="Voucher Entry"
+        variant={searchParams == "view" ? "view" : "edit"}
+      />
       <FormikWrapper
         title=""
         initialValues={initialData}

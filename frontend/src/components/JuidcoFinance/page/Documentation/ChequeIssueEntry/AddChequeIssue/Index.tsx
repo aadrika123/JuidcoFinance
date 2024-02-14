@@ -331,7 +331,7 @@ export const AddChequeIssueEntry = () => {
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
-        title={""}
+        title={"Add Cheque Issue"}
       />
       <TableWithCount
         data={data}

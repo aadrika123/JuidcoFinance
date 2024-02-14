@@ -116,7 +116,7 @@ export const EditBillPaymentEntry = ({
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Edit Bill Payment Entry" variant="view" />
+      <HeaderWidget title="Bill Payment Entry" variant={searchParams == "view" ? "view" : "edit"} />
       <FormikWrapper
         title=""
         initialValues={initialData}

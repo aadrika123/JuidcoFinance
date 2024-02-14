@@ -23,10 +23,7 @@ export const EditReceiptBudget = ({
 
   const [initialData, setInitialData] = useState<ReceiptBudgetDetailsData>({
     fin_year_id: "",
-    department_id: "",
     primary_acc_code_id: "",
-    admin_ward_id: "",
-    budget_type_id: "",
     amount: "",
   });
 
@@ -44,10 +41,7 @@ export const EditReceiptBudget = ({
         return {
           ...prev,
           fin_year_id: res.data.data.fin_year.id,
-          department_id: res.data.data.department.id,
           primary_acc_code_id: res.data.data.primary_acc_code.id,
-          admin_ward_id: res.data.data.admin_ward.id,
-          budget_type_id: res.data.data.budget_type.id,
           amount: res.data.data.amount,
         };
       });
@@ -101,11 +95,11 @@ export const EditReceiptBudget = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Receipt Budget"
+        title="Receipt Budget"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Receipt Budget"
+        title=""
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={receiptBudgetDetailsSchema}

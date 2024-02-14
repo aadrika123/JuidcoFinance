@@ -4,6 +4,7 @@ import RadioButtons from "@/components/global/atoms/RadioButton";
 import CheckBoxes from "@/components/global/atoms/Checkbox";
 import Input from "../atoms/Input";
 import Select from "../atoms/Select";
+import SelectForNoApi from "../atoms/SelectForNoApi";
 
 
 /**
@@ -25,6 +26,7 @@ interface FormikControllerProps {
   options: Options[];
   placeholder?: string | "";
   api?: string;
+  data: [];
   type?: string;
   value?: number | string;
   error?: string | undefined;
@@ -47,6 +49,8 @@ const FormikController: React.FC<FormikControllerProps> = (props) => {
       return <CheckBoxes {...rest} />;
     case "select":
       return <Select {...rest} />;
+    case "selectForNoApi": 
+      return <SelectForNoApi {...rest}/>;
     default:
       return null;
   }

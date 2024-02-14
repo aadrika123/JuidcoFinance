@@ -97,11 +97,11 @@ export const EditOpeningBalance = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Opening Balance"
+        title="Opening Balance"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Opening Balance"
+        title="Opening Balance"
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={openingBalanceDetailsSchema}

@@ -107,11 +107,11 @@ export const EditBudgetReAppro = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Budget Re-Appropriation"
+        title="Budget Re-Appropriation"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Budget Re-Appropriation"
+        title="Budget Re-Appropriation"
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={budgetReApproDetailsSchema}

@@ -121,11 +121,11 @@ export const EditGrantManagement = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Grant Management"
+        title="Grant Management"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Grant Management"
+        title="Grant Management"
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={grantManagementDetailsSchema}

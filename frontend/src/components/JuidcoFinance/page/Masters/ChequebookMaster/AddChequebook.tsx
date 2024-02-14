@@ -160,7 +160,7 @@ export const AddChequebook = () => {
                         />
 
                         <DropDownListBox
-                          api={APIs.chequebook_master$employee_list}
+                          api={APIs.employee_root}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           placeholder="Please select an employee"

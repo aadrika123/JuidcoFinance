@@ -8,11 +8,11 @@ import { QueryClient, useMutation } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
-import APIs from "@/json/apis.json";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { ChequebookDataProps, ResponseData } from "@/utils/types/chequebook_master_types";
 import { ChequebookDetailsSchema } from "@/utils/validation/masters/chequebook_master.validation";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
+import { FINANCE_URL } from "@/utils/api/urls";
 
 export const EditChequebook = ({
   chequebookID,
@@ -156,7 +156,7 @@ export const EditChequebook = ({
       HEADER: "Employee",
       ACCESSOR: "employee_id",
       PLACEHOLDER: "Select employee",
-      API: `${APIs.employee_root}`,
+      API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
     },
 
     {

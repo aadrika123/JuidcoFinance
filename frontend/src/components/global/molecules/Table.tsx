@@ -24,6 +24,8 @@ export interface ColumnProps {
 interface SimpleTableProps<T> {
   columns: Array<ColumnProps>;
   data?: T[];
+  pageNo?: number;
+  limit?: number;
   center?: boolean;
   scrollable?: boolean;
   height?: string;
@@ -39,6 +41,8 @@ type ObjectContent = {
 const Table = <T,>({
   columns,
   data,
+  pageNo = 1,
+  limit,
   center = false,
   scrollable = false,
   height = "h-96",
@@ -57,7 +61,12 @@ const Table = <T,>({
 
   const rows = !data?.length ? (
     <Trow className="flex items-center justify-center" scrollable={scrollable}>
-      <Tdata className="border-none" scrollable={scrollable} value="No data" colSpan={columns.length} />
+      <Tdata
+        className="border-none"
+        scrollable={scrollable}
+        value="No data"
+        colSpan={columns.length}
+      />
     </Trow>
   ) : (
     data?.map((row, index) => {
@@ -78,13 +87,15 @@ const Table = <T,>({
                 ? (value as ObjectContent).type ||
                   (value as ObjectContent).name ||
                   (value as ObjectContent).code
-                : column.value
-                  ? column.value(row["id" as keyof typeof row] as string)
-                  : typeof value === "boolean"
-                    ? value
-                      ? "Yes"
-                      : "No"
-                    : (value as string);
+                : column.name === "id"
+                  ? index + 1 + (pageNo - 1) * (limit || data.length)
+                  : column.value
+                    ? column.value(row["id" as keyof typeof row] as string)
+                    : typeof value === "boolean"
+                      ? value
+                        ? "Yes"
+                        : "No"
+                      : (value as string);
 
             return (
               <Tdata

@@ -47,6 +47,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
         name={item.ACCESSOR || ""}
         placeholder={item.PLACEHOLDER}
         api={item.API}
+        data={item.DATA || []}
         options={item.OPTIONS || []}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -85,7 +86,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
           pushD1(d1); /// Pushing D1[] into D[]
           d.push(
             <div key={index}>
-              <h2 className="text-[22px] text-primary my-8">{item.TITLE}</h2>
+              <h2 className="text-[22px] text-primary mt-8 mb-4">{item.TITLE}</h2>
               {item?.CHILDRENS && item?.CHILDRENS?.length > 0 && (
                 <div className="mt-2 grid grid-cols-2 gap-x-6 gap-4">
                   {item.CHILDRENS.map(
@@ -145,7 +146,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
 
   return (
     <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
-      <div className="mt-8">
+      <div>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}

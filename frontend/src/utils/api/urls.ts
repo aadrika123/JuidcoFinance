@@ -113,7 +113,7 @@ export const FINANCE_URL: Urls = {
     get: "/department/get",
   },
   EMPLOYEE_URL: {
-    get: "/employee/get",
+    get: "/employees/get",
   },
 
   VOUCHER_TYPE_URL: {
@@ -191,15 +191,15 @@ export const FINANCE_URL: Urls = {
     get: "/financial-years/get",
   },
   ACCOUNTING_CODE_URL: {
-    getAll: "/accounting-code-list/get-all",
+    get: "/get-all-account-code",
   },
   MUNICIPILATY_CODE_URL: {
-    getAll: "/get-all-munci-code",
+    get: "/get-all-munci-code",
   },
   BUDGET_NAME_URL: {
-    getAll: "/budget-names/get",
+    get: "/budget-names/get",
   },
   INVESTMENT_TYPE_URL: {
-    getAll: "/investment-types/get",
+    get: "/investment-types/get",
   },
 };

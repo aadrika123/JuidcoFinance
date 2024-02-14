@@ -216,12 +216,12 @@ export const AddBudgetAppro = () => {
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
-        title="Add Budget Appro"
+        title="Add Budget Appropriation"
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Add Budget Appro Table"
+        title="Add Budget Appropriation Table"
         columns={columns}
         footerData={footerData}
         handleStore={mutate}
