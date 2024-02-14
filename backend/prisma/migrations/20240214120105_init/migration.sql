@@ -147,7 +147,7 @@ CREATE TABLE "employees" (
 -- CreateTable
 CREATE TABLE "payment_types" (
     "id" SERIAL NOT NULL,
-    "type" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "remark" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE "bill_payment_entries" (
 -- CreateTable
 CREATE TABLE "voucher_types" (
     "id" SERIAL NOT NULL,
-    "type" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -249,7 +249,7 @@ CREATE TABLE "voucher_types" (
 -- CreateTable
 CREATE TABLE "voucher_sub_types" (
     "id" SERIAL NOT NULL,
-    "type" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

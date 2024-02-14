@@ -188,7 +188,7 @@ model employees {
 /// Payment Types
 model payment_types {
   id                  Int                   @id @default(autoincrement())
-  type                String
+  name                String
   remark              String
   dir_payment_entries dir_payment_entries[]
   created_at          DateTime              @default(now()) @map("created_at")
@@ -302,7 +302,7 @@ model bill_payment_entries {
 
 model voucher_types {
   id              Int               @id @default(autoincrement())
-  type            String
+  name            String
   remark          String?
   voucher_entries voucher_entries[]
   created_at      DateTime          @default(now()) @map("created_at")
@@ -311,7 +311,7 @@ model voucher_types {
 
 model voucher_sub_types {
   id              Int               @id @default(autoincrement())
-  type            String
+  name            String
   remark          String?
   voucher_entries voucher_entries[]
   created_at      DateTime          @default(now()) @map("created_at")

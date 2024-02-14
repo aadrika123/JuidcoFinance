@@ -5,19 +5,19 @@ import { faker } from "@faker-js/faker";
 
 
 const prisma = new PrismaClient();
-const voucher_types_seed = async () => {
+const admin_wards_seeder = async () => {
 
-    const file_path = "./prisma/data/sprint1/voucher_entries.xlsx";
+    const file_path = "./prisma/data/sprint1/cheque_issuance.xlsx";
 
-    readXlsxFile(file_path, { sheet: 'Voucher Type' }).then(async (rows) => {
+    readXlsxFile(file_path, { sheet: 'Administartion Ward' }).then(async (rows) => {
         const n = rows.length;
-        for (let i = 0; i < n; i++) {
+        for (let i = 1; i < n; i++) {
           const row = rows[i];
 
-          await prisma.voucher_types.create({
+          await prisma.adminis_wards.create({
             data: {
-                name: row[0].toString(),
-                remark: row[0].toString(),
+                name: row[3].toString(),
+                remark: row[2].toString(),
                 created_at: faker.date.past(),
                 updated_at: faker.date.recent(),
             },
@@ -25,5 +25,5 @@ const voucher_types_seed = async () => {
         }
       });
 };
-export default voucher_types_seed;
+export default admin_wards_seeder;
 

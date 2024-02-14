@@ -43,24 +43,43 @@ import balance_trackings_seeder from "./seeder/budgeting/balance_trackings_seede
 import grant_entries_seeder from "./seeder/budgeting/grant_entries_seeder";
 import grants_seeder from "./seeder/grants_seeder";
 import employees_seeder from "./seeder/employees_seeder";
+import municipality_codes_seeder from "./seeder/municipality_codes_seeder";
+import departments_seeder from "./seeder/departments_seeder";
+import admin_wards_seeder from "./seeder/admin_wards_seeder";
+import payment_types_seeder from "./seeder/payment_types_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
 
+  await bill_types_seeder();
+  await vendor_types_seeder();
+  await employees_seeder();
   await grants_seeder();
-
+  await payment_types_seeder();
   await subledgers_seeder();
   await modules_seeder();
+  await budget_names_seeder();
+  await expenditure_natures_seeder();
+
+
+
+
   await budget_types_seeder();
   await financial_years_seeder();
-  await budget_names_seeder();
+  await municipality_codes_seeder();
   await investment_types_seeder();
-  await expenditure_natures_seeder();
   await grant_natures_seeder();
+  await expenditure_natures_seeder();
+
+
   
+  await admin_wards_seeder();
+  await departments_seeder();
+  await voucher_types_seed();
+  await voucher_sub_types_seed();
 
-
-
+  
+  await vendors_seeder();
 
 
   /////// Accounting Code //////////////
@@ -107,109 +126,11 @@ async function main() {
     }
   });
 
-  /////// Municipality Code //////////////
-  const file_path2 = "./prisma/data/sample-municipality-code1.xlsx";
-
-  // File path.
-  readXlsxFile(file_path2).then(async (rows) => {
-    const n = rows.length;
-    for (let i = 1; i < n; i++) {
-      // console.log(rows[i]);
-      const row = rows[i];
-      await prisma.municipality_codes.create({
-        data: {
-          id: parseInt(row[0].toString()),
-          ulbs: row[1].toString(),
-          district: row[2].toString(),
-          state_code: row[3].toString(),
-          district_code: row[4].toString(),
-          category: row[5].toString(),
-          code: row[6].toString(),
-          remark: row[7].toString(),
-        },
-      });
-    }
-  });
-
-  ///////////////// department ////////////////////////
-  function createRandomDepartment(): departments {
-    return {
-      id: faker.datatype.number(),
-      name: faker.company.name(),
-      remark: faker.lorem.sentence(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const departments = faker.helpers.multiple(createRandomDepartment, {
-    count: 5,
-  });
-
-  let id = 1;
-  for (const item of departments) {
-    await prisma.departments.create({
-      data: {
-        id: id, //item.id,
-        name: item.name,
-        remark: item.remark,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    id++;
-  }
 
   ///////////////// Vendor Types ////////////////////////
-  await vendor_types_seeder();
 
   ///////////////// Employee ////////////////////////
-  await employees_seeder();
 
-  ///////////////// Bank Master ////////////////////////
-  function createRandomUser(): bank_masters {
-    return {
-      id: faker.datatype.number(),
-      bank_name: faker.company.name(),
-      ifsc_code: faker.finance.routingNumber(),
-      branch: faker.company.companySuffix(),
-      micr_code: faker.finance.account(),
-      branch_address: faker.address.streetAddress(),
-      branch_city: faker.address.city(),
-      branch_state: faker.address.state(),
-      branch_district: faker.address.county(),
-      email: faker.internet.email(),
-      contact_no: faker.phone.number(),
-      contact_person_name: faker.internet.userName(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const data = faker.helpers.multiple(createRandomUser, {
-    count: 20,
-  });
-
-  for (const item of data) {
-    await prisma.bank_masters.create({
-      data: {
-        id: item.id,
-        bank_name: item.bank_name,
-        ifsc_code: item.ifsc_code,
-        branch: item.branch,
-        micr_code: item.micr_code,
-        branch_address: item.branch_address,
-        branch_city: item.branch_city,
-        branch_state: item.branch_state,
-        branch_district: item.branch_district,
-        email: item.email,
-        contact_no: item.contact_no,
-        contact_person_name: item.contact_person_name,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-  }
 
   ///////////////// cheque_book_entry ////////////////////////
   function createRandomChequeBook(): cheque_book_entries {
@@ -258,74 +179,6 @@ async function main() {
     });
   }
 
-  ///////////////// Vendor ////////////////////////
-  await vendors_seeder();
-
-  ///////////////// Administrative Ward /////////////////////
-  function createRandomAdminisWard(): adminis_wards {
-    return {
-      id: faker.datatype.number(),
-      name: faker.company.name(),
-      remark: faker.lorem.sentence(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const adminisWards = faker.helpers.multiple(createRandomAdminisWard, {
-    count: 5,
-  });
-
-  let iw = 1;
-  for (const item of adminisWards) {
-    await prisma.adminis_wards.create({
-      data: {
-        id: iw, //item.id,
-        name: item.name,
-        remark: item.remark,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    iw++;
-  }
-
-  //////////////// Payment Type ///////////////////////
-  function createRandomPaymentType(): payment_types {
-    return {
-      id: faker.datatype.number(),
-      type: faker.person.firstName(),
-      remark: faker.lorem.sentence(),
-      created_at: faker.date.recent(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const paymentTypes = faker.helpers.multiple(createRandomPaymentType, {
-    count: 5,
-  });
-
-  const paymentModes = [
-    "Credit Card",
-    "Debit Card",
-    "PayPal",
-    "Cash",
-    "Bank Transfer",
-  ];
-  let ip = 1;
-  for (const item of paymentTypes) {
-    await prisma.payment_types.create({
-      data: {
-        id: ip,
-        type: paymentModes[ip - 1],
-        remark: item.remark,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
-    });
-    ip++;
-  }
-
  
   ///////////////// Direct Payment Entry ////////////////////////
   function createRandomDirPaymentEntry(): dir_payment_entries {
@@ -357,53 +210,45 @@ async function main() {
     data: paymentEntries,
   });
 
-  await balance_trackings_seeder();
 
-  //////////////// Voucher Type //////////////////
-  await voucher_types_seed();
+  setTimeout(async () => {
+    await voucher_entries_seed();
+    await bill_payment_entry_seed();
 
-  //////////////// Voucher sub type //////////////////
-  await voucher_sub_types_seed();
+    await balance_trackings_seeder();
 
-  //////////////// Bill Types //////////////////////
-  await bill_types_seeder();
-
-  /////////////// Bill Payment Entry //////////////////
-  await bill_payment_entry_seed();
-
-  /////////////// Receipt Types Seeder //////////////////
-  await receipt_types_seeder();
-
-  await subledgers_seeder();
-
-  await modules_seeder();
-
-  await receipts_seeder();
-
-  //////////////// Voucher Entries //////////////////
-  await voucher_entries_seed();
-
-  await bill_stages_seeder();
-
-  await bill_invoices_seeder();
-
-  await banks_seeder();
-
-  await cheque_issuances_seeder();
-
-  await budget_appropriations_seeder();
-
-  await receipt_budgets_seeder();
+    await receipt_types_seeder();
   
-  await budget_reappropriations_seeder();
+    await subledgers_seeder();
+  
+    await modules_seeder();
+  
+    await receipts_seeder();
+  
+    await bill_stages_seeder();
+  
+    await bill_invoices_seeder();
+  
+    await banks_seeder();
+  
+    await cheque_issuances_seeder();
+  
+    await budget_appropriations_seeder();
+  
+    await receipt_budgets_seeder();
+    
+    await budget_reappropriations_seeder();
+  
+    await opening_balances_seeder();
+  
+    await revised_budgets_seeder();
+  
+    await investments_seeder();
+  
+    await grant_entries_seeder();
+  
+  }, 3000);
 
-  await opening_balances_seeder();
-
-  await revised_budgets_seeder();
-
-  await investments_seeder();
-
-  await grant_entries_seeder();
 
 }
 main()
