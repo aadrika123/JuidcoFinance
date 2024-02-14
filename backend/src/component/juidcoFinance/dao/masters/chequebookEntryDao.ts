@@ -18,7 +18,7 @@ class ChequebookEntryDao {
 
 
 
-   // Add new chequebook in DB
+  // Add new chequebook in DB
   store = async (req: Request) => {
     return await prisma.cheque_book_entries.create({
       data: chequebookRequestData(req),
@@ -32,8 +32,18 @@ class ChequebookEntryDao {
     const search: string = String(req.query.search);
     const skip = (page - 1) * limit;
 
+    let order: number = Number(req.query.order);
+
+    if (order != -1 && order != 1) {
+      order = 1;
+    }
+
+
 
     const query: Prisma.cheque_book_entriesFindManyArgs = {
+      orderBy: [
+        { updated_at: order == -1 ? "desc" : "asc" }
+      ],
       skip: skip,
       take: limit,
       select: {
@@ -41,7 +51,7 @@ class ChequebookEntryDao {
         date: true,
         bank_name: true,
         employee: {
-          select:{
+          select: {
             id: true,
             name: true
           }
@@ -50,7 +60,7 @@ class ChequebookEntryDao {
         cheque_no_from: true,
         bank_branch: true,
         page_count: true,
-        cheque_no_to: true, 
+        cheque_no_to: true,
         issuer_name: true,
         cheque_book_return: true,
         cheque_book_return_date: true,
@@ -60,29 +70,29 @@ class ChequebookEntryDao {
       },
     };
 
-    if(search !== "undefined" && search !== ""){
+    if (search !== "undefined" && search !== "") {
       query.where = {
         OR: [
-          {bank_name: {contains: search, mode: "insensitive"},},
-          {bank_branch: {contains: search, mode: "insensitive"},},
-          {remarks: {contains: search, mode: "insensitive"},},
+          { bank_name: { contains: search, mode: "insensitive" }, },
+          { bank_branch: { contains: search, mode: "insensitive" }, },
+          { remarks: { contains: search, mode: "insensitive" }, },
         ],
       }
     }
-    
-    
+
+
     const [data, count] = await prisma.$transaction([
       prisma.cheque_book_entries.findMany(query),
-      prisma.cheque_book_entries.count({where: query.where})
+      prisma.cheque_book_entries.count({ where: query.where })
     ]);
 
-    return generateRes(data, count, page, limit );
+    return generateRes(data, count, page, limit);
   };
 
   // get all chequebook data
   get_employee_list = async (req: Request) => {
     const search: string = String(req.query.search);
-    
+
     const query: Prisma.employeesFindManyArgs = {
       select: {
         id: true,
@@ -90,20 +100,20 @@ class ChequebookEntryDao {
       },
     };
 
-    
-    if(search !== "undefined" && search !== ""){
+
+    if (search !== "undefined" && search !== "") {
 
       query.where = {
-        name: {contains: search, mode: "insensitive"}
+        name: { contains: search, mode: "insensitive" }
       }
 
     }
-    
+
     const [data] = await prisma.$transaction([
       prisma.employees.findMany(query),
     ]);
 
-    return {'data': data};
+    return { 'data': data };
   };
 
 
@@ -118,17 +128,17 @@ class ChequebookEntryDao {
         date: true,
         bank_name: true,
         employee: {
-          select:{
+          select: {
             id: true,
             name: true
           }
         },
-        
+
         bank_account_no: true,
         cheque_no_from: true,
         bank_branch: true,
         page_count: true,
-        cheque_no_to: true, 
+        cheque_no_to: true,
         issuer_name: true,
         cheque_book_return: true,
         cheque_book_return_date: true,
