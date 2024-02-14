@@ -18,12 +18,22 @@ class BankMasterDao {
   };
 
   // Get limited bank master
-  get = async (req:Request) => {
+  get = async (req: Request) => {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
+    let order: number = Number(req.query.order);
+
+    if (order != -1 && order != 1) {
+      order = 1;
+    }
+
 
     const query: Prisma.bank_mastersFindManyArgs = {
+      orderBy: [
+        { updated_at: order == -1 ? "desc" : "asc" }
+      ],
+
       skip: (page - 1) * limit,
       take: limit,
       select: {
@@ -34,7 +44,7 @@ class BankMasterDao {
       },
     };
 
-    if(search !== "undefined" && search !== ""){
+    if (search !== "undefined" && search !== "") {
       query.where = {
         OR: [
           {
@@ -50,7 +60,7 @@ class BankMasterDao {
 
     const [data, count] = await prisma.$transaction([
       prisma.bank_masters.findMany(query),
-      prisma.bank_masters.count({where: query.where}),
+      prisma.bank_masters.count({ where: query.where }),
     ]);
     return generateRes(data, count, page, limit);
   };

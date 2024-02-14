@@ -31,8 +31,18 @@ class BudgetAppropriationsDao {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
     const search: string = String(req.query.search);
+    let order: number = Number(req.query.order);
+
+    if (order != -1 && order != 1) {
+      order = 1;
+    }
+
 
     const query: Prisma.budget_appropriationsFindManyArgs = {
+      orderBy: [
+        {updated_at: order == -1?"desc":"asc"}        
+      ],
+      
       skip: (page - 1) * limit,
       take: limit,
       select: {
