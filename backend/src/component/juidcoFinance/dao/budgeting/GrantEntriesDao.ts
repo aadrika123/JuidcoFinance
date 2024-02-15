@@ -71,7 +71,7 @@ class GrantEntriesDao {
         voucher: {
           select: {
             id: true,
-            amount: true
+            voucher_no: true
           },
         },
         expndtre_nature: {
@@ -205,7 +205,7 @@ class GrantEntriesDao {
         voucher: {
           select: {
             id: true,
-            amount: true
+            voucher_no: true
           },
         },
         expndtre_nature: {

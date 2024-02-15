@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
+import { Request } from "express";
 
 const prisma = new PrismaClient();
 
@@ -70,6 +71,39 @@ class AccountingCodeDao {
   }
 
   getSubCodes = async () => {
+    const query: Prisma.account_codesFindManyArgs = {
+      select: {
+        id: true,
+        code: true,
+        description: true,
+      },
+    };
+
+    query.where = {
+      NOT: [{
+        AND: [
+          {
+            detail_code: {
+              equals: "00",
+            },
+  
+            minor_head: {
+              not: "00",
+            },
+            
+          },
+        ],
+      }],
+    }
+
+    const data = prisma.account_codes.findMany(query);
+    return generateRes(data);
+  }
+
+
+  getChildCodes = async (req: Request) => {
+    const code: number = Number(req.query.page);
+    
     const query: Prisma.account_codesFindManyArgs = {
       select: {
         id: true,

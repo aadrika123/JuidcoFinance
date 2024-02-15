@@ -160,7 +160,7 @@ const generateRouteFile = (modelDetails) => {
 
 // Modify the modelDetails below
 const modelDetails = {
-    name: "employees",
+    name: "drcr",
     fields: [
         {name: 'id', type: 'Int', constraint: '@id @default(autoincrement())'},
         {name: 'name', type: 'String'},

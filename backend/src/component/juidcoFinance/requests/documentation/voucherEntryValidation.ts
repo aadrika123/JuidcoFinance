@@ -12,7 +12,7 @@ export const voucherEntrySchema = Joi.object({
   voucher_sub_id: Joi.number().required(),
   sub_ledger_id: Joi.number().required(),
   amount: Joi.number().required(),
-  dr_cr: Joi.string().valid('dr', 'cr').required(),
+  dr_cr_id: Joi.number().required(),
 });
 
 export const voucherEntryValidation = Joi.array().items(voucherEntrySchema);
@@ -34,7 +34,7 @@ export const requestData = (req: Request): VoucherEntryRequestData => {
     voucher_sub_id: req.body.voucher_sub_id,
     sub_ledger_id: req.body.sub_ledger_id,
     amount: req.body.amount,
-    dr_cr: req.body.dr_cr,
+    dr_cr_id: req.body.dr_cr_id,
   };
 };
 
@@ -52,7 +52,7 @@ export const multiRequestData = (req: Request): VoucherEntryRequestData[] => {
       voucher_sub_id: item.voucher_sub_id,
       sub_ledger_id: item.sub_ledger_id,
       amount: item.amount,
-      dr_cr: item.dr_cr,
+      dr_cr_id: item.dr_cr_id,
     });
   }
 

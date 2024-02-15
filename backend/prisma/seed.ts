@@ -47,6 +47,7 @@ import municipality_codes_seeder from "./seeder/municipality_codes_seeder";
 import departments_seeder from "./seeder/departments_seeder";
 import admin_wards_seeder from "./seeder/admin_wards_seeder";
 import payment_types_seeder from "./seeder/payment_types_seeder";
+import drcr_seeder from "./seeder/budgeting/drcr_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -60,6 +61,7 @@ async function main() {
   await modules_seeder();
   await budget_names_seeder();
   await expenditure_natures_seeder();
+  await drcr_seeder();
 
 
 

@@ -269,7 +269,7 @@ CREATE TABLE "voucher_entries" (
     "voucher_sub_id" INTEGER NOT NULL,
     "sub_ledger_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
-    "dr_cr" TEXT NOT NULL,
+    "dr_cr_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -481,7 +481,7 @@ CREATE TABLE "budget_reappropriations" (
 CREATE TABLE "opening_balances" (
     "id" SERIAL NOT NULL,
     "fin_year_id" INTEGER NOT NULL,
-    "dr_cr" TEXT NOT NULL,
+    "dr_cr_id" INTEGER NOT NULL,
     "primary_acc_code_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -602,6 +602,16 @@ CREATE TABLE "balance_trackings" (
     CONSTRAINT "balance_trackings_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "drcr" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "drcr_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -658,6 +668,9 @@ ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_voucher_sub_id_fke
 
 -- AddForeignKey
 ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_sub_ledger_id_fkey" FOREIGN KEY ("sub_ledger_id") REFERENCES "subledgers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "voucher_entries" ADD CONSTRAINT "voucher_entries_dr_cr_id_fkey" FOREIGN KEY ("dr_cr_id") REFERENCES "drcr"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "receipt_entries" ADD CONSTRAINT "receipt_entries_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -745,6 +758,9 @@ ALTER TABLE "budget_reappropriations" ADD CONSTRAINT "budget_reappropriations_fr
 
 -- AddForeignKey
 ALTER TABLE "opening_balances" ADD CONSTRAINT "opening_balances_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "opening_balances" ADD CONSTRAINT "opening_balances_dr_cr_id_fkey" FOREIGN KEY ("dr_cr_id") REFERENCES "drcr"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "opening_balances" ADD CONSTRAINT "opening_balances_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
