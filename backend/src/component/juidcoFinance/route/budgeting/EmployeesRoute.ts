@@ -13,6 +13,7 @@ class EmployeesRoute {
 
   configure(app: express.Application, apiId: string): void {
     app.route(`${baseUrl}/employees/get`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "01"));
+    app.route(`${baseUrl}/employees/get-designations`).get((req: Request, res: Response) => this.controller.getDesignations(req, res, apiId + "02"));
   }
 }
 

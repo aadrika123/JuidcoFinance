@@ -159,7 +159,6 @@ model departments {
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
   cheque_issuances     cheque_issuances[]
-  receipt_budgets     receipt_budgets[]
 
 
   created_at DateTime @default(now()) @map("created_at")
@@ -206,7 +205,6 @@ model adminis_wards {
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
   cheque_issuances     cheque_issuances[]
-  receipt_budgets     receipt_budgets[]
 
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
@@ -502,7 +500,6 @@ model budget_types{
 	name                String
 	remarks             String
 
-  receipt_budgets     receipt_budgets[]
 
 
 	created_at          DateTime            @default(now()) @map("created_at")
@@ -525,29 +522,6 @@ model financial_years{
 }
 
 
-////receipt_budgets: Managed by: Bijoy Paitandi
-model receipt_budgets{
-	id                  Int                 @id @default(autoincrement())
-	fin_year_id         Int
-  fin_year            financial_years     @relation(fields: [fin_year_id], references: [id])
-
-	department_id       Int
-  department          departments         @relation(fields: [department_id], references: [id])
-
-	primary_acc_code_id Int
-  primary_acc_code    account_codes       @relation(fields: [primary_acc_code_id], references: [id])
-
-	admin_ward_id       Int
-  admin_ward          adminis_wards       @relation(fields: [admin_ward_id], references: [id])
-
-	budget_type_id      Int
-  budget_type         budget_types        @relation(fields: [budget_type_id], references: [id])
-
-	amount              Float
-
-	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
-}
 
 ////budget_appropriations: Managed by: Bijoy Paitandi
 model budget_appropriations{
@@ -714,7 +688,6 @@ model grant_entries{
   advance_rcving_date DateTime
 	advance_amount      Float
 
-
 	expenditure_date    DateTime
 
 	voucher_id          Int
@@ -789,6 +762,21 @@ model drcr{
   voucher_entries     voucher_entries[]
   opening_balances    opening_balances[]
 
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+
+////receipt_budgets: Managed by: Bijoy Paitandi
+model receipt_budgets{
+	id                  Int                 @id @default(autoincrement())
+	fin_year_id         Int
+  fin_year            financial_years     @relation(fields: [fin_year_id], references: [id])
+
+	primary_acc_code_id Int
+  primary_acc_code    account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+	amount              Float
 
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")

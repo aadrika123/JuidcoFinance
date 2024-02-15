@@ -429,21 +429,6 @@ CREATE TABLE "financial_years" (
 );
 
 -- CreateTable
-CREATE TABLE "receipt_budgets" (
-    "id" SERIAL NOT NULL,
-    "fin_year_id" INTEGER NOT NULL,
-    "department_id" INTEGER NOT NULL,
-    "primary_acc_code_id" INTEGER NOT NULL,
-    "admin_ward_id" INTEGER NOT NULL,
-    "budget_type_id" INTEGER NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "receipt_budgets_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "budget_appropriations" (
     "id" SERIAL NOT NULL,
     "fin_year_id" INTEGER NOT NULL,
@@ -612,6 +597,18 @@ CREATE TABLE "drcr" (
     CONSTRAINT "drcr_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "receipt_budgets" (
+    "id" SERIAL NOT NULL,
+    "fin_year_id" INTEGER NOT NULL,
+    "primary_acc_code_id" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "receipt_budgets_pkey" PRIMARY KEY ("id")
+);
+
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -721,21 +718,6 @@ ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_bank_id_fkey" FO
 ALTER TABLE "cheque_issuances" ADD CONSTRAINT "cheque_issuances_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_admin_ward_id_fkey" FOREIGN KEY ("admin_ward_id") REFERENCES "adminis_wards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_budget_type_id_fkey" FOREIGN KEY ("budget_type_id") REFERENCES "budget_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "budget_appropriations" ADD CONSTRAINT "budget_appropriations_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -806,3 +788,9 @@ ALTER TABLE "grant_entries" ADD CONSTRAINT "grant_entries_employee_id_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "balance_trackings" ADD CONSTRAINT "balance_trackings_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_fin_year_id_fkey" FOREIGN KEY ("fin_year_id") REFERENCES "financial_years"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "receipt_budgets" ADD CONSTRAINT "receipt_budgets_primary_acc_code_id_fkey" FOREIGN KEY ("primary_acc_code_id") REFERENCES "account_codes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

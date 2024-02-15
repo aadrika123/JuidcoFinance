@@ -62,7 +62,6 @@ class FinanceRoute {
   private bankMasterRoute: BankMasterRoute;
   private vendorTypeRoute: VendorTypeRoute;
   private departmentRoute: DepartmentRoute;
-  private vendorMasterRoute: VendorMasterRoute;
   private chequebookEntryRoute: ChequeBookEntryRoute;
   private dirPaymentEntryRoute: DirPaymentEntryRoute;
   private paymentTypeRoute: PaymentTypeRoute;
@@ -98,9 +97,7 @@ class FinanceRoute {
     this.departmentRoute.configure(app); // 06
 
     // VENDOR_MASTER_ROUTE ///
-    this.vendorMasterRoute = new VendorMasterRoute();
-    this.vendorMasterRoute.configure(app); // 07
-
+    (new VendorMasterRoute()).configure(app, "07");
     /// CHECKBOOK_ENTRY_ROUTE ///
     this.chequebookEntryRoute = new ChequeBookEntryRoute();
     this.chequebookEntryRoute.configure(app); // 08

@@ -3,6 +3,9 @@ import { sendResponse } from "../../../../util/sendResponse";
 import VendorMasterDao from "../../dao/masters/vendorMasterDao";
 import { vendorMasterValidation } from "../../requests/masters/vendorMasterValidation";
 import ResMessage from "../../responseMessage/masters/vendorMasterMessage";
+import { resObj } from "../../../../util/types";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resMessage } from "../../responseMessage/commonMessage";
 
 /**
  * | Author- Krish Vishwakarma
@@ -13,8 +16,11 @@ import ResMessage from "../../responseMessage/masters/vendorMasterMessage";
 
 class VendorMasterController {
   private vendorMasterDao: VendorMasterDao;
+  private initMsg: string;
   constructor() {
     this.vendorMasterDao = new VendorMasterDao();
+    this.initMsg = "VendorMaster";
+
   }
 
   // create a new Vendor
@@ -132,6 +138,32 @@ class VendorMasterController {
       return sendResponse(false, error, "", 500, "POST", "0704", "1.0", res);
     }
   };
+
+
+    getNames = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+      const resObj: resObj = {
+        apiId,
+        action: "GET",
+        version: "1.0",
+      };
+      
+      try {
+        
+        const data = await this.vendorMasterDao.getNames();
+  
+        if (!data)
+          return CommonRes.SUCCESS(
+            resMessage(this.initMsg).NOT_FOUND,
+            data,
+            resObj,
+            res
+          );
+  
+          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      } catch (error: any) {
+        return CommonRes.SERVER_ERROR(error, resObj, res);
+      }
+    };
 }
 
 export default VendorMasterController;

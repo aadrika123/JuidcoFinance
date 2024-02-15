@@ -10,7 +10,7 @@ export interface OpeningBalancesRequestData {
 
 const openingBalancesSchema = Joi.object({
     fin_year_id: Joi.number().required(),
-    dr_cr: Joi.number().required(),
+    dr_cr_id: Joi.number().required(),
     primary_acc_code_id: Joi.number().required(),
     amount: Joi.number().required(),
 })
