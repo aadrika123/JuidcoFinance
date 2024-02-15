@@ -21,6 +21,8 @@ interface SelectProps {
   touched?: boolean | undefined;
   readonly?: boolean;
   className?: string;
+  visibility?: boolean;
+  handler?: (id: number | string) => void;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
 }
@@ -62,6 +64,9 @@ const Select: React.FC<SelectProps> = (props) => {
   }
 
   const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    if(props.handler){
+      props.handler(parseInt(e.target.value));
+    }
     setValue(parseInt(e.target.value))
     const selectedOption = e.target.options[e.target.selectedIndex].dataset;
     setValue1(selectedOption.name);
@@ -84,7 +89,7 @@ const Select: React.FC<SelectProps> = (props) => {
         >
           <option selected value="">{props.placeholder}</option>
           {dataList.map((d: Select) => (
-            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || d?.code}>
+            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code)}>
               {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code)}
             </option>
           ))}

@@ -49,12 +49,12 @@ export const HeroRevisedBudget = () => {
     {
       name: "revised_amount",
       caption: "Revised Budget Amount",
-      width: "w-[25%]",
+      width: "w-[23%]",
     },
     {
-      name: "remark",
+      name: "remarks",
       caption: "Remarks",
-      width: "w-[25%]",
+      width: "w-[23%]",
     },
     {
       name: "View / Edit",
@@ -71,7 +71,7 @@ export const HeroRevisedBudget = () => {
         title="Revised Budget List"
         center
         columns={column}
-        api={FINANCE_URL.BILL_INVOICE_ENTRY_URL.get || ""}
+        api={FINANCE_URL.REVISED_BUDGET_URL.get || ""}
         numberOfRowsPerPage={10}
       />
     </>

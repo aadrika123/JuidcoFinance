@@ -223,16 +223,16 @@ export const AddGrantManagement = () => {
       caption: "Nature of the Grant",
       width: "w-[25%]",
     },
-    {
-      name: "grant_from_date",
-      caption: "Grant From Date",
-      width: "w-[25%]",
-    },
-    {
-      name: "grant_to_date",
-      caption: "Grant To Date",
-      width: "w-[25%]",
-    },
+    // {
+    //   name: "grant_from_date",
+    //   caption: "Grant From Date",
+    //   width: "w-[25%]",
+    // },
+    // {
+    //   name: "grant_to_date",
+    //   caption: "Grant To Date",
+    //   width: "w-[25%]",
+    // },
     {
       name: "expenditure_nature_id_name",
       caption: "Nature of Expenditure",

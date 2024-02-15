@@ -30,6 +30,17 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     enableReinitialize,
   } = props;
 
+  //////////////// Filtering Fields //////////////
+  const filterFields = (fields: any) => {
+    return fields.map((field: any) => {
+      if (field.CHILDRENS) {
+        const filteredChildren = filterFields(field.CHILDRENS);
+        field.CHILDRENS = filteredChildren.filter((child:FieldTypeProps ) => child.VISIBILITY !== false);
+      }
+      return field.VISIBILITY !== false ? field : null;
+    }).filter(Boolean); // Filter out null values
+  };
+
   const formikController = (
     item: any,
     handleChange: (e: React.ChangeEvent<unknown>) => void,
@@ -51,6 +62,8 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
         options={item.OPTIONS || []}
         onChange={handleChange}
         onBlur={handleBlur}
+        visibility={item.VISIBILITY}
+        handler={item.HANDLER}
         value={values[item.ACCESSOR as keyof typeof values]}
         error={errors[item.ACCESSOR as keyof typeof errors]}
         touched={touched[item.ACCESSOR as keyof typeof touched]}
@@ -165,7 +178,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
           }) => (
             <form onSubmit={handleSubmit}>
               {generateFields(
-                fields,
+                filterFields(fields),
                 handleChange,
                 handleBlur,
                 values,

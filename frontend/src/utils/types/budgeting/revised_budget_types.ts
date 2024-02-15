@@ -4,7 +4,7 @@ export interface RevisedBudgetDetailsData {
   primary_acc_code_id: number | string;
   approved_amount?: number | string;
   revised_amount?: number | string;
-  remark?: string;
+  remarks?: string;
 }
 
 export interface ResponseData {
@@ -13,7 +13,7 @@ export interface ResponseData {
       primary_acc_code: { id: number };
       approved_amount?: number | string;
       revised_amount?: number | string;
-      remark: string;
+      remarks: string;
     };
   };
 }

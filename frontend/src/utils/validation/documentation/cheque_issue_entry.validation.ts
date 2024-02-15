@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 // Define your schema
 export const chequeIssueValidationSchema = Yup.object().shape({
-  voucher_no: Yup.number().required("Voucher Number is required"),
+  voucher_no: Yup.string().required("Voucher Number is required"),
   voucher_date: Yup.date().required("Voucher Date is required"),
   bill_type_id: Yup.number().required("Bill Type ID is required"),
   narration: Yup.string().required("Narration is required"),

@@ -6,7 +6,6 @@ import Input from "../atoms/Input";
 import Select from "../atoms/Select";
 import SelectForNoApi from "../atoms/SelectForNoApi";
 
-
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 03-02-2024
@@ -15,8 +14,8 @@ import SelectForNoApi from "../atoms/SelectForNoApi";
  */
 
 interface Options {
-  key: string,
-  value: string
+  key: string;
+  value: string;
 }
 
 interface FormikControllerProps {
@@ -32,27 +31,35 @@ interface FormikControllerProps {
   error?: string | undefined;
   touched?: boolean | undefined;
   readonly?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  visibility?: boolean;
+  handler?: (id: number | string) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 const FormikController: React.FC<FormikControllerProps> = (props) => {
-  const { control, ...rest } = props;
-  switch (control) {
-    case "input":
-      return <Input {...rest} />;
-    case "textarea":
-      return <TextArea {...rest} />;
-    case "radio":
-      return <RadioButtons {...rest} />;
-    case "checkbox":
-      return <CheckBoxes {...rest} />;
-    case "select":
-      return <Select {...rest} />;
-    case "selectForNoApi": 
-      return <SelectForNoApi {...rest}/>;
-    default:
-      return null;
+  const { control, visibility = true, ...rest } = props;
+  if (visibility) {
+    switch (control) {
+      case "input":
+        return <Input {...rest} />;
+      case "textarea":
+        return <TextArea {...rest} />;
+      case "radio":
+        return <RadioButtons {...rest} />;
+      case "checkbox":
+        return <CheckBoxes {...rest} />;
+      case "select":
+        return <Select {...rest} />;
+      case "selectForNoApi":
+        return <SelectForNoApi {...rest} />;
+      default:
+        return null;
+    }
+  } else {
+    return null;
   }
 };
 

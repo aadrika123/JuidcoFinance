@@ -32,7 +32,7 @@ export const AddOpeningBalance = () => {
   });
   const initialValues: OpeningBalanceDetailsData = {
     fin_year_id: "",
-    dr_cr: "",
+    dr_cr_id: "",
     primary_acc_code_id: "",
     amount: "",
   };
@@ -63,7 +63,8 @@ export const AddOpeningBalance = () => {
               fin_year_id: values.fin_year_id,
               fin_year_id_name:
                 values.fin_year_id_name || item.fin_year_id_name,
-              dr_cr: values.dr_cr,
+              dr_cr_id: values.dr_cr_id,
+              dr_cr_id_name: values.dr_cr_id_name || item.dr_cr_id_name,
               primary_acc_code_id: values.primary_acc_code_id,
               primary_acc_code_id_name:
                 values.primary_acc_code_id_name ||
@@ -149,7 +150,7 @@ export const AddOpeningBalance = () => {
     setInitialData((prev) => ({
       ...prev,
       fin_year_id: data[Id - 1]?.fin_year_id,
-      dr_cr: data[Id - 1]?.dr_cr,
+      dr_cr_id: data[Id - 1]?.dr_cr_id,
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       amount: data[Id - 1]?.amount,
     }));
@@ -172,12 +173,12 @@ export const AddOpeningBalance = () => {
     {
       name: "primary_acc_code_id_name",
       caption: "Primary Accounting Code",
-      width: "w-[25%]",
+      width: "w-[50%]",
     },
     {
-      name: "amount ",
+      name: "amount",
       caption: "Opening Balance Amount",
-      width: "w-[25%]",
+      width: "w-[28%]",
     },
     {
       name: "edit/remove",

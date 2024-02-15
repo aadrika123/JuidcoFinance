@@ -1,6 +1,6 @@
 export interface ChequeIssueEntryData {
   id?: number | string;
-  voucher_no: number;
+  voucher_no: number | string;
   voucher_date: string;
   bill_type_id: number;
   bill_type_id_name?: string;
@@ -17,5 +17,5 @@ export interface ChequeIssueEntryData {
   module_id_name?: string;
   issue_date: string;
   cheque_no: string;
-  amount: number;
+  amount: number | string;
 }

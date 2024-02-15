@@ -30,7 +30,7 @@ export const AddChequeIssueEntry = () => {
     isOnEdit: false,
   });
   const initialValues: ChequeIssueEntryData = {
-    voucher_no: 0,
+    voucher_no: "",
     voucher_date: "",
     bill_type_id: 0,
     narration: "",
@@ -41,7 +41,7 @@ export const AddChequeIssueEntry = () => {
     module_id: 0,
     issue_date: "",
     cheque_no: "",
-    amount: 0,
+    amount: "",
   };
   const [data, setData] = useState<ChequeIssueEntryData[]>([]);
   const [initialData, setInitialData] =

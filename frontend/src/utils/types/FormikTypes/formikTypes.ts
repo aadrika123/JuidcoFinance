@@ -62,6 +62,8 @@ export type FieldTypeProps = {
   TITLE?: string;
   CHILDRENS?: FieldTypeProps[];
   DATA?: Data[];
+  HANDLER? : (id: number | string) => void;
+  VISIBILITY?: boolean | true;
 };
 
 export interface FormikWrapperProps {

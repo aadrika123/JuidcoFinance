@@ -34,7 +34,7 @@ export const AddRevisedBudget = () => {
     primary_acc_code_id: "",
     approved_amount: undefined,
     revised_amount: undefined,
-    remark: "",
+    remarks: "",
   };
 
   const [data, setData] = useState<RevisedBudgetDetailsData[]>([]);
@@ -66,7 +66,7 @@ export const AddRevisedBudget = () => {
                 item.primary_acc_code_id_name,
               approved_amount: values.approved_amount,
               revised_amount: values.revised_amount,
-              remark: values.remark,
+              remarks: values.remarks,
             };
           } else {
             return item;
@@ -85,7 +85,7 @@ export const AddRevisedBudget = () => {
   ): Promise<RevisedBudgetDetailsData> => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.create}`,
+        url: `${FINANCE_URL.REVISED_BUDGET_URL.create}`,
         method: "POST",
         data: filterValBefStoring(values),
       });
@@ -149,7 +149,7 @@ export const AddRevisedBudget = () => {
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       approved_amount: data[Id - 1]?.approved_amount,
       revised_amount: data[Id - 1]?.revised_amount,
-      remark: data[Id - 1]?.remark,
+      remarks: data[Id - 1]?.remarks,
     }));
     dispatch(openPopup());
   };
@@ -170,22 +170,22 @@ export const AddRevisedBudget = () => {
     {
       name: "primary_acc_code_id_name",
       caption: "Primary Accounting Code",
-      width: "w-[25%]",
+      width: "w-[20%]",
     },
     {
       name: "approved_amount",
       caption: "Approved Budget Amount",
-      width: "w-[25%]",
+      width: "w-[20%]",
     },
     {
       name: "revised_amount",
       caption: "Revised Budget Amount",
-      width: "w-[25%]",
+      width: "w-[20%]",
     },
     {
-      name: "remark",
+      name: "remarks",
       caption: "Remarks",
-      width: "w-[25%]",
+      width: "w-[18%]",
     },
     {
       name: "edit/remove",

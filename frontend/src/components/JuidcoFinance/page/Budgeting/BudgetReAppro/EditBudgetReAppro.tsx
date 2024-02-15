@@ -12,7 +12,7 @@ import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { BudgetReApproDetailsData } from "@/utils/types/budgeting/budget_re_appro_types";
 import { budgetReApproDetailsSchema } from "@/utils/validation/budgeting/budget_re_appro.validation";
-import { fields } from "./BudgetReApproFormFields";
+import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 
 export const EditBudgetReAppro = ({
   BudgetReApproID,
@@ -20,6 +20,9 @@ export const EditBudgetReAppro = ({
   BudgetReApproID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [selects, setSelects] = useState({
+    f_p_codes: [],
+  });
 
   const [initialData, setInitialData] = useState<BudgetReApproDetailsData>({
     fin_year_id: "",
@@ -102,6 +105,107 @@ export const EditBudgetReAppro = ({
   const onSubmit = (values: any) => {
     mutate(filterValBefStoring(values));
   };
+
+  /////////////// Handle Select Primary Accounting Code ////////////////
+  const handleSelectPrimaryCode = async (id: string | number) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        method: "GET",
+      });
+      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  //////////////////// Handle Select From Primary Accounting Code //////////////
+  const handleSelectFromPrimaryCode = async (id: string | number) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        method: "GET",
+      });
+      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  /////////////////// Field List ///////////////////////
+  const fields: FieldTypeProps[] = [
+    {
+      CONTROL: "select",
+      HEADER: "Financial Year",
+      ACCESSOR: "fin_year_id",
+      PLACEHOLDER: "Select financial year",
+      API: `${FINANCE_URL.FINANCIAL_YEAR_URL.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Primary Accounting Code",
+      ACCESSOR: "primary_acc_code_id",
+      PLACEHOLDER: "Select Primary Accounting Code",
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
+      HANDLER: handleSelectPrimaryCode,
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Transaction Date",
+      ACCESSOR: "transaction_date",
+      TYPE: "date",
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Budget Name",
+      ACCESSOR: "budget_name_id",
+      PLACEHOLDER: "Select budget name",
+      API: `${FINANCE_URL.BUDGET_NAME_URL.get}`,
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Actual Budget Amount",
+      ACCESSOR: "actual_amount",
+      PLACEHOLDER: "Enter Actual Amount",
+      TYPE: "number",
+    },
+    {
+      TITLE: "Budget Transfer Form",
+      CHILDRENS: [
+        {
+          CONTROL: "selectForNoApi",
+          HEADER: "From Primary Accounting Code",
+          ACCESSOR: "from_primary_acc_code_id",
+          PLACEHOLDER: "Select From Primary Accounting Code",
+          DATA: selects.f_p_codes,
+          HANDLER: handleSelectFromPrimaryCode
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Approved Budget Amount",
+          ACCESSOR: "approved_amount",
+          PLACEHOLDER: "Enter approved budget amount",
+          TYPE: "number",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Balance Approved Amount",
+          ACCESSOR: "balance_amount",
+          PLACEHOLDER: "Enter balance amount",
+          TYPE: "number",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Transfer Amount",
+          ACCESSOR: "transfer_amount",
+          PLACEHOLDER: "Enter transfer amount",
+          TYPE: "number",
+        },
+      ],
+    },
+  ];
 
   return (
     <>

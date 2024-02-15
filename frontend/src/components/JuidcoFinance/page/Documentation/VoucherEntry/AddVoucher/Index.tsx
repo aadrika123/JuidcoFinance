@@ -38,7 +38,7 @@ export const AddVoucherEntry = () => {
     voucher_sub_id: 0,
     sub_ledger_id: 0,
     amount: undefined,
-    dr_cr: "",
+    dr_cr_id: "",
   };
   const [data, setData] = useState<VoucherDataProps[]>([]);
   const [initialData, setInitialData] =
@@ -69,7 +69,8 @@ export const AddVoucherEntry = () => {
               department_id: values.department_id,
               department_id_name:
                 values.department_id_name || item.department_id_name,
-              dr_cr: values.dr_cr,
+              dr_cr_id: values.dr_cr_id,
+              dr_cr_id_name: values.dr_cr_id_name || item.dr_cr_id_name,
               narration: values.narration,
               sub_ledger_id: values.sub_ledger_id,
               sub_ledger_id_name:
@@ -168,7 +169,7 @@ export const AddVoucherEntry = () => {
       voucher_sub_id: data[Id - 1]?.voucher_sub_id,
       sub_ledger_id: data[Id - 1]?.sub_ledger_id,
       amount: data[Id - 1]?.amount,
-      dr_cr: data[Id - 1]?.dr_cr,
+      dr_cr_id: data[Id - 1]?.dr_cr_id,
     }));
     dispatch(openPopup());
   };
@@ -246,11 +247,11 @@ export const AddVoucherEntry = () => {
     },
 
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Dr/Cr",
       ACCESSOR: "dr_cr",
-      PLACEHOLDER: "Enter Dr/Cr",
-      TYPE: "text",
+      PLACEHOLDER: "Select Dr/Cr",
+      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
     },
 
     {

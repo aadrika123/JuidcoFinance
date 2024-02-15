@@ -26,7 +26,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
     voucher_sub_id: 0,
     sub_ledger_id: 0,
     amount: undefined,
-    dr_cr: "",
+    dr_cr_id: "",
   });
 
   const queryClient = new QueryClient();
@@ -38,7 +38,6 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
         method: "GET",
         url: `${FINANCE_URL.VOUCHER_ENTRY_URL.getById}/${VoucherID}`,
       });
-      console.log("jkjkdhsf", res.data.data);
 
       setInitialData((prev) => {
         return {
@@ -52,6 +51,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
           voucher_date: DateFormatter(res.data.data.voucher_date),
           voucher_sub_id: res.data.data.voucher_sub_type.id,
           voucher_type_id: res.data.data.voucher_type.id,
+          dr_cr_id: res.data.data.dr_cr.id,
         };
       });
     })();
@@ -149,9 +149,8 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
       HEADER: "Dr/Cr",
       ACCESSOR: "dr_cr",
       PLACEHOLDER: "Select Dr/Cr",
-      API: "/bill-type/get",
+      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
     },
-
     {
       CONTROL: "select",
       HEADER: "Sub Ledger/Name",

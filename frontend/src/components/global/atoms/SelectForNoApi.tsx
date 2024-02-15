@@ -26,7 +26,8 @@ interface SelectProps {
   touched?: boolean | undefined;
   readonly?: boolean;
   className?: string;
-  handler?: ()=> void;
+  visibility?: boolean;
+  handler?: (id: number | string) => void;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
 }
@@ -45,7 +46,7 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
 
   const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
     if(props.handler){
-      props.handler();
+      props.handler(parseInt(e.target.value));
     }
    
     setValue(parseInt(e.target.value))

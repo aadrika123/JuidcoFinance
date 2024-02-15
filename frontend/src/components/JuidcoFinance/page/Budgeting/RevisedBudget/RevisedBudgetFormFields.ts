@@ -26,7 +26,7 @@ export const fields: FieldTypeProps[] = [
   {
     CONTROL: "input",
     HEADER: "Remarks",
-    ACCESSOR: "remark",
+    ACCESSOR: "remarks",
     PLACEHOLDER: "Enter remark",
   },
 ];
