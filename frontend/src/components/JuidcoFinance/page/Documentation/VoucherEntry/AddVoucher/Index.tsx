@@ -94,8 +94,6 @@ export const AddVoucherEntry = () => {
     resetInitialValue();
   };
 
-  console.log(data, "test")
-
   const queryClient = new QueryClient();
   // store multiple data in row
   const handleStore = async (
@@ -116,13 +114,13 @@ export const AddVoucherEntry = () => {
 
   const { mutate } = useMutation<VoucherDataProps, Error, any>(handleStore, {
     onSuccess: () => {
-      toast.success("Updated Direct Payment Entry");
+      toast.success("Added Voucher Entry");
       setTimeout(() => {
         goBack();
       }, 1000);
     },
     onError: () => {
-      alert("Error updating Direct Payment Entry");
+      alert("Something Went Wrong!!");
     },
     onSettled: () => {
       queryClient.invalidateQueries();
@@ -198,7 +196,7 @@ export const AddVoucherEntry = () => {
       caption: "Voucher Type",
       width: "w-[20%]",
     },
-    { name: "dr_cr_name", caption: "Dr/Cr", width: "w-[15%]" },
+    { name: "dr_cr_id_name", caption: "Dr/Cr", width: "w-[15%]" },
     {
       name: "branch",
       caption: "Edit/Remove",
@@ -249,9 +247,9 @@ export const AddVoucherEntry = () => {
     {
       CONTROL: "select",
       HEADER: "Dr/Cr",
-      ACCESSOR: "dr_cr",
+      ACCESSOR: "dr_cr_id",
       PLACEHOLDER: "Select Dr/Cr",
-      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+      API: `${FINANCE_URL.DR_CR_URL.get}`,
     },
 
     {

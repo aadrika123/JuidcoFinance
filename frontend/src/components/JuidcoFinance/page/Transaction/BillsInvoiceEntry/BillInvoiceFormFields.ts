@@ -20,8 +20,8 @@ export const fields: FieldTypeProps[] = [
     CONTROL: "select",
     HEADER: "Vendor Name",
     ACCESSOR: "vendor_id",
-    PLACEHOLDER: "Select Vendor Type",
-    API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
+    PLACEHOLDER: "Select Vendor Name",
+    API: `${FINANCE_URL.VENDOR_MASTER_URL.getNames}`,
   },
 
   {

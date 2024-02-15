@@ -43,7 +43,7 @@ export const fields: FieldTypeProps[] = [
     HEADER: "Payee Name",
     ACCESSOR: "payee_name_id",
     PLACEHOLDER: "Select Payee Name",
-    API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+    API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
   },
 
   {

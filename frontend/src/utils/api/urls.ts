@@ -36,7 +36,9 @@ type FinanceUrlKeys =
   | "MUNICIPILATY_CODE_URL"
   | "BUDGET_NAME_URL"
   | "INVESTMENT_TYPE_URL"
-  | "REVISED_BUDGET_URL";
+  | "REVISED_BUDGET_URL"
+  | "DR_CR_URL"
+  | "EXPENDITURE_NATURE_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -49,6 +51,8 @@ type Urls = {
     getAll?: string;
     getMainCodes?: string;
     getChildCodes?: string;
+    getNatures?: string;
+    getNames?: string;
   };
 };
 
@@ -65,7 +69,8 @@ export const FINANCE_URL: Urls = {
     create: "/vendor-master/create",
     update: "/vendor-master/update",
     getById: "/vendor-master/get",
-    getAll: "vendor-master/get",
+    getAll: "/vendor-master/get",
+    getNames: "/vendor-master/get-names",
   },
 
   CHEQUEBOOK_MASTER_URL: {
@@ -106,6 +111,7 @@ export const FINANCE_URL: Urls = {
 
   GRANT_URL: {
     get: "/grant/get",
+    getNatures: "/grant-natures/get"
   },
 
   BILL_TYPE: {
@@ -213,4 +219,10 @@ export const FINANCE_URL: Urls = {
   INVESTMENT_TYPE_URL: {
     get: "/investment-types/get",
   },
+  DR_CR_URL: {
+    get: "/drcr/get",
+  },
+  EXPENDITURE_NATURE_URL:{
+    get: "/expenditure-natures/get"
+  }
 };

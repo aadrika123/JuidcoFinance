@@ -334,7 +334,8 @@ model voucher_entries {
   sub_ledger       subledgers        @relation(fields: [sub_ledger_id], references: [id])
   sub_ledger_id    Int
   amount           Float
-  dr_cr            String
+  dr_cr_id         Int
+  dr_cr            drcr            @relation(fields: [dr_cr_id], references: [id])
 
 
   grant_entries grant_entries[]
@@ -608,7 +609,8 @@ model opening_balances{
 	fin_year_id         Int
   fin_year                    financial_years     @relation(fields: [fin_year_id], references: [id])
 
-	dr_cr               String
+  dr_cr_id         Int
+  dr_cr            drcr            @relation(fields: [dr_cr_id], references: [id])
 
 	primary_acc_code_id Int
   primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
@@ -777,3 +779,17 @@ model balance_trackings{
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
 
+
+////drcr: Managed by: Bijoy Paitandi
+model drcr{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+
+
+  voucher_entries     voucher_entries[]
+  opening_balances    opening_balances[]
+
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

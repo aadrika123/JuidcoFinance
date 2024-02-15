@@ -13,6 +13,7 @@ interface Option {
     name?: string;
     type?: string;
     code?: string;
+    ulbs?: string;
   }
 
 interface SelectProps {
@@ -71,8 +72,8 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
         >
           <option selected value="">{props.placeholder}</option>
           {props?.data.map((d: Option) => (
-            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || d?.code}>
-              {d?.name || d?.type || d?.code}
+            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || d?.code || d?.ulbs}>
+              {d?.name || d?.type || d?.code || d?.ulbs}
             </option>
           ))}
         </select>

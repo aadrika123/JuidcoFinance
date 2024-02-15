@@ -84,7 +84,7 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
         toast.success("Updated Voucher Entry");
       },
       onError: () => {
-        alert("Error updating Voucher Entry");
+        alert("Something Went Wrong!!!");
       },
       onSettled: () => {
         queryClient.invalidateQueries();
@@ -147,9 +147,9 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
     {
       CONTROL: "select",
       HEADER: "Dr/Cr",
-      ACCESSOR: "dr_cr",
+      ACCESSOR: "dr_cr_id",
       PLACEHOLDER: "Select Dr/Cr",
-      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+      API: `${FINANCE_URL.DR_CR_URL.get}`,
     },
     {
       CONTROL: "select",

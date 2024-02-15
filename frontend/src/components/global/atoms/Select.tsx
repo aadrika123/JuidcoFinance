@@ -33,6 +33,7 @@ interface Select {
   type?: string;
   code?: string;
   description?:string;
+  ulbs?: string;
 }
 
 const Select: React.FC<SelectProps> = (props) => {
@@ -89,8 +90,8 @@ const Select: React.FC<SelectProps> = (props) => {
         >
           <option selected value="">{props.placeholder}</option>
           {dataList.map((d: Select) => (
-            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code)}>
-              {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code)}
+            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
+              {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}
             </option>
           ))}
         </select>

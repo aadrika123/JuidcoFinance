@@ -15,14 +15,14 @@ export const fields: FieldTypeProps[] = [
     HEADER: "Primary Accounting Code",
     ACCESSOR: "primary_acc_code_id",
     PLACEHOLDER: "Select primary accounting code",
-    API: `${FINANCE_URL.ACCOUNTING_CODE_URL.get}`,
+    API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
   },
   {
     CONTROL: "select",
     HEADER: "Dr/Cr Type",
     ACCESSOR: "dr_cr_id",
     PLACEHOLDER: "Select Dr/Cr",
-    API: `${FINANCE_URL.FINANCIAL_YEAR_URL.get}`,
+    API: `${FINANCE_URL.DR_CR_URL.get}`,
   },
   {
     CONTROL: "input",

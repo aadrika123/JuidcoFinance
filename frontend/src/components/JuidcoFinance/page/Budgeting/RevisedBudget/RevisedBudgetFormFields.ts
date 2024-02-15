@@ -7,7 +7,7 @@ export const fields: FieldTypeProps[] = [
     HEADER: "Primary Accounting Code",
     ACCESSOR: "primary_acc_code_id",
     PLACEHOLDER: "Select primary accounting code",
-    API: `${FINANCE_URL.ACCOUNTING_CODE_URL.get}`,
+    API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
   },
   {
     CONTROL: "input",

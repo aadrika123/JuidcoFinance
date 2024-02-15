@@ -111,7 +111,7 @@ interface VoucherEntryRequestData {
   voucher_sub_id: number;
   sub_ledger_id: number;
   amount: number;
-  dr_cr: string;
+  dr_cr_id: number;
 }
 
 export type {

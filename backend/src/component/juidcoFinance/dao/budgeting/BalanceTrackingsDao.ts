@@ -94,6 +94,23 @@ class BalanceTrackingsDao {
     return generateRes(data);
   };
 
+
+  getBalance = async (req: Request) => {
+    const id: number = Number(req.query.id);     
+
+    const query: Prisma.balance_trackingsFindManyArgs = {
+      where: { primary_acc_code_id: id },
+      select: {
+        id: true,
+        balance_amount: true,
+        created_at: true,
+        updated_at: true,
+      },
+    };
+    const data = await prisma.balance_trackings.findFirst(query);
+    return generateRes(data);
+    
+  }
  
 }
 
