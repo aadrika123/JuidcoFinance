@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 import { BudgetReApproDetailsData } from "@/utils/types/budgeting/budget_re_appro_types";
 import { budgetReApproDetailsSchema } from "@/utils/validation/budgeting/budget_re_appro.validation";
 import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
-// import { fields } from "./BudgetReApproFormFields";
 
 interface UpdatedModeType {
   id: number | string;
@@ -29,6 +28,8 @@ export const AddBudgetReAppro = () => {
   const queryClient = new QueryClient();
   const [selects, setSelects] = useState({
     f_p_codes: [],
+    balance_amount: undefined,
+    approved_amount: undefined,
   });
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
@@ -42,8 +43,8 @@ export const AddBudgetReAppro = () => {
     budget_name_id: "",
     actual_amount: undefined,
     from_primary_acc_code_id: "",
-    approved_amount: undefined,
-    balance_amount: undefined,
+    // approved_amount: undefined,
+    // balance_amount: undefined,
     transfer_amount: undefined,
   };
 
@@ -155,7 +156,7 @@ export const AddBudgetReAppro = () => {
   const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/${id}`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -172,7 +173,11 @@ export const AddBudgetReAppro = () => {
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setInitialData((prev)=> ({...prev, approved_amount: res.data.data.amount}))
+      setSelects((prev) => ({
+        ...prev,
+        balance_amount: res.data?.data?.balance_amount,
+        approved_amount: res.data?.data?.approved_amount,
+      }));
     } catch (error) {
       console.log(error);
       throw error;
@@ -200,7 +205,7 @@ export const AddBudgetReAppro = () => {
       fin_year_id: data[Id - 1]?.fin_year_id,
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       transaction_date: data[Id - 1]?.transaction_date,
-      remark: data[Id -1]?.remark,
+      remark: data[Id - 1]?.remark,
       budget_name_id: data[Id - 1]?.budget_name_id,
       actual_amount: data[Id - 1]?.actual_amount,
       from_primary_acc_code_id: data[Id - 1]?.from_primary_acc_code_id,
@@ -273,7 +278,7 @@ export const AddBudgetReAppro = () => {
           ACCESSOR: "from_primary_acc_code_id",
           PLACEHOLDER: "Select From Primary Accounting Code",
           DATA: selects.f_p_codes,
-          HANDLER: handleSelectFromPrimaryCode
+          HANDLER: handleSelectFromPrimaryCode,
         },
         {
           CONTROL: "input",
@@ -281,8 +286,9 @@ export const AddBudgetReAppro = () => {
           ACCESSOR: "approved_amount",
           PLACEHOLDER: "Enter approved budget amount",
           TYPE: "number",
-          VISIBILITY: false,
-          READONLY: true
+          VISIBILITY: selects.approved_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.approved_amount,
         },
         {
           CONTROL: "input",
@@ -290,6 +296,9 @@ export const AddBudgetReAppro = () => {
           ACCESSOR: "balance_amount",
           PLACEHOLDER: "Enter balance amount",
           TYPE: "number",
+          VISIBILITY: selects.balance_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.balance_amount,
         },
         {
           CONTROL: "input",

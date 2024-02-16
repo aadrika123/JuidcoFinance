@@ -10,8 +10,8 @@ export const budgetReApproDetailsSchema = Yup.object().shape({
   from_primary_acc_code_id: Yup.number().required(
     "From Primary Accounting Code is required"
   ),
-  approved_amount: Yup.number().required("Approved Amount is required"),
-  balance_amount: Yup.number().required("Balance Amount is required"),
+  // approved_amount: Yup.number().required("Approved Amount is required"),
+  // balance_amount: Yup.number().required("Balance Amount is required"),
   transfer_amount: Yup.number().required("Transfer Amount is required"),
   remark: Yup.string().required("Remarks is Required")
 });

@@ -235,6 +235,6 @@ export const FINANCE_URL: Urls = {
     get: "/modules/get"
   },
   BALANCE_TRACKING_URL: {
-    get: "/balance-trackings/get-balances"
+    get: "/balance-trackings/get-balance"
   },
 };

@@ -1,11 +1,25 @@
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import { v4 as uuidv4 } from "uuid";
+
+const generateUniqueNo = (initialString?: string): string => {
+  const uniqueId = uuidv4();
+
+  // Extract the first 8 characters from the UUID
+  const unqId = uniqueId.substring(0, 6);
+
+  return initialString ? initialString + unqId : unqId;
+};
+
+
 const prisma = new PrismaClient();
+
+  
 const cheque_issuances_seeder = async () => {
     const number_of_records = 10;
     for (let i = 0; i < number_of_records; i++) {
         const record = {
-            voucher_no: faker.datatype.number(),
+            voucher_no:  generateUniqueNo("VN"),
             voucher_date: faker.date.past(),
             bill_type_id: 1,
             narration: faker.lorem.sentence(),

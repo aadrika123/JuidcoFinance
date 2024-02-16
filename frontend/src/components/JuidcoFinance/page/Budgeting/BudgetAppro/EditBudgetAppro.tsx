@@ -22,13 +22,14 @@ export const EditBudgetAppro = ({
   const searchParams = useSearchParams().get("mode");
   const [selects, setSelects] = useState({
     f_p_codes: [],
+    approved_amount: undefined,
   });
   const [initialData, setInitialData] = useState<BudgetApproDetailsData>({
     fin_year_id: "",
     primary_acc_code_id: "",
     remark: "",
     from_primary_acc_code_id: "",
-    approved_amount: "",
+    // approved_amount: undefined,
     transfer_amount: "",
   });
 
@@ -49,7 +50,7 @@ export const EditBudgetAppro = ({
           primary_acc_code_id: res.data.data.primary_acc_code.id,
           remark: res.data.data.remark,
           from_primary_acc_code_id: res.data.data.from_primary_acc_code.id,
-          approved_amount: res.data.data.approved_amount,
+          // approved_amount: res.data.data.approved_amount,
           transfer_amount: res.data.data.transfer_amount,
         };
       });
@@ -116,16 +117,16 @@ export const EditBudgetAppro = ({
 
   //////////////////// Handle Select From Primary Accounting Code //////////////
   const handleSelectFromPrimaryCode = async (id: string | number) => {
-    // try {
-    //   const res = await axios({
-    //     url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
-    //     method: "GET",
-    //   });
-    //   setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
-    // } catch (error) {
-    //   console.log(error);
-    //   throw error;
-    // }
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
+        method: "GET",
+      });
+      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
   ////////// Form Fields /////////////////
@@ -168,6 +169,9 @@ export const EditBudgetAppro = ({
           ACCESSOR: "approved_amount",
           PLACEHOLDER: "Enter approved amount",
           TYPE: "number",
+          VISIBILITY: selects.approved_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.approved_amount,
         },
         {
           CONTROL: "input",

@@ -64,7 +64,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
         onBlur={handleBlur}
         visibility={item.VISIBILITY}
         handler={item.HANDLER}
-        value={values[item.ACCESSOR as keyof typeof values]}
+        value={item.VALUE ? item.VALUE : values[item.ACCESSOR as keyof typeof values]}
         error={errors[item.ACCESSOR as keyof typeof errors]}
         touched={touched[item.ACCESSOR as keyof typeof touched]}
       />

@@ -2,7 +2,7 @@ import Joi from "joi";
 import { Request } from "express";
 
 export interface ChequeIssuancesRequestData {
-    voucher_no: number,
+    voucher_no: string,
     voucher_date: Date,
     bill_type_id: number,
     narration: string,
@@ -18,7 +18,7 @@ export interface ChequeIssuancesRequestData {
 }
 
 const chequeIssuancesSchema = Joi.object({
-    voucher_no: Joi.number().required(),
+    voucher_no: Joi.string().required(),
     voucher_date: Joi.date().required(),
     bill_type_id: Joi.number().required(),
     narration: Joi.string().required(),

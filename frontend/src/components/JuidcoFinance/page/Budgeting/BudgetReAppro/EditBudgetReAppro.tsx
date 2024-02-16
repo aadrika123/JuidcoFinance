@@ -22,6 +22,8 @@ export const EditBudgetReAppro = ({
   const searchParams = useSearchParams().get("mode");
   const [selects, setSelects] = useState({
     f_p_codes: [],
+    balance_amount: undefined,
+    approved_amount: undefined,
   });
 
   const [initialData, setInitialData] = useState<BudgetReApproDetailsData>({
@@ -32,8 +34,8 @@ export const EditBudgetReAppro = ({
     budget_name_id: "",
     actual_amount: "",
     from_primary_acc_code_id: "",
-    approved_amount: "",
-    balance_amount: "",
+    // approved_amount: "",
+    // balance_amount: "",
     transfer_amount: "",
   });
 
@@ -111,7 +113,7 @@ export const EditBudgetReAppro = ({
   const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/${id}`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -125,10 +127,14 @@ export const EditBudgetReAppro = ({
   const handleSelectFromPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      setSelects((prev) => ({
+        ...prev,
+        balance_amount: res.data?.data?.balance_amount,
+        approved_amount: res.data?.data?.approved_amount,
+      }));
     } catch (error) {
       console.log(error);
       throw error;
@@ -195,6 +201,9 @@ export const EditBudgetReAppro = ({
           ACCESSOR: "approved_amount",
           PLACEHOLDER: "Enter approved budget amount",
           TYPE: "number",
+          VISIBILITY: selects.approved_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.approved_amount,
         },
         {
           CONTROL: "input",
@@ -202,6 +211,9 @@ export const EditBudgetReAppro = ({
           ACCESSOR: "balance_amount",
           PLACEHOLDER: "Enter balance amount",
           TYPE: "number",
+          VISIBILITY: selects.balance_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.balance_amount,
         },
         {
           CONTROL: "input",

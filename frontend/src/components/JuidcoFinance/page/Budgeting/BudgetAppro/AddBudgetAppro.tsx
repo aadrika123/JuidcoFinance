@@ -28,6 +28,7 @@ export const AddBudgetAppro = () => {
   const queryClient = new QueryClient();
   const [selects, setSelects] = useState({
     f_p_codes: [],
+    approved_amount: undefined,
   });
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
@@ -38,7 +39,7 @@ export const AddBudgetAppro = () => {
     primary_acc_code_id: "",
     remark: "",
     from_primary_acc_code_id: "",
-    approved_amount: undefined,
+    // approved_amount: undefined,
     transfer_amount: undefined,
   };
 
@@ -77,7 +78,7 @@ export const AddBudgetAppro = () => {
               from_primary_acc_code_id_name:
                 values.from_primary_acc_code_id_name ||
                 item.from_primary_acc_code_id_name,
-              approved_amount: values.approved_amount,
+              // approved_amount: values.approved_amount,
               transfer_amount: values.transfer_amount,
             };
           } else {
@@ -135,7 +136,7 @@ export const AddBudgetAppro = () => {
    const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/${id}`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -147,16 +148,16 @@ export const AddBudgetAppro = () => {
 
   //////////////////// Handle Select From Primary Accounting Code //////////////
   const handleSelectFromPrimaryCode = async (id: string | number) => {
-    // try {
-    //   const res = await axios({
-    //     url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
-    //     method: "GET",
-    //   });
-    //   setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
-    // } catch (error) {
-    //   console.log(error);
-    //   throw error;
-    // }
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
+        method: "GET",
+      });
+      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
   ///////////////// Handling Total Count ///////////////
@@ -190,7 +191,7 @@ export const AddBudgetAppro = () => {
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       remark: data[Id - 1]?.remark,
       from_primary_acc_code_id: data[Id - 1]?.from_primary_acc_code_id,
-      approved_amount: data[Id - 1]?.approved_amount,
+      // approved_amount: data[Id - 1]?.approved_amount,
       transfer_amount: data[Id - 1]?.transfer_amount,
     }));
     dispatch(openPopup());
@@ -272,6 +273,9 @@ export const AddBudgetAppro = () => {
           ACCESSOR: "approved_amount",
           PLACEHOLDER: "Enter approved amount",
           TYPE: "number",
+          VISIBILITY: selects.approved_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.approved_amount,
         },
         {
           CONTROL: "input",
