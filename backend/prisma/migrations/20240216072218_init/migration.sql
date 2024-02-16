@@ -18,7 +18,7 @@ CREATE TABLE "function_codes" (
     "id" SERIAL NOT NULL,
     "group" TEXT NOT NULL,
     "description_code" TEXT NOT NULL,
-    "cost_center" TEXT NOT NULL,
+    "code_center" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -376,7 +376,7 @@ CREATE TABLE "bill_invoices" (
 -- CreateTable
 CREATE TABLE "cheque_issuances" (
     "id" SERIAL NOT NULL,
-    "voucher_no" INTEGER NOT NULL,
+    "voucher_no" TEXT NOT NULL,
     "voucher_date" TIMESTAMP(3) NOT NULL,
     "bill_type_id" INTEGER NOT NULL,
     "narration" TEXT NOT NULL,

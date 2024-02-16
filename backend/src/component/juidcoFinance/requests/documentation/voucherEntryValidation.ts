@@ -43,7 +43,7 @@ export const multiRequestData = (req: Request): VoucherEntryRequestData[] => {
   const data = [];
   for (const item of req.body) {
     data.push({
-      voucher_no: generateUniquePaymentNo("vn"),
+      voucher_no: generateUniquePaymentNo("VN"),
       voucher_date: item.voucher_date,
       voucher_type_id: item.voucher_type_id,
       narration: item.narration,

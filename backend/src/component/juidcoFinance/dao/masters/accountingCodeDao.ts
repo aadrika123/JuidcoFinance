@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, account_codes } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
 import { Request } from "express";
 
@@ -101,9 +101,16 @@ class AccountingCodeDao {
   }
 
 
-  getChildCodes = async (req: Request) => {
-    const code: number = Number(req.query.page);
-    
+  getChildCodes = async (id: number) => {
+    const acc = await prisma.$queryRaw<account_codes[]>`SELECT * FROM account_codes where id=${id}`;
+    if (!acc){
+      return generateRes(null);
+    }
+
+    const code = acc[0].code;
+
+    const prefix = code.substring(0, code.length-2);
+
     const query: Prisma.account_codesFindManyArgs = {
       select: {
         id: true,
@@ -113,23 +120,13 @@ class AccountingCodeDao {
     };
 
     query.where = {
-      NOT: [{
-        AND: [
-          {
-            detail_code: {
-              equals: "00",
-            },
-  
-            minor_head: {
-              not: "00",
-            },
-            
-          },
-        ],
-      }],
+      code: {
+        startsWith: prefix
+      }
     }
 
     const data = prisma.account_codes.findMany(query);
+
     return generateRes(data);
   }
 

@@ -5,6 +5,7 @@ import ResMessage from "../../responseMessage/masters/accountCodeMessage";
 import { resObj } from "../../../../util/types";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
+import Joi from "joi";
 
 /**
  * | Author- Krish Vishwakarma
@@ -154,8 +155,18 @@ class AccountCodeController {
       };
       
       try {
+
+        const id: number = Number(req.params.id);
+
+        // validate id
+        const { error } = Joi.object({
+          id: Joi.number().required()
+        }).validate({'id': id});
+  
+        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+  
         
-        const data = await this.dao.getChildCodes(req);
+        const data = await this.dao.getChildCodes(id);
   
         if (!data)
           return CommonRes.SUCCESS(

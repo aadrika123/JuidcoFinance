@@ -48,6 +48,8 @@ import departments_seeder from "./seeder/departments_seeder";
 import admin_wards_seeder from "./seeder/admin_wards_seeder";
 import payment_types_seeder from "./seeder/payment_types_seeder";
 import drcr_seeder from "./seeder/budgeting/drcr_seeder";
+import account_codes_seeder from "./seeder/account_codes_seeder";
+import function_codes_seeder from "./seeder/function_codes_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -80,54 +82,10 @@ async function main() {
   await voucher_types_seed();
   await voucher_sub_types_seed();
 
-  
-  await vendors_seeder();
 
+  await account_codes_seeder();
 
-  /////// Accounting Code //////////////
-  const file_path = "./prisma/data/sample-accounting-code.xlsx";
-
-  // File path.
-  readXlsxFile(file_path).then(async (rows) => {
-    const n = rows.length;
-    for (let i = 1; i < n; i++) {
-      const row = rows[i];
-      await prisma.account_codes.create({
-        data: {
-          id: parseInt(row[0].toString()),
-          code: row[1].toString() + row[2].toString() + row[3].toString(),
-          major_head: row[1].toString(),
-          minor_head: row[2].toString(),
-          detail_code: row[3].toString(),
-          description: row[4].toString(),
-          remark: row[5].toString(),
-        },
-      });
-    }
-  });
-
-  /////// Accounting Code //////////////
-  const file_path1 = "./prisma/data/sample-function-code.xlsx";
-
-  // File path.
-  readXlsxFile(file_path1).then(async (rows) => {
-    const n = rows.length;
-    for (let i = 1; i < n; i++) {
-      // console.log(rows[i]);
-      const row = rows[i];
-      await prisma.function_codes.create({
-        data: {
-          id: parseInt(row[0].toString()),
-          group: row[1].toString(),
-          description_code: row[2].toString(),
-          cost_center: row[3].toString(),
-          description: row[4].toString(),
-          remark: row[5].toString(),
-        },
-      });
-    }
-  });
-
+  await function_codes_seeder();
 
   ///////////////// Vendor Types ////////////////////////
 
@@ -214,6 +172,10 @@ async function main() {
 
 
   setTimeout(async () => {
+
+    await vendors_seeder();
+
+
     await voucher_entries_seed();
     await bill_payment_entry_seed();
 

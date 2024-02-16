@@ -44,7 +44,7 @@ model function_codes {
   id               Int      @id @default(autoincrement())
   group            String
   description_code String
-  cost_center      String
+  code_center      String
   description      String
   remark           String?
   created_at       DateTime @default(now()) @map("created_at")
@@ -455,7 +455,7 @@ model bill_invoices {
 ////cheque_issuances: Managed by: Bijoy Paitandi
 model cheque_issuances {
   id            Int           @id @default(autoincrement())
-  voucher_no    Int
+  voucher_no    String
   voucher_date  DateTime
   bill_type_id  Int
   bill_type     bill_types    @relation(fields: [bill_type_id], references: [id])
