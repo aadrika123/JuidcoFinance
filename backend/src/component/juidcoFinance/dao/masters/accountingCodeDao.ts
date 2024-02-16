@@ -110,6 +110,20 @@ class AccountingCodeDao {
     return generateRes(data);
   }
 
+  getParentCode = async (id: number) => {
+    const acc = await prisma.$queryRaw<account_codes[]>`SELECT * FROM account_codes where id=${id}`;
+    if (!acc){
+      return generateRes(null);
+    }
+
+    const parent_id = acc[0].parent_id;
+
+    const data = await prisma.$queryRaw<account_codes[]>`SELECT code, description FROM account_codes where id=${parent_id}`;
+    
+
+    return generateRes(data);
+  }
+
 }
 
 export default AccountingCodeDao;
