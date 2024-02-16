@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { baseUrl } from "../../../../util/common";
+import ReceiptBudgetsController from "../../controller/budgeting/ReceiptBudgetsController";
 
 /**
  * | Author- Bijoy Paitandi
