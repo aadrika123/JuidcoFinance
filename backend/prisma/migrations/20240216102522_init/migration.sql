@@ -6,6 +6,7 @@ CREATE TABLE "account_codes" (
     "minor_head" TEXT NOT NULL,
     "detail_code" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "parent_id" INTEGER DEFAULT 0,
     "remark" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

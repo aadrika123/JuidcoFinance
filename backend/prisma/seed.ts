@@ -54,6 +54,11 @@ import function_codes_seeder from "./seeder/function_codes_seeder";
 const prisma = new PrismaClient();
 async function main() {
 
+  await account_codes_seeder();
+
+  await function_codes_seeder();
+
+
   await bill_types_seeder();
   await vendor_types_seeder();
   await employees_seeder();
@@ -76,16 +81,15 @@ async function main() {
   await expenditure_natures_seeder();
 
 
-  
+
   await admin_wards_seeder();
   await departments_seeder();
   await voucher_types_seed();
   await voucher_sub_types_seed();
 
 
-  await account_codes_seeder();
 
-  await function_codes_seeder();
+  
 
   ///////////////// Vendor Types ////////////////////////
 
@@ -139,42 +143,46 @@ async function main() {
     });
   }
 
- 
-  ///////////////// Direct Payment Entry ////////////////////////
-  function createRandomDirPaymentEntry(): dir_payment_entries {
-    return {
-      id: faker.datatype.number(),
-      payment_no: `pn${faker.datatype.number(6)}`,
-      payment_date: faker.date.recent(),
-      payment_type_id: 1,
-      payee_name_id: 1,
-      narration: faker.lorem.sentence(),
-      grant_id: 1,
-      user_common_budget: faker.datatype.boolean(),
-      adminis_ward_id: 2,
-      address: faker.address.streetAddress(),
-      department_id: 1,
-      payment_mode: faker.internet.email(),
-      subledger_id: 1,
-      amount: faker.datatype.number(),
-      created_at: faker.date.past(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const paymentEntries = faker.helpers.multiple(createRandomDirPaymentEntry, {
-    count: 20,
-  });
-
-  await prisma.dir_payment_entries.createMany({
-    data: paymentEntries,
-  });
-
 
   setTimeout(async () => {
 
+    ///////////////// Direct Payment Entry ////////////////////////
+    function createRandomDirPaymentEntry(): dir_payment_entries {
+      return {
+        id: faker.datatype.number(),
+        payment_no: `pn${faker.datatype.number(6)}`,
+        payment_date: faker.date.recent(),
+        payment_type_id: 1,
+        payee_name_id: 1,
+        narration: faker.lorem.sentence(),
+        grant_id: 1,
+        user_common_budget: faker.datatype.boolean(),
+        adminis_ward_id: 2,
+        address: faker.address.streetAddress(),
+        department_id: 1,
+        payment_mode: faker.internet.email(),
+        subledger_id: 1,
+        amount: faker.datatype.number(),
+        created_at: faker.date.past(),
+        updated_at: faker.date.recent(),
+      };
+    }
+
+    const paymentEntries = faker.helpers.multiple(createRandomDirPaymentEntry, {
+      count: 20,
+    });
+
+    await prisma.dir_payment_entries.createMany({
+      data: paymentEntries,
+    });
+
+
     await vendors_seeder();
 
+  }, 3000);
+
+
+  setTimeout(async () => {
 
     await voucher_entries_seed();
     await bill_payment_entry_seed();
@@ -182,36 +190,36 @@ async function main() {
     await balance_trackings_seeder();
 
     await receipt_types_seeder();
-  
+
     await subledgers_seeder();
-  
+
     await modules_seeder();
-  
+
     await receipts_seeder();
-  
+
     await bill_stages_seeder();
-  
+
     await bill_invoices_seeder();
-  
+
     await banks_seeder();
-  
+
     await cheque_issuances_seeder();
-  
+
     await budget_appropriations_seeder();
-  
+
     await receipt_budgets_seeder();
-    
+
     await budget_reappropriations_seeder();
-  
+
     await opening_balances_seeder();
-  
+
     await revised_budgets_seeder();
-  
+
     await investments_seeder();
-  
+
     await grant_entries_seeder();
-  
-  }, 3000);
+
+  }, 6000);
 
 
 }

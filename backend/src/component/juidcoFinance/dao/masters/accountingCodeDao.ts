@@ -52,18 +52,9 @@ class AccountingCodeDao {
     };
 
     query.where = {
-      AND: [
-        {
-          detail_code: {
-            equals: "00",
-          },
-
-          minor_head: {
-            not: "00",
-          },
-          
-        },
-      ],
+      parent_id:{
+        equals: 0,
+      }
     }
 
     const data = prisma.account_codes.findMany(query);
@@ -80,20 +71,9 @@ class AccountingCodeDao {
     };
 
     query.where = {
-      NOT: [{
-        AND: [
-          {
-            detail_code: {
-              equals: "00",
-            },
-  
-            minor_head: {
-              not: "00",
-            },
-            
-          },
-        ],
-      }],
+      parent_id:{
+        not: 0,
+      }
     }
 
     const data = prisma.account_codes.findMany(query);
@@ -120,8 +100,8 @@ class AccountingCodeDao {
     };
 
     query.where = {
-      code: {
-        startsWith: prefix
+      parent_id: {
+        equals: id,
       }
     }
 

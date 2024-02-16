@@ -1,45 +1,81 @@
 import { PrismaClient } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
-  
+
 
 const prisma = new PrismaClient();
+
+const isParent = (detailCode: string, minorHead: string) => {
+    return detailCode == "00" && minorHead != "00";
+}
+
 
 const account_codes_seeder = async () => {
     const file_path = "./prisma/data/chart_of_accounts.xlsx";
 
-    readXlsxFile(file_path, { sheet: 'Sheet6' }).then(async (rows) => {
+    const parents = new Map();
+
+    readXlsxFile(file_path, { sheet: 'Primary Accouting Code' }).then(async (rows) => {
         const n = rows.length;
         for (let i = 1; i < n; i++) {
-          const row = rows[i];
-          //console.log(row);
+            const row = rows[i];
+            //console.log(row);
 
-          if(row && row[0] && row[7]){
+            if (row && row[0] && row[7]) {
 
+                const majorHead = row[0].toString() + row[1].toString() + row[2].toString();
+                const minorHead = row[3].toString() + row[4].toString();
+                const detailCode = row[5].toString() + row[6].toString();
+                const code = majorHead + minorHead + detailCode;
+                const description = majorHead + minorHead + detailCode + " " + row[7].toString();
 
-            const majorHead = row[0].toString() + row[1].toString();
-            const minorHead = row[2].toString() + row[3].toString();
-            const detailCode = row[4].toString() + row[5].toString() + row[6].toString();
-            const code = majorHead + minorHead + detailCode;
-            const description = majorHead + minorHead + detailCode + " " +row[7].toString();
-  
-            await prisma.account_codes.create({
-              data: {
-                  code: code,
-                  major_head: majorHead,
-                  minor_head: minorHead,
-                  detail_code: detailCode,
-                  description: description,
-                  created_at: faker.date.past(),
-                  updated_at: faker.date.recent(),
-              },
-            });
+                if (!row[7].toString().startsWith("The detailed Head codes from")) {
+                    if (isParent(detailCode, minorHead)){
+                        await prisma.account_codes.create({
+                            data: {
+                                code: code,
+                                major_head: majorHead,
+                                minor_head: minorHead,
+                                detail_code: detailCode,
+                                description: description,
+                                created_at: faker.date.past(),
+                                updated_at: faker.date.recent(),
+                            },
+                        });
 
-          }
-          
+                        // console.log(code);
+                        parents.set(code, description);
+                    }else{
+
+                        const parent = parents.get(majorHead + minorHead + "00");
+                        if(parent == undefined){
+                            // console.log("No parent found");
+                        }else{
+
+                            const id:number = parent.length;
+                        
+                            await prisma.account_codes.create({
+                                data: {
+                                    code: code,
+                                    major_head: majorHead,
+                                    minor_head: minorHead,
+                                    detail_code: detailCode,
+                                    description: description,
+                                    parent_id: id,
+                                    created_at: faker.date.past(),
+                                    updated_at: faker.date.recent(),
+                                },
+                            });
+                        }
+
+                    }
+
+                }
+
+            }
 
         }
-      });
+    });
 }
 
 export default account_codes_seeder;
