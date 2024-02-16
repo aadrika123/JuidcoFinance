@@ -124,7 +124,7 @@ export const EditChequeIssueEntry = ({
       CONTROL: "input",
       HEADER: "Payment Voucher No",
       ACCESSOR: "voucher_no",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter Voucher No",
     },
     {
       CONTROL: "input",
@@ -138,14 +138,14 @@ export const EditChequeIssueEntry = ({
       HEADER: "Type of Bill",
       ACCESSOR: "bill_type_id",
       PLACEHOLDER: "Select Bill Type",
-      API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+      API: `${FINANCE_URL.BILL_TYPE.get}`,
     },
 
     {
       CONTROL: "input",
       HEADER: "Narration",
       ACCESSOR: "narration",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter Narration",
     },
 
     {
@@ -160,15 +160,15 @@ export const EditChequeIssueEntry = ({
       CONTROL: "select",
       HEADER: "Payee Name",
       ACCESSOR: "payee_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select Payee Name",
+      API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
     },
 
     {
       CONTROL: "select",
       HEADER: "Grant",
       ACCESSOR: "grant_id",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Select Grant",
       API: `${FINANCE_URL.GRANT_URL.get}`,
     },
 
@@ -176,46 +176,42 @@ export const EditChequeIssueEntry = ({
       CONTROL: "select",
       HEADER: "Department",
       ACCESSOR: "department_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select Department",
+      API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
 
     {
       CONTROL: "select",
       HEADER: "Bank Name",
       ACCESSOR: "bank_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select Bank Name",
+      API: `${FINANCE_URL.BANK_URL.get}`,
     },
-
     {
       CONTROL: "select",
       HEADER: "Module Name",
       ACCESSOR: "module_id",
-      PLACEHOLDER: "XYZ Value",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select Module Name",
+      API: `${FINANCE_URL.MODULE_URL.get}`,
     },
-
     {
       CONTROL: "input",
       HEADER: "Issue Date",
       ACCESSOR: "issue_date",
-      PLACEHOLDER: "XYZ Value",
       TYPE: "date",
     },
-
     {
       CONTROL: "input",
       HEADER: "Cheque No",
       ACCESSOR: "cheque_no",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter Cheque Number",
     },
 
     {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter Amount",
       TYPE: "number",
     },
   ];

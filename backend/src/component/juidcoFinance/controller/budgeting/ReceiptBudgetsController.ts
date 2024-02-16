@@ -3,8 +3,8 @@ import CommonRes from "../../../../util/helper/commonResponse";
 import { resObj } from "../../../../util/types";
 import { resMessage } from "../../responseMessage/commonMessage";
 import Joi from "joi";
-import { receiptBudgetsValidation, receiptBudgetsValidationWithID } from "../../requests/documentation/receiptBudgetsValidation";
 import ReceiptBudgetsDao from "../../dao/budgeting/ReceiptBudgetsDao";
+import { receiptBudgetsValidation, receiptBudgetsValidationWithID } from "../../requests/budgeting/receiptBudgetsValidation";
 
 /**
  * | Author- Bijoy Paitandi
@@ -93,7 +93,7 @@ class ReceiptBudgetsController {
       // validate id
       const { error } = Joi.object({
         id: Joi.number().required().greater(0)
-      }).validate({ 'id': id });
+      }).validate({'id': id});
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 

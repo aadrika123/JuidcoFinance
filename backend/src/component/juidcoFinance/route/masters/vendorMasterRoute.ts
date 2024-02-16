@@ -1,5 +1,5 @@
 import { baseUrl } from "../../../../util/common";
-import express from "express";
+import express, { Request, Response } from "express";
 import VendorMasterController from "../../controller/masters/vendorMasterController";
 
 class VendorMasterRoute {
@@ -9,7 +9,7 @@ class VendorMasterRoute {
     this.vendorMasterController = new VendorMasterController();
   }
 
-  configure(app: express.Application): void {
+  configure(app: express.Application, apiId: string): void {
     app
       .route(`${baseUrl}/vendor-master/create`)
       .post(this.vendorMasterController.create); // 0701
@@ -23,6 +23,10 @@ class VendorMasterRoute {
     app
       .route(`${baseUrl}/vendor-master/update`)
       .post(this.vendorMasterController.update); // 0704
+
+    
+    app.route(`${baseUrl}/vendor-master/get-names`).get((req: Request, res: Response) => this.vendorMasterController.getNames(req, res, apiId + "05"));
+
   }
 }
 

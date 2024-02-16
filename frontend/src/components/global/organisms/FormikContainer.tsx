@@ -51,7 +51,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
   ) => {
     return (
       <FormikController
-        readonly={readonly}
+        readonly={readonly || item.READONLY}
         type={item.TYPE}
         control={item.CONTROL || ""}
         label={item.HEADER || ""}

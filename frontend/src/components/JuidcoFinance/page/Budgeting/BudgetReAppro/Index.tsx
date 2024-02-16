@@ -77,6 +77,11 @@ export const HeroBudgetReAppro = () => {
       width: "w-[25%]",
     },
     {
+      name: "remark",
+      caption: "Remarks",
+      width: "w-[25%]",
+    },
+    {
       name: "transfer_amount",
       caption: "Transfer Amount",
       width: "w-[25%]",

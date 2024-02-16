@@ -117,6 +117,17 @@ class VendorMasterDao {
       data: vendorRequestData(req),
     });
   };
+
+  getNames = async () => {
+    const query: Prisma.vendor_mastersFindManyArgs = {
+      select: {
+        id: true,
+        name: true,
+      },
+    };
+    const data = prisma.vendor_masters.findMany(query);
+    return generateRes(data);
+  };
 }
 
 export default VendorMasterDao;

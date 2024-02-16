@@ -38,7 +38,10 @@ type FinanceUrlKeys =
   | "INVESTMENT_TYPE_URL"
   | "REVISED_BUDGET_URL"
   | "DR_CR_URL"
-  | "EXPENDITURE_NATURE_URL";
+  | "EXPENDITURE_NATURE_URL"
+  | "BANK_URL"
+  | "MODULE_URL"
+  | "BALANCE_TRACKING_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -224,5 +227,14 @@ export const FINANCE_URL: Urls = {
   },
   EXPENDITURE_NATURE_URL:{
     get: "/expenditure-natures/get"
-  }
+  },
+  BANK_URL:{
+    get: "/banks/get"
+  },
+  MODULE_URL: {
+    get: "/modules/get"
+  },
+  BALANCE_TRACKING_URL: {
+    get: "/balance-trackings/get-balances"
+  },
 };

@@ -91,7 +91,8 @@ class GrantEntriesDao {
         employee: {
           select: {
             id: true,
-            name: true
+            name: true,
+            designation: true,
           },
         },
         signature: true,

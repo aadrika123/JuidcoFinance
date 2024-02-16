@@ -38,6 +38,7 @@ export const AddBudgetReAppro = () => {
     fin_year_id: "",
     primary_acc_code_id: "",
     transaction_date: "",
+    remark: "",
     budget_name_id: "",
     actual_amount: undefined,
     from_primary_acc_code_id: "",
@@ -77,6 +78,7 @@ export const AddBudgetReAppro = () => {
                 values.primary_acc_code_id_name ||
                 item.primary_acc_code_id_name,
               transaction_date: values.transaction_date,
+              remark: values.remark,
               budget_name_id: values.budget_name_id,
               budget_name_id_name:
                 values.budget_name_id_name || item.budget_name_id_name,
@@ -167,10 +169,10 @@ export const AddBudgetReAppro = () => {
   const handleSelectFromPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}?id=${id}`,
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      setInitialData((prev)=> ({...prev, approved_amount: res.data.data.amount}))
     } catch (error) {
       console.log(error);
       throw error;
@@ -198,6 +200,7 @@ export const AddBudgetReAppro = () => {
       fin_year_id: data[Id - 1]?.fin_year_id,
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       transaction_date: data[Id - 1]?.transaction_date,
+      remark: data[Id -1]?.remark,
       budget_name_id: data[Id - 1]?.budget_name_id,
       actual_amount: data[Id - 1]?.actual_amount,
       from_primary_acc_code_id: data[Id - 1]?.from_primary_acc_code_id,
@@ -256,6 +259,12 @@ export const AddBudgetReAppro = () => {
       TYPE: "number",
     },
     {
+      CONTROL: "input",
+      HEADER: "Remarks",
+      ACCESSOR: "remark",
+      PLACEHOLDER: "Enter Remark",
+    },
+    {
       TITLE: "Budget Transfer Form",
       CHILDRENS: [
         {
@@ -272,7 +281,8 @@ export const AddBudgetReAppro = () => {
           ACCESSOR: "approved_amount",
           PLACEHOLDER: "Enter approved budget amount",
           TYPE: "number",
-          // VISIBILITY: false
+          VISIBILITY: false,
+          READONLY: true
         },
         {
           CONTROL: "input",
@@ -301,12 +311,12 @@ export const AddBudgetReAppro = () => {
       width: "w-[25%]",
     },
     {
-      name: "transaction_date ",
+      name: "transaction_date",
       caption: "Transaction Date",
       width: "w-[25%]",
     },
     {
-      name: "from_primary_acc_code",
+      name: "from_primary_acc_code_id_name",
       caption: "From Primary Accounting Code",
       width: "w-[25%]",
     },

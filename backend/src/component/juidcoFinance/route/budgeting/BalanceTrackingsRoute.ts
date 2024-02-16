@@ -20,6 +20,7 @@ class BalanceTrackingsRoute {
         app.route(`${this.baseUrl}/create`).post((req: Request, res: Response) => this.controller.create(req, res, apiId + "01"));
         app.route(`${this.baseUrl}/get-all`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "02"));
         app.route(`${this.baseUrl}/get-by-id/:id`).get((req: Request, res: Response) =>this.controller.getById(req, res, apiId + "03"));
+        app.route(`${this.baseUrl}/get-balance/:id`).get((req: Request, res: Response) =>this.controller.getBalance(req, res, apiId + "04"));
     }
 }
 

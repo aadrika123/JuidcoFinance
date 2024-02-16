@@ -6,10 +6,7 @@ const receipt_budgets_seeder = async () => {
     for (let i = 0; i < number_of_records; i++) {
         const record = {
             fin_year_id: 1,
-            department_id: 1,
             primary_acc_code_id: 1,
-            admin_ward_id: 1,
-            budget_type_id: 1,
             amount: faker.datatype.number(),
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),

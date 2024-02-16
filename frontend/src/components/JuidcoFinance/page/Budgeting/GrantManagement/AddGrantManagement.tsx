@@ -21,11 +21,16 @@ interface UpdatedModeType {
   isOnEdit: boolean;
 }
 
+interface DesignationType {
+  id: number;
+  name: string;
+}
+
 const Hoc = PopupFormikHOC(FormikWrapper);
 
 export const AddGrantManagement = () => {
   const dispatch = useDispatch();
-  const [designation, setDesignation] = useState([]);
+  const [designation, setDesignation] = useState<DesignationType[]>([]);
   const queryClient = new QueryClient();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
@@ -255,10 +260,8 @@ useEffect(()=>{
       url: `${FINANCE_URL.EMPLOYEE_URL.get}`,
       method: "GET",
     });
-    const data:any = res.data.data[0].map((item: any)=> {
-      return {name: item.designation, id: item.id}
-    });
-    setDesignation(data)
+    const data = res.data.data[0];
+    setDesignation([{id: data.id, name: data.designation}])
   } catch (error) {
     console.log(error);
     throw error;
@@ -311,6 +314,7 @@ const fields: FieldTypeProps[] = [
         ACCESSOR: "employee_id",
         PLACEHOLDER: "Select Designation",
         DATA: designation,
+        READONLY: true,
       },
       {
         CONTROL: "input",

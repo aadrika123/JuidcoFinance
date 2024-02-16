@@ -1,7 +1,8 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
-import { multiRequestData, requestData } from "../../requests/documentation/receiptBudgetsValidation";
+import { multiRequestData } from "../../requests/budgeting/receiptBudgetsValidation";
+import { requestData } from "../../requests/documentation/receiptBudgetsValidation";
 
 
 
@@ -40,9 +41,8 @@ class ReceiptBudgetsDao {
 
     const query: Prisma.receipt_budgetsFindManyArgs = {
       orderBy: [
-        {updated_at: order == -1?"desc":"asc"}        
+        { updated_at: order == -1 ? "desc" : "asc" }
       ],
-      
       skip: (page - 1) * limit,
       take: limit,
       select: {
@@ -53,28 +53,10 @@ class ReceiptBudgetsDao {
             name: true
           },
         },
-        department: {
-          select: {
-            id: true,
-            name: true
-          },
-        },
         primary_acc_code: {
           select: {
             id: true,
             code: true
-          },
-        },
-        admin_ward: {
-          select: {
-            id: true,
-            name: true
-          },
-        },
-        budget_type: {
-          select: {
-            id: true,
-            name: true
           },
         },
         amount: true,
@@ -95,29 +77,8 @@ class ReceiptBudgetsDao {
             },
           },
           {
-            department: {
-              name: {
-                contains: search, mode: "insensitive",
-              },
-            },
-          },
-          {
             primary_acc_code: {
               code: {
-                contains: search, mode: "insensitive",
-              },
-            },
-          },
-          {
-            admin_ward: {
-              name: {
-                contains: search, mode: "insensitive",
-              },
-            },
-          },
-          {
-            budget_type: {
-              name: {
                 contains: search, mode: "insensitive",
               },
             },
@@ -146,28 +107,10 @@ class ReceiptBudgetsDao {
             name: true
           },
         },
-        department: {
-          select: {
-            id: true,
-            name: true
-          },
-        },
         primary_acc_code: {
           select: {
             id: true,
             code: true
-          },
-        },
-        admin_ward: {
-          select: {
-            id: true,
-            name: true
-          },
-        },
-        budget_type: {
-          select: {
-            id: true,
-            name: true
           },
         },
         amount: true,

@@ -77,8 +77,7 @@ class FinanceRoute {
         this.departmentRoute = new departmentRoute_1.default();
         this.departmentRoute.configure(app); // 06
         // VENDOR_MASTER_ROUTE ///
-        this.vendorMasterRoute = new vendorMasterRoute_1.default();
-        this.vendorMasterRoute.configure(app); // 07
+        (new vendorMasterRoute_1.default()).configure(app, "07");
         /// CHECKBOOK_ENTRY_ROUTE ///
         this.chequebookEntryRoute = new chequebookEntryRoute_1.default();
         this.chequebookEntryRoute.configure(app); // 08

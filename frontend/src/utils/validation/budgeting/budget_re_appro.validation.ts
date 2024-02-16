@@ -4,7 +4,7 @@ export const budgetReApproDetailsSchema = Yup.object().shape({
   primary_acc_code_id: Yup.number().required(
     "Primary Accounting Code Id is required"
   ),
-  transaction_date: Yup.number().required("Transaction Date  is required"),
+  transaction_date: Yup.string().required("Transaction Date  is required"),
   budget_name_id: Yup.number().required("Budget Name Id is required"),
   actual_amount: Yup.number().required("Actual Amount is required"),
   from_primary_acc_code_id: Yup.number().required(
@@ -13,4 +13,5 @@ export const budgetReApproDetailsSchema = Yup.object().shape({
   approved_amount: Yup.number().required("Approved Amount is required"),
   balance_amount: Yup.number().required("Balance Amount is required"),
   transfer_amount: Yup.number().required("Transfer Amount is required"),
+  remark: Yup.string().required("Remarks is Required")
 });

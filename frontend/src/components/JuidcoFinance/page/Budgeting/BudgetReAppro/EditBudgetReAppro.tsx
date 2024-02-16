@@ -28,6 +28,7 @@ export const EditBudgetReAppro = ({
     fin_year_id: "",
     primary_acc_code_id: "",
     transaction_date: "",
+    remark: "",
     budget_name_id: "",
     actual_amount: "",
     from_primary_acc_code_id: "",
@@ -170,6 +171,12 @@ export const EditBudgetReAppro = ({
       ACCESSOR: "actual_amount",
       PLACEHOLDER: "Enter Actual Amount",
       TYPE: "number",
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Remarks",
+      ACCESSOR: "remark",
+      PLACEHOLDER: "Enter Remark",
     },
     {
       TITLE: "Budget Transfer Form",
