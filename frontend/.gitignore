@@ -40,3 +40,5 @@ next-env.d.ts
 /magic-run.js
 /magic-run.rar
 /magic.rar
+
+/prisma/migrations
