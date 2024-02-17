@@ -14,6 +14,7 @@ import InputBox from "@/components/Helpers/InputBox";
 import Routes from "@/json/routes.json";
 import APIs from "@/json/apis.json";
 import goBack from "@/utils/helper";
+import { FINANCE_URL } from "@/utils/api/urls";
 
 /**
  * | Author- Bijoy Paitandi
@@ -26,7 +27,7 @@ import goBack from "@/utils/helper";
 export interface AddChequebookDetailsData {
   date: Date;
   issuer_name: string
-  bank_name: string;
+  bank_id: number | string;
   bank_account_no: string;
   cheque_no_from: string;
   employee_id: number;
@@ -73,7 +74,7 @@ export const AddChequebook = () => {
     const AddCheckbookDetailsSchema = Yup.object().shape({
       date: Yup.date().required("Issue date is required."),
       issuer_name: Yup.string().required("Issuer name is required."),
-      bank_name: Yup.string().required("Bank Name is required"),
+      bank_id: Yup.string().required("Bank Name is required"),
       bank_account_no: Yup.string().required("Bank Account No is required."),
       cheque_no_from: Yup.string().required("Serial number of first check leaf"),
       employee_id: Yup.number().required("Please select the employee").notOneOf([-1], "Please select an employee"),
@@ -85,7 +86,7 @@ export const AddChequebook = () => {
     const initialChequebookDetails = {
       date: new Date(),
       issuer_name: "",
-      bank_name: "",
+      bank_id: -1,
       bank_account_no: "",
       cheque_no_from: "",
       employee_id: -1,
@@ -102,7 +103,7 @@ export const AddChequebook = () => {
      
       <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
       <div className="flex justify-between">
-        <SubHeading>Add Chequebook</SubHeading>
+        <SubHeading>Add Cheque Book</SubHeading>
       </div>
 
       
@@ -146,21 +147,19 @@ export const AddChequebook = () => {
                           label="Issuer Name"
                           name="issuer_name"
                         />
-
-                        <InputBox
+                        <DropDownListBox
+                          api={`${FINANCE_URL.BANK_URL.get}`}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          type="text"
-                          placeholder="Example: Bank of Baroda"
-                          value={values.bank_name}
-                          touched={touched.bank_name}
-                          error={errors.bank_name}
-                          label="Name of the bank"
-                          name="bank_name"
+                          placeholder="Please select an bank"
+                          value={values.bank_id}
+                          error={errors.bank_id}
+                          touched={touched.bank_id}
+                          label="Bank Name"
+                          name="bank_id"
                         />
-
                         <DropDownListBox
-                          api={APIs.employee_root}
+                          api={`${FINANCE_URL.EMPLOYEE_URL.get}`}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           placeholder="Please select an employee"

@@ -113,7 +113,7 @@ export const EditBudgetReAppro = ({
   const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -155,7 +155,7 @@ export const EditBudgetReAppro = ({
       HEADER: "Primary Accounting Code",
       ACCESSOR: "primary_acc_code_id",
       PLACEHOLDER: "Select Primary Accounting Code",
-      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
       HANDLER: handleSelectPrimaryCode,
     },
     {

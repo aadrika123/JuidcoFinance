@@ -1,14 +1,19 @@
 // Bank Master Types //
+type BankType = {
+ id: number;
+ name: string;
+}
+
 export type AccountTableData = {
   id: number;
-  bank_name: string;
+  bank: BankType;
   ifsc_code: string;
   branch: string;
 };
 
 export interface AddBankDetailsData {
   id?: number;
-  bank_name: string;
+  bank_id: number;
   ifsc_code: string;
   branch: string;
   micr_code: string;

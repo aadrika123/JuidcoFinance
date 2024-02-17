@@ -24,7 +24,7 @@ export const EditChequebook = ({
   const [initialData, setInitialData] = useState<ChequebookDataProps>({
     date: "",
     bank_branch: "",
-    bank_name: "",
+    bank_id: "",
     bank_account_no: "",
     cheque_no_from: "",
     cheque_no_to: "",
@@ -50,7 +50,7 @@ export const EditChequebook = ({
         return {
           ...prev,
           date: DateFormatter(d.date),
-          bank_name: d.bank_name,
+          bank_id: d.bank.id,
           bank_branch: d.bank_branch,
           bank_account_no: d.bank_account_no,
           cheque_no_from: d.cheque_no_from,
@@ -126,19 +126,18 @@ export const EditChequebook = ({
       PLACEHOLDER: "Example: Kantatoli, Ranchi",
     },
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Bank Name",
-      ACCESSOR: "bank_name",
-      PLACEHOLDER: "Example: ICICI BANK"
+      ACCESSOR: "bank_id",
+      PLACEHOLDER: "Select bank name",
+      API: `${FINANCE_URL.BANK_URL.get}`,
     },
-
     {
       CONTROL: "input",
       HEADER: "Bank Account No.",
       ACCESSOR: "bank_account_no",
       PLACEHOLDER: "Example: 3224242234324"
     },
-
     {
       CONTROL: "input",
       HEADER: "Cheque no from",

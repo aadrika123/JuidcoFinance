@@ -46,9 +46,9 @@ export const ReceiptsHome = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Receipt"} />
+      <HeaderWidget variant="add" title={"Receipt Entry"} />
       <TableWithFeatures
-        title="Receipt List"
+        title="Receipts List"
         center
         columns={columns}
         api={"/receipt-entry/get" || ""}

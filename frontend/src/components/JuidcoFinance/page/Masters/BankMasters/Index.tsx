@@ -25,6 +25,7 @@ import type {
 import type { MasterProps } from "@/utils/types/types";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
+import DropDownListBox from "@/components/Helpers/DropDownListBox";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -135,15 +136,16 @@ export const HeroBankMasters = () => {
                   }) => (
                     <form onSubmit={handleSubmit}>
                       <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                        <InputBox
+                        <DropDownListBox
+                          api={`${FINANCE_URL.BANK_URL.get}`}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.bank_name}
-                          error={errors.bank_name}
-                          touched={touched.bank_name}
-                          label="Name of Bank *"
-                          name="bank_name"
-                          placeholder="Enter Bank Name"
+                          placeholder="Please select an bank"
+                          value={values.bank_id}
+                          error={errors.bank_id}
+                          touched={touched.bank_id}
+                          label="Bank Name"
+                          name="bank_id"
                         />
                         <InputBox
                           onChange={handleChange}

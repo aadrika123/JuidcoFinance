@@ -240,7 +240,7 @@ export const AddBudgetReAppro = () => {
       HEADER: "Primary Accounting Code",
       ACCESSOR: "primary_acc_code_id",
       PLACEHOLDER: "Select Primary Accounting Code",
-      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
       HANDLER: handleSelectPrimaryCode,
     },
     {

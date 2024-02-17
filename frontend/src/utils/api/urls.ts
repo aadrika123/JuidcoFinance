@@ -56,6 +56,7 @@ type Urls = {
     getChildCodes?: string;
     getNatures?: string;
     getNames?: string;
+    getParentCodes?: string;
   };
 };
 
@@ -211,7 +212,8 @@ export const FINANCE_URL: Urls = {
   ACCOUNTING_CODE_URL: {
     get: "/get-all-account-code",
     getMainCodes: "/get-main-account-codes",
-    getChildCodes: "/get-child-account-codes"
+    getChildCodes: "/get-child-account-codes",
+    getParentCodes: "/get-parent-account-codes"
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",

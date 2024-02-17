@@ -5,7 +5,7 @@ export type ChequebookTableData = {
   id: number;
   date: string,
   bank_branch: string,
-  bank_name: string,
+  bank_id: number | string,
   bank_account_no: string,
   cheque_no_from: string,
   cheque_no_to: string,
@@ -20,7 +20,7 @@ export type ChequebookTableData = {
 export interface AddChequebookDetailsData {
   date: string,
   bank_branch: string,
-  bank_name: string,
+  bank_id: number | string,
   bank_account_no: string,
   cheque_no_from: string,
   cheque_no_to: string,
@@ -35,7 +35,7 @@ export interface ChequebookDataProps {
   id?: number | string,
   date: string,
   bank_branch: string,
-  bank_name: string,
+  bank_id: number | string,
   bank_account_no: string,
   cheque_no_from: string,
   cheque_no_to: string,
@@ -51,7 +51,7 @@ export interface ResponseData {
     data: {
       date: string;
       bank_branch: string;
-      bank_name: string;
+      bank: {id: number};
       bank_account_no: string;
       cheque_no_from: string;
       cheque_no_to: string;

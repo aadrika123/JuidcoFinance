@@ -1,11 +1,13 @@
 "use client";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, useState } from "react";
 import TotalCountTable from "../molecules/TotalCountTable";
 import Button from "@/components/global/atoms/Button";
 import { useDispatch } from "react-redux";
 import { openPopup } from "@/redux/reducers/PopupReducers";
 import Table from "@/components/global/molecules/Table";
 import goBack from "@/utils/helper";
+import Popup from "@/components/global/molecules/Popup";
+import LosingDataConfirm from "@/components/global/molecules/LosingDataConfirm";
 
 export interface ColumnProps {
   name: string;
@@ -33,13 +35,34 @@ interface TableHOCProps<T> {
 }
 
 const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
+  const [showPopup, setShowPopup] = useState({
+    isOpen: false,
+    state: "",
+  });
+  const { isOpen, state } = showPopup;
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(openPopup());
   };
 
+  const handleConfirmButton = (state?: string) => {
+    setShowPopup((prev) => ({
+      ...prev,
+      isOpen: !prev.isOpen,
+      state: state || "",
+    }));
+  };
+
   return (
     <>
+      {isOpen && (
+        <Popup width="30%" bgColor="[#F8FFF7]" title="">
+          <LosingDataConfirm
+            cancel={handleConfirmButton}
+            continue={state === "back" ? goBack : props.handleResetTable}
+          />
+        </Popup>
+      )}
       <section className="border bg-white rounded-lg border-zinc-300 p-6 px-10">
         <div className="flex justify-between items-center mb-2">
           <div className="text-secondary text-sub_head font-semibold">
@@ -54,13 +77,21 @@ const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
           <TotalCountTable footerData={props.footerData} />
         )}
         <aside className="flex items-center justify-end py-5 gap-5">
-          <Button onClick={goBack} buttontype="button" variant="cancel">
+          <Button
+            onClick={() =>
+              props.data && props.data.length > 0
+                ? handleConfirmButton("back")
+                : goBack()
+            }
+            buttontype="button"
+            variant="cancel"
+          >
             Back
           </Button>
           {props.data && props.data.length > 0 && (
             <>
               <Button
-                onClick={props.handleResetTable}
+                onClick={() => handleConfirmButton("reset")}
                 buttontype="button"
                 variant="cancel"
               >

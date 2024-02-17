@@ -58,6 +58,8 @@ async function main() {
 
   await function_codes_seeder();
 
+  
+
 
   await bill_types_seeder();
   await vendor_types_seeder();

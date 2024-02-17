@@ -58,9 +58,9 @@ export const ChequebooksHome = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Chequebook"} />
+      <HeaderWidget variant="add" title={"Cheque Book"} />
       <TableWithFeatures
-        title="Chequebook List"
+        title="Cheque Book List"
         center
         columns={columns}
         api={"/chequebook-entry/get" || ""}

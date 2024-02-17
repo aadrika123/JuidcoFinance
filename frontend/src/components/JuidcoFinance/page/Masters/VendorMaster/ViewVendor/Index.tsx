@@ -32,7 +32,7 @@ type VendorData = {
   vendor_type: VendorType;
   department: DepartmentType;
   email: string;
-  bank_name: string;
+  bank: DepartmentType;
   contact_address: string;
   ifsc_code: string;
   bank_account_no: string;
@@ -102,7 +102,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
                 />
                 <FilledDisabledInputBox
                   label="Name of the Bank"
-                  value={vendorData?.bank_name}
+                  value={vendorData?.bank?.name}
                 />
                 <FilledDisabledInputBox
                   label="Office Address"

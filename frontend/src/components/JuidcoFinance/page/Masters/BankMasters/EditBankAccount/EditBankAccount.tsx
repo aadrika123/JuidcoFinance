@@ -13,6 +13,7 @@ import { useMutation } from "react-query";
 import { useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
+import DropDownListBox from "@/components/Helpers/DropDownListBox";
 
 const EditBankAccount = ({ bankID }: { bankID: string }) => {
   const [bankAccountDetails, setBankAccountDetails] =
@@ -66,7 +67,7 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
   });
 
   const initialBankDetailsValues = {
-    bank_name: bankAccountDetails?.bank_name || "",
+    bank_id: bankAccountDetails?.bank_id || -1,
     ifsc_code: bankAccountDetails?.ifsc_code || "",
     branch: bankAccountDetails?.branch || "",
     micr_code: bankAccountDetails?.micr_code || "",
@@ -104,14 +105,16 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
           }) => (
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                <InputBox
+                <DropDownListBox
+                  api={`${FINANCE_URL.BANK_URL.get}`}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.bank_name}
-                  error={errors.bank_name}
-                  touched={touched.bank_name}
-                  label="Name of Bank *"
-                  name="bank_name"
+                  placeholder="Please select an bank"
+                  value={values.bank_id}
+                  error={errors.bank_id}
+                  touched={touched.bank_id}
+                  label="Bank Name"
+                  name="bank_id"
                 />
                 <InputBox
                   onChange={handleChange}

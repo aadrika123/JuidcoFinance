@@ -131,7 +131,7 @@ export const HeroAddVendor = () => {
                     name="name"
                     placeholder="Enter Vendor Name"
                   />
-                  <InputBox
+                  {/* <InputBox
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.bank_name}
@@ -140,6 +140,17 @@ export const HeroAddVendor = () => {
                     label="Name of the bank"
                     name="bank_name"
                     placeholder="Enter Bank Name"
+                  /> */}
+                  <DropDownList
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.bank_id}
+                    error={errors.bank_id}
+                    touched={touched.bank_id}
+                    label="Name of the bank"
+                    name="bank_id"
+                    placeholder={"Select Bank Name"}
+                    api={FINANCE_URL.BANK_URL.get || ""}
                   />
 
                   <InputBox

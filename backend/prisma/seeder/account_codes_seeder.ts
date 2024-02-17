@@ -30,8 +30,11 @@ const account_codes_seeder = async () => {
                 const description = majorHead + minorHead + detailCode + " " + row[7].toString();
 
                 if (!row[7].toString().startsWith("The detailed Head codes from")) {
-                    if (isParent(detailCode, minorHead)){
-                        await prisma.account_codes.create({
+                    if(detailCode == "00" && minorHead == "00"){
+                        // ignore
+                    }
+                    else if (isParent(detailCode, minorHead)){
+                        const x = await prisma.account_codes.create({
                             data: {
                                 code: code,
                                 major_head: majorHead,
@@ -43,8 +46,7 @@ const account_codes_seeder = async () => {
                             },
                         });
 
-                        // console.log(code);
-                        parents.set(code, description);
+                        parents.set(code, x);
                     }else{
 
                         const parent = parents.get(majorHead + minorHead + "00");
@@ -52,7 +54,7 @@ const account_codes_seeder = async () => {
                             // console.log("No parent found");
                         }else{
 
-                            const id:number = parent.length;
+                            const id:number = parent.id;
                         
                             await prisma.account_codes.create({
                                 data: {
