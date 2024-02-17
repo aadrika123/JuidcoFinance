@@ -41,7 +41,7 @@ interface VendorRequestData {
   mobile_no: string;
   tin_no: string;
   pan_no: string;
-  bank_name: string;
+  bank_id: number;
   ifsc_code: string;
   department_id: number;
   email: string;

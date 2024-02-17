@@ -104,7 +104,11 @@ model vendor_masters {
   mobile_no        String
   tin_no           String
   pan_no           String
-  bank_name        String
+
+  bank_id             Int
+  bank                banks   @relation(fields: [bank_id], references: [id])
+
+
   ifsc_code        String
   department       departments  @relation(fields: [department_id], references: [id])
   department_id    Int
@@ -436,6 +440,7 @@ model banks {
   cheque_issuances      cheque_issuances[]
   bank_masters          bank_masters[]
   chequebook_entries    cheque_book_entries[]
+  vendor_masters        vendor_masters[]
 
   created_at       DateTime           @default(now()) @map("created_at")
   updated_at       DateTime           @updatedAt @map("updated_at")

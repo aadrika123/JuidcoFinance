@@ -22,7 +22,7 @@ const vendors_seeder = async () => {
               mobile_no: faker.phone.number(),
               tin_no: faker.finance.routingNumber(),
               pan_no: faker.finance.account(),
-              bank_name: faker.company.name(),
+              bank_id: 1,
               ifsc_code: faker.finance.routingNumber(),
               department_id: 1,
               email: faker.internet.email(),

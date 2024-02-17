@@ -90,7 +90,12 @@ class VendorMasterDao {
         tin_no: true,
         gst_no: true,
         pan_no: true,
-        bank_name: true,
+        bank: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
         ifsc_code: true,
         email: true,
         contact_address: true,
