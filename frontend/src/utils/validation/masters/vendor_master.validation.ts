@@ -12,7 +12,7 @@ export const VendorDetailsSchema = Yup.object().shape({
   tin_no: Yup.string().required("TIN No. is required"),
   gst_no: Yup.string().required("GST No. Name is required"),
   pan_no: Yup.string().required("Pan number is required"),
-  bank_name: Yup.string().required("Bank Name is required"),
+  bank_id: Yup.number().required("Bank Name is required"),
   ifsc_code: Yup.string().required("IFSC code is required"),
   email: Yup.string()
     .email("Invalid email address")
@@ -33,7 +33,7 @@ export const initialVendorDetails: VendorDetailsData = {
   tin_no: "",
   gst_no: "",
   pan_no: "",
-  bank_name: "",
+  bank_id: "",
   ifsc_code: "",
   email: "",
   contact_address: "",

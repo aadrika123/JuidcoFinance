@@ -27,7 +27,6 @@ export const HeroAddVendor = () => {
   const createVendorDetails = async (
     values: VendorDetailsData
   ): Promise<VendorDetailsData> => {
-    console.log(values, "lolo");
     const res = await axios({
       url: `${FINANCE_URL.VENDOR_MASTER_URL.create}`,
       method: "POST",
@@ -38,15 +37,15 @@ export const HeroAddVendor = () => {
   const { mutate } = useMutation(createVendorDetails, {
     onSuccess: () => {
       toast.success("Successfully Added Vendor Details!");
+      setTimeout(() => {
+        goBack();
+      }, 1000);
     },
     onError: () => {
       alert("there was an error");
     },
     onSettled: () => {
       queryClient.invalidateQueries("vendor-list");
-      setTimeout(() => {
-        goBack();
-      }, 1000);
     },
   });
 
@@ -75,6 +74,7 @@ export const HeroAddVendor = () => {
               handleBlur,
               handleSubmit,
               handleReset,
+              dirty,
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -246,18 +246,21 @@ export const HeroAddVendor = () => {
                   >
                     Back
                   </PrimaryButton>
+                  {dirty && (
+                    <>
+                      <PrimaryButton
+                        onClick={handleReset}
+                        buttonType="button"
+                        variant={"cancel"}
+                      >
+                        Reset
+                      </PrimaryButton>
 
-                  <PrimaryButton
-                    onClick={handleReset}
-                    buttonType="button"
-                    variant={"cancel"}
-                  >
-                    Reset
-                  </PrimaryButton>
-
-                  <PrimaryButton buttonType="submit" variant="primary">
-                    Save
-                  </PrimaryButton>
+                      <PrimaryButton buttonType="submit" variant="primary">
+                        Save
+                      </PrimaryButton>
+                    </>
+                  )}
                 </div>
               </form>
             )}

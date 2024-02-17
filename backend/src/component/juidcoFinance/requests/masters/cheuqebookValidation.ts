@@ -6,7 +6,7 @@ import { Request } from "express";
 export const chequebookValidation = Joi.object({
   date: Joi.date().iso().required(),
   issuer_name: Joi.string().required(),
-  bank_name: Joi.string().required(),
+  bank_id: Joi.number().required(),
   bank_account_no: Joi.string().required(),
   cheque_no_from: Joi.string().required(),
   employee_id: Joi.number().required(),
@@ -26,7 +26,7 @@ export const chequebookRequestData = (req: Request):  ChequebookRequestData=> {
   return {
     date: req.body.date,
     issuer_name: req.body.issuer_name,
-    bank_name: req.body.bank_name,
+    bank_id: req.body.bank_id,
     bank_account_no: req.body.bank_account_no,
     cheque_no_from: req.body.cheque_no_from,
     employee_id: req.body.employee_id,

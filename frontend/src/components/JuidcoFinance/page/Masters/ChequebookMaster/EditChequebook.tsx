@@ -92,15 +92,15 @@ export const EditChequebook = ({
   >(UpdateChequebook, {
     onSuccess: () => {
       toast.success("Updated Successfully")
+      setTimeout(() => {
+        goBack();
+      }, 2000);
     },
     onError: () => {
       alert("Error updating the record.");
     },
     onSettled: () => {
       queryClient.invalidateQueries();
-      setTimeout(() => {
-        goBack();
-      }, 2000);
     },
   });
 

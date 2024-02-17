@@ -20,6 +20,7 @@ class AccountCodeRoute {
     app.route(`${baseUrl}/get-sub-account-codes`).get((req: Request, res: Response) => this.accountingCodeController.getSubAccountingCode(req, res, apiId + "04"));
     app.route(`${baseUrl}/get-child-account-codes/:id`).get((req: Request, res: Response) => this.accountingCodeController.getChildAccountingCode(req, res, apiId + "05"));
     app.route(`${baseUrl}/get-parent-account-code/:id`).get((req: Request, res: Response) => this.accountingCodeController.getParentCode(req, res, apiId + "06"));
+    app.route(`${baseUrl}/get-codes-with-parent-detail`).get((req: Request, res: Response) => this.accountingCodeController.getCodesWithParentDetail(req, res, apiId + "07"));
   }
 }
 

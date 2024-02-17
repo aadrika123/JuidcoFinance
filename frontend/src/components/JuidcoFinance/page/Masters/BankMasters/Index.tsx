@@ -7,7 +7,7 @@ import AccountList from "./AccountList/AccountList";
 import AddBankHeader from "./AddBank/AddBank";
 import Popup from "@/components/Helpers/Basic/Popup";
 import InputBox from "@/components/Helpers/InputBox";
-import { useMutation, useQuery, QueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "@/components/Helpers/Basic/Loader";
 import { Formik } from "formik";
@@ -24,7 +24,6 @@ import type {
 } from "@/utils/types/bank_master_types";
 import type { MasterProps } from "@/utils/types/types";
 import { FINANCE_URL } from "@/utils/api/urls";
-import goBack from "@/utils/helper";
 import DropDownListBox from "@/components/Helpers/DropDownListBox";
 // Imports //----------------------------------------------------------------
 
@@ -48,10 +47,9 @@ export const HeroBankMasters = () => {
   function handleSearchFetchQueryChange(): void {
     setFetchQuery(!fetchQuery);
   }
-  console.log(fetchQuery);
 
   // ----- FETCH DATA ------////
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const fetchBankData = async (): Promise<MasterProps<AccountTableData>> => {
     const res = await axios({
@@ -99,9 +97,6 @@ export const HeroBankMasters = () => {
       },
       onSettled: () => {
         queryClient.invalidateQueries();
-        setTimeout(() => {
-          goBack();
-        }, 1000);
       },
     }
   );
@@ -122,7 +117,6 @@ export const HeroBankMasters = () => {
                   initialValues={initialBankDetailsValues}
                   validationSchema={AddBankDetailsSchema}
                   onSubmit={(values: AddBankDetailsData) => {
-                    console.log(values);
                     mutate(values);
                   }}
                 >
@@ -133,6 +127,8 @@ export const HeroBankMasters = () => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    handleReset,
+                    dirty,
                   }) => (
                     <form onSubmit={handleSubmit}>
                       <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -256,12 +252,23 @@ export const HeroBankMasters = () => {
                         >
                           Close
                         </PrimaryButton>
-                        {/* <PrimaryButton buttonType="button" variant="cancel">
-                          Reset
-                        </PrimaryButton> */}
-                        <PrimaryButton buttonType="submit" variant="primary">
-                          Save
-                        </PrimaryButton>
+                        {dirty && (
+                          <>
+                            <PrimaryButton
+                              onClick={handleReset}
+                              buttonType="button"
+                              variant="cancel"
+                            >
+                              Reset
+                            </PrimaryButton>
+                            <PrimaryButton
+                              buttonType="submit"
+                              variant="primary"
+                            >
+                              Save
+                            </PrimaryButton>
+                          </>
+                        )}
                       </div>
                     </form>
                   )}

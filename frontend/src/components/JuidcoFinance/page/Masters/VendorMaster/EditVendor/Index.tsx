@@ -105,7 +105,8 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
               handleChange,
               handleBlur,
               handleSubmit,
-              handleReset
+              handleReset,
+              dirty
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -255,12 +256,14 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                   >
                     Close
                   </PrimaryButton>
+                  {dirty && <>
                   <PrimaryButton onClick={handleReset} buttonType="button" variant="cancel">
                     Reset
                   </PrimaryButton>
                   <PrimaryButton buttonType="submit" variant="primary">
                     Save
                   </PrimaryButton>
+                  </>}
                 </div>
               </form>
             )}

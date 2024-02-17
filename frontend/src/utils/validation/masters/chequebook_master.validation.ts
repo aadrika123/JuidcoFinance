@@ -4,7 +4,7 @@ import * as Yup from "yup";
 export const ChequebookDetailsSchema = Yup.object().shape({
   date: Yup.string().required("Cheque issue date is required!"),
   bank_branch: Yup.string().required("Name of the branch is required."),
-  bank_name: Yup.string().required("Name of the bank is required."),
+  bank_id: Yup.number().required("Name of the bank is required."),
   bank_account_no: Yup.string().required("Bank account no is required."),
   cheque_no_from: Yup.string().required("Starting cheque number is required."),
   cheque_no_to: Yup.string().required("Ending cheque number is required."),
@@ -15,7 +15,7 @@ export const ChequebookDetailsSchema = Yup.object().shape({
 });
 
 export const initialChequebookDetails = {
-  bankName: "",
+  bankId: "",
   ifscCode: "",
   branch: "",
   micrCode: "",

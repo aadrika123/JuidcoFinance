@@ -16,8 +16,6 @@ const prisma = new PrismaClient();
 
 class ChequebookEntryDao {
 
-
-
   // Add new chequebook in DB
   store = async (req: Request) => {
     return await prisma.cheque_book_entries.create({
@@ -49,7 +47,12 @@ class ChequebookEntryDao {
       select: {
         id: true,
         date: true,
-        bank_name: true,
+        bank: {
+          select: {
+            id: true,
+            name: true,  
+          }
+        },
         employee: {
           select: {
             id: true,
@@ -73,7 +76,7 @@ class ChequebookEntryDao {
     if (search !== "undefined" && search !== "") {
       query.where = {
         OR: [
-          { bank_name: { contains: search, mode: "insensitive" }, },
+          { bank: { name: {contains: search, mode: "insensitive" }}, },
           { bank_branch: { contains: search, mode: "insensitive" }, },
           { remarks: { contains: search, mode: "insensitive" }, },
         ],
@@ -126,7 +129,12 @@ class ChequebookEntryDao {
       select: {
         id: true,
         date: true,
-        bank_name: true,
+        bank: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
         employee: {
           select: {
             id: true,

@@ -22,7 +22,7 @@ interface ApiResponse {
 }
 
 interface BankRequestData {
-  bank_name: string;
+  bank_id: number;
   ifsc_code: string;
   branch: string;
   micr_code: string;
@@ -55,7 +55,7 @@ interface VendorRequestData {
 interface ChequebookRequestData {
   date: Date;
   issuer_name: string;
-  bank_name: string;
+  bank_id: number;
   bank_account_no: string;
   cheque_no_from: string;
   employee_id: number;

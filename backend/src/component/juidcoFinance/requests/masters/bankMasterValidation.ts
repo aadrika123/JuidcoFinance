@@ -5,7 +5,7 @@ import { Request } from "express";
 // Validating request data
 export const bankMasterValidation = Joi.object({
   id: Joi.number(),
-  bank_name: Joi.string().required(),
+  bank_id: Joi.number().required(),
   ifsc_code: Joi.string().required(),
   branch: Joi.string().required(),
   micr_code: Joi.string().required(),
@@ -21,7 +21,7 @@ export const bankMasterValidation = Joi.object({
 // arrange request data for store and update
 export const requestData = (req: Request): BankRequestData => {
   return {
-    bank_name: req.body.bank_name,
+    bank_id: req.body.bank_id,
     ifsc_code: req.body.ifsc_code,
     branch: req.body.branch,
     micr_code: req.body.micr_code,

@@ -14,6 +14,7 @@ export type AccountTableData = {
 export interface AddBankDetailsData {
   id?: number;
   bank_id: number;
+  bank?: BankType;
   ifsc_code: string;
   branch: string;
   micr_code: string;

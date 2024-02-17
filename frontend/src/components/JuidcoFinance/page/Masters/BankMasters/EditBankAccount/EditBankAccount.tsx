@@ -67,7 +67,7 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
   });
 
   const initialBankDetailsValues = {
-    bank_id: bankAccountDetails?.bank_id || -1,
+    bank_id: bankAccountDetails?.bank?.id || -1,
     ifsc_code: bankAccountDetails?.ifsc_code || "",
     branch: bankAccountDetails?.branch || "",
     micr_code: bankAccountDetails?.micr_code || "",
