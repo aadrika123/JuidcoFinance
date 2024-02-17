@@ -58,6 +58,8 @@ async function main() {
 
   await function_codes_seeder();
 
+  await banks_seeder();
+
   
 
 
@@ -103,7 +105,7 @@ async function main() {
     return {
       id: faker.datatype.number(),
       date: faker.date.recent(),
-      bank_name: faker.company.name(),
+      bank_id: 1,
       bank_account_no: faker.finance.account(),
       cheque_no_from: faker.finance.creditCardNumber(),
       employee_id: faker.datatype.number(),
@@ -128,7 +130,9 @@ async function main() {
       data: {
         id: item.id,
         date: item.date,
-        bank_name: item.bank_name,
+        
+        bank_id: item.bank_id,
+
         bank_account_no: item.bank_account_no,
         cheque_no_from: item.cheque_no_from,
         employee_id: 1, //item.employee_id,
@@ -202,8 +206,6 @@ async function main() {
     await bill_stages_seeder();
 
     await bill_invoices_seeder();
-
-    await banks_seeder();
 
     await cheque_issuances_seeder();
 

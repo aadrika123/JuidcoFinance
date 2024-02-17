@@ -75,7 +75,10 @@ model municipality_codes {
 /// BankMaster
 model bank_masters {
   id                  Int      @id @default(autoincrement())
-  bank_name           String
+
+  bank_id             Int
+  bank                banks   @relation(fields: [bank_id], references: [id])
+
   ifsc_code           String
   branch              String
   micr_code           String
@@ -135,7 +138,11 @@ model vendor_types {
 model cheque_book_entries {
   id                      Int       @id @default(autoincrement())
   date                    DateTime
-  bank_name               String
+  
+  bank_id             Int
+  bank                banks   @relation(fields: [bank_id], references: [id])
+
+  
   bank_account_no         String
   cheque_no_from          String
   employee                employees @relation(fields: [employee_id], references: [id])
@@ -426,7 +433,10 @@ model banks {
   name   String
   remark String
 
-  cheque_issuances cheque_issuances[]
+  cheque_issuances      cheque_issuances[]
+  bank_masters          bank_masters[]
+  chequebook_entries    cheque_book_entries[]
+
   created_at       DateTime           @default(now()) @map("created_at")
   updated_at       DateTime           @updatedAt @map("updated_at")
 }

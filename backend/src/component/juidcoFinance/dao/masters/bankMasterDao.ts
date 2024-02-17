@@ -38,7 +38,12 @@ class BankMasterDao {
       take: limit,
       select: {
         id: true,
-        bank_name: true,
+        bank:{
+          select: {
+            id: true,
+            name: true,  
+          }
+        },
         ifsc_code: true,
         branch: true,
       },
@@ -48,9 +53,11 @@ class BankMasterDao {
       query.where = {
         OR: [
           {
-            bank_name: {
-              equals: search,
-              mode: "insensitive",
+            bank: {
+              name: {
+                equals: search,
+                mode: "insensitive",
+              }
             },
           },
           { ifsc_code: { equals: search, mode: "insensitive" } }
@@ -72,7 +79,12 @@ class BankMasterDao {
       where: { id },
       select: {
         id: true,
-        bank_name: true,
+        bank:{
+          select: {
+            id: true,
+            name: true,  
+          }
+        },
         ifsc_code: true,
         branch: true,
         micr_code: true,

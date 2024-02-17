@@ -27,7 +27,7 @@ const account_codes_seeder = async () => {
                 const minorHead = row[3].toString() + row[4].toString();
                 const detailCode = row[5].toString() + row[6].toString();
                 const code = majorHead + minorHead + detailCode;
-                const description = majorHead + minorHead + detailCode + " " + row[7].toString();
+                const description = row[7].toString();//majorHead + minorHead + detailCode + " " + row[7].toString();
 
                 if (!row[7].toString().startsWith("The detailed Head codes from")) {
                     if(detailCode == "00" && minorHead == "00"){

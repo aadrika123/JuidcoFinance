@@ -62,21 +62,12 @@ class AccountingCodeDao {
   }
 
   getSubCodes = async () => {
-    const query: Prisma.account_codesFindManyArgs = {
-      select: {
-        id: true,
-        code: true,
-        description: true,
-      },
-    };
-
-    query.where = {
-      parent_id:{
-        not: 0,
-      }
+    
+    const data = await prisma.$queryRaw<account_codes[]>`SELECT id, code, description FROM account_codes where parent_id != 0 order by description asc`;
+    if (!data){
+      return generateRes(null);
     }
 
-    const data = prisma.account_codes.findMany(query);
     return generateRes(data);
   }
 
@@ -123,6 +114,21 @@ class AccountingCodeDao {
 
     return generateRes(data);
   }
+
+
+  getCodesWithParentDetail = async () => {
+    const data = await prisma.$queryRaw<account_codes[]>`select a.id, a.code, a.description, b.description as parent_name 
+    from account_codes a 
+    left join account_codes b on a.parent_id = b.id where a.parent_id != 0 
+    union
+    SELECT id, code, description, '' as parent_name FROM account_codes where parent_id=0`;
+    if (!data){
+      return generateRes(null);
+    }
+    
+    return generateRes(data);
+  }
+
 
 }
 

@@ -47,7 +47,7 @@ CREATE TABLE "municipality_codes" (
 -- CreateTable
 CREATE TABLE "bank_masters" (
     "id" SERIAL NOT NULL,
-    "bank_name" TEXT NOT NULL,
+    "bank_id" INTEGER NOT NULL,
     "ifsc_code" TEXT NOT NULL,
     "branch" TEXT NOT NULL,
     "micr_code" TEXT NOT NULL,
@@ -105,7 +105,7 @@ CREATE TABLE "vendor_types" (
 CREATE TABLE "cheque_book_entries" (
     "id" SERIAL NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
-    "bank_name" TEXT NOT NULL,
+    "bank_id" INTEGER NOT NULL,
     "bank_account_no" TEXT NOT NULL,
     "cheque_no_from" TEXT NOT NULL,
     "employee_id" INTEGER NOT NULL,
@@ -611,10 +611,16 @@ CREATE TABLE "receipt_budgets" (
 );
 
 -- AddForeignKey
+ALTER TABLE "bank_masters" ADD CONSTRAINT "bank_masters_bank_id_fkey" FOREIGN KEY ("bank_id") REFERENCES "banks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_vendor_type_id_fkey" FOREIGN KEY ("vendor_type_id") REFERENCES "vendor_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "vendor_masters" ADD CONSTRAINT "vendor_masters_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "departments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cheque_book_entries" ADD CONSTRAINT "cheque_book_entries_bank_id_fkey" FOREIGN KEY ("bank_id") REFERENCES "banks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "cheque_book_entries" ADD CONSTRAINT "cheque_book_entries_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "employees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
