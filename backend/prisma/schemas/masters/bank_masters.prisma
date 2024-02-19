@@ -1,0 +1,20 @@
+/// BankMaster
+model bank_masters {
+  id                  Int      @id @default(autoincrement())
+
+  bank_id             Int
+  bank                banks   @relation(fields: [bank_id], references: [id])
+
+  ifsc_code           String
+  branch              String
+  micr_code           String
+  branch_address      String
+  branch_city         String
+  branch_state        String
+  branch_district     String
+  email               String
+  contact_no          String
+  contact_person_name String
+  created_at          DateTime @default(now()) @map("created_at")
+  updated_at          DateTime @updatedAt @map("updated_at")
+}

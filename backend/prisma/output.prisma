@@ -1,0 +1,771 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+////balance_trackings: Managed by: Bijoy Paitandi
+model balance_trackings {
+  id Int @id @default(autoincrement())
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  balance_amount Float
+
+  grant_entries grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////budget_appropriations: Managed by: Bijoy Paitandi
+model budget_appropriations {
+  id          Int             @id @default(autoincrement())
+  fin_year_id Int
+  fin_year    financial_years @relation(fields: [fin_year_id], references: [id])
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  remark String
+
+  from_primary_acc_code_id Int
+  from_primary_acc_code    account_codes @relation("from", fields: [from_primary_acc_code_id], references: [id])
+
+  approved_amount Int
+  transfer_amount Float
+  created_at      DateTime @default(now()) @map("created_at")
+  updated_at      DateTime @updatedAt @map("updated_at")
+}
+
+////budget_names: Managed by: Bijoy Paitandi
+model budget_names {
+  id      Int    @id @default(autoincrement())
+  name    String
+  remarks String
+
+  budget_reappropriations budget_reappropriations[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////budget_reappropriations: Managed by: Bijoy Paitandi
+model budget_reappropriations {
+  id Int @id @default(autoincrement())
+
+  fin_year_id Int
+  fin_year    financial_years @relation(fields: [fin_year_id], references: [id])
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  transaction_date DateTime
+
+  budget_name_id Int
+  budget_name    budget_names @relation(fields: [budget_name_id], references: [id])
+
+  actual_amount Float
+
+  from_primary_acc_code_id Int
+  from_primary_acc_code    account_codes @relation("from", fields: [from_primary_acc_code_id], references: [id])
+
+  approved_amount Int
+  balance_amount  Int
+  transfer_amount Float
+  remark          String
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////budget_types: Managed by: Bijoy Paitandi
+model budget_types {
+  id      Int    @id @default(autoincrement())
+  name    String
+  remarks String
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////drcr: Managed by: Bijoy Paitandi
+model drcr {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  voucher_entries  voucher_entries[]
+  opening_balances opening_balances[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////expenditure_natures: Managed by: Bijoy Paitandi
+model expenditure_natures {
+  id      Int    @id @default(autoincrement())
+  name    String
+  remarks String
+
+  grant_entries grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////financial_years: Managed by: Bijoy Paitandi
+model financial_years {
+  id      Int    @id @default(autoincrement())
+  name    String
+  remarks String
+
+  receipt_budgets         receipt_budgets[]
+  budget_appropriations   budget_appropriations[]
+  budget_reappropriations budget_reappropriations[]
+  opening_balances        opening_balances[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////grant_entries: Managed by: Bijoy Paitandi
+model grant_entries {
+  id Int @id @default(autoincrement())
+
+  ulb_id Int
+  ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  grant_id Int
+  grant    grants @relation(fields: [grant_id], references: [id])
+
+  sanction_number String
+
+  grant_nature_id Int
+  grant_nature    grant_natures @relation(fields: [grant_nature_id], references: [id])
+
+  grant_from_date   DateTime
+  grant_to_date     DateTime
+  sanctioned_amount Float
+
+  advance_rcving_date DateTime
+  advance_amount      Float
+
+  expenditure_date DateTime
+
+  voucher_id Int
+  voucher    voucher_entries @relation(fields: [voucher_id], references: [id])
+
+  expndtre_nature_id Int
+  expndtre_nature    expenditure_natures @relation(fields: [expndtre_nature_id], references: [id])
+
+  blnce_trckng_id Int
+  blnce_trckng    balance_trackings @relation(fields: [blnce_trckng_id], references: [id])
+
+  refund_date   DateTime
+  refund_amount Float
+
+  employee_id Int
+  employee    employees @relation(fields: [employee_id], references: [id])
+
+  signature  String
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////grant_natures: Managed by: Bijoy Paitandi
+model grant_natures {
+  id      Int    @id @default(autoincrement())
+  name    String
+  remarks String
+
+  grant_entries grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////investment_types: Managed by: Bijoy Paitandi
+model investment_types {
+  id      Int    @id @default(autoincrement())
+  name    String
+  remarks String
+
+  investments investments[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////investments: Managed by: Bijoy Paitandi
+model investments {
+  id Int @id @default(autoincrement())
+
+  ulb_id Int
+  ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  investment_no      String
+  authorization_date DateTime
+  investment_date    DateTime
+  particulars        String
+
+  investment_type_id Int
+  investment_type    investment_types @relation(fields: [investment_type_id], references: [id])
+
+  purchase_amount     Float
+  face_value_amount   Float
+  interest_due_date   DateTime
+  interest_due_amount Float
+
+  employee_id Int
+  employee    employees @relation(fields: [employee_id], references: [id])
+
+  interest_recovered_amount Float
+  interest_recovery_date    DateTime
+  acc_adj_recovery_date     DateTime
+  realization_final_amount  Float
+  realization_date          DateTime
+  acc_adj_realization_date  DateTime
+  remarks                   String
+  created_at                DateTime @default(now()) @map("created_at")
+  updated_at                DateTime @updatedAt @map("updated_at")
+}
+
+////opening_balances: Managed by: Bijoy Paitandi
+model opening_balances {
+  id Int @id @default(autoincrement())
+
+  fin_year_id Int
+  fin_year    financial_years @relation(fields: [fin_year_id], references: [id])
+
+  dr_cr_id Int
+  dr_cr    drcr @relation(fields: [dr_cr_id], references: [id])
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  amount     Float
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////receipt_budgets: Managed by: Bijoy Paitandi
+model receipt_budgets {
+  id          Int             @id @default(autoincrement())
+  fin_year_id Int
+  fin_year    financial_years @relation(fields: [fin_year_id], references: [id])
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  amount Float
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+////revised_budgets: Managed by: Bijoy Paitandi
+model revised_budgets {
+  id Int @id @default(autoincrement())
+
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+
+  approved_amount Int
+  revised_amount  Float
+  remarks         String
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+//// Primary Accounting Code
+model account_codes {
+  id          Int    @id @default(autoincrement())
+  code        String
+  major_head  String
+  minor_head  String
+  detail_code String
+  description String
+
+  parent_id Int? @default(0)
+
+  remark String?
+
+  receipt_budgets receipt_budgets[]
+  investments     investments[]
+
+  budget_appropriations      budget_appropriations[]
+  budget_appropriations_from budget_appropriations[] @relation("from")
+
+  budget_reappropriations      budget_reappropriations[]
+  budget_reappropriations_from budget_reappropriations[] @relation("from")
+  opening_balances             opening_balances[]
+  revised_budgets              revised_budgets[]
+  balance_trackings            balance_trackings[]
+
+  grant_entries grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+/// Administrative Ward
+model adminis_wards {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  remark               String
+  dir_payment_entries  dir_payment_entries[]
+  bill_payment_entries bill_payment_entries[]
+  receipt_entries      receipt_entries[]
+  voucher_entries      voucher_entries[]
+  bill_invoices        bill_invoices[]
+  cheque_issuances     cheque_issuances[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+/// BankMaster
+model bank_masters {
+  id Int @id @default(autoincrement())
+
+  bank_id Int
+  bank    banks @relation(fields: [bank_id], references: [id])
+
+  ifsc_code           String
+  branch              String
+  micr_code           String
+  branch_address      String
+  branch_city         String
+  branch_state        String
+  branch_district     String
+  email               String
+  contact_no          String
+  contact_person_name String
+  created_at          DateTime @default(now()) @map("created_at")
+  updated_at          DateTime @updatedAt @map("updated_at")
+}
+
+/// Banks
+model banks {
+  id     Int    @id @default(autoincrement())
+  name   String
+  remark String
+
+  cheque_issuances   cheque_issuances[]
+  bank_masters       bank_masters[]
+  chequebook_entries cheque_book_entries[]
+  vendor_masters     vendor_masters[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+/// Bills Payment Entry
+model bill_payment_entries {
+  id      Int    @id @default(autoincrement())
+  bill_no String
+
+  bill_type_id      Int
+  bill_type         bill_types     @relation(fields: [bill_type_id], references: [id])
+  bill_entry_date   DateTime
+  department        departments    @relation(fields: [department_id], references: [id])
+  department_id     Int
+  vendor_id         Int
+  vendor            vendor_masters @relation(fields: [vendor_id], references: [id])
+  address           String
+  payee             employees      @relation(fields: [payee_id], references: [id])
+  payee_id          Int
+  adminis_ward      adminis_wards  @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward_id   Int
+  bill_amount       Float
+  advance           Float
+  deposit           Float
+  deductions_amount Float
+  earlier_payment   Float          @default(0)
+  payable_amount    Float          @default(0)
+  net_amount        Float          @default(0)
+  is_approved       Boolean        @default(false)
+  created_at        DateTime       @default(now()) @map("created_at")
+  updated_at        DateTime       @updatedAt @map("updated_at")
+}
+
+/// Bill Stages
+model bill_stages {
+  id         Int      @id @default(autoincrement())
+  name       String
+  remark     String?
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  bill_invoices bill_invoices[]
+}
+
+/// Bill Types
+model bill_types {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  remark               String?
+  bill_payment_entries bill_payment_entries[]
+  bill_invoice_entries bill_invoices[]
+  cheque_issuances     cheque_issuances[]
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+}
+
+//// Cheque Book Entry
+model cheque_book_entries {
+  id   Int      @id @default(autoincrement())
+  date DateTime
+
+  bank_id Int
+  bank    banks @relation(fields: [bank_id], references: [id])
+
+  bank_account_no         String
+  cheque_no_from          String
+  employee                employees @relation(fields: [employee_id], references: [id])
+  employee_id             Int
+  bank_branch             String
+  page_count              Int
+  cheque_no_to            String
+  issuer_name             String
+  cheque_book_return      Boolean
+  cheque_book_return_date DateTime
+  remarks                 String?
+  created_at              DateTime  @default(now()) @map("created_at")
+  updated_at              DateTime  @updatedAt @map("updated_at")
+}
+
+/// Department
+model departments {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  remark               String?
+  vendors              vendor_masters[]
+  dir_payment_entries  dir_payment_entries[]
+  bill_payment_entries bill_payment_entries[]
+  voucher_entries      voucher_entries[]
+  bill_invoices        bill_invoices[]
+  cheque_issuances     cheque_issuances[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+/// Direct Payment Entry
+model dir_payment_entries {
+  id                 Int           @id @default(autoincrement())
+  payment_no         String
+  payment_date       DateTime
+  payment_type_id    Int
+  payment_type       payment_types @relation(fields: [payment_type_id], references: [id])
+  payee_name_id      Int
+  payee_name         employees     @relation(fields: [payee_name_id], references: [id])
+  narration          String
+  grant_id           Int
+  grant              grants        @relation(fields: [grant_id], references: [id])
+  user_common_budget Boolean
+  adminis_ward_id    Int
+  adminis_ward       adminis_wards @relation(fields: [adminis_ward_id], references: [id])
+  address            String
+  department_id      Int
+  department         departments   @relation(fields: [department_id], references: [id])
+
+  subledger_id Int
+  subledger    subledgers @relation(fields: [subledger_id], references: [id])
+
+  payment_mode String
+  amount       Float
+  created_at   DateTime @default(now()) @map("created_at")
+  updated_at   DateTime @updatedAt @map("updated_at")
+}
+
+/// Employee
+model employees {
+  id          Int    @id @default(autoincrement())
+  name        String
+  email       String
+  designation String
+
+  cheque_book_entries  cheque_book_entries[]
+  bill_payment_entries bill_payment_entries[]
+  dir_payment_entries  dir_payment_entries[]
+  cheque_issuances     cheque_issuances[]
+  investments          investments[]
+  grant_entries        grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+//// Function Code
+model function_codes {
+  id               Int      @id @default(autoincrement())
+  group            String
+  description_code String
+  code_center      String
+  description      String
+  remark           String?
+  created_at       DateTime @default(now()) @map("created_at")
+  updated_at       DateTime @updatedAt @map("updated_at")
+}
+
+/// Grant
+model grants {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  remark              String
+  dir_payment_entries dir_payment_entries[]
+  cheque_issuances    cheque_issuances[]
+  grant_entries       grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+//// Modules
+model modules {
+  id               Int                @id @default(autoincrement())
+  name             String
+  remark           String?
+  receipts         receipt_entries[]
+  cheque_issuances cheque_issuances[]
+  created_at       DateTime           @default(now()) @map("created_at")
+  updated_at       DateTime           @updatedAt @map("updated_at")
+}
+
+//// Municipality Code
+model municipality_codes {
+  id            Int     @id @default(autoincrement())
+  ulbs          String
+  district      String
+  state_code    String
+  district_code String
+  category      String
+  code          String
+  remark        String?
+
+  investments   investments[]
+  grant_entries grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+/// Payment Types
+model payment_types {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  remark              String
+  dir_payment_entries dir_payment_entries[]
+  created_at          DateTime              @default(now()) @map("created_at")
+  updated_at          DateTime              @updatedAt @map("updated_at")
+}
+
+//// Receipt Entry
+model receipt_entries {
+  id         Int      @id @default(autoincrement())
+  receipt_no String
+  date       DateTime
+  paid_by    String
+  email      String
+
+  module_id Int
+  module    modules @relation(fields: [module_id], references: [id])
+
+  receipt_type    receipt_types @relation(fields: [receipt_type_id], references: [id])
+  receipt_type_id Int
+
+  mobile_no String
+
+  admin_ward_id Int
+  admin_ward    adminis_wards @relation(fields: [admin_ward_id], references: [id])
+
+  narration String
+
+  subledger_id Int
+  subledger    subledgers @relation(fields: [subledger_id], references: [id])
+  amount       Float
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+//// Receipt Type
+model receipt_types {
+  id         Int               @id @default(autoincrement())
+  name       String
+  remark     String?
+  receipts   receipt_entries[]
+  created_at DateTime          @default(now()) @map("created_at")
+  updated_at DateTime          @updatedAt @map("updated_at")
+}
+
+//// subledgers
+model subledgers {
+  id           Int                   @id @default(autoincrement())
+  name         String
+  code         String
+  remark       String?
+  receipts     receipt_entries[]
+  vouchers     voucher_entries[]
+  dir_payments dir_payment_entries[]
+  created_at   DateTime              @default(now()) @map("created_at")
+  updated_at   DateTime              @updatedAt @map("updated_at")
+}
+
+///// Vendor Master
+
+model vendor_masters {
+  id             Int          @id @default(autoincrement())
+  vendor_type    vendor_types @relation(fields: [vendor_type_id], references: [id])
+  vendor_type_id Int
+  vendor_no      String
+  name           String
+  mobile_no      String
+  tin_no         String
+  pan_no         String
+
+  bank_id Int
+  bank    banks @relation(fields: [bank_id], references: [id])
+
+  ifsc_code        String
+  department       departments @relation(fields: [department_id], references: [id])
+  department_id    Int
+  email            String
+  contact_address  String
+  gst_no           String
+  aadhar_no        String
+  bank_account_no  String
+  bank_branch_name String
+  authorized_date  DateTime? // Use DateTime? for nullable date fields
+  is_authorized    Boolean     @default(false)
+
+  bill_invoices bill_invoices[]
+  bill_payments bill_payment_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+//// Vendor Type
+model vendor_types {
+  id         Int              @id @default(autoincrement())
+  name       String
+  remark     String?
+  vendors    vendor_masters[]
+  created_at DateTime         @default(now()) @map("created_at")
+  updated_at DateTime         @updatedAt @map("updated_at")
+}
+
+model voucher_entries {
+  id               Int               @id @default(autoincrement())
+  voucher_no       String
+  voucher_date     DateTime
+  voucher_type     voucher_types     @relation(fields: [voucher_type_id], references: [id])
+  voucher_type_id  Int
+  narration        String
+  department       departments       @relation(fields: [department_id], references: [id])
+  department_id    Int
+  adminis_ward     adminis_wards     @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward_id  Int
+  voucher_sub_type voucher_sub_types @relation(fields: [voucher_sub_id], references: [id])
+  voucher_sub_id   Int
+  sub_ledger       subledgers        @relation(fields: [sub_ledger_id], references: [id])
+  sub_ledger_id    Int
+  amount           Float
+  dr_cr_id         Int
+  dr_cr            drcr              @relation(fields: [dr_cr_id], references: [id])
+
+  grant_entries grant_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}
+
+model voucher_sub_types {
+  id              Int               @id @default(autoincrement())
+  name            String
+  remark          String?
+  voucher_entries voucher_entries[]
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @updatedAt @map("updated_at")
+}
+
+// ----------------------------------------------------------------  //
+// * | Author- Krish
+// * | Created On- 31-01-2024
+// * | Created for- Documentation & Record Keeping
+
+model voucher_types {
+  id              Int               @id @default(autoincrement())
+  name            String
+  remark          String?
+  voucher_entries voucher_entries[]
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @updatedAt @map("updated_at")
+}
+
+//// Bill Invoice Table : Managed By: Bijoy Paitandi
+model bill_invoices {
+  id            Int            @id @default(autoincrement())
+  bill_no       String
+  type_id       Int
+  type          bill_types     @relation(fields: [type_id], references: [id])
+  vendor_id     Int
+  vendor        vendor_masters @relation(fields: [vendor_id], references: [id])
+  department_id Int
+  department    departments    @relation(fields: [department_id], references: [id])
+  bill_date     DateTime
+  entry_date    DateTime
+  stage_id      Int
+  bill_stage    bill_stages    @relation(fields: [stage_id], references: [id])
+  address       String
+  narration     String
+  admin_ward_id Int
+  admin_ward    adminis_wards  @relation(fields: [admin_ward_id], references: [id])
+  amount        Float
+  is_authorized Boolean        @default(false)
+  created_at    DateTime       @default(now()) @map("created_at")
+  updated_at    DateTime       @updatedAt @map("updated_at")
+}
+
+////cheque_issuances: Managed by: Bijoy Paitandi
+model cheque_issuances {
+  id            Int           @id @default(autoincrement())
+  voucher_no    String
+  voucher_date  DateTime
+  bill_type_id  Int
+  bill_type     bill_types    @relation(fields: [bill_type_id], references: [id])
+  narration     String
+  admin_ward_id Int
+  admin_ward    adminis_wards @relation(fields: [admin_ward_id], references: [id])
+  department_id Int
+  department    departments   @relation(fields: [department_id], references: [id])
+  payee_id      Int
+  payee         employees     @relation(fields: [payee_id], references: [id])
+  grant_id      Int
+  grant         grants        @relation(fields: [grant_id], references: [id])
+  bank_id       Int
+  bank          banks         @relation(fields: [bank_id], references: [id])
+  module_id     Int
+  module        modules       @relation(fields: [module_id], references: [id])
+  issue_date    DateTime
+  cheque_no     String
+  amount        Float
+  created_at    DateTime      @default(now()) @map("created_at")
+  updated_at    DateTime      @updatedAt @map("updated_at")
+}

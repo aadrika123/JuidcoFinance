@@ -1,0 +1,14 @@
+////financial_years: Managed by: Bijoy Paitandi
+model financial_years{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+  receipt_budgets             receipt_budgets[]
+  budget_appropriations       budget_appropriations[]
+  budget_reappropriations     budget_reappropriations[]
+  opening_balances            opening_balances[]
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

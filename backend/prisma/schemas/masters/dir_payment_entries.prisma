@@ -1,0 +1,27 @@
+/// Direct Payment Entry
+model dir_payment_entries {
+  id                 Int           @id @default(autoincrement())
+  payment_no         String
+  payment_date       DateTime
+  payment_type_id    Int
+  payment_type       payment_types @relation(fields: [payment_type_id], references: [id])
+  payee_name_id      Int
+  payee_name         employees     @relation(fields: [payee_name_id], references: [id])
+  narration          String
+  grant_id           Int
+  grant              grants        @relation(fields: [grant_id], references: [id])
+  user_common_budget Boolean
+  adminis_ward_id    Int
+  adminis_ward       adminis_wards @relation(fields: [adminis_ward_id], references: [id])
+  address            String
+  department_id      Int
+  department         departments   @relation(fields: [department_id], references: [id])
+
+  subledger_id Int
+  subledger    subledgers @relation(fields: [subledger_id], references: [id])
+
+  payment_mode String
+  amount       Float
+  created_at   DateTime @default(now()) @map("created_at")
+  updated_at   DateTime @updatedAt @map("updated_at")
+}

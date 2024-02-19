@@ -1,0 +1,17 @@
+////opening_balances: Managed by: Bijoy Paitandi
+model opening_balances{
+	id                  Int                 @id @default(autoincrement())
+
+	fin_year_id         Int
+  fin_year                    financial_years     @relation(fields: [fin_year_id], references: [id])
+
+  dr_cr_id         Int
+  dr_cr            drcr            @relation(fields: [dr_cr_id], references: [id])
+
+	primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+	amount              Float
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

@@ -37,11 +37,8 @@ export const HeroReceiptBudget = () => {
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
     { name: "fin_year", caption: "Financial Year", width: "w-[10%]" },
-    { name: "department", caption: "Department", width: "w-[10%]" },
-    { name: "admin_ward", caption: "Administration Ward", width: "w-[15%]" },
     { name: "primary_acc_code", caption: "Primary Account Code", width: "w-[10%]" },
     { name: "amount", caption: "Amount", width: "w-[10%]" },
-    { name: "budget_type", caption: "Budget Type", width: "w-[25%]" },
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,

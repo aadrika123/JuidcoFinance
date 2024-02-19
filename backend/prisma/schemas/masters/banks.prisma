@@ -1,0 +1,14 @@
+/// Banks
+model banks {
+  id     Int    @id @default(autoincrement())
+  name   String
+  remark String
+
+  cheque_issuances      cheque_issuances[]
+  bank_masters          bank_masters[]
+  chequebook_entries    cheque_book_entries[]
+  vendor_masters        vendor_masters[]
+
+  created_at       DateTime           @default(now()) @map("created_at")
+  updated_at       DateTime           @updatedAt @map("updated_at")
+}

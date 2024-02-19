@@ -1,0 +1,23 @@
+//// Bill Invoice Table : Managed By: Bijoy Paitandi
+model bill_invoices {
+  id            Int            @id @default(autoincrement())
+  bill_no       String
+  type_id       Int
+  type          bill_types     @relation(fields: [type_id], references: [id])
+  vendor_id     Int
+  vendor        vendor_masters @relation(fields: [vendor_id], references: [id])
+  department_id Int
+  department    departments    @relation(fields: [department_id], references: [id])
+  bill_date     DateTime
+  entry_date    DateTime
+  stage_id      Int
+  bill_stage    bill_stages    @relation(fields: [stage_id], references: [id])
+  address       String
+  narration     String
+  admin_ward_id Int
+  admin_ward    adminis_wards  @relation(fields: [admin_ward_id], references: [id])
+  amount        Float
+  is_authorized Boolean        @default(false)
+  created_at    DateTime       @default(now()) @map("created_at")
+  updated_at    DateTime       @updatedAt @map("updated_at")
+}

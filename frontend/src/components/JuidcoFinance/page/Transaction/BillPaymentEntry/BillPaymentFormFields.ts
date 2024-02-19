@@ -21,7 +21,7 @@ export const fields: FieldTypeProps[] = [
     HEADER: "Bill Type",
     ACCESSOR: "bill_type_id",
     PLACEHOLDER: "Select Bill Type",
-    API: `${FINANCE_URL.GRANT_URL.get}`,
+    API: `${FINANCE_URL.BILL_TYPE.get}`,
   },
   {
     CONTROL: "select",
@@ -35,7 +35,7 @@ export const fields: FieldTypeProps[] = [
     HEADER: "Vendor Name",
     ACCESSOR: "vendor_id",
     PLACEHOLDER: "Select Vendor Name",
-    API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
+    API: `${FINANCE_URL.VENDOR_MASTER_URL.getNames}`,
   },
   {
     CONTROL: "textarea",
@@ -48,7 +48,7 @@ export const fields: FieldTypeProps[] = [
     HEADER: "Payee Name",
     ACCESSOR: "payee_id",
     PLACEHOLDER: "Select Payee Name",
-    API: `${FINANCE_URL.VOUCHER_TYPE_URL.get}`,
+    API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
   },
   {
     CONTROL: "select",

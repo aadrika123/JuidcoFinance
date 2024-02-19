@@ -1,0 +1,11 @@
+////investment_types: Managed by: Bijoy Paitandi
+model investment_types{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+  investments         investments[]
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

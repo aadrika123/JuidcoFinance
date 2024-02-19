@@ -1,0 +1,28 @@
+/// Bills Payment Entry
+model bill_payment_entries {
+  id      Int    @id @default(autoincrement())
+  bill_no String
+
+  bill_type_id      Int
+  bill_type         bill_types     @relation(fields: [bill_type_id], references: [id])
+  bill_entry_date   DateTime
+  department        departments    @relation(fields: [department_id], references: [id])
+  department_id     Int
+  vendor_id         Int
+  vendor            vendor_masters @relation(fields: [vendor_id], references: [id])
+  address           String
+  payee             employees      @relation(fields: [payee_id], references: [id])
+  payee_id          Int
+  adminis_ward      adminis_wards  @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward_id   Int
+  bill_amount       Float
+  advance           Float
+  deposit           Float
+  deductions_amount Float
+  earlier_payment   Float          @default(0)
+  payable_amount    Float          @default(0)
+  net_amount        Float          @default(0)
+  is_approved       Boolean        @default(false)
+  created_at        DateTime       @default(now()) @map("created_at")
+  updated_at        DateTime       @updatedAt @map("updated_at")
+}

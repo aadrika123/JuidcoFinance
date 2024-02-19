@@ -1,0 +1,10 @@
+/// Bill Stages
+model bill_stages {
+  id         Int      @id @default(autoincrement())
+  name       String
+  remark     String?
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  bill_invoices bill_invoices[]
+}

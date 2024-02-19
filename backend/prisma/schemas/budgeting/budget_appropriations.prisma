@@ -1,0 +1,22 @@
+
+////budget_appropriations: Managed by: Bijoy Paitandi
+model budget_appropriations{
+	id                          Int                 @id @default(autoincrement())
+	fin_year_id                 Int
+  fin_year                    financial_years     @relation(fields: [fin_year_id], references: [id])
+
+	primary_acc_code_id         Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+	remark                      String
+	
+  from_primary_acc_code_id    Int
+  from_primary_acc_code       account_codes       @relation("from", fields: [from_primary_acc_code_id], references: [id])
+
+
+  approved_amount             Int
+	transfer_amount             Float
+	created_at                  DateTime            @default(now()) @map("created_at")
+	updated_at                  DateTime            @updatedAt @map("updated_at")
+}
+

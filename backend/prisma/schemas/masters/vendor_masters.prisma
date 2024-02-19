@@ -1,0 +1,34 @@
+///// Vendor Master
+
+model vendor_masters {
+  id               Int          @id @default(autoincrement())
+  vendor_type      vendor_types @relation(fields: [vendor_type_id], references: [id])
+  vendor_type_id   Int
+  vendor_no        String
+  name             String
+  mobile_no        String
+  tin_no           String
+  pan_no           String
+
+  bank_id             Int
+  bank                banks   @relation(fields: [bank_id], references: [id])
+
+
+  ifsc_code        String
+  department       departments  @relation(fields: [department_id], references: [id])
+  department_id    Int
+  email            String
+  contact_address  String
+  gst_no           String
+  aadhar_no        String
+  bank_account_no  String
+  bank_branch_name String
+  authorized_date  DateTime? // Use DateTime? for nullable date fields
+  is_authorized    Boolean      @default(false)
+
+  bill_invoices bill_invoices[]
+  bill_payments bill_payment_entries[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}

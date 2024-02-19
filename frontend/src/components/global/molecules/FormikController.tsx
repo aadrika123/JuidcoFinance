@@ -4,7 +4,7 @@ import RadioButtons from "@/components/global/atoms/RadioButton";
 import CheckBoxes from "@/components/global/atoms/Checkbox";
 import Input from "../atoms/Input";
 import Select from "../atoms/Select";
-
+import SelectForNoApi from "../atoms/SelectForNoApi";
 
 /**
  * | Author- Sanjiv Kumar
@@ -14,8 +14,8 @@ import Select from "../atoms/Select";
  */
 
 interface Options {
-  key: string,
-  value: string
+  key: string;
+  value: string;
 }
 
 interface FormikControllerProps {
@@ -25,30 +25,41 @@ interface FormikControllerProps {
   options: Options[];
   placeholder?: string | "";
   api?: string;
+  data: [];
   type?: string;
   value?: number | string;
   error?: string | undefined;
   touched?: boolean | undefined;
   readonly?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  visibility?: boolean;
+  handler?: (id: number | string) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 const FormikController: React.FC<FormikControllerProps> = (props) => {
-  const { control, ...rest } = props;
-  switch (control) {
-    case "input":
-      return <Input {...rest} />;
-    case "textarea":
-      return <TextArea {...rest} />;
-    case "radio":
-      return <RadioButtons {...rest} />;
-    case "checkbox":
-      return <CheckBoxes {...rest} />;
-    case "select":
-      return <Select {...rest} />;
-    default:
-      return null;
+  const { control, visibility = true, ...rest } = props;
+  if (visibility) {
+    switch (control) {
+      case "input":
+        return <Input {...rest} />;
+      case "textarea":
+        return <TextArea {...rest} />;
+      case "radio":
+        return <RadioButtons {...rest} />;
+      case "checkbox":
+        return <CheckBoxes {...rest} />;
+      case "select":
+        return <Select {...rest} />;
+      case "selectForNoApi":
+        return <SelectForNoApi {...rest} />;
+      default:
+        return null;
+    }
+  } else {
+    return null;
   }
 };
 

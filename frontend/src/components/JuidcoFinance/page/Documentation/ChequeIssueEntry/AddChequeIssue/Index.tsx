@@ -30,7 +30,7 @@ export const AddChequeIssueEntry = () => {
     isOnEdit: false,
   });
   const initialValues: ChequeIssueEntryData = {
-    voucher_no: 0,
+    voucher_no: "",
     voucher_date: "",
     bill_type_id: 0,
     narration: "",
@@ -41,7 +41,7 @@ export const AddChequeIssueEntry = () => {
     module_id: 0,
     issue_date: "",
     cheque_no: "",
-    amount: 0,
+    amount: "",
   };
   const [data, setData] = useState<ChequeIssueEntryData[]>([]);
   const [initialData, setInitialData] =
@@ -120,16 +120,16 @@ export const AddChequeIssueEntry = () => {
     handleStore,
     {
       onSuccess: () => {
-        toast.success("Updated Direct Payment Entry");
-      },
-      onError: () => {
-        alert("Error updating Direct Payment Entry");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
+        toast.success("Added Cheque Issue Entry");
         setTimeout(() => {
           goBack();
         }, 1000);
+      },
+      onError: () => {
+        alert("Something Went Wrong!!!");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries();
       },
     }
   );
@@ -216,18 +216,19 @@ export const AddChequeIssueEntry = () => {
   ];
 
   // Add Input Fields
-  const fields: FieldTypeProps[] = [
+   // Add Input Fields
+   const fields: FieldTypeProps[] = [
     {
       CONTROL: "input",
       HEADER: "Payment Voucher No",
       ACCESSOR: "voucher_no",
-      PLACEHOLDER: "Enter payment voucher no",
-      TYPE: "number",
+      PLACEHOLDER: "Enter Voucher No",
     },
     {
       CONTROL: "input",
       HEADER: "Payment Voucher Date",
       ACCESSOR: "voucher_date",
+      PLACEHOLDER: "YYYY-MM-DD",
       TYPE: "date",
     },
     {
@@ -242,7 +243,7 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "input",
       HEADER: "Narration",
       ACCESSOR: "narration",
-      PLACEHOLDER: "XYZ Value",
+      PLACEHOLDER: "Enter Narration",
     },
 
     {
@@ -257,7 +258,7 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "select",
       HEADER: "Payee Name",
       ACCESSOR: "payee_id",
-      PLACEHOLDER: "Select payee name",
+      PLACEHOLDER: "Select Payee Name",
       API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
     },
 
@@ -265,7 +266,7 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "select",
       HEADER: "Grant",
       ACCESSOR: "grant_id",
-      PLACEHOLDER: "Select grant",
+      PLACEHOLDER: "Select Grant",
       API: `${FINANCE_URL.GRANT_URL.get}`,
     },
 
@@ -273,7 +274,7 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "select",
       HEADER: "Department",
       ACCESSOR: "department_id",
-      PLACEHOLDER: "Select department",
+      PLACEHOLDER: "Select Department",
       API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
     },
 
@@ -281,37 +282,34 @@ export const AddChequeIssueEntry = () => {
       CONTROL: "select",
       HEADER: "Bank Name",
       ACCESSOR: "bank_id",
-      PLACEHOLDER: "Select bank name",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select Bank Name",
+      API: `${FINANCE_URL.BANK_URL.get}`,
     },
-
     {
       CONTROL: "select",
       HEADER: "Module Name",
       ACCESSOR: "module_id",
-      PLACEHOLDER: "Select module name",
-      API: `${FINANCE_URL.ADMINIS_WARD_URL.get}`,
+      PLACEHOLDER: "Select Module Name",
+      API: `${FINANCE_URL.MODULE_URL.get}`,
     },
-
     {
       CONTROL: "input",
       HEADER: "Issue Date",
       ACCESSOR: "issue_date",
       TYPE: "date",
     },
-
     {
       CONTROL: "input",
       HEADER: "Cheque No",
       ACCESSOR: "cheque_no",
-      PLACEHOLDER: "Enter cheque no",
+      PLACEHOLDER: "Enter Cheque Number",
     },
 
     {
       CONTROL: "input",
       HEADER: "Amount",
       ACCESSOR: "amount",
-      PLACEHOLDER: "Enter amount",
+      PLACEHOLDER: "Enter Amount",
       TYPE: "number",
     },
   ];
@@ -331,7 +329,7 @@ export const AddChequeIssueEntry = () => {
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
-        title={""}
+        title={"Add Cheque Issue"}
       />
       <TableWithCount
         data={data}

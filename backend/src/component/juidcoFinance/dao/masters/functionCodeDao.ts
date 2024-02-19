@@ -13,7 +13,7 @@ class FunctionCodeDao {
         id: true,
         group: true,
         description_code: true,
-        code_center: true,
+        cost_center: true,
         description: true,
       },
     };

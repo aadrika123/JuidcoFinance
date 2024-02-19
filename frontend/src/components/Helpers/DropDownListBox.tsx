@@ -1,6 +1,7 @@
 import { useQuery} from "react-query";
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
+import axios from "@/lib/axiosConfig"
 import { useField } from "formik";
 
 
@@ -38,14 +39,13 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
 
   console.log(field);
   console.log(meta);
-  
   const fetchData = async (): Promise<Employee[]> => {
     const res = await axios({
       url: props.api,
       method: "GET",
     });
-    
-    return res.data?.data?.data;
+
+    return res.data?.data;
   };
 
   

@@ -233,12 +233,12 @@ export const HeroAddPaymentEntry = () => {
         resetInitialValue={resetInitialValue}
         onSubmit={onSubmit}
         fields={fields}
-        title="Add New Entry"
+        title="Add Direct Payments Entry"
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Add New Entry"
+        title="Add Direct Payments Entry"
         columns={columns}
         footerData={footerData}
         handleStore={mutate}

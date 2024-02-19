@@ -1,0 +1,16 @@
+////balance_trackings: Managed by: Bijoy Paitandi
+model balance_trackings{
+	id                  Int                 @id @default(autoincrement())
+	
+  primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+
+	balance_amount      Float
+
+  grant_entries grant_entries[]
+
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

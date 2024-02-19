@@ -13,6 +13,7 @@
     "start": "tsc && node build/server.js",
     "dev": "nodemon src/server.ts",
     "migrate": "npx prisma migrate dev --name init",
+    "migrate2": "rm -rf prisma/migrations && npx prisma migrate dev --name init",
     "magic": "node magic.js"
   },
   "author": "Aadrika Enterprises",

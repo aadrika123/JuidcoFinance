@@ -70,3 +70,18 @@ export const fields: FieldTypeProps[] = [
     ],
   },
 ];
+
+// const filterFields = (fields) => {
+//   return fields.map(field => {
+//     if (field.CHILDRENS) {
+//       // If the field has CHILDRENS, filter the children recursively
+//       const filteredChildren = filterFields(field.CHILDRENS);
+//       // Filter out children with visibility set to false
+//       field.CHILDRENS = filteredChildren.filter(child => child.VISIBILITY !== false);
+//     }
+//     return field.VISIBILITY !== false ? field : null;
+//   }).filter(Boolean); // Filter out null values
+// };
+
+// const filteredFields = filterFields(fields);
+// console.log(filteredFields);

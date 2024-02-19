@@ -27,7 +27,7 @@ export const voucherSchema = yup.object().shape({
     .number()
     .required("Amount is required")
     .moreThan(0, "Amount must be greater than 0"),
-  dr_cr: yup
-    .string()
+  dr_cr_id: yup
+    .number()
     .required("Dr/Cr is required"),
 });

@@ -1,0 +1,17 @@
+//// Municipality Code
+model municipality_codes {
+  id            Int      @id @default(autoincrement())
+  ulbs          String
+  district      String
+  state_code    String
+  district_code String
+  category      String
+  code          String
+  remark        String?
+
+  investments   investments[]
+  grant_entries grant_entries[]
+
+  created_at    DateTime @default(now()) @map("created_at")
+  updated_at    DateTime @updatedAt @map("updated_at")
+}

@@ -8,11 +8,11 @@ import { QueryClient, useMutation } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
-import APIs from "@/json/apis.json";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { ChequebookDataProps, ResponseData } from "@/utils/types/chequebook_master_types";
 import { ChequebookDetailsSchema } from "@/utils/validation/masters/chequebook_master.validation";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
+import { FINANCE_URL } from "@/utils/api/urls";
 
 export const EditChequebook = ({
   chequebookID,
@@ -24,7 +24,7 @@ export const EditChequebook = ({
   const [initialData, setInitialData] = useState<ChequebookDataProps>({
     date: "",
     bank_branch: "",
-    bank_name: "",
+    bank_id: "",
     bank_account_no: "",
     cheque_no_from: "",
     cheque_no_to: "",
@@ -50,7 +50,7 @@ export const EditChequebook = ({
         return {
           ...prev,
           date: DateFormatter(d.date),
-          bank_name: d.bank_name,
+          bank_id: d.bank.id,
           bank_branch: d.bank_branch,
           bank_account_no: d.bank_account_no,
           cheque_no_from: d.cheque_no_from,
@@ -92,15 +92,15 @@ export const EditChequebook = ({
   >(UpdateChequebook, {
     onSuccess: () => {
       toast.success("Updated Successfully")
+      setTimeout(() => {
+        goBack();
+      }, 2000);
     },
     onError: () => {
       alert("Error updating the record.");
     },
     onSettled: () => {
       queryClient.invalidateQueries();
-      setTimeout(() => {
-        goBack();
-      }, 2000);
     },
   });
 
@@ -126,19 +126,18 @@ export const EditChequebook = ({
       PLACEHOLDER: "Example: Kantatoli, Ranchi",
     },
     {
-      CONTROL: "input",
+      CONTROL: "select",
       HEADER: "Bank Name",
-      ACCESSOR: "bank_name",
-      PLACEHOLDER: "Example: ICICI BANK"
+      ACCESSOR: "bank_id",
+      PLACEHOLDER: "Select bank name",
+      API: `${FINANCE_URL.BANK_URL.get}`,
     },
-
     {
       CONTROL: "input",
       HEADER: "Bank Account No.",
       ACCESSOR: "bank_account_no",
       PLACEHOLDER: "Example: 3224242234324"
     },
-
     {
       CONTROL: "input",
       HEADER: "Cheque no from",
@@ -156,7 +155,7 @@ export const EditChequebook = ({
       HEADER: "Employee",
       ACCESSOR: "employee_id",
       PLACEHOLDER: "Select employee",
-      API: `${APIs.employee_root}`,
+      API: `${FINANCE_URL.EMPLOYEE_URL.get}`,
     },
 
     {

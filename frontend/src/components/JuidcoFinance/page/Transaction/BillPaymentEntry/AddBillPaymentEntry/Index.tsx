@@ -195,14 +195,14 @@ export const HeroAddBillPaymentEntry = () => {
     {
       name: "payee_id_name",
       caption: "Payee Name",
-      width: "w-[20%]",
+      width: "w-[30%]",
     },
     { name: "bill_amount", caption: "Bill Amount", width: "w-[20%]" },
     
     {
       name: "button",
       caption: "Edit/Remove",
-      width: "w-[5%]",
+      width: "w-[10%]",
       value: addButton,
     },
   ];
@@ -216,12 +216,12 @@ export const HeroAddBillPaymentEntry = () => {
         resetInitialValue={resetInitialValue}
         onSubmit={onSubmit}
         fields={fields}
-        title="Add New Entry"
+        title="Add New Bill Payment Entry"
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Add New Entry"
+        title="Add Bill Payment Entry"
         columns={columns}
         handleStore={mutate}
         handleResetTable={handleResetTable}

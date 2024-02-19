@@ -18,7 +18,10 @@ export interface VendorDetailsData {
   tin_no: string;
   gst_no: string;
   pan_no: string;
-  bank_name: string;
+  bank_id: number | string;
+  bank?: {
+    id: number | string;
+  };
   ifsc_code: string;
   email: string;
   contact_address: string;

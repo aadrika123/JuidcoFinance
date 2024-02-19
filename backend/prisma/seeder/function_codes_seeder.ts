@@ -26,7 +26,7 @@ const function_codes_seeder = async () => {
               data: {
                   group: group,
                   description_code: description_code,
-                  code_center: code_center,  
+                  cost_center: code_center,  
                   description: description,
                   created_at: faker.date.past(),
                   updated_at: faker.date.recent(),

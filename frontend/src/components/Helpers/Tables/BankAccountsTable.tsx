@@ -84,7 +84,7 @@ const BankAccountsTable: React.FC = () => {
                 <td className="border border-zinc-400">{d?.id}</td>
 
                 {/* Name of Bank */}
-                <td className="border border-zinc-400">{d?.bank_name}</td>
+                <td className="border border-zinc-400">{d?.bank?.name}</td>
 
                 {/*  IFSC Code */}
                 <td className="border border-zinc-400 ">

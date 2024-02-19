@@ -1,0 +1,12 @@
+////budget_names: Managed by: Bijoy Paitandi
+model budget_names{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+  budget_reappropriations         budget_reappropriations[]
+  
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}
+

@@ -1,0 +1,26 @@
+model voucher_entries {
+  id               Int               @id @default(autoincrement())
+  voucher_no       String
+  voucher_date     DateTime
+  voucher_type     voucher_types     @relation(fields: [voucher_type_id], references: [id])
+  voucher_type_id  Int
+  narration        String
+  department       departments       @relation(fields: [department_id], references: [id])
+  department_id    Int
+  adminis_ward     adminis_wards     @relation(fields: [adminis_ward_id], references: [id])
+  adminis_ward_id  Int
+  voucher_sub_type voucher_sub_types @relation(fields: [voucher_sub_id], references: [id])
+  voucher_sub_id   Int
+  sub_ledger       subledgers        @relation(fields: [sub_ledger_id], references: [id])
+  sub_ledger_id    Int
+  amount           Float
+  dr_cr_id         Int
+  dr_cr            drcr            @relation(fields: [dr_cr_id], references: [id])
+
+
+  grant_entries grant_entries[]
+
+
+  created_at       DateTime          @default(now()) @map("created_at")
+  updated_at       DateTime          @updatedAt @map("updated_at")
+}

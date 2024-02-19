@@ -1,0 +1,11 @@
+////budget_types: Managed by: Bijoy Paitandi
+model budget_types{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	remarks             String
+
+
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

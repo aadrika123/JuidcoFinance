@@ -14,7 +14,7 @@ import goBack, { filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
 import { BudgetReApproDetailsData } from "@/utils/types/budgeting/budget_re_appro_types";
 import { budgetReApproDetailsSchema } from "@/utils/validation/budgeting/budget_re_appro.validation";
-import { fields } from "./BudgetReApproFormFields";
+import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 
 interface UpdatedModeType {
   id: number | string;
@@ -26,6 +26,11 @@ const Hoc = PopupFormikHOC(FormikWrapper);
 export const AddBudgetReAppro = () => {
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
+  const [selects, setSelects] = useState({
+    f_p_codes: [],
+    balance_amount: undefined,
+    approved_amount: undefined,
+  });
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
     isOnEdit: false,
@@ -34,11 +39,12 @@ export const AddBudgetReAppro = () => {
     fin_year_id: "",
     primary_acc_code_id: "",
     transaction_date: "",
+    remark: "",
     budget_name_id: "",
     actual_amount: undefined,
     from_primary_acc_code_id: "",
-    approved_amount: undefined,
-    balance_amount: undefined,
+    // approved_amount: undefined,
+    // balance_amount: undefined,
     transfer_amount: undefined,
   };
 
@@ -73,13 +79,15 @@ export const AddBudgetReAppro = () => {
                 values.primary_acc_code_id_name ||
                 item.primary_acc_code_id_name,
               transaction_date: values.transaction_date,
+              remark: values.remark,
               budget_name_id: values.budget_name_id,
               budget_name_id_name:
                 values.budget_name_id_name || item.budget_name_id_name,
               actual_amount: values.actual_amount,
               from_primary_acc_code_id: values.from_primary_acc_code_id,
               from_primary_acc_code_id_name:
-                values.from_primary_acc_code_id_name || item.from_primary_acc_code_id_name,
+                values.from_primary_acc_code_id_name ||
+                item.from_primary_acc_code_id_name,
               approved_amount: values.approved_amount,
               balance_amount: values.balance_amount,
               transfer_amount: values.transfer_amount,
@@ -144,6 +152,38 @@ export const AddBudgetReAppro = () => {
     return sum;
   };
 
+  /////////////// Handle Select Primary Accounting Code ////////////////
+  const handleSelectPrimaryCode = async (id: string | number) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/${id}`,
+        method: "GET",
+      });
+      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  //////////////////// Handle Select From Primary Accounting Code //////////////
+  const handleSelectFromPrimaryCode = async (id: string | number) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
+        method: "GET",
+      });
+      setSelects((prev) => ({
+        ...prev,
+        balance_amount: res.data?.data?.balance_amount,
+        approved_amount: res.data?.data?.approved_amount,
+      }));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
   ///////////////// Handling Remove item(row) from list ///////////////
   const onRemoveButton = (id: string) => {
     setData((prev) => {
@@ -165,6 +205,7 @@ export const AddBudgetReAppro = () => {
       fin_year_id: data[Id - 1]?.fin_year_id,
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       transaction_date: data[Id - 1]?.transaction_date,
+      remark: data[Id - 1]?.remark,
       budget_name_id: data[Id - 1]?.budget_name_id,
       actual_amount: data[Id - 1]?.actual_amount,
       from_primary_acc_code_id: data[Id - 1]?.from_primary_acc_code_id,
@@ -185,6 +226,91 @@ export const AddBudgetReAppro = () => {
     );
   };
 
+  /////////////////// Field List ///////////////////////
+  const fields: FieldTypeProps[] = [
+    {
+      CONTROL: "select",
+      HEADER: "Financial Year",
+      ACCESSOR: "fin_year_id",
+      PLACEHOLDER: "Select financial year",
+      API: `${FINANCE_URL.FINANCIAL_YEAR_URL.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Primary Accounting Code",
+      ACCESSOR: "primary_acc_code_id",
+      PLACEHOLDER: "Select Primary Accounting Code",
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
+      HANDLER: handleSelectPrimaryCode,
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Transaction Date",
+      ACCESSOR: "transaction_date",
+      TYPE: "date",
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Budget Name",
+      ACCESSOR: "budget_name_id",
+      PLACEHOLDER: "Select budget name",
+      API: `${FINANCE_URL.BUDGET_NAME_URL.get}`,
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Actual Budget Amount",
+      ACCESSOR: "actual_amount",
+      PLACEHOLDER: "Enter Actual Amount",
+      TYPE: "number",
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Remarks",
+      ACCESSOR: "remark",
+      PLACEHOLDER: "Enter Remark",
+    },
+    {
+      TITLE: "Budget Transfer Form",
+      CHILDRENS: [
+        {
+          CONTROL: "selectForNoApi",
+          HEADER: "From Primary Accounting Code",
+          ACCESSOR: "from_primary_acc_code_id",
+          PLACEHOLDER: "Select From Primary Accounting Code",
+          DATA: selects.f_p_codes,
+          HANDLER: handleSelectFromPrimaryCode,
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Approved Budget Amount",
+          ACCESSOR: "approved_amount",
+          PLACEHOLDER: "Enter approved budget amount",
+          TYPE: "number",
+          VISIBILITY: selects.approved_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.approved_amount,
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Balance Approved Amount",
+          ACCESSOR: "balance_amount",
+          PLACEHOLDER: "Enter balance amount",
+          TYPE: "number",
+          VISIBILITY: selects.balance_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.balance_amount,
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Transfer Amount",
+          ACCESSOR: "transfer_amount",
+          PLACEHOLDER: "Enter transfer amount",
+          TYPE: "number",
+        },
+      ],
+    },
+  ];
+
   // Add Table
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
@@ -194,12 +320,12 @@ export const AddBudgetReAppro = () => {
       width: "w-[25%]",
     },
     {
-      name: "transaction_date ",
+      name: "transaction_date",
       caption: "Transaction Date",
       width: "w-[25%]",
     },
     {
-      name: "from_primary_acc_code",
+      name: "from_primary_acc_code_id_name",
       caption: "From Primary Accounting Code",
       width: "w-[25%]",
     },

@@ -48,22 +48,22 @@ const TableWithFeatures = <T,>({
 
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1`,
       method: "GET",
     });
 
     let data = res.data?.data;
-    console.log(data)
     if (data == null) {
       data = { totalPage: 0, data: [] };
     }
 
+    // data = data.data.sort(sortByCreatedAtDesc);
     setState((prev) => ({
       ...prev,
       pageCount: data.totalPage,
       data: data.data,
     }));
-    return data?.data;
+    return data.data;
   };
 
   const {
@@ -110,6 +110,8 @@ const TableWithFeatures = <T,>({
                 columns={columns}
                 data={data}
                 center={center}
+                pageNo={page}
+                limit={numberOfRowsPerPage}
                 // scrollable
               />
               <NextPrevPagination

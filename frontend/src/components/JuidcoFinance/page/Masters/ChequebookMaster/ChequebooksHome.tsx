@@ -41,7 +41,7 @@ export const ChequebooksHome = () => {
     { name: 'id', caption: "Sr. No.", width: "w-[5%]" },
     { name: 'date', caption: "Issue Date", width: "w-[5%]" },
     { name: 'bank_branch', caption: "Bank Branch", width: "w-[5%]" },
-    { name: 'bank_name', caption: "Bank Name", width: "w-[5%]" },
+    { name: 'bank', caption: "Bank Name", width: "w-[5%]" },
     { name: 'bank_account_no', caption: "Bank Account No", width: "w-[5%]" },
     { name: 'cheque_no_from', caption: "Cheque Number From", width: "w-[5%]" },
     { name: 'cheque_no_to', caption: "Cheque Number To", width: "w-[5%]" },
@@ -58,9 +58,9 @@ export const ChequebooksHome = () => {
 
   return (
     <>
-      <HeaderWidget variant="add" title={"Chequebook"} />
+      <HeaderWidget variant="add" title={"Cheque Book"} />
       <TableWithFeatures
-        title="Chequebook List"
+        title="Cheque Book List"
         center
         columns={columns}
         api={"/chequebook-entry/get" || ""}

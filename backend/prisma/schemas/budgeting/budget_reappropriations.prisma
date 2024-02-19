@@ -1,0 +1,29 @@
+////budget_reappropriations: Managed by: Bijoy Paitandi
+model budget_reappropriations{
+	id                  Int                 @id @default(autoincrement())
+	
+  fin_year_id         Int
+  fin_year                    financial_years     @relation(fields: [fin_year_id], references: [id])
+
+	primary_acc_code_id Int
+  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+
+	transaction_date    DateTime
+
+	budget_name_id      Int
+  budget_name                 budget_names        @relation(fields: [budget_name_id], references: [id])
+
+	actual_amount       Float
+
+	from_primary_acc_code_id          Int
+  from_primary_acc_code       account_codes       @relation("from", fields: [from_primary_acc_code_id], references: [id])
+
+
+	approved_amount     Int
+	balance_amount      Int
+	transfer_amount     Float
+	remark              String
+	
+  created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

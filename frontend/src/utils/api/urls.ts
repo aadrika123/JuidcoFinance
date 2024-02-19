@@ -35,7 +35,13 @@ type FinanceUrlKeys =
   | "GRANT_MANAGEMENT_URL"
   | "MUNICIPILATY_CODE_URL"
   | "BUDGET_NAME_URL"
-  | "INVESTMENT_TYPE_URL";
+  | "INVESTMENT_TYPE_URL"
+  | "REVISED_BUDGET_URL"
+  | "DR_CR_URL"
+  | "EXPENDITURE_NATURE_URL"
+  | "BANK_URL"
+  | "MODULE_URL"
+  | "BALANCE_TRACKING_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -46,6 +52,11 @@ type Urls = {
     delete?: string;
     getCodes?: string;
     getAll?: string;
+    getMainCodes?: string;
+    getChildCodes?: string;
+    getNatures?: string;
+    getNames?: string;
+    getParentCodes?: string;
   };
 };
 
@@ -62,7 +73,8 @@ export const FINANCE_URL: Urls = {
     create: "/vendor-master/create",
     update: "/vendor-master/update",
     getById: "/vendor-master/get",
-    getAll: "vendor-master/get",
+    getAll: "/vendor-master/get",
+    getNames: "/vendor-master/get-names",
   },
 
   CHEQUEBOOK_MASTER_URL: {
@@ -103,6 +115,7 @@ export const FINANCE_URL: Urls = {
 
   GRANT_URL: {
     get: "/grant/get",
+    getNatures: "/grant-natures/get"
   },
 
   BILL_TYPE: {
@@ -113,7 +126,7 @@ export const FINANCE_URL: Urls = {
     get: "/department/get",
   },
   EMPLOYEE_URL: {
-    get: "/employee/get",
+    get: "/employees/get",
   },
 
   VOUCHER_TYPE_URL: {
@@ -154,6 +167,12 @@ export const FINANCE_URL: Urls = {
     update: "/receipt-budgets/update",
     getById: "receipt-budgets/get-by-id",
   },
+  REVISED_BUDGET_URL: {
+    create: "/revised-budgets/create",
+    get: "/revised-budgets/get-all",
+    update: "/revised-budgets/update",
+    getById: "revised-budgets/get-by-id",
+  },
   BUDGET_APPRO_URL: {
     create: "/budget-appropriations/create",
     get: "/budget-appropriations/get-all",
@@ -179,10 +198,10 @@ export const FINANCE_URL: Urls = {
     getById: "investments/get-by-id",
   },
   GRANT_MANAGEMENT_URL: {
-    create: "/investments/create",
-    get: "/investments/get-all",
-    update: "/investments/update",
-    getById: "investments/get-by-id",
+    create: "/grant-entries/create",
+    get: "/grant-entries/get-all",
+    update: "/grant-entries/update",
+    getById: "grant-entries/get-by-id",
   },
   BUDGET_TYPE_URL: {
     get: "/budget-types/get",
@@ -191,15 +210,33 @@ export const FINANCE_URL: Urls = {
     get: "/financial-years/get",
   },
   ACCOUNTING_CODE_URL: {
-    getAll: "/accounting-code-list/get-all",
+    get: "/get-all-account-code",
+    getMainCodes: "/get-main-account-codes",
+    getChildCodes: "/get-child-account-codes",
+    getParentCodes: "/get-parent-account-codes"
   },
   MUNICIPILATY_CODE_URL: {
-    getAll: "/get-all-munci-code",
+    get: "/get-all-munci-code",
   },
   BUDGET_NAME_URL: {
-    getAll: "/budget-names/get",
+    get: "/budget-names/get",
   },
   INVESTMENT_TYPE_URL: {
-    getAll: "/investment-types/get",
+    get: "/investment-types/get",
+  },
+  DR_CR_URL: {
+    get: "/drcr/get",
+  },
+  EXPENDITURE_NATURE_URL:{
+    get: "/expenditure-natures/get"
+  },
+  BANK_URL:{
+    get: "/banks/get"
+  },
+  MODULE_URL: {
+    get: "/modules/get"
+  },
+  BALANCE_TRACKING_URL: {
+    get: "/balance-trackings/get-balance"
   },
 };

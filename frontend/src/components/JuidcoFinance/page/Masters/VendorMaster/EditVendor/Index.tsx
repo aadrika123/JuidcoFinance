@@ -83,7 +83,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
               tin_no: vendorDetails?.tin_no || "",
               gst_no: vendorDetails?.gst_no || "",
               pan_no: vendorDetails?.pan_no || "",
-              bank_name: vendorDetails?.bank_name || "",
+              bank_id: vendorDetails?.bank?.id || "",
               ifsc_code: vendorDetails?.ifsc_code || "",
               email: vendorDetails?.email || "",
               contact_address: vendorDetails?.contact_address || "",
@@ -105,7 +105,8 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
               handleChange,
               handleBlur,
               handleSubmit,
-              handleReset
+              handleReset,
+              dirty
             }) => (
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -159,14 +160,16 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                     label="Vendor Name"
                     name="name"
                   />
-                  <InputBox
+                  <DropDownList
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.bank_name}
-                    error={errors.bank_name}
-                    touched={touched.bank_name}
+                    value={values.bank_id}
+                    error={errors.bank_id}
+                    touched={touched.bank_id}
                     label="Name of the bank"
-                    name="bank_name"
+                    name="bank_id"
+                    placeholder={"Select Bank Name"}
+                    api={FINANCE_URL.BANK_URL.get || ""}
                   />
 
                   <InputBox
@@ -253,12 +256,14 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
                   >
                     Close
                   </PrimaryButton>
+                  {dirty && <>
                   <PrimaryButton onClick={handleReset} buttonType="button" variant="cancel">
                     Reset
                   </PrimaryButton>
                   <PrimaryButton buttonType="submit" variant="primary">
                     Save
                   </PrimaryButton>
+                  </>}
                 </div>
               </form>
             )}

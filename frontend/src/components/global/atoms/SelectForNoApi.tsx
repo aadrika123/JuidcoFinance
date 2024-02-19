@@ -13,6 +13,8 @@ interface Option {
     name?: string;
     type?: string;
     code?: string;
+    ulbs?: string;
+    description?: string;
   }
 
 interface SelectProps {
@@ -20,12 +22,14 @@ interface SelectProps {
   name: string;
   placeholder?: string;
   value?: number | string;
-  options: Option[] | [];
+  data: Option[] | [];
   error?: string | undefined;
   type?: string;
   touched?: boolean | undefined;
   readonly?: boolean;
   className?: string;
+  visibility?: boolean;
+  handler?: (id: number | string) => void;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
 }
@@ -43,6 +47,10 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
   const fieldId = "id_" + props.name;
 
   const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    if(props.handler){
+      props.handler(parseInt(e.target.value));
+    }
+   
     setValue(parseInt(e.target.value))
     const selectedOption = e.target.options[e.target.selectedIndex].dataset;
     setValue1(selectedOption.name);
@@ -64,9 +72,9 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
           id={fieldId}
         >
           <option selected value="">{props.placeholder}</option>
-          {props?.options.map((d: Option) => (
-            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || d?.code}>
-              {d?.name || d?.type || d?.code}
+          {props?.data.map((d: Option) => (
+            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
+              {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}
             </option>
           ))}
         </select>

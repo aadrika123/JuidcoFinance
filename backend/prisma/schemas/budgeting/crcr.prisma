@@ -1,0 +1,13 @@
+////drcr: Managed by: Bijoy Paitandi
+model drcr{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+
+
+  voucher_entries     voucher_entries[]
+  opening_balances    opening_balances[]
+
+
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+}

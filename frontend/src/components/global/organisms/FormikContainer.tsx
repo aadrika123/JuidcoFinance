@@ -30,6 +30,17 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
     enableReinitialize,
   } = props;
 
+  //////////////// Filtering Fields //////////////
+  const filterFields = (fields: any) => {
+    return fields.map((field: any) => {
+      if (field.CHILDRENS) {
+        const filteredChildren = filterFields(field.CHILDRENS);
+        field.CHILDRENS = filteredChildren.filter((child:FieldTypeProps ) => child.VISIBILITY !== false);
+      }
+      return field.VISIBILITY !== false ? field : null;
+    }).filter(Boolean); // Filter out null values
+  };
+
   const formikController = (
     item: any,
     handleChange: (e: React.ChangeEvent<unknown>) => void,
@@ -40,17 +51,20 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
   ) => {
     return (
       <FormikController
-        readonly={readonly}
+        readonly={readonly || item.READONLY}
         type={item.TYPE}
         control={item.CONTROL || ""}
         label={item.HEADER || ""}
         name={item.ACCESSOR || ""}
         placeholder={item.PLACEHOLDER}
         api={item.API}
+        data={item.DATA || []}
         options={item.OPTIONS || []}
         onChange={handleChange}
         onBlur={handleBlur}
-        value={values[item.ACCESSOR as keyof typeof values]}
+        visibility={item.VISIBILITY}
+        handler={item.HANDLER}
+        value={item.VALUE ? item.VALUE : values[item.ACCESSOR as keyof typeof values]}
         error={errors[item.ACCESSOR as keyof typeof errors]}
         touched={touched[item.ACCESSOR as keyof typeof touched]}
       />
@@ -85,7 +99,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
           pushD1(d1); /// Pushing D1[] into D[]
           d.push(
             <div key={index}>
-              <h2 className="text-[22px] text-primary my-8">{item.TITLE}</h2>
+              <h2 className="text-[22px] text-primary mt-8 mb-4">{item.TITLE}</h2>
               {item?.CHILDRENS && item?.CHILDRENS?.length > 0 && (
                 <div className="mt-2 grid grid-cols-2 gap-x-6 gap-4">
                   {item.CHILDRENS.map(
@@ -145,7 +159,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
 
   return (
     <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
-      <div className="mt-8">
+      <div>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -164,7 +178,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
           }) => (
             <form onSubmit={handleSubmit}>
               {generateFields(
-                fields,
+                filterFields(fields),
                 handleChange,
                 handleBlur,
                 values,

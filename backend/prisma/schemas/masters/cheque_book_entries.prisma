@@ -1,0 +1,23 @@
+//// Cheque Book Entry
+model cheque_book_entries {
+  id                      Int       @id @default(autoincrement())
+  date                    DateTime
+  
+  bank_id             Int
+  bank                banks   @relation(fields: [bank_id], references: [id])
+
+  
+  bank_account_no         String
+  cheque_no_from          String
+  employee                employees @relation(fields: [employee_id], references: [id])
+  employee_id             Int
+  bank_branch             String
+  page_count              Int
+  cheque_no_to            String
+  issuer_name             String
+  cheque_book_return      Boolean
+  cheque_book_return_date DateTime
+  remarks                 String?
+  created_at              DateTime  @default(now()) @map("created_at")
+  updated_at              DateTime  @updatedAt @map("updated_at")
+}

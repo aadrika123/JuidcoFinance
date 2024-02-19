@@ -1,0 +1,16 @@
+/// Department
+model departments {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  remark               String?
+  vendors              vendor_masters[]
+  dir_payment_entries  dir_payment_entries[]
+  bill_payment_entries bill_payment_entries[]
+  voucher_entries      voucher_entries[]
+  bill_invoices        bill_invoices[]
+  cheque_issuances     cheque_issuances[]
+
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+}

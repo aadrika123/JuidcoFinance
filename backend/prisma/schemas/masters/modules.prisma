@@ -1,0 +1,10 @@
+//// Modules
+model modules {
+  id               Int                @id @default(autoincrement())
+  name             String
+  remark           String?
+  receipts         receipt_entries[]
+  cheque_issuances cheque_issuances[]
+  created_at       DateTime           @default(now()) @map("created_at")
+  updated_at       DateTime           @updatedAt @map("updated_at")
+}

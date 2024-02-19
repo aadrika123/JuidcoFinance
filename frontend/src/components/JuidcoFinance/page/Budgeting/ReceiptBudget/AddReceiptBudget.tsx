@@ -32,10 +32,10 @@ export const AddReceiptBudget = () => {
   });
   const initialValues: ReceiptBudgetDetailsData = {
     fin_year_id: "",
-    department_id: "",
+    // department_id: "",
     primary_acc_code_id: "",
-    admin_ward_id: "",
-    budget_type_id: "",
+    // admin_ward_id: "",
+    // budget_type_id: "",
     amount: undefined,
   };
 
@@ -65,19 +65,10 @@ export const AddReceiptBudget = () => {
               fin_year_id: values.fin_year_id,
               fin_year_id_name:
                 values.fin_year_id_name || item.fin_year_id_name,
-              department_id: values.department_id,
-              department_id_name:
-                values.department_id_name || item.department_id_name,
               primary_acc_code_id: values.primary_acc_code_id,
               primary_acc_code_id_name:
                 values.primary_acc_code_id_name ||
                 item.primary_acc_code_id_name,
-              admin_ward_id: values.admin_ward_id,
-              admin_ward_id_name:
-                values.admin_ward_id_name || item.admin_ward_id_name,
-              budget_type_id: values.budget_type_id,
-              budget_type_id_name:
-                values.budget_type_id_name || item.budget_type_id_name,
               amount: values.amount,
             };
           } else {
@@ -159,10 +150,7 @@ export const AddReceiptBudget = () => {
     setInitialData((prev) => ({
       ...prev,
       fin_year_id: data[Id - 1]?.fin_year_id,
-      department_id: data[Id - 1]?.department_id,
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
-      admin_ward_id: data[Id - 1]?.admin_ward_id,
-      budget_type_id: data[Id - 1]?.budget_type_id,
       amount: data[Id - 1]?.amount,
     }));
     dispatch(openPopup());
@@ -184,15 +172,9 @@ export const AddReceiptBudget = () => {
     {
       name: "primary_acc_code_id_name",
       caption: "Primary Accounting Code",
-      width: "w-[25%]",
+      width: "w-[40%]",
     },
-    { name: "department_id_name", caption: "Department", width: "w-[15%]" },
-    {
-      name: "budget_type_id_name",
-      caption: "Budget Type",
-      width: "w-[20%]",
-    },
-    { name: "amount", caption: "Amount(Rs) ", width: "w-[20%]" },
+    { name: "amount", caption: "Amount(Rs) ", width: "w-[39%]" },
     {
       name: "edit/remove",
       caption: "Edit/Remove",

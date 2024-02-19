@@ -1,0 +1,15 @@
+
+
+// ----------------------------------------------------------------  //
+// * | Author- Krish
+// * | Created On- 31-01-2024
+// * | Created for- Documentation & Record Keeping
+
+model voucher_types {
+  id              Int               @id @default(autoincrement())
+  name            String
+  remark          String?
+  voucher_entries voucher_entries[]
+  created_at      DateTime          @default(now()) @map("created_at")
+  updated_at      DateTime          @updatedAt @map("updated_at")
+}

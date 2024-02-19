@@ -30,10 +30,10 @@ export const sidebarLinks: SidebarLinksProps = {
           subModules: [
             { moduleName: " Charts of Account", path: "/finance/masters" },
             { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
-            // {
-            //   moduleName: "Vendor Masters",
-            //   path: "/finance/masters/vendor-master",
-            // },
+            {
+              moduleName: "Vendor Masters",
+              path: "/finance/masters/vendor-master",
+            },
             {
               moduleName: "Cheque Book Entry",
               path: "/finance/masters/chequebook-master",
@@ -128,6 +128,10 @@ export const sidebarLinks: SidebarLinksProps = {
             {
               moduleName: "Investments",
               path: "/finance/budgeting/investments",
+            },
+            {
+              moduleName: "Grant Managements",
+              path: "/finance/budgeting/grant-management",
             },
           ],
         },

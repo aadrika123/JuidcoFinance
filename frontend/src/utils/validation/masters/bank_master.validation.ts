@@ -2,7 +2,7 @@ import { AddBankDetailsData } from "@/utils/types/bank_master_types";
 import * as Yup from "yup";
 
 export const AddBankDetailsSchema = Yup.object().shape({
-  bank_name: Yup.string().required("Bank Name is required"),
+  bank_id: Yup.number().required("Bank Name is required"),
   ifsc_code: Yup.string().required("IFSC Code is required"),
   branch: Yup.string().required("Branch Name is required"),
   micr_code: Yup.string().required("Micr Code is required"),
@@ -20,7 +20,7 @@ export const AddBankDetailsSchema = Yup.object().shape({
 });
 
 export const initialBankDetailsValues: AddBankDetailsData = {
-  bank_name: "",
+  bank_id: -1,
   ifsc_code: "",
   branch: "",
   micr_code: "",

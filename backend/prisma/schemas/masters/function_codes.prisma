@@ -1,0 +1,11 @@
+//// Function Code
+model function_codes {
+  id               Int      @id @default(autoincrement())
+  group            String
+  description_code String
+  cost_center      String
+  description      String
+  remark           String?
+  created_at       DateTime @default(now()) @map("created_at")
+  updated_at       DateTime @updatedAt @map("updated_at")
+}

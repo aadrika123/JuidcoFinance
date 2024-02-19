@@ -93,8 +93,8 @@ export const HeroGrantManagement = () => {
     },
     {
       name: "expenditure_date",
-      caption: "Date",
-      width: "w-[25%]",
+      caption: "Expenditure Date",
+      width: "w-[40%]",
     },
     {
       name: "voucher",
@@ -102,13 +102,13 @@ export const HeroGrantManagement = () => {
       width: "w-[25%]",
     },
     {
-      name: "expenditure_nature",
+      name: "expndtre_nature",
       caption: "Nature of Expenditure",
       width: "w-[25%]",
     },
     {
       name: "refund_date",
-      caption: "Date",
+      caption: "Refund Date",
       width: "w-[25%]",
     },
     {

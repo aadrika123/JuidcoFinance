@@ -13,8 +13,8 @@ import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
 import { budgetApproDetailsSchema } from "@/utils/validation/budgeting/budget_appro.validation";
-import { fields } from "./BudgetApproFormFields";
 import { BudgetApproDetailsData } from "@/utils/types/budgeting/budget_appro_types";
+import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 
 interface UpdatedModeType {
   id: number | string;
@@ -26,6 +26,10 @@ const Hoc = PopupFormikHOC(FormikWrapper);
 export const AddBudgetAppro = () => {
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
+  const [selects, setSelects] = useState({
+    f_p_codes: [],
+    approved_amount: undefined,
+  });
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
     isOnEdit: false,
@@ -35,7 +39,7 @@ export const AddBudgetAppro = () => {
     primary_acc_code_id: "",
     remark: "",
     from_primary_acc_code_id: "",
-    approved_amount: undefined,
+    // approved_amount: undefined,
     transfer_amount: undefined,
   };
 
@@ -74,7 +78,7 @@ export const AddBudgetAppro = () => {
               from_primary_acc_code_id_name:
                 values.from_primary_acc_code_id_name ||
                 item.from_primary_acc_code_id_name,
-              approved_amount: values.approved_amount,
+              // approved_amount: values.approved_amount,
               transfer_amount: values.transfer_amount,
             };
           } else {
@@ -128,6 +132,34 @@ export const AddBudgetAppro = () => {
     setData([]);
   };
 
+   /////////////// Handle Select Primary Accounting Code ////////////////
+   const handleSelectPrimaryCode = async (id: string | number) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
+        method: "GET",
+      });
+      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  //////////////////// Handle Select From Primary Accounting Code //////////////
+  const handleSelectFromPrimaryCode = async (id: string | number) => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
+        method: "GET",
+      });
+      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
     let sum = 0;
@@ -159,7 +191,7 @@ export const AddBudgetAppro = () => {
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       remark: data[Id - 1]?.remark,
       from_primary_acc_code_id: data[Id - 1]?.from_primary_acc_code_id,
-      approved_amount: data[Id - 1]?.approved_amount,
+      // approved_amount: data[Id - 1]?.approved_amount,
       transfer_amount: data[Id - 1]?.transfer_amount,
     }));
     dispatch(openPopup());
@@ -201,6 +233,61 @@ export const AddBudgetAppro = () => {
     },
   ];
 
+  ////////// Form Fields /////////////////
+  const fields: FieldTypeProps[] = [
+    {
+      CONTROL: "select",
+      HEADER: "Financial Year",
+      ACCESSOR: "fin_year_id",
+      PLACEHOLDER: "Select financial year",
+      API: `${FINANCE_URL.FINANCIAL_YEAR_URL.get}`,
+    },
+    {
+      CONTROL: "select",
+      HEADER: "Primary Accounting Code",
+      ACCESSOR: "primary_acc_code_id",
+      PLACEHOLDER: "Select Primary Accounting Code",
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
+      HANDLER: handleSelectPrimaryCode,
+    },
+    {
+      CONTROL: "input",
+      HEADER: "Budget Appropriation Remark",
+      ACCESSOR: "remark",
+      PLACEHOLDER: "Enter budget appropriation remark",
+    },
+    {
+      TITLE: "Budget Transfer From",
+      CHILDRENS: [
+        {
+          CONTROL: "selectForNoApi",
+          HEADER: "From Primary Accounting Code",
+          ACCESSOR: "from_primary_acc_code_id",
+          PLACEHOLDER: "Select From Primary Accounting Code",
+          DATA: selects.f_p_codes,
+          HANDLER: handleSelectFromPrimaryCode
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Approved Amount",
+          ACCESSOR: "approved_amount",
+          PLACEHOLDER: "Enter approved amount",
+          TYPE: "number",
+          VISIBILITY: selects.approved_amount ? true : false,
+          READONLY: true,
+          VALUE: selects.approved_amount,
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Transfer Amount",
+          ACCESSOR: "transfer_amount",
+          PLACEHOLDER: "Enter transfer amount",
+          TYPE: "number",
+        },
+      ],
+    },
+  ];
+
   const footerData = [
     {
       key: "Total Transfer Amount",
@@ -216,12 +303,12 @@ export const AddBudgetAppro = () => {
         onSubmit={onSubmit}
         fields={fields}
         resetInitialValue={resetInitialValue}
-        title="Add Budget Appro"
+        title="Add Budget Appropriation"
       />
       <TableWithCount
         data={data}
         scrollable
-        title="Add Budget Appro Table"
+        title="Add Budget Appropriation Table"
         columns={columns}
         footerData={footerData}
         handleStore={mutate}

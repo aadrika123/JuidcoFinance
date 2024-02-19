@@ -25,7 +25,7 @@ export const EditRevisedBudget = ({
     primary_acc_code_id: "",
     approved_amount: "",
     revised_amount: "",
-    remark: "",
+    remarks: "",
   });
 
   const queryClient = new QueryClient();
@@ -35,7 +35,7 @@ export const EditRevisedBudget = ({
     (async function () {
       const res = await axios({
         method: "GET",
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.getById}/${RevisedBudgetID}`,
+        url: `${FINANCE_URL.REVISED_BUDGET_URL.getById}/${RevisedBudgetID}`,
       });
 
       setInitialData((prev) => {
@@ -44,7 +44,7 @@ export const EditRevisedBudget = ({
           primary_acc_code_id: res.data.data.primary_acc_code.id,
           approved_amount: res.data.data.approved_amount,
           revised_amount: res.data.data.revised_amount,
-          remark: res.data.data.remark,
+          remarks: res.data.data.remarks,
         };
       });
     })();
@@ -56,7 +56,7 @@ export const EditRevisedBudget = ({
   ): Promise<RevisedBudgetDetailsData> => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.update}`,
+        url: `${FINANCE_URL.REVISED_BUDGET_URL.update}`,
         method: "POST",
         data: {
           id: Number(RevisedBudgetID),
@@ -97,11 +97,11 @@ export const EditRevisedBudget = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Revised Budget"
+        title="Revised Budget"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Revised Budget"
+        title="Revised Budget"
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={revisedBudgetDetailsSchema}

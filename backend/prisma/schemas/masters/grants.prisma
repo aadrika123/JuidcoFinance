@@ -1,0 +1,13 @@
+/// Grant
+model grants {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  remark              String
+  dir_payment_entries dir_payment_entries[]
+  cheque_issuances    cheque_issuances[]
+  grant_entries grant_entries[]
+
+
+  created_at          DateTime              @default(now()) @map("created_at")
+  updated_at          DateTime              @updatedAt @map("updated_at")
+}

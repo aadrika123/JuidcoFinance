@@ -23,7 +23,7 @@ export const EditOpeningBalance = ({
 
   const [initialData, setInitialData] = useState<OpeningBalanceDetailsData>({
     fin_year_id: "",
-    dr_cr: "",
+    dr_cr_id: "",
     primary_acc_code_id: "",
     amount: "",
   });
@@ -42,7 +42,7 @@ export const EditOpeningBalance = ({
         return {
           ...prev,
           fin_year_id: res.data.data.fin_year.id,
-          dr_cr: res.data.data.dr_cr,
+          dr_cr_id: res.data.data.dr_cr.id,
           primary_acc_code_id: res.data.data.primary_acc_code.id,
           amount: res.data.data.amount,
         };
@@ -97,11 +97,11 @@ export const EditOpeningBalance = ({
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Opening Balance"
+        title="Opening Balance"
         variant={searchParams == "view" ? "view" : "edit"}
       />
       <FormikWrapper
-        title="Edit Opening Balance"
+        title="Opening Balance"
         initialValues={initialData}
         enableReinitialize={true}
         validationSchema={openingBalanceDetailsSchema}

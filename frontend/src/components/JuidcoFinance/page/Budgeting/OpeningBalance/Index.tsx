@@ -42,7 +42,7 @@ export const HeroOpeningBalance = () => {
       width: "w-[25%]",
     },
     {
-      name: "dr_cr ",
+      name: "dr_cr",
       caption: "Dr/Cr Type",
       width: "w-[25%]",
     },
@@ -52,7 +52,7 @@ export const HeroOpeningBalance = () => {
       width: "w-[25%]",
     },
     {
-      name: "amount ",
+      name: "amount",
       caption: "Opening Balance Amount",
       width: "w-[25%]",
     },
