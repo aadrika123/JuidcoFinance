@@ -13,7 +13,7 @@ export const vendorMasterValidation = Joi.object({
     .required(),
   tin_no: Joi.string().allow(null, "").optional(),
   pan_no: Joi.string().allow(null, "").optional(),
-  bank_name: Joi.number().required(),
+  bank_id: Joi.number().required(),
   ifsc_code: Joi.string().required(),
   department_id: Joi.number().integer().required(),
   email: Joi.string().email().required(),
