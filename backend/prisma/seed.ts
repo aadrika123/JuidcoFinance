@@ -1,16 +1,8 @@
 import {
   PrismaClient,
-  adminis_wards,
-  bank_masters,
   cheque_book_entries,
-  departments,
   dir_payment_entries,
-  employees,
-  grants,
-  payment_types,
-  vendor_types,
 } from "@prisma/client";
-import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
 import receipt_types_seeder from "./seeder/receipt_types_seeder";
