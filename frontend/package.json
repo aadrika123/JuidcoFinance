@@ -6,7 +6,8 @@
     "dev": "next dev -p 5000",
     "build": "next build",
     "start": "next start -p 5000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "magic": "node magic-run.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
