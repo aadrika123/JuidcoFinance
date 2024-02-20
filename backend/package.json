@@ -14,18 +14,24 @@
     "dev": "nodemon src/server.ts",
     "migrate": "npx prisma migrate dev --name init",
     "migrate2": "rm -rf prisma/migrations && npx prisma migrate dev --name init",
-    "magic": "node magic.js"
+    "magic": "node magic.js",
+    "build2": "npx tsc && cp -R ./src/grpc/proto ./build/grpc"
+    
   },
   "author": "Aadrika Enterprises",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
+    "@grpc/grpc-js": "^1.10.1",
     "@prisma/client": "^5.8.1",
     "body-parser": "^1.20.2",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "grpc-tools": "^1.12.4",
+    "ip": "^2.0.1",
     "joi": "^17.12.0",
     "nodemon": "^3.0.3",
     "read-excel-file": "^5.7.1",
