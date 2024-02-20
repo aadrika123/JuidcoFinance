@@ -113,7 +113,7 @@ export const EditBudgetReAppro = ({
   const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/1`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));

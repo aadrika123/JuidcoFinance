@@ -39,52 +39,52 @@ export const HeroBudgetReAppro = () => {
     {
       name: "fin_year",
       caption: "Financial Year",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "primary_acc_code",
       caption: "Primary Accounting Code",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "transaction_date",
       caption: "Transaction Date",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "budget_name",
       caption: "Budget Name",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "actual_amount",
       caption: "Actual Budget Amount",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "from_primary_acc_code",
       caption: "From Primary Accounting Code",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "approved_amount",
       caption: "Approved Budget Amount",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "balance_amount",
       caption: "Balance Approved Amount",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "remark",
       caption: "Remarks",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "transfer_amount",
       caption: "Transfer Amount",
-      width: "w-[25%]",
+      width: "w-[10%]",
     },
     {
       name: "View / Edit",

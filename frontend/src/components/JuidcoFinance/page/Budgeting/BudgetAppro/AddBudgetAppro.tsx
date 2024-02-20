@@ -136,7 +136,7 @@ export const AddBudgetAppro = () => {
    const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -153,7 +153,7 @@ export const AddBudgetAppro = () => {
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+      setSelects((prev)=> ({...prev, approved_amount: res.data?.data?.balance_amount}))
     } catch (error) {
       console.log(error);
       throw error;
@@ -247,7 +247,7 @@ export const AddBudgetAppro = () => {
       HEADER: "Primary Accounting Code",
       ACCESSOR: "primary_acc_code_id",
       PLACEHOLDER: "Select Primary Accounting Code",
-      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}`,
       HANDLER: handleSelectPrimaryCode,
     },
     {

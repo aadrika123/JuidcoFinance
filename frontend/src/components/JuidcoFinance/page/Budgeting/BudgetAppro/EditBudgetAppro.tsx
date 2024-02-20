@@ -119,10 +119,10 @@ export const EditBudgetAppro = ({
   const handleSelectFromPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
+        url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/1`,
         method: "GET",
       });
-      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+      setSelects((prev)=> ({...prev, approved_amount: res.data?.data?.balance_amount}))
     } catch (error) {
       console.log(error);
       throw error;

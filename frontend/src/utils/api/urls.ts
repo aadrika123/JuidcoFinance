@@ -213,7 +213,7 @@ export const FINANCE_URL: Urls = {
     get: "/get-all-account-code",
     getMainCodes: "/get-main-account-codes",
     getChildCodes: "/get-child-account-codes",
-    getParentCodes: "/get-parent-account-codes"
+    getParentCodes: "/get-codes-with-parent-detail"
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",
