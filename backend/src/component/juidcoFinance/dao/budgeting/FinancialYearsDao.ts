@@ -11,7 +11,7 @@ class FinancialYearsDao {
         name: true,
       },
     };
-    const data = prisma.financial_years.findMany(query);
+    const data = await prisma.financial_years.findMany(query);
     return generateRes(data);
   };
 }

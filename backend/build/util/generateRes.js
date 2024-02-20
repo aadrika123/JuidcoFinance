@@ -4,7 +4,7 @@ exports.generateRes = void 0;
 const generateRes = (data, count, page, limit) => {
     if (!data || data.length == 0)
         return null;
-    if (data && !(data.length > 0))
+    if (data && (!(data.length > 0) || !count || !page || !limit))
         return data;
     return {
         currentPage: page,
