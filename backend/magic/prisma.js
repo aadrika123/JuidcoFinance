@@ -1,14 +1,5 @@
 const fs = require('fs');
 
-const showHelp = () => {
-    console.log("\n\nSyntax: node magic.js <command>")
-    console.log("\ncommands:");
-    console.log(`
-        merge:  merges all the schema files into one file.
-    `);
-}
-
-
 const getSchemaFileList = async (folder, list) => {
 
     const items = fs.readdirSync(folder);
@@ -23,23 +14,24 @@ const getSchemaFileList = async (folder, list) => {
         }
     }
 
-    for(let i=0;i< subFolders.length;i++){
+    for (let i = 0; i < subFolders.length; i++) {
         await getSchemaFileList(subFolders[i], list);
     };
 }
 
 
-const mergeSchemas = async () => {
+const mergeSchemas = async (args) => {
+
     const schemaFolder = "./prisma/schemas";
 
     const list = [];
     await getSchemaFileList(schemaFolder, list);
-    
+
     // console.log(list);
 
     const outputFile = "./prisma/schema.prisma";
-    
-    fs.writeFileSync(outputFile,"");
+
+    fs.writeFileSync(outputFile, "");
 
     list.forEach(file => {
         var d = fs.readFileSync(file).toString();
@@ -49,13 +41,6 @@ const mergeSchemas = async () => {
     console.log(`Merged ${list.length} schema files into ${outputFile}`);
 }
 
-
-const args = process.argv;
-if (args.length < 3) { console.log("Please provide an argument ..."); showHelp(); }
-else {
-    const command = args[2];
-
-    if (command == "merge") { mergeSchemas(); }
-
-    else { console.log("Unknown command: " + command); showHelp(); }
+module.exports = {
+    mergeSchemas
 }
