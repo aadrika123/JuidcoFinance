@@ -179,6 +179,14 @@ export const AddReceipt = () => {
     dispatch(openPopup());
   };
 
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () =>{
     setData([]);
@@ -241,6 +249,7 @@ export const AddReceipt = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

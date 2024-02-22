@@ -8,8 +8,8 @@ import { useDispatch } from "react-redux";
 import { FormikWrapperProps } from "@/utils/types/FormikTypes/formikTypes";
 
 const PopupFormikHOC = <P extends FormikWrapperProps>(
-  WrappedComponent: React.ComponentType<P>
-): React.FC<P> => {
+  WrappedComponent: React.ComponentType<any>
+): React.FC<any> => {
   const HOCComponent: React.FC<P> = (props) => {
     const { resetInitialValue, title } = props;
     const dispatch = useDispatch();

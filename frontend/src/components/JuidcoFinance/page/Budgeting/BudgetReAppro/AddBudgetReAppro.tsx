@@ -176,7 +176,7 @@ export const AddBudgetReAppro = () => {
       setSelects((prev) => ({
         ...prev,
         balance_amount: res.data?.data?.balance_amount,
-        approved_amount: res.data?.data?.approved_amount,
+        approved_amount: res.data?.data?.balance_amount,
       }));
     } catch (error) {
       console.log(error);
@@ -213,6 +213,8 @@ export const AddBudgetReAppro = () => {
       balance_amount: data[Id - 1]?.balance_amount,
       transfer_amount: data[Id - 1]?.transfer_amount,
     }));
+    handleSelectPrimaryCode(data[Id - 1]?.primary_acc_code_id)
+    handleSelectFromPrimaryCode(data[Id - 1]?.from_primary_acc_code_id)
     dispatch(openPopup());
   };
 
@@ -225,6 +227,19 @@ export const AddBudgetReAppro = () => {
       </>
     );
   };
+
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+    setSelects({
+      f_p_codes: [],
+      balance_amount: undefined,
+      approved_amount: undefined,
+    });
+  }
 
   /////////////////// Field List ///////////////////////
   const fields: FieldTypeProps[] = [
@@ -287,7 +302,7 @@ export const AddBudgetReAppro = () => {
           PLACEHOLDER: "Enter approved budget amount",
           TYPE: "number",
           VISIBILITY: selects.approved_amount ? true : false,
-          READONLY: true,
+          // READONLY: true,
           VALUE: selects.approved_amount,
         },
         {
@@ -297,7 +312,7 @@ export const AddBudgetReAppro = () => {
           PLACEHOLDER: "Enter balance amount",
           TYPE: "number",
           VISIBILITY: selects.balance_amount ? true : false,
-          READONLY: true,
+          // READONLY: true,
           VALUE: selects.balance_amount,
         },
         {
@@ -367,6 +382,7 @@ export const AddBudgetReAppro = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

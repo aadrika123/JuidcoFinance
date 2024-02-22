@@ -157,6 +157,14 @@ export const AddBillsInvoiceEntry = () => {
     });
   };
 
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   ///////////////// Handling Edit Functionality ///////////////
   const onEditButton = (id: string) => {
     const Id: number = Number(id);
@@ -238,6 +246,7 @@ export const AddBillsInvoiceEntry = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

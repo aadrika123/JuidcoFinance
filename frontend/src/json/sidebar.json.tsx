@@ -133,6 +133,10 @@ export const sidebarLinks: SidebarLinksProps = {
               moduleName: "Grant Managements",
               path: "/finance/budgeting/grant-management",
             },
+            {
+              moduleName: "Loans - Borrowings Managements",
+              path: "/finance/budgeting/loan-management",
+            },
           ],
         },
       ],

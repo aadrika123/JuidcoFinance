@@ -50,7 +50,7 @@ const Select: React.FC<SelectProps> = (props) => {
       url: props.api,
       method: "GET",
     });
-console.log("first", res.data.data)
+    
     return res.data?.data;
   };
 

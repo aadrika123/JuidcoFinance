@@ -204,6 +204,14 @@ export const AddInvestments = () => {
     dispatch(openPopup());
   };
 
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   ///////////////// Edit and Remove Button JSX ///////////////
   const addButton = (id: string) => {
     return (
@@ -270,6 +278,7 @@ export const AddInvestments = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

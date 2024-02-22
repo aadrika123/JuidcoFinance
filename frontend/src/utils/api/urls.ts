@@ -41,7 +41,8 @@ type FinanceUrlKeys =
   | "EXPENDITURE_NATURE_URL"
   | "BANK_URL"
   | "MODULE_URL"
-  | "BALANCE_TRACKING_URL";
+  | "BALANCE_TRACKING_URL"
+  | "LOAN_MANAGEMENT_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -238,5 +239,11 @@ export const FINANCE_URL: Urls = {
   },
   BALANCE_TRACKING_URL: {
     get: "/balance-trackings/get-balance"
+  },
+  LOAN_MANAGEMENT_URL: {
+    create: "/loan-management/create",
+    get: "/loan-management/get-all",
+    update: "/loan-management/update",
+    getById: "loan-management/get-by-id",
   },
 };

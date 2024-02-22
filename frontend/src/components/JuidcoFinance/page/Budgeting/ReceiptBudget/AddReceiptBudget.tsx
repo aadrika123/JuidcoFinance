@@ -156,6 +156,14 @@ export const AddReceiptBudget = () => {
     dispatch(openPopup());
   };
 
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   ///////////////// Edit and Remove Button JSX ///////////////
   const addButton = (id: string) => {
     return (
@@ -208,6 +216,7 @@ export const AddReceiptBudget = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

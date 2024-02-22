@@ -32,6 +32,7 @@ interface TableHOCProps<T> {
   footerData?: FooterData[];
   handleStore: (data: T[] | undefined) => void;
   handleResetTable: () => void;
+  handleAddNewEntery?: () => void;
 }
 
 const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
@@ -42,6 +43,9 @@ const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
   const { isOpen, state } = showPopup;
   const dispatch = useDispatch();
   const handleClick = () => {
+    if (props.handleAddNewEntery) {
+      props.handleAddNewEntery();
+    }
     dispatch(openPopup());
   };
 

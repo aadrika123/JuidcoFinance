@@ -196,6 +196,15 @@ export const HeroAddPaymentEntry = () => {
     );
   };
 
+
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   // Add Table
   const columns = [
     { name: "id", caption: "Sr. No.", width: "w-[10%]" },
@@ -243,6 +252,7 @@ export const HeroAddPaymentEntry = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );
