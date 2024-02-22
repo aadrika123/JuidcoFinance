@@ -42,6 +42,7 @@ import payment_types_seeder from "./seeder/payment_types_seeder";
 import drcr_seeder from "./seeder/budgeting/drcr_seeder";
 import account_codes_seeder from "./seeder/account_codes_seeder";
 import function_codes_seeder from "./seeder/function_codes_seeder";
+import loan_management_seeder from "./seeder/budgeting/loan_management_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -214,6 +215,8 @@ async function main() {
     await investments_seeder();
 
     await grant_entries_seeder();
+
+    await loan_management_seeder();
 
   }, 6000);
 

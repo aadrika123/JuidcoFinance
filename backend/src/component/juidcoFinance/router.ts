@@ -40,6 +40,7 @@ import ExpenditureNaturesRoute from "./route/budgeting/ExpenditureNaturesRoute";
 import EmployeesRoute from "./route/budgeting/EmployeesRoute";
 import BudgetNamesRoute from "./route/budgeting/BudgetNamesRoute";
 import DrcrRoute from "./route/budgeting/DrcrRoute";
+import LoanManagementRoute from "./route/budgeting/LoanManagementRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -187,6 +188,8 @@ class FinanceRoute {
     (new BudgetNamesRoute()).configure(app, "39");
 
     (new DrcrRoute()).configure(app, "40");
+
+    (new LoanManagementRoute()).configure(app, "41");  // 41
   }
 }
 

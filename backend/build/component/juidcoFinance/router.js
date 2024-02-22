@@ -43,6 +43,7 @@ const ExpenditureNaturesRoute_1 = __importDefault(require("./route/budgeting/Exp
 const EmployeesRoute_1 = __importDefault(require("./route/budgeting/EmployeesRoute"));
 const BudgetNamesRoute_1 = __importDefault(require("./route/budgeting/BudgetNamesRoute"));
 const DrcrRoute_1 = __importDefault(require("./route/budgeting/DrcrRoute"));
+const LoanManagementRoute_1 = __importDefault(require("./route/budgeting/LoanManagementRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -133,6 +134,7 @@ class FinanceRoute {
         (new ExpenditureNaturesRoute_1.default()).configure(app, "38");
         (new BudgetNamesRoute_1.default()).configure(app, "39");
         (new DrcrRoute_1.default()).configure(app, "40");
+        (new LoanManagementRoute_1.default()).configure(app, "41"); // 41
     }
 }
 exports.default = FinanceRoute;
