@@ -14,9 +14,9 @@
     "dev": "nodemon src/server.ts",
     "migrate": "npx prisma migrate dev --name init",
     "migrate2": "rm -rf prisma/migrations && npx prisma migrate dev --name init",
-    "magic": "node magic.js",
-    "build2": "npx tsc && cp -R ./src/grpc/proto ./build/grpc"
-    
+    "magic": "node magic/index.js",
+    "build2": "npx tsc && cp -R ./src/grpc/proto ./build/grpc",
+    "doc": "python3 magic/gen_doc.py"
   },
   "author": "Aadrika Enterprises",
   "license": "ISC",
