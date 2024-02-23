@@ -7,8 +7,8 @@ import {
 } from "../../requests/budgeting/loanManagementValidation";
 
 /**
- * | Author- Bijoy Paitandi
- * | Created for- loan_management Dao
+ * | Author- Sanjiv Kumar
+ * | Created for- loan_managements Dao
  * | Status: open
  */
 
@@ -21,12 +21,12 @@ class LoanManagementDao {
 
   // store
   store = async (req: Request) => {
-    return await prisma.loan_management.createMany({
+    return await prisma.loan_managements.createMany({
       data: multiRequestData(req),
     });
   };
 
-  // Get limited loan_management
+  // Get limited loan_managements
   get = async (req: Request) => {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
@@ -37,7 +37,7 @@ class LoanManagementDao {
       order = 1;
     }
 
-    const query: Prisma.loan_managementFindManyArgs = {
+    const query: Prisma.loan_managementsFindManyArgs = {
       orderBy: [{ updated_at: order == -1 ? "desc" : "asc" }],
       skip: (page - 1) * limit,
       take: limit,
@@ -144,15 +144,15 @@ class LoanManagementDao {
     }
 
     const [data, count] = await prisma.$transaction([
-      prisma.loan_management.findMany(query),
-      prisma.loan_management.count({ where: query.where }),
+      prisma.loan_managements.findMany(query),
+      prisma.loan_managements.count({ where: query.where }),
     ]);
     return generateRes(data, count, page, limit);
   };
 
   // Get single payment entry details
   getById = async (id: number) => {
-    const query: Prisma.loan_managementFindManyArgs = {
+    const query: Prisma.loan_managementsFindManyArgs = {
       where: { id },
       select: {
         id: true,
@@ -218,14 +218,14 @@ class LoanManagementDao {
         updated_at: true,
       },
     };
-    const data = await prisma.loan_management.findFirst(query);
+    const data = await prisma.loan_managements.findFirst(query);
     return generateRes(data);
   };
 
-  // Update loan_management details
+  // Update loan_managements details
   update = async (req: Request) => {
     const id: number = req.body.id;
-    return await prisma.loan_management.update({
+    return await prisma.loan_managements.update({
       where: {
         id: id,
       },

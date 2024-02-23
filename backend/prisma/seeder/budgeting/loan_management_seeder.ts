@@ -37,7 +37,7 @@ const loan_management_seeder = async () => {
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
     };
-    await prisma.loan_management.create({ data: record });
+    await prisma.loan_managements.create({ data: record });
   }
 };
 export default loan_management_seeder;

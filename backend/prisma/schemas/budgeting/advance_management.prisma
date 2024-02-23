@@ -1,0 +1,42 @@
+////advance_management: Managed by: Sanjiv Kumar
+model advance_managements {
+    id                                             Int                @id @default(autoincrement())
+    ulb_id                                         Int
+    ulb                                            municipality_codes @relation(fields: [ulb_id], references: [id])
+    primary_acc_code_id                            Int
+    primary_acc_code                               account_codes      @relation(fields: [primary_acc_code_id], references: [id])
+    serial_no_of_estimate                          String
+    work_order_no                                  String
+    work_name                                      String
+    work_nature                                    String
+    contract_amount                                Float
+    contractor_name                                String
+    order_sanctioning_the_contract_no              String
+    order_sanctioning_the_contract_resolution_date DateTime
+    order_sanctioning_the_estimate_no              String
+    order_sanctioning_the_estimate_date            DateTime
+    voucher_no                                     String
+    date                                           DateTime
+    amount                                         Float
+    officer_id                                     Int
+    officer                                        employees          @relation("officer", fields: [officer_id], references: [id])
+    bill_no                                        String
+    bill_date                                      DateTime
+    payable_amount                                 Float
+    approved_amount                                Float
+    cumulative_approved_amount                     Float
+    pwd_officer_id                                 Int
+    pwd_officer                                    employees          @relation("pwd_officer", fields: [pwd_officer_id], references: [id])
+    security_deposit_deducted_amount               Float
+    tds_amount                                     Float
+    work_contract_tax_amount                       Float
+    material_issued_recovery_amount                Float
+    advance_provided_recovery_amount               Float
+    other_deduction_amount                         Float
+    net_paid_amount                                Float
+    department_id                                  Int
+    department                                     departments        @relation(fields: [department_id], references: [id])
+    remarks                                        String
+    created_at                                     DateTime           @default(now()) @map("created_at")
+    updated_at                                     DateTime           @updatedAt @map("updated_at")
+}

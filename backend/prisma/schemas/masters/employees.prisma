@@ -1,18 +1,24 @@
 /// Employee
 model employees {
-  id                   Int                    @id @default(autoincrement())
-  name                 String
-  email                String
-  designation          String
-  
+  id          Int    @id @default(autoincrement())
+  name        String
+  email       String
+  designation String
+
   cheque_book_entries  cheque_book_entries[]
   bill_payment_entries bill_payment_entries[]
   dir_payment_entries  dir_payment_entries[]
   cheque_issuances     cheque_issuances[]
   investments          investments[]
-  grant_entries grant_entries[]
+  grant_entries        grant_entries[]
 
+  advance_officer     advance_managements[] @relation("officer")
+  advance_pwd_officer advance_managements[] @relation("pwd_officer")
 
-  created_at           DateTime               @default(now()) @map("created_at")
-  updated_at           DateTime               @updatedAt @map("updated_at")
+  loan_officer     loan_managements[] @relation("officer")
+  loan_employee    loan_managements[] @relation("employee")
+  loan_designation loan_managements[] @relation("designation")
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }

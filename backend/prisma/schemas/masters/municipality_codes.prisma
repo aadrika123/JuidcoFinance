@@ -11,6 +11,8 @@ model municipality_codes {
 
   investments   investments[]
   grant_entries grant_entries[]
+  advance_managements   advance_managements[]
+  loan_managements      loan_managements[]
 
   created_at    DateTime @default(now()) @map("created_at")
   updated_at    DateTime @updatedAt @map("updated_at")

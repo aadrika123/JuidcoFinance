@@ -43,6 +43,7 @@ import drcr_seeder from "./seeder/budgeting/drcr_seeder";
 import account_codes_seeder from "./seeder/account_codes_seeder";
 import function_codes_seeder from "./seeder/function_codes_seeder";
 import loan_management_seeder from "./seeder/budgeting/loan_management_seeder";
+import advance_management_seeder from "./seeder/budgeting/advance_management_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -217,6 +218,8 @@ async function main() {
     await grant_entries_seeder();
 
     await loan_management_seeder();
+
+    await advance_management_seeder();
 
   }, 6000);
 

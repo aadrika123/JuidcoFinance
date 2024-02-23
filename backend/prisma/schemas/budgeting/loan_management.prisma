@@ -1,34 +1,40 @@
-////loan_management: Managed by: Sanjiv Kumar
-model loan_management{
-	id                  Int                 @id @default(autoincrement())
-	ulb_id              Int
-	primary_acc_code_id Int
-	purpose_of_loan     String
-	department_id       Int
-	resolution_date     DateTime
-	loan_no             String
-	loan_sanctioned_amount Float
-	interest_rate       Float
-	instalments_no      Int
-	instalment_amount   Float
-	receipt_date        DateTime
-	received_amount     Float
-	total_received_amount Float
-	repayment_due_date  DateTime
-	principal_amount    Float
-	interest_amount     Float
-	total_due_amount_to_repayment Float
-	officer_id          Int
-	repaid_repayment_date DateTime
-	repaid_principal_amount Float
-	repaid_interest     Float
-	repaid_total_amount Float
-	balance_principal_amount Float
-	balance_interest    Float
-	balance_total_amount Float
-	balance_remarks     String
-	employee_id         Int
-	designation_id      Int
-	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
+///loan_management: Managed by: Sanjiv Kumar
+model loan_managements {
+    id                            Int                @id @default(autoincrement())
+    ulb_id                        Int
+    ulb                           municipality_codes @relation(fields: [ulb_id], references: [id])
+    primary_acc_code_id           Int
+    primary_acc_code              account_codes      @relation(fields: [primary_acc_code_id], references: [id])
+    purpose_of_loan               String
+    department_id                 Int
+    department                    departments        @relation(fields: [department_id], references: [id])
+    resolution_date               DateTime
+    loan_no                       String
+    loan_sanctioned_amount        Float
+    interest_rate                 Float
+    instalments_no                Int
+    instalment_amount             Float
+    receipt_date                  DateTime
+    received_amount               Float
+    total_received_amount         Float
+    repayment_due_date            DateTime
+    principal_amount              Float
+    interest_amount               Float
+    total_due_amount_to_repayment Float
+    officer_id                    Int
+    officer                       employees          @relation("officer", fields: [officer_id], references: [id])
+    repaid_repayment_date         DateTime
+    repaid_principal_amount       Float
+    repaid_interest               Float
+    repaid_total_amount           Float
+    balance_principal_amount      Float
+    balance_interest              Float
+    balance_total_amount          Float
+    balance_remarks               String
+    employee_id                   Int
+    employee                      employees          @relation("employee", fields: [employee_id], references: [id])
+    designation_id                Int
+    designation                   employees          @relation("designation", fields: [designation_id], references: [id])
+    created_at                    DateTime           @default(now()) @map("created_at")
+    updated_at                    DateTime           @updatedAt @map("updated_at")
 }

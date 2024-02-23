@@ -10,6 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+////advance_management: Managed by: Sanjiv Kumar
+model advance_managements{
+	id                                              Int                 @id @default(autoincrement())
+	ulb_id                                          Int
+  ulb                                             municipality_codes  @relation(fields: [ulb_id], references: [id])
+	primary_acc_code_id                             Int
+  primary_acc_code                                account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+	serial_no_of_estimate                           String
+	work_order_no                                   String
+	work_name                                       String
+	work_nature                                     String
+	contract_amount                                 Float
+	contractor_name                                 String
+	order_sanctioning_the_contract_no               String
+	order_sanctioning_the_contract_resolution_date  DateTime
+	order_sanctioning_the_estimate_no               String
+	order_sanctioning_the_estimate_date             DateTime
+	voucher_no                                      String
+	date                                            DateTime
+	amount                                          Float
+	officer_id                                      Int
+  officer                                         employees        @relation("officer", fields: [officer_id], references: [id])
+	bill_no                                         String
+	bill_date                                       DateTime
+	payable_amount                                  Float
+	approved_amount                                 Float
+	cumulative_approved_amount                      Float
+	pwd_officer_id                                  Int
+  pwd_officer                                     employees        @relation("pwd_officer", fields: [pwd_officer_id], references: [id])
+	security_deposit_deducted_amount                Float
+	tds_amount                                      Float
+	work_contract_tax_amount                        Float
+	material_issued_recovery_amount                 Float
+	advance_provided_recovery_amount                Float
+	other_deduction_amount                          Float
+	net_paid_amount                                 Float
+	department_id                                   Int
+  department                                      departments         @relation(fields: [department_id], references: [id])
+	remarks                                         String
+	created_at                                      DateTime            @default(now()) @map("created_at")
+	updated_at                                      DateTime            @updatedAt @map("updated_at")
+}
+
 ////balance_trackings: Managed by: Bijoy Paitandi
 model balance_trackings{
 	id                  Int                 @id @default(autoincrement())
@@ -262,7 +305,7 @@ model investments{
 
 
 ////loan_management: Managed by: Sanjiv Kumar
-model loan_management{
+model loan_managements{
 	id                  Int                 @id @default(autoincrement())
 	ulb_id              Int
   ulb                 municipality_codes  @relation(fields: [ulb_id], references: [id])
@@ -270,7 +313,7 @@ model loan_management{
   primary_acc_code    account_codes       @relation(fields: [primary_acc_code_id], references: [id])
 	purpose_of_loan     String
 	department_id       Int
-  department            departments       @relation(fields: [department_id], references: [id])
+  department          departments         @relation(fields: [department_id], references: [id])
 	resolution_date     DateTime
 	loan_no             String
 	loan_sanctioned_amount Float
@@ -285,7 +328,7 @@ model loan_management{
 	interest_amount     Float
 	total_due_amount_to_repayment Float
 	officer_id          Int
-  officer             employees       @relation("officer", fields: [officer_id], references: [id])
+  officer              employees          @relation("officer", fields: [officer_id], references: [id])
 	repaid_repayment_date DateTime
 	repaid_principal_amount Float
 	repaid_interest     Float
@@ -295,9 +338,9 @@ model loan_management{
 	balance_total_amount Float
 	balance_remarks     String
 	employee_id         Int
-  employee            employees       @relation("employee", fields: [employee_id], references: [id])
+  employee            employees           @relation("employee", fields: [employee_id], references: [id])
 	designation_id      Int
-  designation         employees       @relation("designation", fields: [designation_id], references: [id])
+  designation          employees          @relation("designation", fields: [designation_id], references: [id])
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
@@ -373,9 +416,10 @@ model account_codes {
   opening_balances                  opening_balances[]
   revised_budgets                   revised_budgets[]
   balance_trackings                 balance_trackings[]
-  loan_management                   loan_management[]
 
   grant_entries grant_entries[]
+  advance_managements                advance_managements[]
+  loan_managements                  loan_managements[]
 
 
   created_at  DateTime @default(now()) @map("created_at")
@@ -520,7 +564,8 @@ model departments {
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
   cheque_issuances     cheque_issuances[]
-  loan_management loan_management[]
+  advance_managements  advance_managements[]
+  loan_managements     loan_managements[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -568,10 +613,13 @@ model employees {
   investments          investments[]
   grant_entries grant_entries[]
 
-  officer         loan_management[]     @relation("officer")
-  designation1      loan_management[]     @relation("designation")
-  employee1      loan_management[]     @relation("employee")
+  advance_officer              advance_managements[]     @relation("officer")
+  advance_pwd_officer          advance_managements[]     @relation("pwd_officer")
 
+  loan_officer              loan_managements[]      @relation("officer")
+  loan_employee             loan_managements[]      @relation("employee")
+  loan_designation          loan_managements[]      @relation("designation")
+  
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
@@ -626,7 +674,8 @@ model municipality_codes {
 
   investments   investments[]
   grant_entries grant_entries[]
-  loan_management loan_management[]
+  advance_managements   advance_managements[]
+  loan_managements      loan_managements[]
 
   created_at    DateTime @default(now()) @map("created_at")
   updated_at    DateTime @updatedAt @map("updated_at")
