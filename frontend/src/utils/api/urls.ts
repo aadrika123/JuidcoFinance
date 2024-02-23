@@ -42,7 +42,8 @@ type FinanceUrlKeys =
   | "BANK_URL"
   | "MODULE_URL"
   | "BALANCE_TRACKING_URL"
-  | "LOAN_MANAGEMENT_URL";
+  | "LOAN_MANAGEMENT_URL"
+  | "ADVANCE_MANAGEMENT_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -245,5 +246,11 @@ export const FINANCE_URL: Urls = {
     get: "/loan-management/get-all",
     update: "/loan-management/update",
     getById: "loan-management/get-by-id",
+  },
+  ADVANCE_MANAGEMENT_URL: {
+    create: "/advance-management/create",
+    get: "/advance-management/get-all",
+    update: "/advance-management/update",
+    getById: "advance-management/get-by-id",
   },
 };

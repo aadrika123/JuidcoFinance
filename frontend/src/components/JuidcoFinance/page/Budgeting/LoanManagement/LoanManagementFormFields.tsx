@@ -75,6 +75,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="ulb_id"
                     placeholder="Select ULBs"
                     api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+                    readonly={readonly}
                   />
                   <Select
                     onChange={handleChange}
@@ -86,6 +87,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="primary_acc_code_id"
                     placeholder="Select Primary Accounting Code"
                     api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                    readonly={readonly}
                   />
                   <Input
                     onChange={handleChange}
@@ -96,6 +98,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     label="Purpose of Loan"
                     name="purpose_of_loan"
                     placeholder="Enter Purpose of Loan"
+                    readonly={readonly}
                   />
 
                   <Select
@@ -108,6 +111,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="department_id"
                     placeholder="Select department name"
                     api={`${FINANCE_URL.DEPARTMENT_URL.get}`}
+                    readonly={readonly}
                   />
 
                   <Input
@@ -120,6 +124,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="resolution_date"
                     type="date"
                     placeholder="undefined"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -131,6 +136,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     label="Loan Number"
                     name="loan_no"
                     placeholder="Enter Remarks"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -143,6 +149,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="loan_sanctioned_amount"
                     type="number"
                     placeholder="Enter Amount of Loan Sanctioned"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -155,6 +162,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="interest_rate"
                     type="number"
                     placeholder="Enter Rate of Interest"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -167,6 +175,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="instalments_no"
                     type="number"
                     placeholder="Enter Number of Instalments"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -179,6 +188,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="instalment_amount"
                     type="number"
                     placeholder="Enter Amount of Instalment"
+                    readonly={readonly}
                   />
                 </div>
                 <h2 className="text-xl font-medium text-black mt-6 mb-3">
@@ -195,6 +205,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="receipt_date"
                     type="date"
                     placeholder="undefined"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -207,6 +218,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="received_amount"
                     type="number"
                     placeholder="Enter Amount Received"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -219,6 +231,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="total_received_amount"
                     type="number"
                     placeholder="Enter Total Received Amount"
+                    readonly={readonly}
                   />
                 </div>
                 <h2 className="text-xl font-medium text-black mt-6 mb-3">
@@ -235,6 +248,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="repayment_due_date"
                     type="date"
                     placeholder="undefined"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -247,6 +261,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="principal_amount"
                     type="number"
                     placeholder="Enter Amount of Principal"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -259,6 +274,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="interest_amount"
                     type="number"
                     placeholder="Enter Amount of Interest"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -271,6 +287,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="total_due_amount_to_repayment"
                     type="number"
                     placeholder="Enter Total Amount Due to Repayment"
+                    readonly={readonly}
                   />
 
                   <Select
@@ -283,6 +300,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="officer_id"
                     placeholder="Select Officer"
                     api={`${FINANCE_URL.EMPLOYEE_URL.get}`}
+                    readonly={readonly}
                   />
                 </div>
                 <h2 className="text-xl font-medium text-black mt-6 mb-3">
@@ -299,6 +317,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="repaid_repayment_date"
                     type="date"
                     placeholder="undefined"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -311,6 +330,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="repaid_principal_amount"
                     type="number"
                     placeholder="Enter Principal Amount"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -323,6 +343,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="repaid_interest"
                     type="number"
                     placeholder="Enter Interest"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -335,6 +356,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="repaid_total_amount"
                     type="number"
                     placeholder="Enter Total Amount"
+                    readonly={readonly}
                   />
                 </div>
                 <h2 className="text-xl font-medium text-black mt-6 mb-3">
@@ -351,6 +373,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="balance_principal_amount"
                     type="number"
                     placeholder="Enter Principal Amount"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -363,6 +386,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="balance_interest"
                     type="number"
                     placeholder="Enter Interest"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -375,6 +399,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="balance_total_amount"
                     type="number"
                     placeholder="Enter Total Amount"
+                    readonly={readonly}
                   />
 
                   <Input
@@ -386,6 +411,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     label="Remarks"
                     name="balance_remarks"
                     placeholder="Enter Remarks"
+                    readonly={readonly}
                   />
                 </div>
                 <h2 className="text-xl font-medium text-black mt-6 mb-3">
@@ -402,6 +428,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="employee_id"
                     placeholder="Select Name"
                     api={`${FINANCE_URL.EMPLOYEE_URL.get}`}
+                    readonly={readonly}
                   />
 
                   <Select
@@ -414,6 +441,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="designation_id"
                     placeholder="Select Designation"
                     api={`${FINANCE_URL.EMPLOYEE_URL.get}`}
+                    readonly={readonly}
                   />
                 </div>
               </div>

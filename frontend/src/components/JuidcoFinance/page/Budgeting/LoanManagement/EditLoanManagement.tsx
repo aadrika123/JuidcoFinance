@@ -58,16 +58,16 @@ export const EditLoanManagement = ({
     (async function () {
       const res = await axios({
         method: "GET",
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.getById}/${LoanManagementID}`,
+        url: `${FINANCE_URL.LOAN_MANAGEMENT_URL.getById}/${LoanManagementID}`,
       });
 
       setInitialData((prev) => {
         return {
           ...prev,
-          ulb_id: res.data.data.ulb_id,
-          primary_acc_code_id: res.data.data.primary_acc_code_id,
+          ulb_id: res.data.data.ulb.id,
+          primary_acc_code_id: res.data.data.primary_acc_code.id,
           purpose_of_loan: res.data.data.purpose_of_loan,
-          department_id: res.data.data.department_id,
+          department_id: res.data.data.department.id,
           resolution_date: DateFormatter(res.data.data.resolution_date),
           loan_no: res.data.data.loan_no,
           loan_sanctioned_amount: res.data.data.loan_sanctioned_amount,
@@ -82,7 +82,7 @@ export const EditLoanManagement = ({
           interest_amount: res.data.data.interest_amount,
           total_due_amount_to_repayment:
             res.data.data.total_due_amount_to_repayment,
-          officer_id: res.data.data.officer_id,
+          officer_id: res.data.data.officer.id,
           repaid_repayment_date: DateFormatter(
             res.data.data.repaid_repayment_date
           ),
@@ -93,8 +93,8 @@ export const EditLoanManagement = ({
           balance_interest: res.data.data.balance_interest,
           balance_total_amount: res.data.data.balance_total_amount,
           balance_remarks: res.data.data.balance_remarks,
-          employee_id: res.data.data.employee_id,
-          designation_id: res.data.data.designation_id,
+          employee_id: res.data.data.employee.id,
+          designation_id: res.data.data.designation.id,
         };
       });
     })();

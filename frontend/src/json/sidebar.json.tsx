@@ -137,6 +137,10 @@ export const sidebarLinks: SidebarLinksProps = {
               moduleName: "Loans - Borrowings Managements",
               path: "/finance/budgeting/loan-management",
             },
+            {
+              moduleName: "Advance Managements",
+              path: "/finance/budgeting/advance-management",
+            },
           ],
         },
       ],
