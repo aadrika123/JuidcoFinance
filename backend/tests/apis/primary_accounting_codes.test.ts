@@ -7,7 +7,7 @@ const request = supertest(app);
 
 describe('accounting code apis', () => {
     it('Gets code list', async () => {
-        const response = await request.get("/api/v1/finance/get-all-account-code");
+        const response = await request.get("/api/v1/finance/get-all-account-code",);
     
         
         expect(response.status).toBe(200);
