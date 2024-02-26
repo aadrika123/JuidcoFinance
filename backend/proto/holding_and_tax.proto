@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package holding_and_tax;
+
+service HoldingAndTax {
+    rpc RecordDemandsOnExistingAssessments(DemandsOnExistingAssessments) returns (GeneralResponse) {}
+}
+
+message GeneralResponse {
+    int32 code = 1;
+    string message = 2;
+}
+
+message AccountingEntry {
+    string description = 1;
+    int64 debit_amount = 2;
+    int64 credit_amount = 3;
+}
+
+message PropertyDetails {
+    string assessment_code = 1;
+    repeated AccountingEntry accounting_entries = 2;
+}   
+
+message DemandsOnExistingAssessments {
+    string ulb = 1;
+    string bill_no = 2;
+    string date_bill_raised = 3;
+    string old_ward_no = 4;
+    string new_ward_no = 5;
+    string department_or_section = 6;
+    PropertyDetails property_details = 7;
+}
