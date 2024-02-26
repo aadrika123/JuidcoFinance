@@ -422,8 +422,9 @@ model account_codes {
   loan_managements                  loan_managements[]
 
 
-  created_at  DateTime @default(now()) @map("created_at")
-  updated_at  DateTime @updatedAt @map("updated_at")
+
+  created_at   DateTime @default(now()) @map("created_at")
+  updated_at   DateTime @updatedAt @map("updated_at")
 }
 
 /// Administrative Ward

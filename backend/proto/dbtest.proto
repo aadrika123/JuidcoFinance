@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package dbtest;
+
+service DatabaseTester {
+    rpc GetBank(BankRequest) returns (Bank) {}
+
+    rpc GetBanks(BanksRequest) returns (stream Bank) {}
+}
+
+message BanksRequest {}
+
+message BankRequest {
+  int32 id = 1;
+}
+
+message Bank {
+    int32 id = 1;
+    string name = 2;
+}

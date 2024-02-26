@@ -7,5 +7,10 @@
 /prisma/migrations
 /prisma/schema.prisma
 
+
+/src/grpc/proto
+
+/magic/generated
+
 /magic
 /magic.js
