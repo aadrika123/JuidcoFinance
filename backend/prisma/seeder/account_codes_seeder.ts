@@ -23,6 +23,9 @@ const account_codes_seeder = async () => {
 
             if (row && row[0] && row[7]) {
 
+                if(row[7].toString().trim().length == 0) // skip empty cells
+                    continue;
+
                 const majorHead = row[0].toString() + row[1].toString() + row[2].toString();
                 const minorHead = row[3].toString() + row[4].toString();
                 const detailCode = row[5].toString() + row[6].toString();
