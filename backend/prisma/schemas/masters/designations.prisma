@@ -1,0 +1,12 @@
+/// Designations   Managed By;- Sanjiv Kumar
+
+model designations {
+    id       Int                  @id @default(autoincrement())
+    name     String
+    employee employees[]
+    udhd_id  Int
+    udhd     udhd_sub_departments @relation(fields: [udhd_id], references: [id])
+
+    created_at DateTime @default(now()) @map("created_at")
+    updated_at DateTime @updatedAt @map("updated_at")
+}

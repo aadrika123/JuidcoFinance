@@ -605,7 +605,10 @@ model employees {
   id                   Int                    @id @default(autoincrement())
   name                 String
   email                String
-  designation          String
+  designation_id          Int
+  designation           designations          @relation(fields: [designation_id], references: [id])
+  user_id              String
+  password             String
   
   cheque_book_entries  cheque_book_entries[]
   bill_payment_entries bill_payment_entries[]
@@ -621,6 +624,28 @@ model employees {
   loan_employee             loan_managements[]      @relation("employee")
   loan_designation          loan_managements[]      @relation("designation")
   
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+}
+
+/// Designations
+model designations {
+id                      Int                       @id @default(autoincrement())
+name                    String
+employee                employees[]
+udhd_id                 Int
+udhd                    udhd_sub_departments      @relation(fields: [udhd_id], references: [id]) 
+
+  created_at           DateTime               @default(now()) @map("created_at")
+  updated_at           DateTime               @updatedAt @map("updated_at")
+}
+
+/// UDHD and sub departments
+model udhd_sub_departments {
+id                          Int                   @id  @default(autoincrement())
+name                        String
+designation                 designations[]
+
   created_at           DateTime               @default(now()) @map("created_at")
   updated_at           DateTime               @updatedAt @map("updated_at")
 }

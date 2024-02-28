@@ -1,0 +1,10 @@
+/// UDHD and Sub-department      Managed by :- Sanjiv Kumar
+
+model udhd_sub_departments {
+    id          Int            @id @default(autoincrement())
+    name        String
+    designation designations[]
+
+    created_at DateTime @default(now()) @map("created_at")
+    updated_at DateTime @updatedAt @map("updated_at")
+}

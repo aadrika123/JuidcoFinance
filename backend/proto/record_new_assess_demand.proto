@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package record_new_assess_demand;
+
+service RecordNewAssesDemand {
+    rpc RecordDemandsOnNewAssessment(NewAssesDemandDetails) returns (GeneralResponse) {}
+}
+
+message GeneralResponse {
+    int32 code =1;
+    string message= 2;
+}
+
+message NewAssesDemandDetails {
+    string ulb=1;
+    string bill_no=2;
+    string date_of_bill_raised=3;
+    string old_ward_no = 4;
+    string new_ward_nO = 5;
+    string department_section=6;
+    PropertyDetails property_details = 7;
+}
+
+message PropertyDetails {
+    string assessment_code = 1;
+    AccountingEntry accounting_entries = 2;
+}
+
+message AccountingEntry{
+    string description = 1;
+    int32 debit_amount = 2;
+    int32 credit_amount = 3;
+}

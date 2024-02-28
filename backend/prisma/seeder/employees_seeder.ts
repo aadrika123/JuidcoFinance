@@ -18,7 +18,9 @@ const employees_seeder = async () => {
             data: {
                 name: row[0].toString(),
                 email: faker.internet.email(),
-                designation: faker.name.jobTitle(),
+                designation_id: 1,
+                password: "1234",
+                user_id: faker.random.alphaNumeric(6),
                 created_at: faker.date.past(),
                 updated_at: faker.date.recent(),
             },

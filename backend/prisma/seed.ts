@@ -44,9 +44,13 @@ import account_codes_seeder from "./seeder/account_codes_seeder";
 import function_codes_seeder from "./seeder/function_codes_seeder";
 import loan_management_seeder from "./seeder/budgeting/loan_management_seeder";
 import advance_management_seeder from "./seeder/budgeting/advance_management_seeder";
+import udhd_sub_departments_seeder from "./seeder/udhd_sub_departments_seeder";
+import designations_seeder from "./seeder/designation_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
+
+  await udhd_sub_departments_seeder();
 
   await account_codes_seeder();
 
@@ -54,7 +58,7 @@ async function main() {
 
   await banks_seeder();
 
-  
+  await designations_seeder();
 
 
   await bill_types_seeder();
@@ -185,6 +189,7 @@ async function main() {
   setTimeout(async () => {
 
     await voucher_entries_seed();
+
     await bill_payment_entry_seed();
 
     await balance_trackings_seeder();
@@ -220,7 +225,6 @@ async function main() {
     await loan_management_seeder();
 
     await advance_management_seeder();
-
   }, 6000);
 
 

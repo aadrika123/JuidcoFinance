@@ -1,9 +1,11 @@
 /// Employee
 model employees {
-  id          Int    @id @default(autoincrement())
-  name        String
-  email       String
-  designation String
+  id             Int          @id @default(autoincrement())
+  name           String
+  email          String
+  designation_id Int
+  designation    designations @relation(fields: [designation_id], references: [id])
+  user_id        String
 
   cheque_book_entries  cheque_book_entries[]
   bill_payment_entries bill_payment_entries[]

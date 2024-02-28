@@ -45,6 +45,8 @@ const BudgetNamesRoute_1 = __importDefault(require("./route/budgeting/BudgetName
 const DrcrRoute_1 = __importDefault(require("./route/budgeting/DrcrRoute"));
 const LoanManagementRoute_1 = __importDefault(require("./route/budgeting/LoanManagementRoute"));
 const AdvanceManagementRoute_1 = __importDefault(require("./route/budgeting/AdvanceManagementRoute"));
+const Auth_1 = __importDefault(require("./route/auth/Auth"));
+const udhdSubDepartmentRoute_1 = __importDefault(require("./route/udhdSubDepartmentRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -137,6 +139,8 @@ class FinanceRoute {
         (new DrcrRoute_1.default()).configure(app, "40");
         (new LoanManagementRoute_1.default()).configure(app, "41"); // 41
         (new AdvanceManagementRoute_1.default()).configure(app, "42"); // 42
+        (new Auth_1.default()).configure(app, "43"); // 43
+        (new udhdSubDepartmentRoute_1.default().configure(app, "44")); // 44
     }
 }
 exports.default = FinanceRoute;
