@@ -112,7 +112,7 @@ export const EditReceipt = ({
   return (
     <>
       <Toaster />
-      <HeaderWidget title="Receipt" variant={searchParams == "view"? "view" : "edit"} />
+      <HeaderWidget title="Receipt" variant={searchParams == "view" ? "view" : "edit"} />
       <FormikWrapper
         title=""
         initialValues={initialData}

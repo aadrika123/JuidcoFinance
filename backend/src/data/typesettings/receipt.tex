@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper,margin=0.5in]{geometry}
+
+\title{project1}
+\author{Bijoy Paitandi}
+\date{February 2024}
+
+\begin{document}
+
+\centering
+\large{Receipt No. \#%receipt_no%}
+\vspace{1em}
+
+\begin{table}[ht]
+        
+    {\renewcommand{\arraystretch}{2}%
+    \begin{tabular}{p{0.35\linewidth} | p{0.6\linewidth}} \hline
+         \textbf{Receipt Date}& %date%\\ \hline 
+         \textbf{Receipt Type}& %receipt_type%\\ \hline
+         \textbf{Amount}& %amount%\\ \hline
+         \textbf{Email}& %email%\\ \hline
+         \textbf{Paid by}& %paid_by%\\ \hline
+         \textbf{Mobile No.}& %mobile_no%\\ \hline
+         \textbf{Admin Ward No.}& %ward_no%\\ \hline
+         \textbf{Narration}& %narration%\\ \hline
+         \textbf{Subledger}& %subledger%\\ \hline
+         
+    \end{tabular}}
+    \label{tab:my_label}
+\end{table}
+
+\end{document}
