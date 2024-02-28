@@ -12,7 +12,7 @@ interface CheckboxProps {
   name: string;
   readonly?: boolean;
   placeholder?: string | "";
-  value?: string | number;
+  value?: number | string;
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;

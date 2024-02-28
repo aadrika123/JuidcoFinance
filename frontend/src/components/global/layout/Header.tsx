@@ -3,12 +3,21 @@ import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { formatString } from "@/utils/helper";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/reducers/authReducer";
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;
 }
 
 const Header: React.FC<SideBarProps> = (props) => {
   const pathName = usePathname();
+  const dispatch = useDispatch()
+
+  //__________ Logout Functionality _____________//
+  const handleClick = () =>{
+    dispatch(logout())
+    window.location.reload()
+  }
 
   // _________ Bread Crumb ________________//
   const breadCrumb = pathName
@@ -117,6 +126,8 @@ const Header: React.FC<SideBarProps> = (props) => {
             width={100}
             height={100}
             alt="profile"
+            onClick={handleClick}
+            className="cursor-pointer"
           />
         </span>
       </div>

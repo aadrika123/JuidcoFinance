@@ -24,17 +24,11 @@ interface RadioButtonProps {
   touched?: boolean | undefined;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const RadioButtons: React.FC<RadioButtonProps> = (props) => {
-  const { label, name, options,onChange, handler, ...rest } = props;
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
-    onChange && onChange(e);
-    handler && handler(e)
-  }
+  const { label, name, options, ...rest } = props;
   return (
     <div>
       <label className="text-secondary text-sm">{label}</label>
@@ -50,7 +44,6 @@ const RadioButtons: React.FC<RadioButtonProps> = (props) => {
                   id={option.value}
                   {...field}
                   {...rest}
-                  onChange={handleChange}
                   value={option.value}
                   checked={field.value === option.value}
                 />
