@@ -189,7 +189,7 @@ class ReceiptEntryController {
         subledger: data.subledger.name,
         date: dayjs(data.date).format('DD MMM YYYY')
       };
-      
+      1
 
       const texData = texTemplate.replace(
         /%(\w*)%/g, // or /{(\w*)}/g for "{this} instead of %this%"

@@ -7,6 +7,9 @@ import Loader from "../atoms/Loader";
 import DebouncedSearch from "../atoms/DebouncedSearch";
 import Table, { ColumnProps } from "../molecules/Table";
 import NextPrevPagination from "../molecules/NextPrevPagination";
+import LoaderSkeleton from "../atoms/LoaderSkeleton";
+
+
 
 /**
  * | Author- Bijoy Paitandi
@@ -36,15 +39,16 @@ const TableWithFeatures = <T,>({
   columns,
   api,
   numberOfRowsPerPage,
-  center=false,
+  center = false,
 }: TableWithFeaturesProps) => {
+  const [isSearching, setIsSearching] = useState(false);
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
     pageCount: 0,
     searchText: "",
     data: [],
   });
-  const { page, pageCount, searchText, data } = state;
+  const { page, pageCount, searchText, data} = state;
 
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
@@ -63,6 +67,8 @@ const TableWithFeatures = <T,>({
       pageCount: data.totalPage,
       data: data.data,
     }));
+
+    setIsSearching(false);
     return data.data;
   };
 
@@ -77,6 +83,7 @@ const TableWithFeatures = <T,>({
   }
 
   useEffect(() => {
+    setIsSearching(true);
     refetchData();
   }, [page, searchText]);
 
@@ -102,8 +109,8 @@ const TableWithFeatures = <T,>({
         </div>
 
         <div className="mt-8">
-          {isFetching ? (
-            <Loader />
+          {isFetching || isSearching ? (
+            <LoaderSkeleton />
           ) : (
             <>
               <Table
@@ -112,7 +119,7 @@ const TableWithFeatures = <T,>({
                 center={center}
                 pageNo={page}
                 limit={numberOfRowsPerPage}
-                // scrollable
+              // scrollable
               />
               <NextPrevPagination
                 page={page}

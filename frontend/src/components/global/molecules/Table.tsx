@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import React, { ReactElement, ReactNode } from "react";
 import Thead from "../atoms/Thead";
@@ -85,8 +86,8 @@ const Table = <T,>({
               ? dayjs(`${value}`).format("DD MMM YYYY")
               : typeof value === "object"
                 ? (value as ObjectContent).type ||
-                  (value as ObjectContent).name ||
-                  (value as ObjectContent).code
+                (value as ObjectContent).name ||
+                (value as ObjectContent).code
                 : column.name === "id"
                   ? index + 1 + (pageNo - 1) * (limit || data.length)
                   : column.value
@@ -113,20 +114,26 @@ const Table = <T,>({
 
   return (
     <>
-      <div className="overflow-x-auto border-[1px] border-zinc-400">
-        <table className={`table table-md`}>
-          <thead className="text-[1rem] bg-primary_green text-white">
-            <Trow scrollable={scrollable} className="w-full">
-              {headers}
-            </Trow>
-          </thead>
-          <tbody
-            className={`${scrollable && `block overflow-y-auto ${height}`}`}
-          >
-            {rows}
-          </tbody>
-        </table>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="overflow-x-auto border-[1px] border-zinc-400">
+          <table className={`table table-md`}>
+            <thead className="text-[1rem] bg-primary_green text-white">
+              <Trow scrollable={scrollable} className="w-full">
+                {headers}
+              </Trow>
+            </thead>
+            <tbody
+              className={`${scrollable && `block overflow-y-auto ${height}`}`}
+            >
+              {rows}
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
+
     </>
   );
 };
