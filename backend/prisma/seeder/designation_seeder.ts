@@ -12,7 +12,39 @@ const designations_seeder = async () => {
       udhd_id: 1,
     },
     {
+      name: "Project Management Consultant",
+      udhd_id: 1,
+    },
+    {
+      name: "Assistant Project Manager",
+      udhd_id: 1,
+    },
+    {
       name: "Deputy Project Manager",
+      udhd_id: 1,
+    },
+    {
+      name: "Deputy General Manager",
+      udhd_id: 1,
+    },
+    {
+      name: "General Manager",
+      udhd_id: 1,
+    },
+    {
+      name: "Project Director Finance",
+      udhd_id: 1,
+    },
+    {
+      name: "Accountant",
+      udhd_id: 1,
+    },
+    {
+      name: "Manager",
+      udhd_id: 1,
+    },
+    {
+      name: "Payment Committee",
       udhd_id: 1,
     },
     {
@@ -29,6 +61,18 @@ const designations_seeder = async () => {
     },
     {
       name: "Assistant Engineer",
+      udhd_id: 3,
+    },
+    {
+      name: "Executive Engineer",
+      udhd_id: 3,
+    },
+    {
+      name: "Executive Officer / AMC",
+      udhd_id: 3,
+    },
+    {
+      name: "Internal Auditor",
       udhd_id: 3,
     },
     {

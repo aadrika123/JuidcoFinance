@@ -12,23 +12,26 @@ import AuthDao from "../../dao/auth/authDao";
  */
 
 class AuthController {
-    private dao: AuthDao;
-    private initMsg: string;
-    constructor() {
-      this.dao = new AuthDao();
-      this.initMsg = "Employee";
-    }
+  private dao: AuthDao;
+  private initMsg: string;
+  constructor() {
+    this.dao = new AuthDao();
+    this.initMsg = "Employee";
+  }
 
-     // Login
-  login = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+  // Login
+  login = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
     const resObj: resObj = {
       apiId,
       action: "GET",
       version: "1.0",
     };
-    
+
     try {
-      
       const data = await this.dao.login(req.body);
 
       if (!data)
@@ -39,7 +42,72 @@ class AuthController {
           res
         );
 
-        return CommonRes.SUCCESS(resMessage(this.initMsg).LOGIN, data, resObj, res);
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).LOGIN,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  /// Send OTP on Mail
+  sendMailOtp = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
+    try {
+      await this.dao.sendMailOtp(req.body.email);
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).OTP_SENT,
+        null,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  /// Verify OTP on Mail
+  verifyMailOtp = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
+    try {
+      const data = await this.dao.verifyMailOtp(req.body.email, req.body.otp);
+
+      if (data === null) {
+        return CommonRes.VALIDATION_ERROR("Wrong OTP entered!!!", resObj, res);
+      } else if (!data) {
+        return CommonRes.VALIDATION_ERROR(
+          "OTP has been expired!!!",
+          resObj,
+          res
+        );
+      }
+
+      return CommonRes.SUCCESS(
+        "OTP validated successfully!!!",
+        data,
+        resObj,
+        res
+      );
     } catch (error: any) {
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
