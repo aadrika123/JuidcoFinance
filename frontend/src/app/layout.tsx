@@ -5,7 +5,6 @@ import "./globals.css";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 import StoreProvider from "./storeProvider";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,6 +18,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <StoreProvider>
       <ReactQueryClientProvider>

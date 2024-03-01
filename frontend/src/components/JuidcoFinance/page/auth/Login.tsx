@@ -77,6 +77,7 @@ const Login = () => {
   }, []);
 
   ///////////////// Handling Login Logics /////////////
+
   const handleLogin = async (values: LoginInitialData) => {
     try {
       const res = await axios({
@@ -92,7 +93,7 @@ const Login = () => {
       res.data.data
         ? (dispatch(login(res.data.data)),
           window.location.replace("/finance/masters"))
-        : toast.error("Somethign Went Wrong!!");
+        : toast.error("You have entered wrong credentials !!");
     } catch (error) {
       toast.error("Something Went Wrong!!");
       console.log(error);
@@ -154,7 +155,7 @@ const Login = () => {
                   label=""
                   name="role"
                   options={options}
-                  className="cursor-pointer mr-1"
+                  // className="cursor-pointer mr-1 text-red-600 focus:bg-green-700"
                   handler={changeHandler}
                 />
                 <SelectForNoApi
@@ -198,7 +199,7 @@ const Login = () => {
                     value={values.keep}
                     error={errors.keep}
                     touched={touched.keep}
-                    className="cursor-pointer"
+                    // className="cursor-pointer"
                   />
                   <span className="cursor-pointer text-xs">
                     Forget password?
