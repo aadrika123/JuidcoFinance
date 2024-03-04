@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "../global/layout/Header";
 import Sidebar from "../global/layout/Sidebar";
+import Loading from "./Loading";
+
 interface PageLayoutProps {
   children: React.ReactNode;
 }
@@ -9,14 +11,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
     <>
       <main>
-
-        <div style={{ zoom: "80%" }} className="grid grid-cols-10">
-          <Sidebar className="col-span-2 border-r border-[#12743B] rounded-tr-2xl w-full h-[110%] sticky top-0 z-50 left-0 bg-white-500" />
-          <div className="col-span-8">
-            <Header className="border-b border-b-[#12743B] w-full h-[6.5rem] flex items-center justify-between px-5 sticky top-0 z-50" />
-            <section className="p-8 h-[100%] bg-[#f3f9f2]">{children}</section>
+        <Suspense fallback={<Loading />}>
+          <div style={{ zoom: "80%" }} className="grid grid-cols-10">
+            <Sidebar className="col-span-2 border-r border-[#12743B] rounded-tr-2xl w-full h-[110%] overflow-hidden" />
+            <div className="col-span-8">
+              <Header className="border-b border-b-[#12743B] w-full h-[6.5rem] flex items-center justify-between px-5 " />
+              <section className="p-8 h-[100%] bg-[#f3f9f2]">
+                {children}
+              </section>
+            </div>
           </div>
-        </div>
+        </Suspense>
       </main>
     </>
   );

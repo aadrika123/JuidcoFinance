@@ -1,31 +1,32 @@
 //// Primary Accounting Code
 model account_codes {
-  id          Int      @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   code        String
   major_head  String
   minor_head  String
   detail_code String
   description String
 
-  parent_id      Int?      @default(0)
+  parent_id Int? @default(0)
 
-  remark      String?
+  remark String?
 
-  receipt_budgets             receipt_budgets[]
-  investments                 investments[]
-  
-  budget_appropriations             budget_appropriations[]
-  budget_appropriations_from        budget_appropriations[] @relation("from")
+  receipt_budgets receipt_budgets[]
+  investments     investments[]
 
-  budget_reappropriations           budget_reappropriations[]
-  budget_reappropriations_from      budget_reappropriations[] @relation("from")
-  opening_balances                  opening_balances[]
-  revised_budgets                   revised_budgets[]
-  balance_trackings                 balance_trackings[]
+  budget_appropriations      budget_appropriations[]
+  budget_appropriations_from budget_appropriations[] @relation("from")
 
-  grant_entries grant_entries[]
+  budget_reappropriations      budget_reappropriations[]
+  budget_reappropriations_from budget_reappropriations[] @relation("from")
+  opening_balances             opening_balances[]
+  revised_budgets              revised_budgets[]
+  balance_trackings            balance_trackings[]
 
+  grant_entries       grant_entries[]
+  advance_managements advance_managements[]
+  loan_managements    loan_managements[]
 
-  created_at  DateTime @default(now()) @map("created_at")
-  updated_at  DateTime @updatedAt @map("updated_at")
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }

@@ -32,17 +32,16 @@ interface Select {
   name?: string;
   type?: string;
   code?: string;
-  description?:string;
+  description?: string;
   ulbs?: string;
 }
 
 const Select: React.FC<SelectProps> = (props) => {
   const [, , helpers] = useField(props.name);
   const [, , helpers1] = useField(`${props.name}_name`);
- 
+
   const { setValue } = helpers;
   const { setValue: setValue1 } = helpers1;
-
 
   const fieldId = "id_" + props.name;
 
@@ -51,7 +50,7 @@ const Select: React.FC<SelectProps> = (props) => {
       url: props.api,
       method: "GET",
     });
-
+    
     return res.data?.data;
   };
 
@@ -64,14 +63,14 @@ const Select: React.FC<SelectProps> = (props) => {
     throw new Error("Fatal Error!");
   }
 
-  const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    if(props.handler){
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (props.handler) {
       props.handler(parseInt(e.target.value));
     }
-    setValue(parseInt(e.target.value))
+    setValue(parseInt(e.target.value));
     const selectedOption = e.target.options[e.target.selectedIndex].dataset;
     setValue1(selectedOption.name);
-  }
+  };
 
   return (
     <>
@@ -88,12 +87,31 @@ const Select: React.FC<SelectProps> = (props) => {
           name={props.name}
           id={fieldId}
         >
-          <option selected value="">{props.placeholder}</option>
-          {dataList.map((d: Select) => (
-            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
-              {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}
-            </option>
-          ))}
+          <option selected value="">
+            {props.placeholder}
+          </option>
+          {dataList.length > 0 &&
+            dataList.map((d: Select) => (
+              <option
+                key={d?.id}
+                value={d?.id}
+                data-name={
+                  d?.name ||
+                  d?.type ||
+                  (d?.code && d?.description
+                    ? `${d.code}-${d?.description}`
+                    : d?.code) ||
+                  d?.ulbs
+                }
+              >
+                {d?.name ||
+                  d?.type ||
+                  (d?.code && d?.description
+                    ? `${d.code}-${d?.description}`
+                    : d?.code) ||
+                  d?.ulbs}
+              </option>
+            ))}
         </select>
 
         {props.touched && props.error && (

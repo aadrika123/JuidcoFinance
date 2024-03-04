@@ -1,6 +1,6 @@
 //// Municipality Code
 model municipality_codes {
-  id            Int      @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   ulbs          String
   district      String
   state_code    String
@@ -9,9 +9,11 @@ model municipality_codes {
   code          String
   remark        String?
 
-  investments   investments[]
-  grant_entries grant_entries[]
+  investments         investments[]
+  grant_entries       grant_entries[]
+  advance_managements advance_managements[]
+  loan_managements    loan_managements[]
 
-  created_at    DateTime @default(now()) @map("created_at")
-  updated_at    DateTime @updatedAt @map("updated_at")
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }

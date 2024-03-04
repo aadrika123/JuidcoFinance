@@ -10,7 +10,7 @@ const AddVendorWidget: React.FC = () => {
     <>
       <div className="overflow-x-auto flex justify-between">
         <div className="flex items-center">
-          <SubHeading className="text-2xl">Vendors</SubHeading>
+          <SubHeading className="text-2xl">Vendor Master</SubHeading>
         </div>
         <div className="flex">
           <Link href={`${pathName}/add`}>

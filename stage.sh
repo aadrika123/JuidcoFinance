@@ -28,7 +28,12 @@ buildThem(){
 }
 
 startServices(){
+
+    pm2 delete "jfinance-back"
+    pm2 delete "jfinance-front"
+
     cd ./backend
+
     pm2 start npm --name "jfinance-back" -- start
     cd ../frontend
     pm2 start npm --name "jfinance-front" -- start

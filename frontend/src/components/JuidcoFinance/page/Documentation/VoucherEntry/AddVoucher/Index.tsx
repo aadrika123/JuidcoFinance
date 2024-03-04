@@ -14,7 +14,7 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import { QueryClient, useMutation } from "react-query";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 interface UpdatedModeType {
   id: number | string;
@@ -114,10 +114,10 @@ export const AddVoucherEntry = () => {
 
   const { mutate } = useMutation<VoucherDataProps, Error, any>(handleStore, {
     onSuccess: () => {
-      toast.success("Added Voucher Entry");
-      setTimeout(() => {
-        goBack();
-      }, 1000);
+     toast.success("Added Voucher Entry");
+     setTimeout(() => {
+      goBack();
+    }, 1000);
     },
     onError: () => {
       alert("Something Went Wrong!!");
@@ -181,6 +181,14 @@ export const AddVoucherEntry = () => {
       </>
     );
   };
+
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
 
   // Add Table
   const columns = [
@@ -283,6 +291,7 @@ export const AddVoucherEntry = () => {
 
   return (
     <>
+      <Toaster/>
       <Hoc
         title="Add New Voucher"
         initialValues={initialData}
@@ -299,6 +308,7 @@ export const AddVoucherEntry = () => {
         footerData={footerData}
         handleResetTable={handleResetTable}
         handleStore={mutate}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

@@ -34,8 +34,8 @@ export const EditBudgetReAppro = ({
     budget_name_id: "",
     actual_amount: "",
     from_primary_acc_code_id: "",
-    // approved_amount: "",
-    // balance_amount: "",
+    approved_amount: "",
+    balance_amount: "",
     transfer_amount: "",
   });
 
@@ -61,8 +61,11 @@ export const EditBudgetReAppro = ({
           approved_amount: res.data.data.approved_amount,
           balance_amount: res.data.data.balance_amount,
           transfer_amount: res.data.data.transfer_amount,
+          remark: res.data.data.remark,
         };
       });
+      handleSelectPrimaryCode(res.data.data.primary_acc_code.id);
+      handleSelectFromPrimaryCode(res.data.data.from_primary_acc_code.id);
     })();
   }, []);
 
@@ -113,7 +116,7 @@ export const EditBudgetReAppro = ({
   const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -155,7 +158,7 @@ export const EditBudgetReAppro = ({
       HEADER: "Primary Accounting Code",
       ACCESSOR: "primary_acc_code_id",
       PLACEHOLDER: "Select Primary Accounting Code",
-      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}`,
       HANDLER: handleSelectPrimaryCode,
     },
     {

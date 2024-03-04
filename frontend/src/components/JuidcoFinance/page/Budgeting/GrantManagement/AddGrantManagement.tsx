@@ -252,6 +252,14 @@ export const AddGrantManagement = () => {
     },
   ];
 
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   /////////////// Handle Select Primary Accounting Code ////////////////
 useEffect(()=>{
  const getEmployeeDesignation = async()=>{
@@ -420,6 +428,7 @@ const fields: FieldTypeProps[] = [
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

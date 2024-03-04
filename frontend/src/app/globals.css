@@ -5,6 +5,7 @@
 html,
 body {
   background-color: white !important;
+  -webkit-text-size-adjust: auto;
 }
 
 .flex-all-center {

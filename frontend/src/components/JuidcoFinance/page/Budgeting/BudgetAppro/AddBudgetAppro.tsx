@@ -39,14 +39,13 @@ export const AddBudgetAppro = () => {
     primary_acc_code_id: "",
     remark: "",
     from_primary_acc_code_id: "",
-    // approved_amount: undefined,
+    approved_amount: undefined,
     transfer_amount: undefined,
   };
 
   const [data, setData] = useState<BudgetApproDetailsData[]>([]);
   const [initialData, setInitialData] =
     useState<BudgetApproDetailsData>(initialValues);
-
   /////////////// Show Form Popup on Load //////////////////////
   useEffect(() => {
     dispatch(openPopup());
@@ -78,7 +77,7 @@ export const AddBudgetAppro = () => {
               from_primary_acc_code_id_name:
                 values.from_primary_acc_code_id_name ||
                 item.from_primary_acc_code_id_name,
-              // approved_amount: values.approved_amount,
+              approved_amount: selects.approved_amount,
               transfer_amount: values.transfer_amount,
             };
           } else {
@@ -132,11 +131,11 @@ export const AddBudgetAppro = () => {
     setData([]);
   };
 
-   /////////////// Handle Select Primary Accounting Code ////////////////
-   const handleSelectPrimaryCode = async (id: string | number) => {
+  /////////////// Handle Select Primary Accounting Code ////////////////
+  const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -153,7 +152,14 @@ export const AddBudgetAppro = () => {
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+      setSelects((prev) => ({
+        ...prev,
+        approved_amount: res.data?.data?.balance_amount,
+      }));
+      setInitialData((prev) => ({
+        ...prev,
+        approved_amount: res.data?.data?.balance_amount,
+      }));
     } catch (error) {
       console.log(error);
       throw error;
@@ -191,9 +197,11 @@ export const AddBudgetAppro = () => {
       primary_acc_code_id: data[Id - 1]?.primary_acc_code_id,
       remark: data[Id - 1]?.remark,
       from_primary_acc_code_id: data[Id - 1]?.from_primary_acc_code_id,
-      // approved_amount: data[Id - 1]?.approved_amount,
+      approved_amount: data[Id - 1]?.approved_amount,
       transfer_amount: data[Id - 1]?.transfer_amount,
     }));
+    handleSelectPrimaryCode(data[Id - 1]?.primary_acc_code_id)
+    handleSelectFromPrimaryCode(data[Id - 1]?.from_primary_acc_code_id)
     dispatch(openPopup());
   };
 
@@ -206,6 +214,18 @@ export const AddBudgetAppro = () => {
       </>
     );
   };
+
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+    setSelects({
+      f_p_codes: [],
+      approved_amount: undefined,
+    });
+  }
 
   // Add Table
   const columns = [
@@ -247,7 +267,7 @@ export const AddBudgetAppro = () => {
       HEADER: "Primary Accounting Code",
       ACCESSOR: "primary_acc_code_id",
       PLACEHOLDER: "Select Primary Accounting Code",
-      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}`,
       HANDLER: handleSelectPrimaryCode,
     },
     {
@@ -265,7 +285,7 @@ export const AddBudgetAppro = () => {
           ACCESSOR: "from_primary_acc_code_id",
           PLACEHOLDER: "Select From Primary Accounting Code",
           DATA: selects.f_p_codes,
-          HANDLER: handleSelectFromPrimaryCode
+          HANDLER: handleSelectFromPrimaryCode,
         },
         {
           CONTROL: "input",
@@ -274,7 +294,7 @@ export const AddBudgetAppro = () => {
           PLACEHOLDER: "Enter approved amount",
           TYPE: "number",
           VISIBILITY: selects.approved_amount ? true : false,
-          READONLY: true,
+          // READONLY: true,
           VALUE: selects.approved_amount,
         },
         {
@@ -301,6 +321,7 @@ export const AddBudgetAppro = () => {
         initialValues={initialData}
         validationSchema={budgetApproDetailsSchema}
         onSubmit={onSubmit}
+        // enableReinitialize={true}
         fields={fields}
         resetInitialValue={resetInitialValue}
         title="Add Budget Appropriation"
@@ -313,6 +334,7 @@ export const AddBudgetAppro = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

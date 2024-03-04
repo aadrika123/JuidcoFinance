@@ -139,6 +139,14 @@ export const AddChequeIssueEntry = () => {
     setData([]);
   };
 
+   ///////////////// Handle Things Before Adding New Entery ///////////
+   const handleAddNewEntery = () =>{
+    setIsUpdateMode({
+      id: "",
+      isOnEdit: false,
+    })
+  }
+
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
     let sum = 0;
@@ -339,6 +347,7 @@ export const AddChequeIssueEntry = () => {
         footerData={footerData}
         handleStore={mutate}
         handleResetTable={handleResetTable}
+        handleAddNewEntery={handleAddNewEntery}
       />
     </>
   );

@@ -2,6 +2,7 @@ import { EmployeeDetailsData } from "./employee_types";
 
 // Bank Master Types //
 export type ChequebookTableData = {
+  bank: any;
   id: number;
   date: string,
   bank_branch: string,

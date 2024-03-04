@@ -7,5 +7,6 @@ export const budgetApproDetailsSchema = Yup.object().shape({
     "From Primary Accounting Code Id is required"
   ),
   approved_amount: Yup.number().required("Approved Amount is required"),
+  // approved_amount: Yup.number(),
   transfer_amount: Yup.number().required("Transfer Amount is required"),
 });

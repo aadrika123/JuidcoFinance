@@ -142,7 +142,7 @@ const ChequebooksTable: React.FC = () => {
                 {/* Bank Name */}
                 <td className="border border-zinc-400 ">
                   <div className="flex justify-center">
-                    <div className="flex justify-center">{d?.bank_name}</div>
+                    <div className="flex justify-center">{d?.bank?.name}</div>
                   </div>
                 </td>
 

@@ -82,15 +82,15 @@ export const EditVoucherEntry = ({ VoucherID }: { VoucherID: string }) => {
     {
       onSuccess: () => {
         toast.success("Updated Voucher Entry");
+        setTimeout(() => {
+          goBack();
+        }, 1000);
       },
       onError: () => {
         alert("Something Went Wrong!!!");
       },
       onSettled: () => {
         queryClient.invalidateQueries();
-        setTimeout(() => {
-          goBack();
-        }, 1000);
       },
     }
   );

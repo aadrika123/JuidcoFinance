@@ -11,3 +11,6 @@
 /src/grpc/proto
 
 /magic/generated
+
+/magic
+/magic.js

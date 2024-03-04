@@ -43,5 +43,5 @@ export const HoldingAndTaxServer: IHoldingAndTaxServer = {
     .setMessage("OK");
     
     callback(null, res);
-  }
+  },
 }

@@ -41,7 +41,10 @@ type FinanceUrlKeys =
   | "EXPENDITURE_NATURE_URL"
   | "BANK_URL"
   | "MODULE_URL"
-  | "BALANCE_TRACKING_URL";
+  | "BALANCE_TRACKING_URL"
+  | "LOAN_MANAGEMENT_URL"
+  | "ADVANCE_MANAGEMENT_URL"
+  | "AUTH_URL";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -57,10 +60,19 @@ type Urls = {
     getNatures?: string;
     getNames?: string;
     getParentCodes?: string;
+    login?: string;
+    getUDHD?: string;
+    getDesig?: string;
   };
 };
 
 export const FINANCE_URL: Urls = {
+  AUTH_URL:{
+    login: "/auth/login",
+    getUDHD: "/udhd/get-all",
+    getDesig: "/udhd/designations/get-all"
+  },
+
   BANK_MASTER_URL: {
     get: "/bank-master/get-all?limit=10",
     create: "/bank-master/create",
@@ -213,7 +225,7 @@ export const FINANCE_URL: Urls = {
     get: "/get-all-account-code",
     getMainCodes: "/get-main-account-codes",
     getChildCodes: "/get-child-account-codes",
-    getParentCodes: "/get-parent-account-codes"
+    getParentCodes: "/get-codes-with-parent-detail"
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",
@@ -238,5 +250,17 @@ export const FINANCE_URL: Urls = {
   },
   BALANCE_TRACKING_URL: {
     get: "/balance-trackings/get-balance"
+  },
+  LOAN_MANAGEMENT_URL: {
+    create: "/loan-management/create",
+    get: "/loan-management/get-all",
+    update: "/loan-management/update",
+    getById: "loan-management/get-by-id",
+  },
+  ADVANCE_MANAGEMENT_URL: {
+    create: "/advance-management/create",
+    get: "/advance-management/get-all",
+    update: "/advance-management/update",
+    getById: "advance-management/get-by-id",
   },
 };

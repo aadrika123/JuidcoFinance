@@ -24,6 +24,13 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = (props) => {
   const fieldId = "id_" + props.name;
+  
+  ///// If the Input type will be number then MouseWheeler will be disabled ////////////
+  const handleFocus = (e: any)=>{
+    if(props.type && props.type === "number"){
+      e.target.addEventListener("wheel", function (e: any) { e.preventDefault() });
+    }
+  }
 
   return (
     <>
@@ -37,8 +44,9 @@ const Input: React.FC<InputProps> = (props) => {
           placeholder={props.placeholder}
           onChange={props.onChange}
           onBlur={props.onBlur}
+          onFocus={handleFocus}
           type={props.type}
-          value={props.value}
+          value={props?.value}
           className={`text-primary h-[40px] p-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
           id={fieldId}

@@ -29,7 +29,7 @@ export const EditBudgetAppro = ({
     primary_acc_code_id: "",
     remark: "",
     from_primary_acc_code_id: "",
-    // approved_amount: undefined,
+    approved_amount: undefined,
     transfer_amount: "",
   });
 
@@ -50,10 +50,12 @@ export const EditBudgetAppro = ({
           primary_acc_code_id: res.data.data.primary_acc_code.id,
           remark: res.data.data.remark,
           from_primary_acc_code_id: res.data.data.from_primary_acc_code.id,
-          // approved_amount: res.data.data.approved_amount,
+          approved_amount: res.data.data.approved_amount,
           transfer_amount: res.data.data.transfer_amount,
         };
       });
+      handleSelectPrimaryCode(res.data.data.primary_acc_code.id);
+      handleSelectFromPrimaryCode(res.data.data.from_primary_acc_code.id);
     })();
   }, []);
 
@@ -100,12 +102,11 @@ export const EditBudgetAppro = ({
     mutate(filterValBefStoring(values));
   };
 
-  
-   /////////////// Handle Select Primary Accounting Code ////////////////
-   const handleSelectPrimaryCode = async (id: string | number) => {
+  /////////////// Handle Select Primary Accounting Code ////////////////
+  const handleSelectPrimaryCode = async (id: string | number) => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}/${id}`,
+        url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
       setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
@@ -122,7 +123,10 @@ export const EditBudgetAppro = ({
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setInitialData((prev)=> ({...prev, approved_amount: res.data?.data?.approved_amount}))
+      setSelects((prev) => ({
+        ...prev,
+        approved_amount: res.data?.data?.balance_amount,
+      }));
     } catch (error) {
       console.log(error);
       throw error;
@@ -143,7 +147,7 @@ export const EditBudgetAppro = ({
       HEADER: "Primary Accounting Code",
       ACCESSOR: "primary_acc_code_id",
       PLACEHOLDER: "Select Primary Accounting Code",
-      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}`,
+      API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getParentCodes}`,
       HANDLER: handleSelectPrimaryCode,
     },
     {
@@ -161,7 +165,7 @@ export const EditBudgetAppro = ({
           ACCESSOR: "from_primary_acc_code_id",
           PLACEHOLDER: "Select From Primary Accounting Code",
           DATA: selects.f_p_codes,
-          HANDLER: handleSelectFromPrimaryCode
+          HANDLER: handleSelectFromPrimaryCode,
         },
         {
           CONTROL: "input",

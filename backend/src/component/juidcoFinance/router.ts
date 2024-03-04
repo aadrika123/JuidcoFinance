@@ -40,6 +40,10 @@ import ExpenditureNaturesRoute from "./route/budgeting/ExpenditureNaturesRoute";
 import EmployeesRoute from "./route/budgeting/EmployeesRoute";
 import BudgetNamesRoute from "./route/budgeting/BudgetNamesRoute";
 import DrcrRoute from "./route/budgeting/DrcrRoute";
+import LoanManagementRoute from "./route/budgeting/LoanManagementRoute";
+import AdvanceManagementRoute from "./route/budgeting/AdvanceManagementRoute";
+import AuthRoute from "./route/auth/Auth";
+import UDHDSubDepartmentRoute from "./route/udhdSubDepartmentRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -187,6 +191,14 @@ class FinanceRoute {
     (new BudgetNamesRoute()).configure(app, "39");
 
     (new DrcrRoute()).configure(app, "40");
+
+    (new LoanManagementRoute()).configure(app, "41");  // 41
+
+    (new AdvanceManagementRoute()).configure(app, "42");  // 42
+
+    (new AuthRoute()).configure(app, "43");  // 43
+
+    (new UDHDSubDepartmentRoute().configure(app, "44")) // 44
   }
 }
 

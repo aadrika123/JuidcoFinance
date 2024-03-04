@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient, account_codes } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
-import { Request } from "express";
 
 const prisma = new PrismaClient();
 
@@ -122,10 +121,7 @@ class AccountingCodeDao {
     left join account_codes b on a.parent_id = b.id where a.parent_id != 0 
     union
     SELECT id, code, description, '' as parent_name FROM account_codes where parent_id=0`;
-    if (!data){
-      return generateRes(null);
-    }
-    
+
     return generateRes(data);
   }
 

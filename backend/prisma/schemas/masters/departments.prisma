@@ -9,6 +9,8 @@ model departments {
   voucher_entries      voucher_entries[]
   bill_invoices        bill_invoices[]
   cheque_issuances     cheque_issuances[]
+  advance_managements  advance_managements[]
+  loan_managements     loan_managements[]
 
 
   created_at DateTime @default(now()) @map("created_at")

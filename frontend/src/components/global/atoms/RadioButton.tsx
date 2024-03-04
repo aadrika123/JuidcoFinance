@@ -24,11 +24,17 @@ interface RadioButtonProps {
   touched?: boolean | undefined;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const RadioButtons: React.FC<RadioButtonProps> = (props) => {
-  const { label, name, options, ...rest } = props;
+  const { label, name, options, onChange, handler, ...rest } = props;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange && onChange(e);
+    handler && handler(e);
+  };
   return (
     <div>
       <label className="text-secondary text-sm">{label}</label>
@@ -39,16 +45,19 @@ const RadioButtons: React.FC<RadioButtonProps> = (props) => {
               <div className="flex items-center mr-3" key={option.key}>
                 <input
                   disabled={props.readonly}
-                  className="mr-1"
+                  className="cursor-pointer mr-1 w-4 h-4 checkbox checkbox-success bg-gray-100 focus:ring-[#12743B] dark:ring-offset-gray-100 focus:ring-2 dark:bg-gray-100 dark:border-[#12743B] focus:border-white"
+                  // className="cursor-pointer mr-1 w-4 h-4 checkbox text-yellow-400 bg-gray-100 border-red-600 focus:ring-[#12743B] dark:ring-offset-gray-100 focus:ring-2 dark:bg-gray-100 dark:border-[#12743B] focus:border-white"
+                  // className="cursor-pointer mr-1 checkbox checkbox-success w-4 h-4 text-[#12743B] bg-white focus:ring-[#12743B] dark:ring-offset-white focus:ring-offset-white focus:ring-2 dark:bg-white border-[#12743B]"
                   type="radio"
                   id={option.value}
                   {...field}
                   {...rest}
+                  onChange={handleChange}
                   value={option.value}
                   checked={field.value === option.value}
                 />
                 <label
-                  className="text-secondary text-sm"
+                  className="text-secondary text-sm selected"
                   htmlFor={option.value}
                 >
                   {option.key}

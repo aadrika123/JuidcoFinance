@@ -42,9 +42,15 @@ import payment_types_seeder from "./seeder/payment_types_seeder";
 import drcr_seeder from "./seeder/budgeting/drcr_seeder";
 import account_codes_seeder from "./seeder/account_codes_seeder";
 import function_codes_seeder from "./seeder/function_codes_seeder";
+import loan_management_seeder from "./seeder/budgeting/loan_management_seeder";
+import advance_management_seeder from "./seeder/budgeting/advance_management_seeder";
+import udhd_sub_departments_seeder from "./seeder/udhd_sub_departments_seeder";
+import designations_seeder from "./seeder/designation_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
+
+  await udhd_sub_departments_seeder();
 
   await account_codes_seeder();
 
@@ -52,94 +58,97 @@ async function main() {
 
   await banks_seeder();
 
-  
-
-
   await bill_types_seeder();
   await vendor_types_seeder();
-  await employees_seeder();
-  await grants_seeder();
-  await payment_types_seeder();
-  await subledgers_seeder();
-  await modules_seeder();
-  await budget_names_seeder();
-  await expenditure_natures_seeder();
-  await drcr_seeder();
 
 
+  setTimeout(async () => {
+    await designations_seeder();
+    await employees_seeder();
+    await grants_seeder();
+    await payment_types_seeder();
+    await subledgers_seeder();
+    await modules_seeder();
+    await budget_names_seeder();
+    await expenditure_natures_seeder();
+    await drcr_seeder();
 
 
-  await budget_types_seeder();
-  await financial_years_seeder();
-  await municipality_codes_seeder();
-  await investment_types_seeder();
-  await grant_natures_seeder();
-  await expenditure_natures_seeder();
-
-
-
-  await admin_wards_seeder();
-  await departments_seeder();
-  await voucher_types_seed();
-  await voucher_sub_types_seed();
-
-
-
+    await budget_types_seeder();
+    await financial_years_seeder();
+    await municipality_codes_seeder();
+    await investment_types_seeder();
+    await grant_natures_seeder();
+    await expenditure_natures_seeder();
   
-
-  ///////////////// Vendor Types ////////////////////////
-
-  ///////////////// Employee ////////////////////////
-
-
-  ///////////////// cheque_book_entry ////////////////////////
-  function createRandomChequeBook(): cheque_book_entries {
-    return {
-      id: faker.datatype.number(),
-      date: faker.date.recent(),
-      bank_id: 1,
-      bank_account_no: faker.finance.account(),
-      cheque_no_from: faker.finance.creditCardNumber(),
-      employee_id: faker.datatype.number(),
-      bank_branch: faker.address.city(),
-      page_count: faker.datatype.number(), // assuming page_count is a string
-      cheque_no_to: faker.finance.creditCardNumber(),
-      issuer_name: faker.person.fullName(),
-      cheque_book_return: faker.datatype.boolean(),
-      cheque_book_return_date: faker.date.future(),
-      remarks: faker.lorem.sentence(),
-      created_at: faker.date.past(),
-      updated_at: faker.date.recent(),
-    };
-  }
-
-  const chequeBooks = faker.helpers.multiple(createRandomChequeBook, {
-    count: 20,
-  });
-
-  for (const item of chequeBooks) {
-    await prisma.cheque_book_entries.create({
-      data: {
-        id: item.id,
-        date: item.date,
-        
-        bank_id: item.bank_id,
-
-        bank_account_no: item.bank_account_no,
-        cheque_no_from: item.cheque_no_from,
-        employee_id: 1, //item.employee_id,
-        bank_branch: item.bank_branch,
-        page_count: item.page_count,
-        cheque_no_to: item.cheque_no_to,
-        issuer_name: item.issuer_name,
-        cheque_book_return: item.cheque_book_return,
-        cheque_book_return_date: item.cheque_book_return_date,
-        remarks: item.remarks,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      },
+  
+  
+    await admin_wards_seeder();
+    await departments_seeder();
+    await voucher_types_seed();
+    await voucher_sub_types_seed();
+  
+  
+  
+    
+  
+    ///////////////// Vendor Types ////////////////////////
+  
+    ///////////////// Employee ////////////////////////
+  
+  
+    ///////////////// cheque_book_entry ////////////////////////
+    function createRandomChequeBook(): cheque_book_entries {
+      return {
+        id: faker.datatype.number(),
+        date: faker.date.recent(),
+        bank_id: 1,
+        bank_account_no: faker.finance.account(),
+        cheque_no_from: faker.finance.creditCardNumber(),
+        employee_id: faker.datatype.number(),
+        bank_branch: faker.address.city(),
+        page_count: faker.datatype.number(), // assuming page_count is a string
+        cheque_no_to: faker.finance.creditCardNumber(),
+        issuer_name: faker.person.fullName(),
+        cheque_book_return: faker.datatype.boolean(),
+        cheque_book_return_date: faker.date.future(),
+        remarks: faker.lorem.sentence(),
+        created_at: faker.date.past(),
+        updated_at: faker.date.recent(),
+      };
+    }
+  
+    const chequeBooks = faker.helpers.multiple(createRandomChequeBook, {
+      count: 20,
     });
-  }
+  
+    for (const item of chequeBooks) {
+      await prisma.cheque_book_entries.create({
+        data: {
+          id: item.id,
+          date: item.date,
+          
+          bank_id: item.bank_id,
+  
+          bank_account_no: item.bank_account_no,
+          cheque_no_from: item.cheque_no_from,
+          employee_id: 1, //item.employee_id,
+          bank_branch: item.bank_branch,
+          page_count: item.page_count,
+          cheque_no_to: item.cheque_no_to,
+          issuer_name: item.issuer_name,
+          cheque_book_return: item.cheque_book_return,
+          cheque_book_return_date: item.cheque_book_return_date,
+          remarks: item.remarks,
+          created_at: item.created_at,
+          updated_at: item.updated_at,
+        },
+      });
+    }
+  
+  }, 1000);
+
+
 
 
   setTimeout(async () => {
@@ -183,6 +192,7 @@ async function main() {
   setTimeout(async () => {
 
     await voucher_entries_seed();
+
     await bill_payment_entry_seed();
 
     await balance_trackings_seeder();
@@ -215,6 +225,9 @@ async function main() {
 
     await grant_entries_seeder();
 
+    await loan_management_seeder();
+
+    await advance_management_seeder();
   }, 6000);
 
 

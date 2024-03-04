@@ -6,7 +6,7 @@ export const generateRes = (
 ) => {
   if (!data || data.length == 0) return null;
 
-  if (data && !(data.length > 0)) return data;
+  if (data && (!(data.length > 0) || !count || !page || !limit)) return data;
 
   return {
     currentPage: page,
