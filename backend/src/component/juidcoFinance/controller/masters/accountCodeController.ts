@@ -20,15 +20,15 @@ class AccountCodeController {
   constructor() {
     this.dao = new AccountingCodeDao();
     this.initMsg = "Accounting Codes";
-
   }
 
-  getAccountCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+  getAccountCode = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
     try {
-      const data = await this.dao.get(
-        Number(req.query.page),
-        Number(req.query.limit)
-      );
+      const data = await this.dao.get(req);
 
       if (!data)
         return sendResponse(
@@ -53,186 +53,224 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "GET",
-        apiId,
-        "1.0",
-        res
-      );
+      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res);
     }
   };
 
-
-    // Get limited account codes
-    getAllAccountingCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-      const resObj: resObj = {
-        apiId,
-        action: "GET",
-        version: "1.0",
-      };
-      
-      try {
-        
-        const data = await this.dao.get_all();
-  
-        if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMsg).NOT_FOUND,
-            data,
-            resObj,
-            res
-          );
-  
-          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-      } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
-      }
+  // Get limited account codes
+  getAllAccountingCode = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
     };
 
-     // Get main codes
-     getMainAccountingCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-      const resObj: resObj = {
-        apiId,
-        action: "GET",
-        version: "1.0",
-      };
-      
-      try {
-        
-        const data = await this.dao.getMainCodes();
-  
-        if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMsg).NOT_FOUND,
-            data,
-            resObj,
-            res
-          );
-  
-          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-      } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
-      }
+    try {
+      const data = await this.dao.get_all();
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  // Get main codes
+  getMainAccountingCode = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
     };
 
-    // Get main codes
-    getSubAccountingCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-      const resObj: resObj = {
-        apiId,
-        action: "GET",
-        version: "1.0",
-      };
-      
-      try {
-        
-        const data = await this.dao.getSubCodes();
-  
-        if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMsg).NOT_FOUND,
-            data,
-            resObj,
-            res
-          );
-  
-          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-      } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
-      }
+    try {
+      const data = await this.dao.getMainCodes();
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  // Get main codes
+  getSubAccountingCode = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
     };
 
+    try {
+      const data = await this.dao.getSubCodes();
 
-    // Get main codes
-    getChildAccountingCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-      const resObj: resObj = {
-        apiId,
-        action: "GET",
-        version: "1.0",
-      };
-      
-      try {
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
 
-        const id: number = Number(req.params.id);
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
 
-        // validate id
-        const { error } = Joi.object({
-          id: Joi.number().required()
-        }).validate({'id': id});
-  
-        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
-  
-        
-        const data = await this.dao.getChildCodes(id);
-  
-        if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMsg).NOT_FOUND,
-            data,
-            resObj,
-            res
-          );
-  
-          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-      } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
-      }
+  // Get main codes
+  getChildAccountingCode = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
     };
 
+    try {
+      const id: number = Number(req.params.id);
 
-        // Get main codes
-        getParentCode = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-          const resObj: resObj = {
-            apiId,
-            action: "GET",
-            version: "1.0",
-          };
-          
-          try {
-    
-            const id: number = Number(req.params.id);
-    
-            // validate id
-            const { error } = Joi.object({
-              id: Joi.number().required()
-            }).validate({'id': id});
-      
-            if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
-      
-            
-            const data = await this.dao.getParentCode(id);
-      
-            if (!data)
-              return CommonRes.SUCCESS(
-                resMessage(this.initMsg).NOT_FOUND,
-                data,
-                resObj,
-                res
-              );
-      
-              return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-          } catch (error: any) {
-            return CommonRes.SERVER_ERROR(error, resObj, res);
-          }
-        };
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required(),
+      }).validate({ id: id });
 
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
-      getCodesWithParentDetail = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-        const resObj: resObj = {apiId, action: "GET", version: "1.0",};
-        try {
-          const data = await this.dao.getCodesWithParentDetail();
-          if (!data)
-            return CommonRes.SUCCESS(
-              resMessage(this.initMsg).NOT_FOUND, data, resObj, res);
+      const data = await this.dao.getChildCodes(id);
 
-            return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-        } catch (error: any) {return CommonRes.SERVER_ERROR(error, resObj, res);}
-      };
-  
-  
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  // Get main codes
+  getParentCode = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+
+    try {
+      const id: number = Number(req.params.id);
+
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required(),
+      }).validate({ id: id });
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.dao.getParentCode(id);
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  getCodesWithParentDetail = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = { apiId, action: "GET", version: "1.0" };
+    try {
+      const data = await this.dao.getCodesWithParentDetail();
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
 }
 
 export default AccountCodeController;

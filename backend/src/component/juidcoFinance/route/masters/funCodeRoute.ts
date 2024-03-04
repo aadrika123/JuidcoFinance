@@ -16,6 +16,7 @@ class FunCodeRoute {
 
   configure(app: express.Application): void {
     app.route(`${baseUrl}/get-fun-code`).get(this.funCodeController.getFunCode);  //0201
+    app.route(`${baseUrl}/get-all-fun-codes`).get(this.funCodeController.getAll); //0202
   }
 }
 

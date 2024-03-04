@@ -1,5 +1,6 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, function_codes } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
+import { Request } from "express";
 
 const prisma = new PrismaClient();
 
@@ -21,8 +22,29 @@ class FunctionCodeDao {
       prisma.function_codes.findMany(query),
       prisma.function_codes.count(),
     ]);
-    
-    return generateRes(data, count, page, limit );
+
+    return generateRes(data, count, page, limit);
+  };
+
+  getAll = async (req: Request) => {
+    const search: string = req.query.search == undefined ? "" : String(req.query.search);
+
+    const c = `${search}%`;
+
+    const data = await prisma.$queryRaw<function_codes[]>`
+    select 
+    id,
+    "group",
+    description_code,
+    cost_center,
+    description
+    from
+    function_codes
+    where
+    CONCAT("group", description_code, cost_center) LIKE ${c}
+    `;
+
+    return generateRes(data);
   };
 }
 

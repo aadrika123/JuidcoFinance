@@ -1,31 +1,33 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, municipality_codes } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
+import { Request } from "express";
 
 const prisma = new PrismaClient();
 
 // -> Belongs to Chart of Accounts
 class MuncipalityCodeDao {
-  // Get limited muncipilaty code
-  get = async (page: number, limit: number) => {
-    const query: Prisma.municipality_codesFindManyArgs = {
-      skip: (page - 1) * limit,
-      take: limit,
-      select: {
-        id: true,
-        ulbs: true,
-        district: true,
-        state_code: true,
-        district_code: true,
-        category: true,
-        code: true,
-      },
-    };
-    const [data, count] = await prisma.$transaction([
-      prisma.municipality_codes.findMany(query),
-      prisma.municipality_codes.count(),
-    ]);
+  // Get All muncipilaty code
+  get = async (req: Request) => {
+    const search: string =
+      req.query.search == undefined ? "" : String(req.query.search);
 
-    return generateRes(data, count, page, limit );
+    const condition: string = `${search}%`;
+
+    const data = await prisma.$queryRaw<municipality_codes[]>`
+     select
+     id,
+     ulbs,
+     district,
+     state_code,
+     district_code,
+     category,
+     code
+     from
+     municipality_codes
+     where CONCAT(state_code, district_code, category, code) LIKE ${condition}
+     `;
+
+    return generateRes(data);
   };
 
   get_all = async () => {
