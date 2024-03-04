@@ -50,6 +50,21 @@ import designations_seeder from "./seeder/designation_seeder";
 const prisma = new PrismaClient();
 async function main() {
 
+  // await udhd_sub_departments_seeder();
+
+  // setTimeout(async () => {
+  //   await designations_seeder();
+
+
+  // },1000);
+
+  // setTimeout(async () => {
+  //   await employees_seeder();
+  // }, 2000);
+
+
+  // return;
+
   await udhd_sub_departments_seeder();
 
   await account_codes_seeder();
@@ -61,9 +76,11 @@ async function main() {
   await bill_types_seeder();
   await vendor_types_seeder();
 
-
   setTimeout(async () => {
     await designations_seeder();
+  },1000);
+
+  setTimeout(async () => {
     await employees_seeder();
     await grants_seeder();
     await payment_types_seeder();
@@ -146,7 +163,7 @@ async function main() {
       });
     }
   
-  }, 1000);
+  }, 2000);
 
 
 
@@ -186,7 +203,7 @@ async function main() {
 
     await vendors_seeder();
 
-  }, 3000);
+  }, 4000);
 
 
   setTimeout(async () => {
