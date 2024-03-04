@@ -41,7 +41,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
   } = props;
 
   return (
-    <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
+    <section className="border bg-white rounded-lg border-primary_green p-6 px-10">
       <div>
         <Formik
           initialValues={initialValues}

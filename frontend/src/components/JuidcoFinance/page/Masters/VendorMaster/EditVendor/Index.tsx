@@ -68,7 +68,7 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
   return (
     <>
       <Toaster />
-      <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
+      <section className="border rounded-lg bg-white border-primary_green p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Edit Vendor</SubHeading>
         </div>

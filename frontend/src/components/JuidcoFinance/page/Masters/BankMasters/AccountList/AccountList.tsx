@@ -15,7 +15,7 @@ type AccountListProps = {
 
 const AccountList: React.FC<AccountListProps> = (props) => {
   return (
-    <section className="border rounded-lg bg-white border-[#12743B] p-6 px-10">
+    <section className="border rounded-lg bg-white border-primary_green p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>Bank Account List</SubHeading>
         <SearchBox

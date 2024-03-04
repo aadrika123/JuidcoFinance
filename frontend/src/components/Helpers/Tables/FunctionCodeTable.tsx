@@ -5,24 +5,18 @@ interface FunctionCodeProps {
   data: FunctionTableData[];
 }
 const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
+  console.log('slsldf ', props.data)
   return (
     <>
       <div className="overflow-x-auto">
         <table className="table table-md">
           <thead className=" text-white text-[1rem] border border-t-2 border-zinc-400 ">
-            <tr className=" w-full">
-              <th className="w-12 py-8 pl-8 flex items-center gap-2 font-medium">
-                <input
-                  type="checkbox"
-                  checked={false}
-                  className="checkbox border-zinc-500 mr-12"
-                />
-              </th>
+            <tr className=" w-full flex">
               <th
-                className="border w-[20%] border-zinc-400 bg-[#BFD859]"
+                className="border w-[15%] border-zinc-400 bg-[#BFD859]"
                 colSpan={2}
               >
-                <div className="flex gap-2 w-32 font-medium ">
+                <div className="flex gap-2 font-medium ">
                   <span>Group</span>
                 </div>
               </th>
@@ -44,48 +38,38 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
                 </div>
               </th>
 
-              <th className="border w-[50%] bg-[#12743B] text-white border-zinc-400 font-medium">
+              <th className="border w-[55%] bg-primary_green text-white border-zinc-400 font-medium">
                 <div className="flex gap-2">
                   <span>Descriptions</span>
                 </div>
               </th>
             </tr>
           </thead>
-          <tbody className="">
+          <tbody className="h-[400px] block overflow-y-auto">
             {props.data?.map((d, index: number) => {
-                console.log(d)
               return (
                 <tr
                   key={index}
                   className="border border-zinc-400 text-secondary"
                 >
-                  <th className="border border-zinc-400">
-                    <div className="flex pr-5 items-center justify-center">
-                      <input
-                        type="checkbox"
-                        checked={false}
-                        className="checkbox border-zinc-400 ml-4"
-                      />
-                    </div>
-                  </th>
 
                   {/* Group  */}
-                  <td className="border border-l-2 border-zinc-400 ">
+                  <td className="border border-l-2 border-zinc-400 w-[8.5%]">
                     <div className="flex justify-center">{d?.group[0]}</div>
                   </td>
-                  <td className="border border-zinc-400 ">
+                  <td className="border border-zinc-400 w-[8.5%]">
                     <div className="flex justify-center">{d?.group[1]}</div>
                   </td>
 
                   {/* Group */}
 
                   {/* Description Code  */}
-                  <td className="border-l-2 border border-zinc-400 ">
+                  <td className="border-l-2 border border-zinc-400 w-[8.6%]">
                     <div className="flex justify-center">
                       {d?.description_code[0]}
                     </div>
                   </td>
-                  <td className="border-r-2 border-zinc-400 ">
+                  <td className="border-r-2 border-zinc-400 w-[8.6%]">
                     <div className="flex justify-center">
                       {d?.description_code[1]}
                     </div>
@@ -93,12 +77,12 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
                   {/* Description Code  */}
 
                   {/* Code Center */}
-                  <td className="border border-zinc-400 ">
+                  <td className="border border-zinc-400  w-[8.5%]">
                     <div className="flex justify-center">
                       {d.cost_center[0]}
                     </div>
                   </td>
-                  <td className="border-r-2 border-zinc-400">
+                  <td className="border-r-2 border-zinc-400 w-[8.5%]">
                     <div className="flex justify-center">
                       {d?.cost_center[1]}
                     </div>
@@ -106,7 +90,7 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
                   {/* Code Center */}
 
                   {/* DESCRIPTION */}
-                  <td className="border border-zinc-400 ">{d?.description}</td>
+                  <td className="border border-zinc-400 min-w-[55%]">{d?.description}</td>
                   {/* DESCRIPTION */}
                 </tr>
               );

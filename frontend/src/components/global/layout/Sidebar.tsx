@@ -35,7 +35,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                   <ul className="h-lvh">
                     <li>
                       <details open className="w-full h-[100%]">
-                        <summary className="text-[1.125rem] p-2 px-6 whitespace-nowrap bg-[#12743B] hover:bg-[#12743B] rounded-none font-semibold text-white">
+                        <summary className="text-[1.125rem] p-2 px-6 whitespace-nowrap bg-primary_green hover:bg-primary_green rounded-none font-semibold text-white">
                           <i className="w-8 bg-white rounded-md p-1">
                             {link.icon}
                           </i>
@@ -48,9 +48,9 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                 <summary
                                   className={`${
                                     pathName.startsWith(sub.path)
-                                      ? " bg-[#12743B]"
+                                      ? " bg-primary_green"
                                       : " bg-transparent text-zinc-600"
-                                  } ml-2 text-[0.9375rem] p-1 pr-4 hover:bg-[#12743B] hover:text-white font-semibold text-white`}
+                                  } ml-2 text-[0.9375rem] p-1 pr-4 hover:bg-primary_green hover:text-white font-semibold text-white`}
                                 >
                                   <i className="w-8 rounded-md p-1.5 bg-primary_green ">
                                     {sub.icon}
