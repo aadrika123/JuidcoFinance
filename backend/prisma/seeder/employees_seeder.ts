@@ -13,7 +13,9 @@ const employees_seeder = async () => {
     readXlsxFile(file_path, { sheet: 'Payee names' }).then(async (rows) => {
         const n = rows.length;
         const pass = "1234"
+        
         for (let i = 1; i < n; i++) {
+          const user_id = 'userId'+i;
           const row = rows[i];
           const hashedPass = await bcrypt.hash(pass, 10)
           await prisma.employees.create({
@@ -22,7 +24,7 @@ const employees_seeder = async () => {
                 email: faker.internet.email(),
                 designation_id: 1,
                 password: hashedPass,
-                user_id: faker.random.alphaNumeric(6),
+                user_id: user_id,
                 created_at: faker.date.past(),
                 updated_at: faker.date.recent(),
             },
