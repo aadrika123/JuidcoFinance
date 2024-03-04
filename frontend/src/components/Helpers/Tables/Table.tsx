@@ -16,13 +16,6 @@ const Table: React.FC<TableDataProps> = (props) => {
         <table className="table table-md">
           <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
             <tr className=" ">
-              <th className="w-2 p-8 flex items-center gap-2 font-medium">
-                <input
-                  type="checkbox"
-                  checked={false}
-                  className="checkbox border-zinc-500"
-                />
-              </th>
               <th className="border border-zinc-400">
                 <div className="flex gap-2 w-32 font-medium">
                   <span>ULBs</span>
@@ -62,13 +55,6 @@ const Table: React.FC<TableDataProps> = (props) => {
           <tbody className="">
             {props.data?.map((d, index: number) => (
               <tr key={index} className="border border-zinc-400 text-secondary">
-                <th className="border border-zinc-400">
-                  <input
-                    type="checkbox"
-                    checked={false}
-                    className="checkbox border-zinc-400 ml-4"
-                  />
-                </th>
                 {/* ULB'S */}
                 <td className="border border-zinc-400">{d?.ulbs}</td>
 

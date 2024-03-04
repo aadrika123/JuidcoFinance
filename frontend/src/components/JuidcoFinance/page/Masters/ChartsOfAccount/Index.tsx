@@ -27,43 +27,22 @@ type TableData =
 
 export const SubLedgure = () => {
   const [tabIndex, setTabIndex] = useState<number>(1);
-  const [muncipalPage, setMuncipalPage] = useState<number>(1);
-  const [accountingPage, setAccoutingPage] = useState<number>(1);
-  const [functionPage, setFunctionPage] = useState<number>(1);
-
-  const handlePageChangeAccounting = (direction: "prev" | "next") => {
-    setAccoutingPage((prevPage) =>
-      direction === "prev" ? prevPage - 1 : prevPage + 1
-    );
-  };
-
-  const handlePageChangeFunctionCode = (direction: "prev" | "next") => {
-    setFunctionPage((prevPage) =>
-      direction === "prev" ? prevPage - 1 : prevPage + 1
-    );
-  };
-  const handlePageChangeMuncipality = (direction: "prev" | "next") => {
-    setMuncipalPage((prevPage) =>
-      direction === "prev" ? prevPage - 1 : prevPage + 1
-    );
-  };
+  const [searchCode, setSearchCode] = useState<string>("");
 
   const fetchAllData = async <T extends TableData>(
-    endpoint: string,
-    page: number = 1
+    endpoint: string
   ): Promise<T> => {
     const res = await axios({
-      url: `/${endpoint}?limit=10&page=${page}`,
+      url:
+        `/${endpoint}` +
+        `${searchCode && searchCode !== "" ? `?search=${searchCode}` : ""}`,
       method: "GET",
     });
     return res.data?.data as T;
   };
 
-  const useCodeQuery = <T extends TableData>(
-    endpoint: string,
-    page: number = 1
-  ) => {
-    return useQuery([endpoint, page], () => fetchAllData<T>(endpoint, page));
+  const useCodeQuery = <T extends TableData>(endpoint: string) => {
+    return useQuery([endpoint, searchCode], () => fetchAllData<T>(endpoint));
   };
 
   //// ------------- Query Functions ----------------//
@@ -73,8 +52,7 @@ export const SubLedgure = () => {
     isError: accountingError,
     isLoading: accountingLoading,
   } = useCodeQuery<ChartsOfAccountsProps<AccountingTableData>>(
-    "get-account-code",
-    accountingPage
+    "get-account-code"
   );
 
   // QUERYING FUNCTION CODE
@@ -83,8 +61,7 @@ export const SubLedgure = () => {
     isError: functionError,
     isLoading: functionLoading,
   } = useCodeQuery<ChartsOfAccountsProps<FunctionTableData>>(
-    "get-fun-code",
-    functionPage
+    "get-all-fun-codes"
   );
 
   // QUERYING MUNCIPALITY CODE
@@ -93,8 +70,7 @@ export const SubLedgure = () => {
     isError: muncipalityError,
     isLoading: muncipalityLoading,
   } = useCodeQuery<ChartsOfAccountsProps<MuncipalityTableData>>(
-    "get-munci-code",
-    muncipalPage
+    "get-munci-code"
   );
   //// ------------- Query Functions ----------------//
 
@@ -102,6 +78,11 @@ export const SubLedgure = () => {
     console.log(accountingError);
     throw new Error("something went wrong");
   }
+
+  ///// ----------------- Search Codes -----------------//
+  const onSearchTextChange = (text: string) => {
+    setSearchCode(text);
+  };
 
   return (
     <>
@@ -157,14 +138,8 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <PrimaryAccountingCode
-              data={accountingCode?.data || []}
-              nextPage={() => handlePageChangeAccounting("next")}
-              prevPage={() => handlePageChangeAccounting("prev")}
-              pages={{
-                page: accountingPage,
-                totalPage: accountingCode?.totalPage ?? 1,
-                currentPage: accountingCode?.currentPage ?? 1,
-              }}
+              data={accountingCode || []}
+              onSearchTextChange={onSearchTextChange}
             />
           )
         ) : tabIndex === 2 ? (
@@ -172,28 +147,16 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <FunctionCode
-              data={functionCode?.data || []}
-              nextPage={() => handlePageChangeFunctionCode("next")}
-              prevPage={() => handlePageChangeFunctionCode("prev")}
-              pages={{
-                page: functionPage,
-                totalPage: functionCode?.totalPage ?? 1,
-                currentPage: functionCode?.currentPage ?? 1,
-              }}
+              data={functionCode || []}
+              onSearchTextChange={onSearchTextChange}
             />
           )
         ) : muncipalityLoading ? (
           <Loader />
         ) : (
           <HeroMuncipalityCode
-            data={muncipalityCode?.data || []}
-            nextPage={() => handlePageChangeMuncipality("next")}
-            prevPage={() => handlePageChangeMuncipality("prev")}
-            pages={{
-              page: muncipalPage,
-              totalPage: muncipalityCode?.totalPage ?? 1,
-              currentPage: muncipalityCode?.currentPage ?? 1,
-            }}
+            data={muncipalityCode || []}
+            onSearchTextChange={onSearchTextChange}
           />
         )}
       </section>

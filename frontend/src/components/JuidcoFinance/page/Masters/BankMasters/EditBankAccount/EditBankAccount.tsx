@@ -84,7 +84,7 @@ const EditBankAccount = ({ bankID }: { bankID: string }) => {
     <>
       <Toaster />
       <HeaderWidget title="Bank Details" variant="edit" />
-      <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
+      <section className="border bg-white rounded-lg border-primary_green p-6 px-10">
         <Formik
           initialValues={initialBankDetailsValues}
           validationSchema={AddBankDetailsSchema}

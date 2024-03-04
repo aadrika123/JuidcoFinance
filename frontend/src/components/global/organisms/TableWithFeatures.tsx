@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
-import Loader from "../atoms/Loader";
 import DebouncedSearch from "../atoms/DebouncedSearch";
 import Table, { ColumnProps } from "../molecules/Table";
 import NextPrevPagination from "../molecules/NextPrevPagination";
@@ -100,7 +99,7 @@ const TableWithFeatures = <T,>({
 
   return (
     <>
-      <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
+      <section className="border bg-white rounded-lg border-primary_green p-6 px-10">
         <div className="flex justify-between items-center">
           <div className="text-secondary text-sub_head font-semibold">
             {title}
