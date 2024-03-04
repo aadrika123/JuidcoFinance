@@ -1,14 +1,17 @@
 'use client'
 
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
+import DownloadButton from "@/components/global/atoms/DownloadButton";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 export const ReceiptsHome = () => {
   const pathName = usePathname();
   const router = useRouter();
+  const [pdf, setPdf] = useState("");
+
 
   const onViewButtonClick1 = (id: string) => {
     router.push(`${pathName}/view/${id}?mode=view`);
@@ -18,14 +21,36 @@ export const ReceiptsHome = () => {
     router.push(`${pathName}/view/${id}?mode=edit`);
   };
 
+  const onViewButtonClick3 = (id: string) => {
+    setPdf(`/api/v1/finance/receipt-entry/get-pdf/${id}?`+new Date().getTime());
+  };
+
+  const onDownloadButtonClick = (id: string) => {
+    const uri = `/api/v1/finance/receipt-entry/get-pdf/${id}`;
+    var link = document.createElement("a");
+    link.setAttribute('download', `Receipt${id}.pdf`);
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
   const tButton = (id: string) => {
     return (
       <>
         <ViewIconButton variant="view" onClick={() => onViewButtonClick1(id)} />
         <ViewIconButton variant="edit" onClick={() => onViewButtonClick2(id)} />
+        <ViewIconButton variant="print" onClick={() => onViewButtonClick3(id)} />
+        <ViewIconButton variant="download" onClick={() => onDownloadButtonClick(id)} />
       </>
     );
   }
+
+  const pdfLoaded = () => {
+    if(pdf !== "")
+      window.frames["pdf" as keyof typeof window.frames].print();
+  }
+  
 
   const columns=[
     {name: 'id', caption: "Sr. No.", width: "w-[5%]"},
@@ -44,9 +69,12 @@ export const ReceiptsHome = () => {
   ]
 
 
+
   return (
     <>
-      <HeaderWidget variant="add" title={"Receipt Entry"} />
+      <iframe onLoad={pdfLoaded} id="pdf" name="pdf" src={pdf} hidden></iframe>
+  
+      <HeaderWidget variant="add" title={"Receipt Entry"}/>
       <TableWithFeatures
         title="Receipts List"
         center

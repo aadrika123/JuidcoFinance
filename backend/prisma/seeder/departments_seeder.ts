@@ -7,9 +7,9 @@ import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 const departments_seeder = async () => {
 
-    const file_path = "./prisma/data/sprint1/bill_payment_entries.xlsx";
+    const file_path = "./prisma/data/sprint1/departments.xlsx";
 
-    readXlsxFile(file_path, { sheet: 'Department' }).then(async (rows) => {
+    readXlsxFile(file_path).then(async (rows) => {
         const n = rows.length;
         for (let i = 0; i < n; i++) {
           const row = rows[i];

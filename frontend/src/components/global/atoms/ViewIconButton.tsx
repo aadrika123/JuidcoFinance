@@ -1,6 +1,6 @@
 import React from "react";
 
-type Variant = "print" | "edit" | "view" | "delete";
+type Variant = "print" | "edit" | "view" | "delete" | "download";
 interface ViewIconButtonProps {
   onClick: () => void;
   variant: Variant;
@@ -9,34 +9,9 @@ interface ViewIconButtonProps {
 const tableBtnVariant = {
   print: (
     <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="19"
-        height="19"
-        viewBox="0 0 19 19"
-        fill="none"
-      >
-        <path
-          d="M5.03514 13.9453H3.57031C3.18181 13.9453 2.80922 13.7909 2.53451 13.5162C2.2598 13.2415 2.10547 12.8689 2.10547 12.4804V8.81835C2.10547 8.42985 2.2598 8.05727 2.53451 7.78256C2.80922 7.50785 3.18181 7.35352 3.57031 7.35352H15.289C15.6775 7.35352 16.0501 7.50785 16.3248 7.78256C16.5995 8.05727 16.7538 8.42985 16.7538 8.81835V12.4804C16.7538 12.8689 16.5995 13.2415 16.3248 13.5162C16.0501 13.7909 15.6775 13.9453 15.289 13.9453H13.8242"
-          stroke="black"
-          strokeWidth="1.7578"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M13.8242 11.0156H5.03516V16.875H13.8242V11.0156Z"
-          stroke="black"
-          strokeWidth="1.7578"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M5.03516 7.35349V2.22656H13.8242V7.35349"
-          stroke="black"
-          strokeWidth="1.7578"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+      <svg width="32" height="32" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.40876" y="0.40876" width="13.3107" height="13.1825" rx="3.67884" stroke="#726E6E" stroke-width="0.81752" />
+        <path d="M8.65232 5.81995V4.45499H5.01241V5.81995H4.55743V4H9.10731V5.81995H8.65232ZM9.38713 7.41241C9.51604 7.41241 9.62418 7.36889 9.71154 7.28183C9.79889 7.19478 9.84242 7.08664 9.84212 6.95743C9.84212 6.82851 9.79859 6.72053 9.71154 6.63347C9.62448 6.54642 9.51635 6.50274 9.38713 6.50244C9.25822 6.50244 9.15023 6.54612 9.06318 6.63347C8.97612 6.72083 8.93245 6.82882 8.93214 6.95743C8.93214 7.08634 8.97582 7.19448 9.06318 7.28183C9.15054 7.36919 9.25852 7.41272 9.38713 7.41241ZM8.65232 10.545V8.48027H5.01241V10.545H8.65232ZM9.10731 11H4.55743V9.18005H3V6.72993C3 6.4721 3.08751 6.25599 3.26253 6.08157C3.43755 5.90716 3.65336 5.81995 3.90998 5.81995H9.75476C10.0126 5.81995 10.2287 5.90716 10.4031 6.08157C10.5775 6.25599 10.6647 6.4721 10.6647 6.72993V9.18005H9.10731V11ZM10.2098 8.72506V6.72993C10.2098 6.60102 10.1662 6.49303 10.0792 6.40598C9.99211 6.31893 9.88398 6.27525 9.75476 6.27494H3.90998C3.78106 6.27494 3.67293 6.31862 3.58557 6.40598C3.49821 6.49334 3.45469 6.60132 3.45499 6.72993V8.72506H4.55743V8.02528H9.10731V8.72506H10.2098Z" fill="#969696" />
       </svg>
     </>
   ),
@@ -118,6 +93,14 @@ const tableBtnVariant = {
       </svg>
     </>
   ),
+  download: (
+    <>
+      <svg width="32" height="32" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.395114" y="0.395114" width="13.2098" height="12.7424" rx="3.55602" stroke="#726E6E" stroke-width="0.790227" />
+        <path d="M7 3.5V10M7 10L9 7.8125M7 10L5 7.8125" stroke="#726E6E" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </>
+  ),
 };
 
 const ViewIconButton: React.FC<ViewIconButtonProps> = ({
@@ -131,6 +114,7 @@ const ViewIconButton: React.FC<ViewIconButtonProps> = ({
         {variant === "edit" ? tableBtnVariant.edit : null}
         {variant === "print" ? tableBtnVariant.print : null}
         {variant === "delete" ? tableBtnVariant.delete : null}
+        {variant === "download" ? tableBtnVariant.download: null}
       </span>
     </button>
   );

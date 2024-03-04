@@ -1,5 +1,5 @@
 //// OTPs
-model opts {
+model otps {
   id            Int         @id   @default(autoincrement())
   email         String?
   mobile        String?

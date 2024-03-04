@@ -6,6 +6,14 @@ import { receiptValidation, receiptValidationWithID } from "../../requests/trans
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
 
+import MemoryStream from 'memorystream';
+
+import latex from 'node-latex';
+import fs from 'fs';
+import dayjs from "dayjs";
+var lescape = require('escape-latex');
+
+
 /**
  * | Author- Bijoy Paitandi
  * | Created On- 31-01-2024
@@ -138,6 +146,70 @@ class ReceiptEntryController {
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
+
+  // get receipt by ID
+  getPDF = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+
+    try {
+      // get the data
+      const id: number = Number(req.params.receiptId);
+
+
+      // validate
+      const { error } = Joi.object({
+        id: Joi.number().required()
+      }).validate({ 'id': id });
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.dao.getById(id);
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+
+      
+      const texFile = './src/data/typesettings/receipt.tex';
+      var texTemplate = fs.readFileSync(texFile).toString();
+
+      const data1 = {...data,
+        receipt_type: data.receipt_type.name,
+        ward_no: data.admin_ward.name,
+        subledger: data.subledger.name,
+        date: dayjs(data.date).format('DD MMM YYYY')
+      };
+      1
+
+      const texData = texTemplate.replace(
+        /%(\w*)%/g, // or /{(\w*)}/g for "{this} instead of %this%"
+        function( m, key ){
+          return data1.hasOwnProperty( key ) ? lescape(data1[ key as keyof typeof data1 ]) : "";
+        }
+      );
+
+      res.status(200).setHeader("Content-Type", "application/pdf");
+
+      const pdf = latex(new MemoryStream(texData));
+      pdf.pipe(res);
+ 
+      return res;
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+
+  };
+
 
 }
 

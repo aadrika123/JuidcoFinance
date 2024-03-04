@@ -23,6 +23,7 @@ class ReceiptEntryRoute {
     app.route(`${this.baseUrl}/get`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "02"));
     app.route(`${this.baseUrl}/get-by-id/:receiptId`).get((req: Request, res: Response) => this.controller.getById(req, res, apiId + "03"));
     app.route(`${this.baseUrl}/update`).post((req: Request, res: Response) =>this.controller.update(req, res, apiId + "04"));
+    app.route(`${this.baseUrl}/get-pdf/:receiptId`).get((req: Request, res: Response) =>this.controller.getPDF(req, res, apiId + "05"));
   }
 }
 

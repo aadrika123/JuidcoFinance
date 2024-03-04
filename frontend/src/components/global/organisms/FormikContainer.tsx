@@ -203,7 +203,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                     >
                       Reset
                     </Button>
-                    <Button variant="primary" buttontype="submit">
+                    <Button variant="primary" buttontype="submit" className="animate-pulse">
                       Save
                     </Button>
                   </>
