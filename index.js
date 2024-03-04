@@ -1,0 +1,1 @@
+console.log("This script runs the automated selenium test cases!");

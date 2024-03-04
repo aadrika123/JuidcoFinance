@@ -48,7 +48,7 @@ const designations_seeder = async () => {
       udhd_id: 1,
     },
     {
-      name: "Designation 1",
+      name: "Accounts Department – Accountant",
       udhd_id: 2,
     },
     {
@@ -76,11 +76,11 @@ const designations_seeder = async () => {
       udhd_id: 3,
     },
     {
-      name: "Designation 1",
+      name: "Accounts Department – Project Director",
       udhd_id: 4,
     },
     {
-      name: "Designation 2",
+      name: "Accounts Department – Manager",
       udhd_id: 4,
     },
   ];
