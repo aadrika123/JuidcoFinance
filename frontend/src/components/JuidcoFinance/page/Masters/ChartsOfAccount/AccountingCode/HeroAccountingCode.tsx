@@ -21,6 +21,14 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
         <div className="mt-8">
           <AccountingTable data={props.data} />
         </div>
+
+        <div className="flex items-center justify-between mt-5 gap-5">
+        <div>
+           Found {props.data.length} Records
+        </div>
+        </div>
+
+
       </section>
     </>
   );

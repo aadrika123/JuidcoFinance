@@ -18,9 +18,14 @@ const FunctionCode: React.FC<FunctionCodeProps> = (props) => {
           <DebouncedSearch onChange={props.onSearchTextChange} />
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 mb-4">
           <FunctionCodeTable data={props.data} />
         </div>
+
+        <div>
+           Found {props.data.length} Records
+        </div>
+        
       </section>
     </>
   );

@@ -8,45 +8,45 @@ interface TableDataProps {
 const Table: React.FC<TableDataProps> = (props) => {
   return (
     <>
-      <div className="overflow-x-auto border-[2px] border-zinc-400">
-        <p className="p-4 text-[0.75rem] text-zinc-700">
+      <div className="overflow-x-auto border-[2px] border-zinc-400 overflow-x-auto h-[550px] overflow-y-auto">
+        <p className="p-4  text-zinc-700 text-center">
           Identification Codes for ULBs at Jharkhand{" "}
         </p>
 
         <table className="table table-md">
-          <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
-            <tr className=" ">
-              <th className="border border-zinc-400">
-                <div className="flex gap-2 w-32 font-medium">
+          <thead className="text-[1rem] text-white border border-t-2 border-zinc-400 sticky top-0">
+            <tr className="">
+              <th className="border border-zinc-400 p-0">
+                <div className="font-medium bg-primary_green p-4">
                   <span>ULBs</span>
                 </div>
               </th>
-              <th className="border border-zinc-400 w-[20%] font-medium">
-                <div className="flex gap-2">
+              <th className="border border-zinc-400 w-[20%] font-medium p-0">
+                <div className="font-medium bg-primary_green p-4">
                   <span>DISTRICT</span>
                 </div>
               </th>
 
-              <th colSpan={2} className="border border-zinc-400 font-medium">
-                <div className="flex gap-2">
+              <th colSpan={2} className="border-2 border-zinc-400 font-medium p-0">
+              <div className="font-medium bg-primary_green p-4">
                   <span>State Code</span>
                 </div>
               </th>
 
-              <th className="border  border-zinc-400 font-medium" colSpan={2}>
-                <div className="flex gap-2">
+              <th className="border  border-zinc-400 font-medium p-0" colSpan={2}>
+              <div className="font-medium bg-primary_green p-4">
                   <span>District Code</span>
                 </div>
               </th>
 
-              <th colSpan={2} className="border   border-zinc-400 font-medium">
-                <div className="flex gap-2">
+              <th colSpan={2} className="border   border-zinc-400 font-medium p-0">
+              <div className="font-medium bg-primary_green p-4">
                   <span>Category</span>
                 </div>
               </th>
 
-              <th colSpan={2} className="border  border-zinc-400  font-medium">
-                <div className="flex gap-2">
+              <th colSpan={2} className="border  border-zinc-400  font-medium p-0">
+              <div className="font-medium bg-primary_green p-4">
                   <span>Code </span>
                 </div>
               </th>

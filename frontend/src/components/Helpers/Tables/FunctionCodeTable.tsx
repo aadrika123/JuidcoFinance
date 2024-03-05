@@ -8,10 +8,10 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
   console.log('slsldf ', props.data)
   return (
     <>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto h-[550px] overflow-y-auto border">
         <table className="table table-md">
           <thead className=" text-white text-[1rem] border border-t-2 border-zinc-400 ">
-            <tr className=" w-full flex">
+            <tr className="sticky top-0 text-center">
               <th
                 className="border w-[15%] border-zinc-400 bg-[#BFD859]"
                 colSpan={2}
@@ -45,7 +45,7 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
               </th>
             </tr>
           </thead>
-          <tbody className="h-[400px] block overflow-y-auto">
+          <tbody className="">
             {props.data?.map((d, index: number) => {
               return (
                 <tr

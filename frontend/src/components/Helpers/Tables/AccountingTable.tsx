@@ -8,54 +8,54 @@ interface AccoutingTableProps {
 const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
   return (
     <>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto h-[550px] overflow-y-auto border">
         <table className="table table-md">
           <thead className=" text-white text-[1rem] border border-t-2 border-zinc-400 ">
-            <tr className=" w-full flex">
+            <tr className="bg-white border-b sticky top-0 text-center">
               <th
-                className="border w-[20%] border-zinc-400 bg-[#285343]"
+                className="border border-white-400 p-0"
                 colSpan={3}
               >
-                <div className="flex gap-2 w-32 font-medium ">
-                  <span>Major Head</span>
+                <div className="text-center bg-[#285343] p-4">
+                  Major Head
                 </div>
               </th>
               <th
-                className="border  w-[15%] border-zinc-400 bg-[#285343] font-medium"
+                className="border border-zinc-400 font-medium p-0"
                 colSpan={2}
               >
-                <div className="flex gap-2">
+                <div className="text-center bg-[#285343] p-4">                
                   <span>Minor Head</span>
                 </div>
               </th>
 
               <th
-                className="border  w-[15%] bg-[#285343] text-white border-zinc-400 font-medium"
+                className="border text-white border-zinc-400 font-medium p-0"
                 colSpan={2}
               >
-                <div className="flex gap-2">
+                <div className="text-center bg-[#285343] p-4">
                   <span>Detail Head</span>
                 </div>
               </th>
 
-              <th className="border w-[50%] bg-primary_green text-white border-zinc-400 font-medium">
-                <div className="flex gap-2">
+              <th className="border text-white border-zinc-400 font-medium p-0">
+              <div className="text-center bg-primary_green p-4">
                   <span>Descriptions</span>
                 </div>
               </th>
             </tr>
           </thead>
-          <tbody className="h-[500px] block overflow-y-auto">
+          <tbody className="">
             {props.data?.map((d, index: number) => (
               <tr key={index} className="border border-zinc-400 text-secondary">
                 {/* MAJOR HEAD */}
-                <td className="border border-l-2 w-[6.65%] border-zinc-400">
+                <td className="border border-l-2 border-zinc-400 w-[6.5%]">
                   <div className="flex justify-center">{d?.major_head[0]}</div>
                 </td>
-                <td className="border border-zinc-400 w-[6.65%]">
+                <td className="border border-zinc-400 w-[6.5%]">
                   <div className="flex justify-center">{d?.major_head[1]}</div>
                 </td>
-                <td className="border border-zinc-400 w-[6.65%]">
+                <td className="border border-zinc-400 w-[6.5%]">
                   <div className="flex justify-center">{d?.major_head[2]}</div>
                 </td>
 

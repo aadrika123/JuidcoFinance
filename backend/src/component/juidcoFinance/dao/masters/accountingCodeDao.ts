@@ -22,9 +22,19 @@ class AccountingCodeDao {
 
     if(search !== 'undefined' && search !== ""){
       query.where ={
-        code: {
+        OR: [
+        {
+          code: {
           startsWith: search
+        },
+      },
+        {
+          description: {
+            contains: search
+          }
         }
+
+      ]
       }
     }
     const data = prisma.account_codes.findMany(query)
