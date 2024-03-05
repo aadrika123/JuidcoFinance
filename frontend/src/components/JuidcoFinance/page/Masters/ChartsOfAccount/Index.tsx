@@ -17,6 +17,15 @@ import type {
   FunctionTableData,
   MuncipalityTableData,
 } from "@/utils/types/types";
+import Button from "@/components/global/atoms/Button";
+import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
+import { useDispatch } from "react-redux";
+import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
+import RequestNewAccountCode from "./RequestNewAccountCode";
+import { RequestAccCodesDetailsSchema } from "@/utils/validation/masters/request_accounting_codes.validation";
+import { PrimaryAccCodes } from "@/utils/types/primary_accounting_codes";
+import Popup from "@/components/global/molecules/Popup";
+import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
 
 // ---- TYPES ----//
 type TableData =
@@ -28,6 +37,7 @@ type TableData =
 export const SubLedgure = () => {
   const [tabIndex, setTabIndex] = useState<number>(1);
   const [searchCode, setSearchCode] = useState<string>("");
+  const dispatch = useDispatch();
 
   const fetchAllData = async <T extends TableData>(
     endpoint: string
@@ -84,10 +94,60 @@ export const SubLedgure = () => {
     setSearchCode(text);
   };
 
+  //// -------------- handleOpenPopup ------------//
+  const handleOpenPopup = () => {
+    dispatch(openPopup());
+  };
+
+  const HOC = PopupFormikHOC(RequestNewAccountCode);
+  ////
+
+  const initialValues = {
+    ulb_id: "",
+    request_no: "",
+    employee_id: "",
+    date: "",
+    group: "",
+    reference_code: "",
+    description: "",
+  };
+
+  const onSubmit = (values: PrimaryAccCodes) => {
+    console.log(values);
+    setIsOpen(!isOpen);
+    dispatch(closePopup());
+  };
+
+  /////////////
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
+      {isOpen && (
+        <Popup title="" width="30%" bgColor="[#F8FFF7]">
+          <SuccesfullConfirm
+            message="Your Request Sent Successfull"
+            handleContinueButton={onClose}
+          />
+        </Popup>
+      )}
+      <HOC
+        initialValues={initialValues}
+        validationSchema={RequestAccCodesDetailsSchema}
+        onSubmit={onSubmit}
+      />
       <section>
-        <SubHeading className="text-2xl">Chart of Accounts</SubHeading>
+        <div className="flex items-center justify-between">
+          <SubHeading className="text-2xl">Chart of Accounts</SubHeading>
+          {tabIndex === 1 && (
+            <Button variant="primary" onClick={handleOpenPopup}>
+              Request A New Primary Accounting Code
+            </Button>
+          )}
+        </div>
 
         <div className="flex items-center gap-12 mt-5 text-secondary">
           <div className="flex-all-center ">
