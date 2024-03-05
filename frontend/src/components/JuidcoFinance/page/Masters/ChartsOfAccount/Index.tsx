@@ -1,7 +1,7 @@
 "use client";
 // ------------------------- CHART OF ACCOUNTS ----------------------- //
 
-import React, { lazy, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
 import HeroMuncipalityCode from "./MunicipalityCode/HeroMuncipalityCode";
 const PrimaryAccountingCode = lazy(
@@ -39,6 +39,11 @@ export const SubLedgure = () => {
   const [searchCode, setSearchCode] = useState<string>("");
   const dispatch = useDispatch();
 
+  const changeTab = (index: number) => {
+    setSearchCode("");
+    setTabIndex(index);
+  }
+
   const fetchAllData = async <T extends TableData>(
     endpoint: string
   ): Promise<T> => {
@@ -52,7 +57,7 @@ export const SubLedgure = () => {
   };
 
   const useCodeQuery = <T extends TableData>(endpoint: string) => {
-    return useQuery([endpoint, searchCode], () => fetchAllData<T>(endpoint));
+    return useQuery([endpoint], () => fetchAllData<T>(endpoint));
   };
 
   //// ------------- Query Functions ----------------//
@@ -61,6 +66,7 @@ export const SubLedgure = () => {
     data: accountingCode,
     isError: accountingError,
     isLoading: accountingLoading,
+    refetch: reloadAccountingCodeData,
   } = useCodeQuery<ChartsOfAccountsProps<AccountingTableData>>(
     "get-account-code"
   );
@@ -70,6 +76,7 @@ export const SubLedgure = () => {
     data: functionCode,
     isError: functionError,
     isLoading: functionLoading,
+    refetch: reloadFunctionCodeData,
   } = useCodeQuery<ChartsOfAccountsProps<FunctionTableData>>(
     "get-all-fun-codes"
   );
@@ -79,6 +86,7 @@ export const SubLedgure = () => {
     data: muncipalityCode,
     isError: muncipalityError,
     isLoading: muncipalityLoading,
+    refetch: reloadMunicipalityCodeData,
   } = useCodeQuery<ChartsOfAccountsProps<MuncipalityTableData>>(
     "get-munci-code"
   );
@@ -91,6 +99,7 @@ export const SubLedgure = () => {
 
   ///// ----------------- Search Codes -----------------//
   const onSearchTextChange = (text: string) => {
+    console.log(text);
     setSearchCode(text);
   };
 
@@ -124,6 +133,14 @@ export const SubLedgure = () => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    switch(tabIndex){
+      case 1: reloadAccountingCodeData(); break;
+      case 2: reloadFunctionCodeData(); break;
+      case 3: reloadMunicipalityCodeData(); break;
+    }
+  }, [searchCode, tabIndex]);
+
   return (
     <>
       {isOpen && (
@@ -154,7 +171,7 @@ export const SubLedgure = () => {
             <input
               id="accounting"
               type="radio"
-              onChange={() => setTabIndex(1)}
+              onChange={() => changeTab(1)}
               name="radio-1"
               className="radio border border-zinc-600"
               defaultChecked
@@ -167,7 +184,7 @@ export const SubLedgure = () => {
           <div className="flex-all-center ">
             <input
               id="function"
-              onChange={() => setTabIndex(2)}
+              onChange={() => changeTab(2)}
               type="radio"
               name="radio-1"
               className="radio  border-zinc-600"
@@ -181,7 +198,7 @@ export const SubLedgure = () => {
             <input
               id="municipality"
               type="radio"
-              onChange={() => setTabIndex(3)}
+              onChange={() => changeTab(3)}
               name="radio-1"
               className="radio  border-zinc-600"
             />
@@ -219,6 +236,8 @@ export const SubLedgure = () => {
             onSearchTextChange={onSearchTextChange}
           />
         )}
+
+
       </section>
     </>
   );

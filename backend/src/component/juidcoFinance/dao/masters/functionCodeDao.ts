@@ -30,6 +30,7 @@ class FunctionCodeDao {
     const search: string = req.query.search == undefined ? "" : String(req.query.search);
 
     const c = `${search}%`;
+    const cc = `%${search}%`;
 
     const data = await prisma.$queryRaw<function_codes[]>`
     select 
@@ -41,7 +42,7 @@ class FunctionCodeDao {
     from
     function_codes
     where
-    CONCAT("group", description_code, cost_center) LIKE ${c}
+    CONCAT("group", description_code, cost_center) LIKE ${c} or description LIKE ${cc}
     `;
 
     return generateRes(data);

@@ -11,7 +11,8 @@ class MuncipalityCodeDao {
     const search: string =
       req.query.search == undefined ? "" : String(req.query.search);
 
-    const condition: string = `${search}%`;
+    const pattern1: string = `${search}%`;
+    const pattern2: string = `%${search}%`;
 
     const data = await prisma.$queryRaw<municipality_codes[]>`
      select
@@ -24,7 +25,7 @@ class MuncipalityCodeDao {
      code
      from
      municipality_codes
-     where CONCAT(state_code, district_code, category, code) LIKE ${condition}
+     where CONCAT(state_code, district_code, category, code) LIKE ${pattern1} or ulbs LIKE ${pattern2} or district LIKE ${pattern2}
      `;
 
     return generateRes(data);
