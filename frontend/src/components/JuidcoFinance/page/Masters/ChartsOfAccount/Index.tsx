@@ -26,6 +26,9 @@ import { RequestAccCodesDetailsSchema } from "@/utils/validation/masters/request
 import { PrimaryAccCodes } from "@/utils/types/primary_accounting_codes";
 import Popup from "@/components/global/molecules/Popup";
 import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
+import { FINANCE_URL } from "@/utils/api/urls";
+import { filterValBefStoring } from "@/utils/helper";
+import toast, { Toaster } from "react-hot-toast";
 
 // ---- TYPES ----//
 type TableData =
@@ -42,7 +45,7 @@ export const SubLedgure = () => {
   const changeTab = (index: number) => {
     setSearchCode("");
     setTabIndex(index);
-  }
+  };
 
   const fetchAllData = async <T extends TableData>(
     endpoint: string
@@ -99,7 +102,6 @@ export const SubLedgure = () => {
 
   ///// ----------------- Search Codes -----------------//
   const onSearchTextChange = (text: string) => {
-    console.log(text);
     setSearchCode(text);
   };
 
@@ -109,44 +111,63 @@ export const SubLedgure = () => {
   };
 
   const HOC = PopupFormikHOC(RequestNewAccountCode);
-  ////
 
+///////// Initializing Values ///////////////
   const initialValues = {
     ulb_id: "",
     request_no: "",
     employee_id: "",
     date: "",
-    group: "",
-    reference_code: "",
+    group_ref: "",
+    code_ref: "",
     description: "",
   };
 
-  const onSubmit = (values: PrimaryAccCodes) => {
-    console.log(values);
-    setIsOpen(!isOpen);
-    dispatch(closePopup());
+  ///////// Hadle Submit Function ///////////////
+  const onSubmit = async (values: PrimaryAccCodes) => {
+    try{
+      const res = await axios({
+        url: FINANCE_URL.ACCOUNTING_CODE_URL.create,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      if (res.data?.data) {
+        setIsOpen(!isOpen);
+        dispatch(closePopup());
+      }
+    }catch(error){
+      toast.error('Something Went Wrong!!!')
+      console.log(error)
+    }
   };
 
-  /////////////
+  ///////////// Handle Open Popup ///////////
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => {
     setIsOpen(!isOpen);
   };
 
   useEffect(() => {
-    switch(tabIndex){
-      case 1: reloadAccountingCodeData(); break;
-      case 2: reloadFunctionCodeData(); break;
-      case 3: reloadMunicipalityCodeData(); break;
+    switch (tabIndex) {
+      case 1:
+        reloadAccountingCodeData();
+        break;
+      case 2:
+        reloadFunctionCodeData();
+        break;
+      case 3:
+        reloadMunicipalityCodeData();
+        break;
     }
   }, [searchCode, tabIndex]);
 
   return (
     <>
+    <Toaster/>
       {isOpen && (
-        <Popup title="" width="30%" bgColor="[#F8FFF7]">
+        <Popup title="" width="30%" bgColor="primary_bg">
           <SuccesfullConfirm
-            message="Your Request Sent Successfull"
+            message="Your Request Sent Successfully"
             handleContinueButton={onClose}
           />
         </Popup>
@@ -215,7 +236,7 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <PrimaryAccountingCode
-              data={accountingCode || []}
+              data={Array.isArray(accountingCode) ? accountingCode : []}
               onSearchTextChange={onSearchTextChange}
             />
           )
@@ -224,7 +245,7 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <FunctionCode
-              data={functionCode || []}
+              data={Array.isArray(functionCode) ? functionCode : []}
               onSearchTextChange={onSearchTextChange}
             />
           )
@@ -232,12 +253,10 @@ export const SubLedgure = () => {
           <Loader />
         ) : (
           <HeroMuncipalityCode
-            data={muncipalityCode || []}
+            data={Array.isArray(muncipalityCode) ? muncipalityCode : []}
             onSearchTextChange={onSearchTextChange}
           />
         )}
-
-
       </section>
     </>
   );

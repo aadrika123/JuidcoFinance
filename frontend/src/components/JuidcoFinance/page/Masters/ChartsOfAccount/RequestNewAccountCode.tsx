@@ -58,7 +58,7 @@ const RequestNewAccountCode: React.FC<FormikWrapperProps> = (props) => {
                   label="Name of ULB"
                   name="ulb_id"
                   placeholder="Select ULBs"
-                  api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
                 />
                 <Input
                   onChange={handleChange}
@@ -79,7 +79,7 @@ const RequestNewAccountCode: React.FC<FormikWrapperProps> = (props) => {
                   label="Name of the Person Requesting Change"
                   name="employee_id"
                   placeholder="Select Name "
-                  api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  api={`${FINANCE_URL.EMPLOYEE_URL.get}`}
                 />
 
                 <Input
@@ -121,11 +121,11 @@ const RequestNewAccountCode: React.FC<FormikWrapperProps> = (props) => {
                       <Input
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.group}
-                        error={errors.group}
-                        touched={touched.group}
+                        value={values.group_ref}
+                        error={errors.group_ref}
+                        touched={touched.group_ref}
                         label=""
-                        name="group"
+                        name="group_ref"
                         placeholder="Enter Group Reference"
                       />
                     </td>
@@ -133,11 +133,11 @@ const RequestNewAccountCode: React.FC<FormikWrapperProps> = (props) => {
                       <Input
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.reference_code}
-                        error={errors.reference_code}
-                        touched={touched.reference_code}
+                        value={values.code_ref}
+                        error={errors.code_ref}
+                        touched={touched.code_ref}
                         label=""
-                        name="reference_code"
+                        name="code_ref"
                         placeholder="Enter Code Reference"
                       />
                     </td>

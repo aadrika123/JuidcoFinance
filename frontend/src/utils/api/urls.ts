@@ -225,7 +225,8 @@ export const FINANCE_URL: Urls = {
     get: "/get-all-account-code",
     getMainCodes: "/get-main-account-codes",
     getChildCodes: "/get-child-account-codes",
-    getParentCodes: "/get-codes-with-parent-detail"
+    getParentCodes: "/get-codes-with-parent-detail",
+    create: "/request-new-acc-code"
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",

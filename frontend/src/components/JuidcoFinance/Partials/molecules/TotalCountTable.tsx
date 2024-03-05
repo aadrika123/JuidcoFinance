@@ -17,7 +17,7 @@ const TotalCountTable: React.FC<TotalCountTableProps> = (props) => {
     return (
       <tr key={`row${index}`} className="flex border border-zinc-400 text-secondary">
         <Tdata className="flex-1" value={item.key} />
-        <Tdata className="bg-[#F8FFF7] flex-1" value={item.value} />
+        <Tdata className="bg-primary_bg flex-1" value={item.value} />
         <Tdata className="flex-1" value="" />
       </tr>
     );

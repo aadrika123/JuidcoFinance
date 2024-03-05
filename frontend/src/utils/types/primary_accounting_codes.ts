@@ -3,7 +3,7 @@ export type PrimaryAccCodes = {
     request_no: string;
     employee_id: number | string;
     date: string;
-    group: string;
-    reference_code: string;
+    group_ref: string;
+    code_ref: string;
     description: string;
 }
