@@ -1,0 +1,16 @@
+///// Request New Account Codes : Managed By : Sanjiv Kumar
+model request_account_codes {
+    id          Int                @id @default(autoincrement())
+    ulb_id      Int
+    ulb         municipality_codes @relation(fields: [ulb_id], references: [id])
+    request_no  String
+    employee_id Int
+    employee    employees          @relation(fields: [employee_id], references: [id])
+    date        DateTime
+    group_ref   String
+    code_ref    String
+    description String
+    status      String             @default("pending")
+    created_at  DateTime           @default(now()) @map("created_at")
+    updated_at  DateTime           @updatedAt @map("updated_at")
+}

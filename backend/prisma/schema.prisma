@@ -10,6 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+///// Request New Account Codes : Managed By : Sanjiv Kumar
+model request_account_codes {
+  id                              Int                     @id     @default(autoincrement())
+  ulb_id                          Int                 
+  ulb                             municipality_codes      @relation(fields: [ulb_id], references: [id])
+  request_no                      String
+  employee_id                     Int
+  employee                        employees               @relation(fields: [employee_id], references: [id])
+  date                            DateTime
+  group_ref                       String
+  code_ref                        String
+  description                     String
+  status                          String                 @default("pending")
+  created_at                      DateTime              @default(now()) @map("created_at")
+  updated_at                      DateTime              @updatedAt  @map("updated_at")
+}
+
 ////advance_management: Managed by: Sanjiv Kumar
 model advance_managements {
     id                                             Int                @id @default(autoincrement())
@@ -633,6 +650,8 @@ model employees {
   loan_employee    loan_managements[] @relation("employee")
   loan_designation loan_managements[] @relation("designation")
 
+  request_account_codes   request_account_codes[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
@@ -689,6 +708,8 @@ model municipality_codes {
   grant_entries       grant_entries[]
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
+
+  request_account_codes     request_account_codes[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")

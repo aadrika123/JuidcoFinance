@@ -22,6 +22,8 @@ model employees {
   loan_employee    loan_managements[] @relation("employee")
   loan_designation loan_managements[] @relation("designation")
 
+  request_account_codes request_account_codes[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }

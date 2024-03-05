@@ -114,6 +114,17 @@ interface VoucherEntryRequestData {
   dr_cr_id: number;
 }
 
+interface RequestNewAccCodeData {
+  id?: number;
+  ulb_id: number;
+  request_no: string;
+  employee_id: number;
+  date: string;
+  group_ref: string;
+  code_ref: string;
+  description: string;
+}
+
 export type {
   resObj,
   CandidateType,
@@ -124,4 +135,5 @@ export type {
   DirPaymentEntryRequestData,
   BillPaymentEntryRequestData,
   VoucherEntryRequestData,
+  RequestNewAccCodeData
 };
