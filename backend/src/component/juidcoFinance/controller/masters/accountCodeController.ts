@@ -6,6 +6,7 @@ import { resObj } from "../../../../util/types";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
 import Joi from "joi";
+import { requestNewAccCodeSchema } from "../../requests/masters/reqAccountCodeValidation";
 
 /**
  * | Author- Krish Vishwakarma
@@ -263,6 +264,37 @@ class AccountCodeController {
 
       return CommonRes.SUCCESS(
         resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  /**
+   * | Author- Sanjiv Kumar
+   * | Created On- 05-03-2024
+   * | Created for- Requesting New Accounting Code
+   */
+
+  requestingNewCode = async (req: Request, res: Response, apiId: string) => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
+    try {
+      const {error} = requestNewAccCodeSchema.validate(req.body)
+
+      if(error)
+        return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.dao.requestNewCode(req.body);
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).CREATED,
         data,
         resObj,
         res

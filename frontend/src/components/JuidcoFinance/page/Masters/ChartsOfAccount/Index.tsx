@@ -17,6 +17,18 @@ import type {
   FunctionTableData,
   MuncipalityTableData,
 } from "@/utils/types/types";
+import Button from "@/components/global/atoms/Button";
+import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
+import { useDispatch } from "react-redux";
+import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
+import RequestNewAccountCode from "./RequestNewAccountCode";
+import { RequestAccCodesDetailsSchema } from "@/utils/validation/masters/request_accounting_codes.validation";
+import { PrimaryAccCodes } from "@/utils/types/primary_accounting_codes";
+import Popup from "@/components/global/molecules/Popup";
+import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
+import { FINANCE_URL } from "@/utils/api/urls";
+import { filterValBefStoring } from "@/utils/helper";
+import toast, { Toaster } from "react-hot-toast";
 
 
 
@@ -30,11 +42,12 @@ type TableData =
 export const SubLedgure = () => {
   const [tabIndex, setTabIndex] = useState<number>(1);
   const [searchCode, setSearchCode] = useState<string>("");
+  const dispatch = useDispatch();
 
   const changeTab = (index: number) => {
     setSearchCode("");
     setTabIndex(index);
-  }
+  };
 
   const fetchAllData = async <T extends TableData>(
     endpoint: string
@@ -91,23 +104,91 @@ export const SubLedgure = () => {
 
   ///// ----------------- Search Codes -----------------//
   const onSearchTextChange = (text: string) => {
-    console.log(text);
     setSearchCode(text);
   };
 
+  //// -------------- handleOpenPopup ------------//
+  const handleOpenPopup = () => {
+    dispatch(openPopup());
+  };
+
+  const HOC = PopupFormikHOC(RequestNewAccountCode);
+
+///////// Initializing Values ///////////////
+  const initialValues = {
+    ulb_id: "",
+    request_no: "",
+    employee_id: "",
+    date: "",
+    group_ref: "",
+    code_ref: "",
+    description: "",
+  };
+
+  ///////// Hadle Submit Function ///////////////
+  const onSubmit = async (values: PrimaryAccCodes) => {
+    try{
+      const res = await axios({
+        url: FINANCE_URL.ACCOUNTING_CODE_URL.create,
+        method: "POST",
+        data: filterValBefStoring(values),
+      });
+      if (res.data?.data) {
+        setIsOpen(!isOpen);
+        dispatch(closePopup());
+      }
+    }catch(error){
+      toast.error('Something Went Wrong!!!')
+      console.log(error)
+    }
+  };
+
+  ///////////// Handle Open Popup ///////////
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => {
+    setIsOpen(!isOpen);
+  };
+
   useEffect(() => {
-    switch(tabIndex){
-      case 1: reloadAccountingCodeData(); break;
-      case 2: reloadFunctionCodeData(); break;
-      case 3: reloadMunicipalityCodeData(); break;
+    switch (tabIndex) {
+      case 1:
+        reloadAccountingCodeData();
+        break;
+      case 2:
+        reloadFunctionCodeData();
+        break;
+      case 3:
+        reloadMunicipalityCodeData();
+        break;
     }
   }, [searchCode, tabIndex]);
 
 
   return (
     <>
+    <Toaster/>
+      {isOpen && (
+        <Popup title="" width="30%" bgColor="primary_bg">
+          <SuccesfullConfirm
+            message="Your Request Sent Successfully"
+            handleContinueButton={onClose}
+          />
+        </Popup>
+      )}
+      <HOC
+        initialValues={initialValues}
+        validationSchema={RequestAccCodesDetailsSchema}
+        onSubmit={onSubmit}
+      />
       <section>
-        <SubHeading className="text-2xl">Chart of Accounts</SubHeading>
+        <div className="flex items-center justify-between">
+          <SubHeading className="text-2xl">Chart of Accounts</SubHeading>
+          {tabIndex === 1 && (
+            <Button variant="primary" onClick={handleOpenPopup}>
+              Request A New Primary Accounting Code
+            </Button>
+          )}
+        </div>
 
         <div className="flex items-center gap-12 mt-5 text-secondary">
           <div className="flex-all-center ">
@@ -158,7 +239,7 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <PrimaryAccountingCode
-              data={accountingCode || []}
+              data={Array.isArray(accountingCode) ? accountingCode : []}
               onSearchTextChange={onSearchTextChange}
             />
           )
@@ -167,7 +248,7 @@ export const SubLedgure = () => {
             <Loader />
           ) : (
             <FunctionCode
-              data={functionCode || []}
+              data={Array.isArray(functionCode) ? functionCode : []}
               onSearchTextChange={onSearchTextChange}
             />
           )
@@ -175,12 +256,10 @@ export const SubLedgure = () => {
           <Loader />
         ) : (
           <HeroMuncipalityCode
-            data={muncipalityCode || []}
+            data={Array.isArray(muncipalityCode) ? muncipalityCode : []}
             onSearchTextChange={onSearchTextChange}
           />
         )}
-
-
       </section>
     </>
   );
