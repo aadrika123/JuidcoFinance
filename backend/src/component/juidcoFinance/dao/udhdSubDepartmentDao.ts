@@ -10,7 +10,7 @@ class UDHDSubDepartmentDao {
         select:{
             id: true,
             name: true,
-        }
+        },
     });
 
     return generateRes(data);
@@ -25,6 +25,9 @@ class UDHDSubDepartmentDao {
       select:{
         id: true,
         name: true
+      },
+      orderBy: {
+        id:'asc'
       }
     });
 

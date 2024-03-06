@@ -18,6 +18,8 @@ import type {
   MuncipalityTableData,
 } from "@/utils/types/types";
 
+
+
 // ---- TYPES ----//
 type TableData =
   | ChartsOfAccountsProps<AccountingTableData>
@@ -100,6 +102,7 @@ export const SubLedgure = () => {
       case 3: reloadMunicipalityCodeData(); break;
     }
   }, [searchCode, tabIndex]);
+
 
   return (
     <>

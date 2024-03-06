@@ -1,15 +1,20 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { formatString } from "@/utils/helper";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/reducers/authReducer";
+import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
+
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;
 }
 
 const Header: React.FC<SideBarProps> = (props) => {
+  const [user, setUser] = useState({name: "", designation: {id: 1, name: ""}});
   const pathName = usePathname();
   const dispatch = useDispatch()
 
@@ -41,6 +46,10 @@ const Header: React.FC<SideBarProps> = (props) => {
     });
   // _________ Bread Crumb ________________//
 
+  useEffect(() => {
+    setUser(JSON.parse(Cookies.get("loginData") as string));
+  },[]);
+
   return (
     <div {...props}>
       <div className="flex justify-center flex-col">
@@ -57,6 +66,8 @@ const Header: React.FC<SideBarProps> = (props) => {
         </div>
       </div>
       <div className="flex items-center gap-5">
+        {user && (
+                  <span className="text-black">{user.name} ({user.designation.name})</span>)}
         {/* <SearchBox /> */}
         <span>
           <svg

@@ -117,7 +117,8 @@ export const HeroBankMasters = () => {
                   initialValues={initialBankDetailsValues}
                   validationSchema={AddBankDetailsSchema}
                   onSubmit={(values: AddBankDetailsData) => {
-                    mutate(values);
+                    console.log(values);
+                    // mutate(values);
                   }}
                 >
                   {({
@@ -136,12 +137,39 @@ export const HeroBankMasters = () => {
                           api={`${FINANCE_URL.BANK_URL.get}`}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          placeholder="Please select bank type"
+                          value={values.bank_type_id}
+                          error={errors.bank_type_id}
+                          touched={touched.bank_type_id}
+                          label="Bank Type"
+                          name="bank_type_id"
+                          required
+                        />
+
+                        <DropDownListBox
+                          api={`${FINANCE_URL.BANK_URL.get}`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="Please select ULB name"
+                          value={values.ulb_id}
+                          error={errors.ulb_id}
+                          touched={touched.ulb_id}
+                          label="ULB Name"
+                          name="ulb_id"
+                          required
+                        />
+
+                        <DropDownListBox
+                          api={`${FINANCE_URL.BANK_URL.get}`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                           placeholder="Please select an bank"
                           value={values.bank_id}
                           error={errors.bank_id}
                           touched={touched.bank_id}
                           label="Bank Name"
                           name="bank_id"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -149,9 +177,10 @@ export const HeroBankMasters = () => {
                           value={values.ifsc_code}
                           error={errors.ifsc_code}
                           touched={touched.ifsc_code}
-                          label="IFSC Code *"
+                          label="IFSC Code"
                           name="ifsc_code"
                           placeholder="Enter IFSC Code"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -159,9 +188,10 @@ export const HeroBankMasters = () => {
                           value={values.branch}
                           error={errors.branch}
                           touched={touched.branch}
-                          label="Bank Branch *"
+                          label="Bank Branch"
                           name="branch"
                           placeholder="Bank Branch"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -181,7 +211,8 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_address}
                           label="Bank Branch Address"
                           name="branch_address"
-                          placeholder="Enter Bank Address"
+                          placeholder="Enter Branch Address"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -201,7 +232,8 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_city}
                           label="Bank Branch City"
                           name="branch_city"
-                          placeholder="Enter Bank City"
+                          placeholder="Enter Bank Branch City"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -221,7 +253,8 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_state}
                           label="Bank Branch State "
                           name="branch_state"
-                          placeholder="Enter Bank State"
+                          placeholder="Enter Bank Branch State"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -233,16 +266,7 @@ export const HeroBankMasters = () => {
                           name="email"
                           placeholder="Enter Email Id"
                         />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.contact_person_name}
-                          error={errors.contact_person_name}
-                          touched={touched.contact_person_name}
-                          name="contact_person_name"
-                          label="Contact Person Name / Designation"
-                          placeholder="Enter Contact Person Name"
-                        />
+                        
                       </div>
                       <div className="mt-4 flex items-center gap-5 justify-end">
                         <PrimaryButton

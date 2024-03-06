@@ -5,9 +5,11 @@ model bank_masters {
   bank_id             Int
   bank                banks   @relation(fields: [bank_id], references: [id])
 
+  ulb_id              Int
+  ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
+
   ifsc_code           String
   branch              String
-  micr_code           String
   branch_address      String
   branch_city         String
   branch_state        String

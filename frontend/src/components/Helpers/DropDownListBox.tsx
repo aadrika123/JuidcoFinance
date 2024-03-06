@@ -21,12 +21,13 @@ interface DropDownListBoxProps {
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
+  required?: boolean | false;
   onChange: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur: (e?: React.FocusEvent<HTMLSelectElement>) => void;
 }
 
 
-interface Employee{
+interface Item{
   id: number;
   name: string;
 }
@@ -39,7 +40,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
 
   console.log(field);
   console.log(meta);
-  const fetchData = async (): Promise<Employee[]> => {
+  const fetchData = async (): Promise<Item[]> => {
     const res = await axios({
       url: props.api,
       method: "GET",
@@ -50,7 +51,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
 
   
   const {
-    data: employeeData = [],
+    data: ItemData = [],
     isError: dataError,
   } = useQuery([], fetchData);
   
@@ -65,6 +66,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
       <div className="flex flex-col gap-1">
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
+          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
         </label>
         <select
           onChange={(event)=> setValue(parseInt(event.target.value))}
@@ -76,8 +78,8 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
         >
           <option value="-1">{props.placeholder}</option>
 
-          {employeeData.map((emp: Employee) => 
-          <option key={emp.id} value={emp.id}>{emp.name}</option>
+          {ItemData.map((item: Item) => 
+          <option key={item.id} value={item.id}>{item.name}</option>
           )}
           
           </select>
