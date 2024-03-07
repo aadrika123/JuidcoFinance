@@ -19,6 +19,7 @@ interface DropDownListProps {
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
+  required?: boolean | false;
   onChange: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e?: React.FocusEvent<HTMLSelectElement>) => void;
 }
@@ -59,6 +60,7 @@ const DropDownList: React.FC<DropDownListProps> = (props) => {
       <div className="flex flex-col gap-1">
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
+          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
         </label>
         <select
           onChange={(event) => setValue(parseInt(event.target.value))}

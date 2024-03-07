@@ -46,6 +46,7 @@ import loan_management_seeder from "./seeder/budgeting/loan_management_seeder";
 import advance_management_seeder from "./seeder/budgeting/advance_management_seeder";
 import udhd_sub_departments_seeder from "./seeder/udhd_sub_departments_seeder";
 import designations_seeder from "./seeder/designation_seeder";
+import bank_types_seeder from "./seeder/masters/bank_types_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -65,6 +66,8 @@ async function main() {
 
   // return;
 
+  await bank_types_seeder();
+  
   await udhd_sub_departments_seeder();
 
   await account_codes_seeder();

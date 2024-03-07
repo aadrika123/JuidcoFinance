@@ -23,6 +23,8 @@ interface ApiResponse {
 
 interface BankRequestData {
   bank_id: number;
+  ulb_id: number;
+  bank_type_id: number;
   ifsc_code: string;
   branch: string;
   micr_code: string;
@@ -32,7 +34,6 @@ interface BankRequestData {
   branch_district: string;
   email: string;
   contact_no: string;
-  contact_person_name: string;
 }
 interface VendorRequestData {
   vendor_type_id: number;

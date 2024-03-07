@@ -1,8 +1,10 @@
 
-////drcr: Managed by: Bijoy Paitandi
-model drcr{
+////bank_types: Managed by: Bijoy Paitandi
+model bank_types{
 	id                  Int                 @id @default(autoincrement())
 	name                String
 	created_at          DateTime            @default(now()) @map("created_at")
 	updated_at          DateTime            @updatedAt @map("updated_at")
+
+	bank_masters bank_masters[]
 }

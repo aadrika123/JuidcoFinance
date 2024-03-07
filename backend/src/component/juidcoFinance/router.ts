@@ -44,6 +44,7 @@ import LoanManagementRoute from "./route/budgeting/LoanManagementRoute";
 import AdvanceManagementRoute from "./route/budgeting/AdvanceManagementRoute";
 import AuthRoute from "./route/auth/Auth";
 import UDHDSubDepartmentRoute from "./route/udhdSubDepartmentRoute";
+import BankTypesRoute from "./route/masters/BankTypesRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -198,7 +199,9 @@ class FinanceRoute {
 
     (new AuthRoute()).configure(app, "43");  // 43
 
-    (new UDHDSubDepartmentRoute().configure(app, "44")) // 44
+    (new UDHDSubDepartmentRoute().configure(app, "44")); // 44
+
+    (new BankTypesRoute().configure(app, "45"));
   }
 }
 

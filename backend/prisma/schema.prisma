@@ -10,23 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-///// Request New Account Codes : Managed By : Sanjiv Kumar
-model request_account_codes {
-  id                              Int                     @id     @default(autoincrement())
-  ulb_id                          Int                 
-  ulb                             municipality_codes      @relation(fields: [ulb_id], references: [id])
-  request_no                      String
-  employee_id                     Int
-  employee                        employees               @relation(fields: [employee_id], references: [id])
-  date                            DateTime
-  group_ref                       String
-  code_ref                        String
-  description                     String
-  status                          String                 @default("pending")
-  created_at                      DateTime              @default(now()) @map("created_at")
-  updated_at                      DateTime              @updatedAt  @map("updated_at")
-}
-
 ////advance_management: Managed by: Sanjiv Kumar
 model advance_managements {
     id                                             Int                @id @default(autoincrement())
@@ -462,18 +445,35 @@ model bank_masters {
   bank_id             Int
   bank                banks   @relation(fields: [bank_id], references: [id])
 
+  bank_type_id        Int
+  bank_type           bank_types  @relation(fields: [bank_type_id], references: [id])
+
+  ulb_id              Int
+  ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
+
+  micr_code           String?
   ifsc_code           String
   branch              String
-  micr_code           String
   branch_address      String
   branch_city         String
   branch_state        String
-  branch_district     String
-  email               String
-  contact_no          String
-  contact_person_name String
+  branch_district     String?
+  email               String?
+  contact_no          String?
+
   created_at          DateTime @default(now()) @map("created_at")
   updated_at          DateTime @updatedAt @map("updated_at")
+}
+
+
+////bank_types: Managed by: Bijoy Paitandi
+model bank_types{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+
+	bank_masters bank_masters[]
 }
 
 /// Banks
@@ -650,7 +650,7 @@ model employees {
   loan_employee    loan_managements[] @relation("employee")
   loan_designation loan_managements[] @relation("designation")
 
-  request_account_codes   request_account_codes[]
+  request_account_codes request_account_codes[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -708,8 +708,9 @@ model municipality_codes {
   grant_entries       grant_entries[]
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
+  bank_masters        bank_masters[]
 
-  request_account_codes     request_account_codes[]
+   request_account_codes   request_account_codes[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -771,6 +772,23 @@ model receipt_types {
   receipts   receipt_entries[]
   created_at DateTime          @default(now()) @map("created_at")
   updated_at DateTime          @updatedAt @map("updated_at")
+}
+
+///// Request New Account Codes : Managed By : Sanjiv Kumar
+model request_account_codes {
+    id          Int                @id @default(autoincrement())
+    ulb_id      Int
+    ulb         municipality_codes @relation(fields: [ulb_id], references: [id])
+    request_no  String
+    employee_id Int
+    employee    employees          @relation(fields: [employee_id], references: [id])
+    date        DateTime
+    group_ref   String
+    code_ref    String
+    description String
+    status      String             @default("pending")
+    created_at  DateTime           @default(now()) @map("created_at")
+    updated_at  DateTime           @updatedAt @map("updated_at")
 }
 
 //// subledgers

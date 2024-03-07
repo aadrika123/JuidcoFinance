@@ -46,6 +46,7 @@ class BankMasterController {
         res
       );
     } catch (error: any) {
+      console.log(error);
       return sendResponse(
         false,
         error,

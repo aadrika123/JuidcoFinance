@@ -38,8 +38,6 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
 
   const fieldId = "id_" + props.name;
 
-  console.log(field);
-  console.log(meta);
   const fetchData = async (): Promise<Item[]> => {
     const res = await axios({
       url: props.api,
@@ -53,7 +51,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
   const {
     data: ItemData = [],
     isError: dataError,
-  } = useQuery([], fetchData);
+  } = useQuery([fieldId], fetchData);
   
   if (dataError) {
     throw new Error("Fatal Error!");
@@ -69,6 +67,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
           {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
         </label>
         <select
+          {...field}
           onChange={(event)=> setValue(parseInt(event.target.value))}
           onBlur={props.onBlur}
           value={props.value}
@@ -85,8 +84,8 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
           </select>
         
         
-        {props.touched && props.error && (
-          <div className="text-red-500">{props.error}</div>
+        {meta.touched && meta.error && (
+          <div className="text-red-500">{meta.error}</div>
         )}
       </div>
     </>

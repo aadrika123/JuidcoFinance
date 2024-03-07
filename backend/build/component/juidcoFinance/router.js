@@ -47,6 +47,7 @@ const LoanManagementRoute_1 = __importDefault(require("./route/budgeting/LoanMan
 const AdvanceManagementRoute_1 = __importDefault(require("./route/budgeting/AdvanceManagementRoute"));
 const Auth_1 = __importDefault(require("./route/auth/Auth"));
 const udhdSubDepartmentRoute_1 = __importDefault(require("./route/udhdSubDepartmentRoute"));
+const BankTypesRoute_1 = __importDefault(require("./route/masters/BankTypesRoute"));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -141,6 +142,7 @@ class FinanceRoute {
         (new AdvanceManagementRoute_1.default()).configure(app, "42"); // 42
         (new Auth_1.default()).configure(app, "43"); // 43
         (new udhdSubDepartmentRoute_1.default().configure(app, "44")); // 44
+        (new BankTypesRoute_1.default().configure(app, "45"));
     }
 }
 exports.default = FinanceRoute;

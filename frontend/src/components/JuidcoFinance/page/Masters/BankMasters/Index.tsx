@@ -25,22 +25,46 @@ import type {
 import type { MasterProps } from "@/utils/types/types";
 import { FINANCE_URL } from "@/utils/api/urls";
 import DropDownListBox from "@/components/Helpers/DropDownListBox";
+import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
+import LosingDataConfirm from "@/components/global/molecules/LosingDataConfirm";
+import APIs from "@/json/apis.json";
+import DropDownList from "@/components/Helpers/DropDownList";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
 export const HeroBankMasters = () => {
   const [page, setPage] = useState<number>(1);
+
   const [isAddBankAccountOpen, setIsBankAccountOpen] = useState<boolean>(false);
+  const [isDataLossPopupOpen, setDataLossPopupOpen] = useState<boolean>(false);
+  const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
+
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [fetchQuery, setFetchQuery] = useState<boolean>(false);
   const dispatch = useDispatch();
+
+  let isDirty = false;
 
   const handlePageChangeAccountList = (direction: "prev" | "next") => {
     setPage((prevPage) => (direction === "prev" ? prevPage - 1 : prevPage + 1));
   };
 
   function handleOpenAddBankAccount() {
-    setIsBankAccountOpen(!isAddBankAccountOpen);
+    if (isDirty) {
+      showDataLossWarningPopup();
+    } else {
+      setIsBankAccountOpen(!isAddBankAccountOpen);
+    }
+  }
+
+  function showDataLossWarningPopup(){
+    setDataLossPopupOpen(true);
+  }
+
+
+  function closePopups(){
+    setDataLossPopupOpen(false);
+    setIsBankAccountOpen(false);
   }
 
   // Handle change Value for search fetch query
@@ -89,8 +113,13 @@ export const HeroBankMasters = () => {
     createBankDetails,
     {
       onSuccess: () => {
-        handleOpenAddBankAccount();
-        toast.success("Successfully Added Bank Details!");
+        setIsBankAccountOpen(false);
+        setSuccessNotificationOpen(true);
+        
+        setTimeout(() => {
+          setIsBankAccountOpen(false);
+          setSuccessNotificationOpen(false);
+        },1000);
       },
       onError: () => {
         alert("there was an error");
@@ -104,11 +133,48 @@ export const HeroBankMasters = () => {
   return (
     <>
       <Toaster />
-      {isAddBankAccountOpen && (
+
+      {isDataLossPopupOpen && (
         <>
           <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-50 rounded-xl hide-scrollbar">
-            <div className="relative z-50">
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
+            <div className="relative z-40">
+
+              <Popup width="30%" bgColor="primary_bg" title="">
+                <LosingDataConfirm
+                  cancel={() => setDataLossPopupOpen(false)}
+                  continue={() => closePopups()}
+                />
+              </Popup>
+
+            </div>
+          </section>
+        </>
+      )}
+
+      {isSuccessNotificationOpen && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
+            <div className="relative z-40">
+
+              <Popup title="" width="30%" bgColor="primary_bg">
+                <SuccesfullConfirm
+                  message="Recorded Successfully"
+                  handleContinueButton={closePopups}
+                />
+              </Popup>
+            </div>
+          </section>
+        </>
+      )}
+
+
+      {isAddBankAccountOpen && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-10"></div>
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-20 rounded-xl hide-scrollbar">
+            <div className="relative z-20">
               <Popup
                 closeModal={handleOpenAddBankAccount}
                 title="Add Bank Account"
@@ -118,7 +184,7 @@ export const HeroBankMasters = () => {
                   validationSchema={AddBankDetailsSchema}
                   onSubmit={(values: AddBankDetailsData) => {
                     console.log(values);
-                    // mutate(values);
+                    mutate(values);
                   }}
                 >
                   {({
@@ -129,12 +195,12 @@ export const HeroBankMasters = () => {
                     handleBlur,
                     handleSubmit,
                     handleReset,
-                    dirty,
+                    dirty
                   }) => (
                     <form onSubmit={handleSubmit}>
                       <div className="grid grid-cols-2 gap-x-6 gap-4 ">
                         <DropDownListBox
-                          api={`${FINANCE_URL.BANK_URL.get}`}
+                          api={`${APIs.bank_types$get}`}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           placeholder="Please select bank type"
@@ -147,7 +213,7 @@ export const HeroBankMasters = () => {
                         />
 
                         <DropDownListBox
-                          api={`${FINANCE_URL.BANK_URL.get}`}
+                          api={`${APIs.chart_of_accounts$get_municipality_codes}`}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           placeholder="Please select ULB name"
@@ -266,7 +332,7 @@ export const HeroBankMasters = () => {
                           name="email"
                           placeholder="Enter Email Id"
                         />
-                        
+
                       </div>
                       <div className="mt-4 flex items-center gap-5 justify-end">
                         <PrimaryButton
@@ -276,6 +342,10 @@ export const HeroBankMasters = () => {
                         >
                           Close
                         </PrimaryButton>
+
+                        {isDirty = dirty}
+
+
                         {dirty && (
                           <>
                             <PrimaryButton
@@ -295,6 +365,7 @@ export const HeroBankMasters = () => {
                         )}
                       </div>
                     </form>
+
                   )}
                 </Formik>
               </Popup>
