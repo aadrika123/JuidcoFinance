@@ -7,17 +7,16 @@ interface TdataProps {
   key?: string | number;
   className?: string;
   colSpan?: number;
-  scrollable?: boolean;
   width?: string;
 }
 
 const Tdata: React.FC<TdataProps> = (props) => {
-  const { className, key, value, scrollable, ...rest } = props;
+  const { className, key, value, ...rest } = props;
   return (
     <td
       {...rest}
       key={`cell-${key}`}
-      className={`border-l border-zinc-400 ${className} ${scrollable && `${props.width}`}`}
+      className={`border-l border-zinc-400 ${className}`}
     >
       <div className="flex justify-center text-start">{value}</div>
     </td>

@@ -4,16 +4,15 @@ interface TheadProps {
   children: ReactNode;
   key?: string | number;
   className?: string;
-  scrollable?: boolean;
 }
 
 const Trow: React.FC<TheadProps> = (props) => {
-  const {key, className, scrollable} = props;
+  const {key, className} = props;
 
   return (
     <tr
       key={`row-${key}`}
-      className={`${className} ${scrollable && "flex"}`}
+      className={`${className}`}
     >
         {props.children}
     </tr>

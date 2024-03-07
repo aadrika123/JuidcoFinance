@@ -8,7 +8,7 @@ interface AccoutingTableProps {
 const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
   return (
     <>
-      <div className="overflow-x-auto h-[550px] overflow-y-auto border">
+      <div className="hide-scrollbar overflow-x-auto h-[550px] overflow-y-auto border">
         <table className="table table-md">
           <thead className=" text-white text-[1rem] border border-t-2 border-zinc-400 ">
             <tr className="bg-white border-b sticky top-0 text-center">

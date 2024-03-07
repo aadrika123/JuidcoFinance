@@ -1,0 +1,367 @@
+"use client";
+
+import React from "react";
+import { Formik, FormikHelpers } from "formik";
+import goBack from "@/utils/helper";
+import Select from "@/components/global/atoms/Select";
+import Input from "@/components/global/atoms/Input";
+import { FINANCE_URL } from "@/utils/api/urls";
+import Button from "@/components/global/atoms/Button";
+import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
+
+/**
+ * | Author- Sanjiv Kumar
+ * | Created On- 06-03-2024
+ * | Created for- Formik Container
+ * | Status- Done
+ */
+
+export interface FormikWrapperProps {
+  initialValues: ReceiptRegisterDetailsData;
+  enableReinitialize?: boolean;
+  validationSchema: object;
+  onSubmit: (
+    values: ReceiptRegisterDetailsData,
+    actions?: FormikHelpers<ReceiptRegisterDetailsData>
+  ) => void;
+  readonly?: boolean;
+  onClose?: () => void;
+  title: string;
+  resetInitialValue?: () => void;
+}
+
+const FormikW: React.FC<FormikWrapperProps> = (props) => {
+  const {
+    initialValues,
+    validationSchema,
+    onSubmit,
+    readonly = false,
+    onClose,
+    enableReinitialize,
+  } = props;
+
+  return (
+    <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
+      <div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+          enableReinitialize={enableReinitialize}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            handleReset,
+            dirty,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col">
+                <div className="grid grid-cols-2 gap-x-6 gap-4">
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.receipt_no}
+                    error={errors.receipt_no}
+                    touched={touched.receipt_no}
+                    readonly={readonly}
+                    label="Receipt Number"
+                    name="receipt_no"
+                    placeholder="Enter Receipt Number"
+                  />
+
+                  <Select
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.ulb_id}
+                    error={errors.ulb_id}
+                    touched={touched.ulb_id}
+                    readonly={readonly}
+                    label="ULBs"
+                    name="ulb_id"
+                    placeholder="Select ULBs"
+                    api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+                  />
+
+                  <Select
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.primary_acc_code_id}
+                    error={errors.primary_acc_code_id}
+                    touched={touched.primary_acc_code_id}
+                    readonly={readonly}
+                    label="Primary Accounting Code"
+                    name="primary_acc_code_id"
+                    placeholder="Select Primary Accounting Code"
+                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  />
+
+                  <Select
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.revenue_module_id}
+                    error={errors.revenue_module_id}
+                    touched={touched.revenue_module_id}
+                    readonly={readonly}
+                    label="Revenue Module Name"
+                    name="revenue_module_id"
+                    placeholder="Select Revenue Module Name"
+                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.paid_by}
+                    error={errors.paid_by}
+                    touched={touched.paid_by}
+                    readonly={readonly}
+                    label="Paid By"
+                    name="paid_by"
+                    placeholder="Enter Paid By"
+                  />
+
+                  <Select
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.receipt_mode_id}
+                    error={errors.receipt_mode_id}
+                    touched={touched.receipt_mode_id}
+                    readonly={readonly}
+                    label="Mode of Receipt"
+                    name="receipt_mode_id"
+                    placeholder="Select Mode of Receipt"
+                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.receipt_date}
+                    error={errors.receipt_date}
+                    touched={touched.receipt_date}
+                    readonly={readonly}
+                    label="Receipt Date"
+                    name="receipt_date"
+                    type="date"
+                    placeholder="undefined"
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.cheque_or_draft_no}
+                    error={errors.cheque_or_draft_no}
+                    touched={touched.cheque_or_draft_no}
+                    readonly={readonly}
+                    label="Cheque / Draft No"
+                    name="cheque_or_draft_no"
+                    placeholder="Enter Cheque / Draft No"
+                  />
+
+                  <Select
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.bank_id}
+                    error={errors.bank_id}
+                    touched={touched.bank_id}
+                    readonly={readonly}
+                    label="Bank"
+                    name="bank_id"
+                    placeholder="Select Bank"
+                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.cash_amount}
+                    error={errors.cash_amount}
+                    touched={touched.cash_amount}
+                    readonly={readonly}
+                    label="Cash"
+                    name="cash_amount"
+                    type="number"
+                    placeholder="Enter Cash Amount"
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.bank_acc_no}
+                    error={errors.bank_acc_no}
+                    touched={touched.bank_acc_no}
+                    readonly={readonly}
+                    label="Deposited into Bank Account No"
+                    name="bank_acc_no"
+                    placeholder="Enter Bank Account No"
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.deposit_date}
+                    error={errors.deposit_date}
+                    touched={touched.deposit_date}
+                    readonly={readonly}
+                    label="Date of Deposit"
+                    name="deposit_date"
+                    type="date"
+                    placeholder="undefined"
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.realisation_date}
+                    error={errors.realisation_date}
+                    touched={touched.realisation_date}
+                    readonly={readonly}
+                    label="Date of Realisation"
+                    name="realisation_date"
+                    type="date"
+                    placeholder="undefined"
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.wheather_returned}
+                    error={errors.wheather_returned}
+                    touched={touched.wheather_returned}
+                    readonly={readonly}
+                    label="Wheather Returned"
+                    name="wheather_reaturned"
+                    placeholder="Enter Wheather Returned"
+                  />
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.remarks}
+                    error={errors.remarks}
+                    touched={touched.remarks}
+                    readonly={readonly}
+                    label="Remarks"
+                    name="remarks"
+                    placeholder="Enter Remarks"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="flex flex-col">
+                    <h2 className="mt-6 text-secondary">Entered By</h2>
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      // value={values.entered_by}
+                      // error={errors.entered_by}
+                      // touched={touched.entered_by}
+                      readonly={readonly}
+                      label=""
+                      name="entered_by"
+                      placeholder="Enter Name"
+                    />
+
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      // value={values.designation}
+                      // error={errors.designation}
+                      // touched={touched.designation}
+                      readonly={readonly}
+                      label=""
+                      name="designation"
+                      placeholder="Enter Designation"
+                    />
+
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.entered_by_print_name}
+                      error={errors.entered_by_print_name}
+                      touched={touched.entered_by_print_name}
+                      readonly={readonly}
+                      label=""
+                      name="entered_by_print_name"
+                      placeholder="Enter Print Name"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <h2 className="mt-6 text-secondary">Checked By</h2>
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      // value={values.checked_by}
+                      // error={errors.checked_by}
+                      // touched={touched.checked_by}
+                      readonly={readonly}
+                      label=""
+                      name="checked_by"
+                      placeholder="Enter Name"
+                    />
+
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      // value={values.designation1}
+                      // error={errors.designation1}
+                      // touched={touched.designation1}
+                      readonly={readonly}
+                      label=""
+                      name="designation1"
+                      placeholder="Enter Designation1"
+                    />
+
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.checked_by_print_name}
+                      error={errors.checked_by_print_name}
+                      touched={touched.checked_by_print_name}
+                      readonly={readonly}
+                      label=""
+                      name="checked_by_print_name"
+                      placeholder="Enter Print Name"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 flex items-center justify-end gap-2">
+                <Button
+                  onClick={onClose || goBack}
+                  variant="cancel"
+                  buttontype="button"
+                >
+                  {onClose ? "Close" : "Back"}
+                </Button>
+
+                {!readonly && dirty && (
+                  <>
+                    <Button
+                      variant="cancel"
+                      buttontype="button"
+                      onClick={handleReset}
+                    >
+                      Reset
+                    </Button>
+                    <Button variant="primary" buttontype="submit">
+                      Save
+                    </Button>
+                  </>
+                )}
+              </div>
+            </form>
+          )}
+        </Formik>
+      </div>
+    </section>
+  );
+};
+
+export default FormikW;

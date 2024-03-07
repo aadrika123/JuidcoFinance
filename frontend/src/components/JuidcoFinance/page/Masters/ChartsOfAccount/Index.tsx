@@ -165,7 +165,7 @@ export const SubLedgure = () => {
     <>
     <Toaster/>
       {isOpen && (
-        <Popup title="" width="30%" bgColor="primary_bg">
+        <Popup title="" width="40%" bgColor="primary_bg">
           <SuccesfullConfirm
             message="Your Request Sent Successfully"
             handleContinueButton={onClose}

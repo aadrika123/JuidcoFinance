@@ -8,7 +8,7 @@ interface TableDataProps {
 const Table: React.FC<TableDataProps> = (props) => {
   return (
     <>
-      <div className="overflow-x-auto border-[2px] border-zinc-400 overflow-x-auto h-[550px] overflow-y-auto">
+      <div className="hide-scrollbar overflow-x-auto border-[2px] border-zinc-400 h-[550px] overflow-y-auto">
         <p className="p-4  text-zinc-700 text-center">
           Identification Codes for ULBs at Jharkhand{" "}
         </p>

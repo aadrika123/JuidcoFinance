@@ -30,6 +30,7 @@ export const sidebarLinks: SidebarLinksProps = {
           subModules: [
             { moduleName: " Charts of Account", path: "/finance/masters" },
             { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+            { moduleName: "Receipt Register", path: "/finance/masters/receipt-register" },
             {
               moduleName: "Vendor Masters",
               path: "/finance/masters/vendor-master",
