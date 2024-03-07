@@ -16,14 +16,13 @@ export interface AddBankDetailsData {
   bank_type_id: number;
   ulb_id: number;
   bank_id: number;
-  bank?: BankType;
   ifsc_code: string;
   branch: string;
-  micr_code: string | undefined;
+  micr_code: string;
   branch_address: string;
   branch_city: string;
   branch_state: string;
-  branch_district: string | undefined;
-  email: string | undefined;
-  contact_no: string | undefined;
+  branch_district: string;
+  email: string;
+  contact_no: string;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 // Imports //
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import AccountList from "./AccountList/AccountList";
 import AddBankHeader from "./AddBank/AddBank";
@@ -28,7 +28,8 @@ import DropDownListBox from "@/components/Helpers/DropDownListBox";
 import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
 import LosingDataConfirm from "@/components/global/molecules/LosingDataConfirm";
 import APIs from "@/json/apis.json";
-import DropDownList from "@/components/Helpers/DropDownList";
+import LoaderSkeleton from "@/components/global/atoms/LoaderSkeleton";
+
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -41,6 +42,10 @@ export const HeroBankMasters = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [fetchQuery, setFetchQuery] = useState<boolean>(false);
+
+  const [isSearching, setIsSearching] = useState(false);
+
+
   const dispatch = useDispatch();
 
   let isDirty = false;
@@ -106,6 +111,8 @@ export const HeroBankMasters = () => {
       method: "POST",
       data: values,
     });
+
+    setIsSearching(false);
     return res.data;
   };
   // mutate Bank Details
@@ -130,14 +137,18 @@ export const HeroBankMasters = () => {
     }
   );
 
+
+
   return (
     <>
       <Toaster />
 
       {isDataLossPopupOpen && (
         <>
+        
+
           <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
             <div className="relative z-40">
 
               <Popup width="30%" bgColor="primary_bg" title="">
@@ -146,16 +157,16 @@ export const HeroBankMasters = () => {
                   continue={() => closePopups()}
                 />
               </Popup>
-
             </div>
           </section>
+
         </>
       )}
 
       {isSuccessNotificationOpen && (
         <>
           <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
             <div className="relative z-40">
 
               <Popup title="" width="30%" bgColor="primary_bg">
@@ -180,10 +191,19 @@ export const HeroBankMasters = () => {
                 title="Add Bank Account"
               >
                 <Formik
+                  enableReinitialize={true}
                   initialValues={initialBankDetailsValues}
                   validationSchema={AddBankDetailsSchema}
                   onSubmit={(values: AddBankDetailsData) => {
                     console.log(values);
+                    
+                    Object.keys(values).forEach(key => {
+                      const val = values[key as keyof typeof values];
+                      if (val == initialBankDetailsValues[key as keyof typeof initialBankDetailsValues]) {
+                               delete values[key as keyof typeof values];
+                        }
+                      });
+
                     mutate(values);
                   }}
                 >
@@ -358,6 +378,7 @@ export const HeroBankMasters = () => {
                             <PrimaryButton
                               buttonType="submit"
                               variant="primary"
+                              className="animate-pulse"
                             >
                               Save
                             </PrimaryButton>
@@ -379,8 +400,8 @@ export const HeroBankMasters = () => {
       </section>
 
       <section className="mt-8">
-        {bankAccountLoading ? (
-          <Loader />
+        {bankAccountLoading || isSearching ? (
+          <LoaderSkeleton/>
         ) : (
           <AccountList
             nextPage={() => handlePageChangeAccountList("next")}
