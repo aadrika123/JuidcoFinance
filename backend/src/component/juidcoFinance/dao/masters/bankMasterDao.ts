@@ -25,7 +25,7 @@ class BankMasterDao {
     let order: number = Number(req.query.order);
 
     if (order != -1 && order != 1) {
-      order = 1;
+      order = -1;
     }
 
 

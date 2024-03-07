@@ -1,4 +1,7 @@
 import React from "react";
+import Button from "../atoms/Button";
+import { motion } from "framer-motion";
+
 
 interface SuccesfullConfirmProps {
   message: string;
@@ -8,6 +11,11 @@ interface SuccesfullConfirmProps {
 const SuccesfullConfirm: React.FC<SuccesfullConfirmProps> = (props) => {
   const { message, handleContinueButton } = props;
   return (
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+    
     <div className="flex flex-col justify-center items-center w-auto">
       <div className="absolute top-3 right-3 cursor-pointer" onClick={handleContinueButton}>
         <svg
@@ -60,6 +68,7 @@ const SuccesfullConfirm: React.FC<SuccesfullConfirmProps> = (props) => {
         </Button>
       </div> */}
     </div>
+    </motion.div>
   );
 };
 

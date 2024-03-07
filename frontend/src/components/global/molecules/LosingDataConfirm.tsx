@@ -1,5 +1,7 @@
 import React from "react";
 import Button from "../atoms/Button";
+import { motion } from "framer-motion";
+
 
 interface LosingDataConfirmProps {
   cancel: () => void;
@@ -12,6 +14,11 @@ const LosingDataConfirm: React.FC<LosingDataConfirmProps> = (props) => {
         props.cancel()
     }
   return (
+
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
     <div className="flex flex-col justify-center items-center w-auto">
       <svg
         width="191"
@@ -20,6 +27,7 @@ const LosingDataConfirm: React.FC<LosingDataConfirmProps> = (props) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
+        className="animate-pulse"
       >
         <rect width="191" height="191" fill="url(#pattern0)" />
         <defs>
@@ -47,7 +55,7 @@ const LosingDataConfirm: React.FC<LosingDataConfirmProps> = (props) => {
           Cancel
         </Button>
         <Button onClick={handleContinueButton} variant="primary">
-          Continue
+          Continue Anyway
         </Button>
       </div>
       <div className="flex items-center mt-2">
@@ -57,6 +65,7 @@ const LosingDataConfirm: React.FC<LosingDataConfirmProps> = (props) => {
         </span>
       </div>
     </div>
+    </motion.div>
   );
 };
 

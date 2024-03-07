@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
+
 
 const BankAccountsTable: React.FC = () => {
   const accountData = useSelector(
@@ -15,12 +17,17 @@ const BankAccountsTable: React.FC = () => {
 
   return (
     <>
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+      
       <div className="overflow-x-auto border-[2px] bg-white border-zinc-400">
         <table className="table table-md">
           <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
             <tr>
               <th className="border border-zinc-400">
-                <div className="flex gap-2 w-32 font-medium text-center">
+                <div className="flex gap-2 w-4 font-medium text-center">
                   <span>Sr No.</span>
                   <span>
                     <svg
@@ -38,7 +45,7 @@ const BankAccountsTable: React.FC = () => {
                   </span>
                 </div>
               </th>
-              <th className="border border-zinc-400 w-[20%] font-medium">
+              <th className="border border-zinc-400 w-[40%] font-medium">
                 <div className="flex gap-2">
                   <span>Name Of Bank</span>
                 </div>
@@ -56,7 +63,7 @@ const BankAccountsTable: React.FC = () => {
                 </div>
               </th>
 
-              <th className="border   border-zinc-400 font-medium">
+              <th className="border   border-zinc-400 font-medium w-[10%]">
                 <div className="flex gap-2">
                   <span>Edit / View</span>
                   <span>
@@ -124,6 +131,7 @@ const BankAccountsTable: React.FC = () => {
           </tbody>
         </table>
       </div>
+      </motion.div>
     </>
   );
 };

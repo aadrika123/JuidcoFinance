@@ -16,33 +16,33 @@ export const AddBankDetailsSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address"),
 });
 
-// export const initialBankDetailsValues: AddBankDetailsData = {
-//   bank_type_id: -1,
-//   ulb_id: -1,
-//   bank_id: -1,
-//   ifsc_code: "",
-//   branch: "",
-//   micr_code: undefined,
-//   branch_address: "",
-//   contact_no: undefined,
-//   branch_city: "",
-//   branch_district: undefined,
-//   branch_state: "",
-//   email: undefined,
-// };
-
 export const initialBankDetailsValues: AddBankDetailsData = {
-  bank_type_id: 1,
-  ulb_id: 1,
-  bank_id: 1,
-  ifsc_code: "38734",
-  branch: "Ranchi",
-  micr_code: undefined,
-  branch_address: "Lower Chutia, Ranchi",
-  contact_no: undefined,
-  branch_city: "Ranchi",
-  branch_district: undefined,
-  branch_state: "Jharkhand",
-  email: undefined,
+  bank_type_id: -1,
+  ulb_id: -1,
+  bank_id: -1,
+  ifsc_code: "",
+  branch: "",
+  micr_code: "",
+  branch_address: "",
+  contact_no: "",
+  branch_city: "",
+  branch_district: "",
+  branch_state: "",
+  email: "",
 };
+
+// export const initialBankDetailsValues: AddBankDetailsData = {
+//   bank_type_id: 1,
+//   ulb_id: 1,
+//   bank_id: 1,
+//   ifsc_code: "38734",
+//   branch: "Ranchi",
+//   branch_address: "Lower Chutia, Ranchi",
+//   branch_city: "Ranchi",
+//   branch_state: "Jharkhand",
+//   micr_code: "",
+//   branch_district: "",
+//   email: "",
+//   contact_no: ""
+// };
 
