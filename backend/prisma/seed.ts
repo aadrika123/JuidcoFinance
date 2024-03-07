@@ -46,6 +46,9 @@ import loan_management_seeder from "./seeder/budgeting/loan_management_seeder";
 import advance_management_seeder from "./seeder/budgeting/advance_management_seeder";
 import udhd_sub_departments_seeder from "./seeder/udhd_sub_departments_seeder";
 import designations_seeder from "./seeder/designation_seeder";
+import receipt_register_seeder from "./seeder/masters/receipt_register_seeder";
+import receipt_modes_seeder from "./seeder/masters/receipt_modes_seeder";
+import revenue_modules_seeder from "./seeder/masters/revenue_modules_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -75,6 +78,10 @@ async function main() {
 
   await bill_types_seeder();
   await vendor_types_seeder();
+
+  await receipt_modes_seeder();
+
+  await revenue_modules_seeder();
 
   setTimeout(async () => {
     await designations_seeder();
@@ -245,6 +252,8 @@ async function main() {
     await loan_management_seeder();
 
     await advance_management_seeder();
+
+    await receipt_register_seeder();
   }, 6000);
 
 

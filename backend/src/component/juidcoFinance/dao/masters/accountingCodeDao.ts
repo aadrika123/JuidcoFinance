@@ -91,9 +91,9 @@ class AccountingCodeDao {
       return generateRes(null);
     }
 
-    const code = acc[0].code;
+    // const code = acc[0].code;
 
-    const prefix = code.substring(0, code.length - 2);
+    // const prefix = code.substring(0, code.length - 2);
 
     const query: Prisma.account_codesFindManyArgs = {
       select: {

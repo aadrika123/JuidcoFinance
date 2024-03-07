@@ -1,3 +1,4 @@
+
 //// Municipality Code
 model municipality_codes {
   id            Int     @id @default(autoincrement())
@@ -14,7 +15,9 @@ model municipality_codes {
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
 
-   request_account_codes   request_account_codes[]
+  request_account_codes request_account_codes[]
+
+  receipt_registers receipt_registers[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
