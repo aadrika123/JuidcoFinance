@@ -14,6 +14,7 @@ model municipality_codes {
   grant_entries       grant_entries[]
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
+  bank_masters        bank_masters[]
 
   request_account_codes request_account_codes[]
 

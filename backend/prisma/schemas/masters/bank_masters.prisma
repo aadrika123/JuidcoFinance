@@ -5,16 +5,22 @@ model bank_masters {
   bank_id             Int
   bank                banks   @relation(fields: [bank_id], references: [id])
 
+  bank_type_id        Int
+  bank_type           bank_types  @relation(fields: [bank_type_id], references: [id])
+
+  ulb_id              Int
+  ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
+
+  micr_code           String?
   ifsc_code           String
   branch              String
-  micr_code           String
   branch_address      String
   branch_city         String
   branch_state        String
-  branch_district     String
-  email               String
-  contact_no          String
-  contact_person_name String
+  branch_district     String?
+  email               String?
+  contact_no          String?
+
   created_at          DateTime @default(now()) @map("created_at")
   updated_at          DateTime @updatedAt @map("updated_at")
 }

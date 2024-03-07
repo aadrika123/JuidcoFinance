@@ -32,13 +32,7 @@ class MuncipalityCodeDao {
   };
 
   get_all = async () => {
-    const query: Prisma.municipality_codesFindManyArgs = {
-      select: {
-        id: true,
-        ulbs: true,
-      },
-    };
-    const data = prisma.municipality_codes.findMany(query);
+    const data = prisma.$queryRaw`select id, ulbs, ulbs as name from municipality_codes`;
     return generateRes(data);
   };
 }

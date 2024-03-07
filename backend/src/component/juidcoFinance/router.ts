@@ -46,6 +46,7 @@ import UDHDSubDepartmentRoute from "./route/udhdSubDepartmentRoute";
 import RevenueModulesRoute from "./route/masters/RevenueModulesRoute";
 import ReceiptModesRoute from "./route/masters/ReceiptModesRoute";
 import ReceiptRegisterRoute from "./route/masters/ReceiptRegisterRoute";
+import BankTypesRoute from "./route/masters/BankTypesRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -200,13 +201,15 @@ class FinanceRoute {
 
     (new AuthRoute()).configure(app, "43");  // 43
 
-    (new UDHDSubDepartmentRoute().configure(app, "44")); // 44
+    (new UDHDSubDepartmentRoute().configure(app, "44"));; // 44
 
     (new RevenueModulesRoute().configure(app, "45")); // 45
 
     (new ReceiptModesRoute().configure(app, "46")); // 46
 
     (new ReceiptRegisterRoute().configure(app, "47")); // 47
+
+    (new BankTypesRoute().configure(app, "45"));
   }
 }
 

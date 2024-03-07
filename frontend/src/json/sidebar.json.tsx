@@ -30,7 +30,6 @@ export const sidebarLinks: SidebarLinksProps = {
           subModules: [
             { moduleName: " Charts of Account", path: "/finance/masters" },
             { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
-            { moduleName: "Receipt Register", path: "/finance/masters/receipt-register" },
             {
               moduleName: "Vendor Masters",
               path: "/finance/masters/vendor-master",
@@ -41,7 +40,24 @@ export const sidebarLinks: SidebarLinksProps = {
             },
           ],
         },
-
+        {
+          moduleName: "Revenue Collection",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="revenue-collection"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/revenue-collection",
+          subModules: [
+            {
+              moduleName: "Receipt Register",
+              path: "/finance/revenue-collection/receipt-register",
+            },
+          ],
+        },
         {
           moduleName: "Documentation & Record Keeping",
           icon: (

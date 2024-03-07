@@ -136,7 +136,7 @@ const TableWithScrollPagination = <T,>({
         )} */}
         {footer}
         <aside className="flex items-center justify-end py-5 gap-5">
-          <Button onClick={() => {}} buttontype="button" variant="cancel">
+          <Button onClick={() => {}} buttontype="button" variant="primary">
             Approved
           </Button>
         </aside>

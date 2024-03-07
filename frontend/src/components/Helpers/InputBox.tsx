@@ -17,6 +17,7 @@ interface InputBoxProps {
   error?: string | undefined;
   touched?: boolean | undefined;
   className?: string;
+  required?: boolean | false;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e?: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -29,6 +30,8 @@ const InputBox: React.FC<InputBoxProps> = (props) => {
       <div className="flex flex-col gap-1">
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
+          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
+
         </label>
         <input
           readOnly={props.isReadOnly}

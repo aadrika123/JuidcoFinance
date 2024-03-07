@@ -1,4 +1,4 @@
-import { EditReceiptRegister } from "@/components/JuidcoFinance/page/Masters/ReceiptRegister/EditReceiptRegister";
+import { EditReceiptRegister } from "@/components/JuidcoFinance/page/RevenueCollection/ReceiptRegister/EditReceiptRegister";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

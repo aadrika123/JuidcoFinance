@@ -25,22 +25,46 @@ import type {
 import type { MasterProps } from "@/utils/types/types";
 import { FINANCE_URL } from "@/utils/api/urls";
 import DropDownListBox from "@/components/Helpers/DropDownListBox";
+import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
+import LosingDataConfirm from "@/components/global/molecules/LosingDataConfirm";
+import APIs from "@/json/apis.json";
+import DropDownList from "@/components/Helpers/DropDownList";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
 export const HeroBankMasters = () => {
   const [page, setPage] = useState<number>(1);
+
   const [isAddBankAccountOpen, setIsBankAccountOpen] = useState<boolean>(false);
+  const [isDataLossPopupOpen, setDataLossPopupOpen] = useState<boolean>(false);
+  const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
+
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [fetchQuery, setFetchQuery] = useState<boolean>(false);
   const dispatch = useDispatch();
+
+  let isDirty = false;
 
   const handlePageChangeAccountList = (direction: "prev" | "next") => {
     setPage((prevPage) => (direction === "prev" ? prevPage - 1 : prevPage + 1));
   };
 
   function handleOpenAddBankAccount() {
-    setIsBankAccountOpen(!isAddBankAccountOpen);
+    if (isDirty) {
+      showDataLossWarningPopup();
+    } else {
+      setIsBankAccountOpen(!isAddBankAccountOpen);
+    }
+  }
+
+  function showDataLossWarningPopup(){
+    setDataLossPopupOpen(true);
+  }
+
+
+  function closePopups(){
+    setDataLossPopupOpen(false);
+    setIsBankAccountOpen(false);
   }
 
   // Handle change Value for search fetch query
@@ -89,8 +113,13 @@ export const HeroBankMasters = () => {
     createBankDetails,
     {
       onSuccess: () => {
-        handleOpenAddBankAccount();
-        toast.success("Successfully Added Bank Details!");
+        setIsBankAccountOpen(false);
+        setSuccessNotificationOpen(true);
+        
+        setTimeout(() => {
+          setIsBankAccountOpen(false);
+          setSuccessNotificationOpen(false);
+        },1000);
       },
       onError: () => {
         alert("there was an error");
@@ -104,11 +133,48 @@ export const HeroBankMasters = () => {
   return (
     <>
       <Toaster />
-      {isAddBankAccountOpen && (
+
+      {isDataLossPopupOpen && (
         <>
           <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-50 rounded-xl hide-scrollbar">
-            <div className="relative z-50">
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
+            <div className="relative z-40">
+
+              <Popup width="30%" bgColor="primary_bg" title="">
+                <LosingDataConfirm
+                  cancel={() => setDataLossPopupOpen(false)}
+                  continue={() => closePopups()}
+                />
+              </Popup>
+
+            </div>
+          </section>
+        </>
+      )}
+
+      {isSuccessNotificationOpen && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
+            <div className="relative z-40">
+
+              <Popup title="" width="30%" bgColor="primary_bg">
+                <SuccesfullConfirm
+                  message="Recorded Successfully"
+                  handleContinueButton={closePopups}
+                />
+              </Popup>
+            </div>
+          </section>
+        </>
+      )}
+
+
+      {isAddBankAccountOpen && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-10"></div>
+          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-20 rounded-xl hide-scrollbar">
+            <div className="relative z-20">
               <Popup
                 closeModal={handleOpenAddBankAccount}
                 title="Add Bank Account"
@@ -117,6 +183,7 @@ export const HeroBankMasters = () => {
                   initialValues={initialBankDetailsValues}
                   validationSchema={AddBankDetailsSchema}
                   onSubmit={(values: AddBankDetailsData) => {
+                    console.log(values);
                     mutate(values);
                   }}
                 >
@@ -128,10 +195,36 @@ export const HeroBankMasters = () => {
                     handleBlur,
                     handleSubmit,
                     handleReset,
-                    dirty,
+                    dirty
                   }) => (
                     <form onSubmit={handleSubmit}>
                       <div className="grid grid-cols-2 gap-x-6 gap-4 ">
+                        <DropDownListBox
+                          api={`${APIs.bank_types$get}`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="Please select bank type"
+                          value={values.bank_type_id}
+                          error={errors.bank_type_id}
+                          touched={touched.bank_type_id}
+                          label="Bank Type"
+                          name="bank_type_id"
+                          required
+                        />
+
+                        <DropDownListBox
+                          api={`${APIs.chart_of_accounts$get_municipality_codes}`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="Please select ULB name"
+                          value={values.ulb_id}
+                          error={errors.ulb_id}
+                          touched={touched.ulb_id}
+                          label="ULB Name"
+                          name="ulb_id"
+                          required
+                        />
+
                         <DropDownListBox
                           api={`${FINANCE_URL.BANK_URL.get}`}
                           onChange={handleChange}
@@ -142,6 +235,7 @@ export const HeroBankMasters = () => {
                           touched={touched.bank_id}
                           label="Bank Name"
                           name="bank_id"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -149,9 +243,10 @@ export const HeroBankMasters = () => {
                           value={values.ifsc_code}
                           error={errors.ifsc_code}
                           touched={touched.ifsc_code}
-                          label="IFSC Code *"
+                          label="IFSC Code"
                           name="ifsc_code"
                           placeholder="Enter IFSC Code"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -159,9 +254,10 @@ export const HeroBankMasters = () => {
                           value={values.branch}
                           error={errors.branch}
                           touched={touched.branch}
-                          label="Bank Branch *"
+                          label="Bank Branch"
                           name="branch"
                           placeholder="Bank Branch"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -181,7 +277,8 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_address}
                           label="Bank Branch Address"
                           name="branch_address"
-                          placeholder="Enter Bank Address"
+                          placeholder="Enter Branch Address"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -201,7 +298,8 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_city}
                           label="Bank Branch City"
                           name="branch_city"
-                          placeholder="Enter Bank City"
+                          placeholder="Enter Bank Branch City"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -221,7 +319,8 @@ export const HeroBankMasters = () => {
                           touched={touched.branch_state}
                           label="Bank Branch State "
                           name="branch_state"
-                          placeholder="Enter Bank State"
+                          placeholder="Enter Bank Branch State"
+                          required
                         />
                         <InputBox
                           onChange={handleChange}
@@ -233,16 +332,7 @@ export const HeroBankMasters = () => {
                           name="email"
                           placeholder="Enter Email Id"
                         />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.contact_person_name}
-                          error={errors.contact_person_name}
-                          touched={touched.contact_person_name}
-                          name="contact_person_name"
-                          label="Contact Person Name / Designation"
-                          placeholder="Enter Contact Person Name"
-                        />
+
                       </div>
                       <div className="mt-4 flex items-center gap-5 justify-end">
                         <PrimaryButton
@@ -252,6 +342,10 @@ export const HeroBankMasters = () => {
                         >
                           Close
                         </PrimaryButton>
+
+                        {isDirty = dirty}
+
+
                         {dirty && (
                           <>
                             <PrimaryButton
@@ -271,6 +365,7 @@ export const HeroBankMasters = () => {
                         )}
                       </div>
                     </form>
+
                   )}
                 </Formik>
               </Popup>

@@ -1,18 +1,22 @@
 "use strict";
 
 import { Request, Response } from "express";
+import BankTypesDao from "../../dao/masters/BankTypesDao";
+import { resObj } from "../../../../util/types";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resMessage } from "../../responseMessage/commonMessage";
 
 /**
  * | Author- Bijoy Paitandi
  * | Created for- Bank Controller
  */
 
-class DrcrController{
-  private dao: DrcrDao;
+class BankTypesController{
+  private dao: BankTypesDao;
   private initMsg: string;
   constructor() {
-    this.dao = new DrcrDao();
-    this.initMsg = "Drcr";
+    this.dao = new BankTypesDao();
+    this.initMsg = "BankTypes";
   }
 
   // Get limited banks
@@ -42,4 +46,4 @@ class DrcrController{
   };
 }
 
-export default DrcrController;
+export default BankTypesController;

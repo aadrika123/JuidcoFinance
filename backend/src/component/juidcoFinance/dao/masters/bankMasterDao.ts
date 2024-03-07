@@ -94,7 +94,6 @@ class BankMasterDao {
         branch_district: true,
         email: true,
         contact_no: true,
-        contact_person_name: true,
       },
     };
     const data = await prisma.bank_masters.findFirst(query);

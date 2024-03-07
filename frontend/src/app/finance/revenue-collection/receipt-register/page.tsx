@@ -1,4 +1,5 @@
-import { HeroReceiptRegister } from "@/components/JuidcoFinance/page/Masters/ReceiptRegister/Index";
+
+import { HeroReceiptRegister } from "@/components/JuidcoFinance/page/RevenueCollection/ReceiptRegister/Index";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

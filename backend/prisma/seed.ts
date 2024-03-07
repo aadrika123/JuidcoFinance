@@ -49,6 +49,7 @@ import designations_seeder from "./seeder/designation_seeder";
 import receipt_register_seeder from "./seeder/masters/receipt_register_seeder";
 import receipt_modes_seeder from "./seeder/masters/receipt_modes_seeder";
 import revenue_modules_seeder from "./seeder/masters/revenue_modules_seeder";
+import bank_types_seeder from "./seeder/masters/bank_types_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -68,6 +69,8 @@ async function main() {
 
   // return;
 
+  await bank_types_seeder();
+  
   await udhd_sub_departments_seeder();
 
   await account_codes_seeder();
