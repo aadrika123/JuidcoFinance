@@ -1,58 +1,40 @@
 "use client";
 
 // Imports //
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "@/lib/axiosConfig";
-import AccountList from "./AccountList/AccountList";
-import AddBankHeader from "./AddBank/AddBank";
-import Popup from "@/components/Helpers/Basic/Popup";
-import InputBox from "@/components/Helpers/InputBox";
+import AddBankHeader from "./molecules/AddBankHeader";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import Loader from "@/components/Helpers/Basic/Loader";
-import { Formik } from "formik";
-import PrimaryButton from "@/components/Helpers/Button";
-import { addBankDetails } from "@/redux/reducers/bankMasterReducer";
-import { useDispatch } from "react-redux";
-import {
-  AddBankDetailsSchema,
-  initialBankDetailsValues,
-} from "@/utils/validation/masters/bank_master.validation";
+import { Toaster } from "react-hot-toast";
+import { initialBankDetailsValues } from "@/utils/validation/masters/bank_master.validation";
 import type {
   AddBankDetailsData,
-  AccountTableData,
 } from "@/utils/types/bank_master_types";
-import type { MasterProps } from "@/utils/types/types";
 import { FINANCE_URL } from "@/utils/api/urls";
-import DropDownListBox from "@/components/Helpers/DropDownListBox";
-import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
-import LosingDataConfirm from "@/components/global/molecules/LosingDataConfirm";
-import APIs from "@/json/apis.json";
-import LoaderSkeleton from "@/components/global/atoms/LoaderSkeleton";
+import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
+import ViewIconButton from "@/components/global/atoms/ViewIconButton";
+import { usePathname, useRouter } from "next/navigation";
+import LosingDataConfirmPopup from "@/components/global/molecules/general/LosingDataConfirmPopup";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import Popup from "@/components/global/molecules/general/Popup";
+import BankAccountForm from "./molecules/BankAccountForm";
 
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
 export const HeroBankMasters = () => {
-  const [page, setPage] = useState<number>(1);
+  const pathName = usePathname();
 
   const [isAddBankAccountOpen, setIsBankAccountOpen] = useState<boolean>(false);
   const [isDataLossPopupOpen, setDataLossPopupOpen] = useState<boolean>(false);
   const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [fetchQuery, setFetchQuery] = useState<boolean>(false);
-
-  const [isSearching, setIsSearching] = useState(false);
-
-
-  const dispatch = useDispatch();
 
   let isDirty = false;
-
-  const handlePageChangeAccountList = (direction: "prev" | "next") => {
-    setPage((prevPage) => (direction === "prev" ? prevPage - 1 : prevPage + 1));
-  };
+  const onDirty = (arg: boolean): boolean => {
+    isDirty = arg;
+    return isDirty;
+  }
 
   function handleOpenAddBankAccount() {
     if (isDirty) {
@@ -62,45 +44,19 @@ export const HeroBankMasters = () => {
     }
   }
 
-  function showDataLossWarningPopup(){
+  function showDataLossWarningPopup() {
     setDataLossPopupOpen(true);
   }
 
 
-  function closePopups(){
+  function closePopups() {
     setDataLossPopupOpen(false);
     setIsBankAccountOpen(false);
   }
 
-  // Handle change Value for search fetch query
-  function handleSearchFetchQueryChange(): void {
-    setFetchQuery(!fetchQuery);
-  }
 
   // ----- FETCH DATA ------////
   const queryClient = useQueryClient();
-
-  const fetchBankData = async (): Promise<MasterProps<AccountTableData>> => {
-    const res = await axios({
-      url: `${FINANCE_URL.BANK_MASTER_URL.get}&page=${page}&search=${searchQuery}`,
-      method: "GET",
-    });
-    return res.data?.data as MasterProps<AccountTableData>;
-  };
-
-  const {
-    data: accountListData,
-    isError: bankAccountError,
-    isLoading: bankAccountLoading,
-  } = useQuery(["bank-list", page, fetchQuery], fetchBankData);
-
-  if (accountListData?.data) {
-    dispatch(addBankDetails(accountListData?.data ?? []));
-  }
-
-  if (bankAccountError) {
-    throw new Error("some error occurred");
-  }
 
   // Add Bank Details
   const createBankDetails = async (
@@ -112,9 +68,9 @@ export const HeroBankMasters = () => {
       data: values,
     });
 
-    setIsSearching(false);
     return res.data;
   };
+
   // mutate Bank Details
   const { mutate } = useMutation<AddBankDetailsData, Error, AddBankDetailsData>(
     createBankDetails,
@@ -122,11 +78,11 @@ export const HeroBankMasters = () => {
       onSuccess: () => {
         setIsBankAccountOpen(false);
         setSuccessNotificationOpen(true);
-        
+
         setTimeout(() => {
           setIsBankAccountOpen(false);
           setSuccessNotificationOpen(false);
-        },1000);
+        }, 1000);
       },
       onError: () => {
         alert("there was an error");
@@ -137,262 +93,63 @@ export const HeroBankMasters = () => {
     }
   );
 
+  const onViewButtonClick = (id: string) => {
+    window.open(`${pathName}/${id}`, "_self");
+  };
 
+
+
+  const onSubmit = (values: AddBankDetailsData) => {
+    console.log(values)
+    mutate(values);
+  }
+
+
+  const tButton = (id: string) => {
+    return (
+      <>
+        <ViewIconButton variant="view" onClick={() => onViewButtonClick(id)} />
+      </>
+    );
+  }
+
+
+  const columns = [
+    { name: 'id', caption: "Sr. No.", width: "w-[5%]" },
+    { name: 'bank', caption: "Bank Name", width: "w-[5%]" },
+    { name: 'ifsc_code', caption: "IFSC Code", width: "w-[10%]" },
+    { name: 'branch', caption: "Branch Name", width: "w-[5%]" },
+    {
+      name: "View / Edit",
+      caption: <span>View / Edit</span>,
+      value: tButton,
+      width: "w-[10%]",
+    }
+  ]
+
+  const bankAccountForm = new BankAccountForm({
+    initialBankDetailsValues: initialBankDetailsValues,
+    onSubmit: onSubmit,
+    onBack: handleOpenAddBankAccount,
+    onDirty: onDirty,
+    readOnly: false
+  });
 
   return (
     <>
       <Toaster />
 
       {isDataLossPopupOpen && (
-        <>
-        
-
-          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
-            <div className="relative z-40">
-
-              <Popup width="30%" bgColor="primary_bg" title="">
-                <LosingDataConfirm
-                  cancel={() => setDataLossPopupOpen(false)}
-                  continue={() => closePopups()}
-                />
-              </Popup>
-            </div>
-          </section>
-
-        </>
+        <LosingDataConfirmPopup cancel={() => setDataLossPopupOpen(false)} continue={() => closePopups()} />
       )}
 
       {isSuccessNotificationOpen && (
-        <>
-          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] max-h-[90%] overflow-auto z-40 rounded-xl hide-scrollbar">
-            <div className="relative z-40">
-
-              <Popup title="" width="30%" bgColor="primary_bg">
-                <SuccesfullConfirm
-                  message="Recorded Successfully"
-                  handleContinueButton={closePopups}
-                />
-              </Popup>
-            </div>
-          </section>
-        </>
+        <SuccesfullConfirmPopup message="Recorded Successfully"/>
       )}
 
 
       {isAddBankAccountOpen && (
-        <>
-          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-10"></div>
-          <section className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] max-h-[90%] overflow-auto z-20 rounded-xl hide-scrollbar">
-            <div className="relative z-20">
-              <Popup
-                closeModal={handleOpenAddBankAccount}
-                title="Add Bank Account"
-              >
-                <Formik
-                  enableReinitialize={true}
-                  initialValues={initialBankDetailsValues}
-                  validationSchema={AddBankDetailsSchema}
-                  onSubmit={(values: AddBankDetailsData) => {
-                    console.log(values);
-                    
-                    Object.keys(values).forEach(key => {
-                      const val = values[key as keyof typeof values];
-                      if (val == initialBankDetailsValues[key as keyof typeof initialBankDetailsValues]) {
-                               delete values[key as keyof typeof values];
-                        }
-                      });
-
-                    mutate(values);
-                  }}
-                >
-                  {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    handleReset,
-                    dirty
-                  }) => (
-                    <form onSubmit={handleSubmit}>
-                      <div className="grid grid-cols-2 gap-x-6 gap-4 ">
-                        <DropDownListBox
-                          api={`${APIs.bank_types$get}`}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          placeholder="Please select bank type"
-                          value={values.bank_type_id}
-                          error={errors.bank_type_id}
-                          touched={touched.bank_type_id}
-                          label="Bank Type"
-                          name="bank_type_id"
-                          required
-                        />
-
-                        <DropDownListBox
-                          api={`${APIs.chart_of_accounts$get_municipality_codes}`}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          placeholder="Please select ULB name"
-                          value={values.ulb_id}
-                          error={errors.ulb_id}
-                          touched={touched.ulb_id}
-                          label="ULB Name"
-                          name="ulb_id"
-                          required
-                        />
-
-                        <DropDownListBox
-                          api={`${FINANCE_URL.BANK_URL.get}`}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          placeholder="Please select an bank"
-                          value={values.bank_id}
-                          error={errors.bank_id}
-                          touched={touched.bank_id}
-                          label="Bank Name"
-                          name="bank_id"
-                          required
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.ifsc_code}
-                          error={errors.ifsc_code}
-                          touched={touched.ifsc_code}
-                          label="IFSC Code"
-                          name="ifsc_code"
-                          placeholder="Enter IFSC Code"
-                          required
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.branch}
-                          error={errors.branch}
-                          touched={touched.branch}
-                          label="Bank Branch"
-                          name="branch"
-                          placeholder="Bank Branch"
-                          required
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.micr_code}
-                          error={errors.micr_code}
-                          touched={touched.micr_code}
-                          label="MICR Code"
-                          name="micr_code"
-                          placeholder="Enter MICR Code"
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.branch_address}
-                          error={errors.branch_address}
-                          touched={touched.branch_address}
-                          label="Bank Branch Address"
-                          name="branch_address"
-                          placeholder="Enter Branch Address"
-                          required
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.contact_no}
-                          error={errors.contact_no}
-                          touched={touched.contact_no}
-                          label="Contact Number"
-                          name="contact_no"
-                          placeholder="Enter Contact Number"
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.branch_city}
-                          error={errors.branch_city}
-                          touched={touched.branch_city}
-                          label="Bank Branch City"
-                          name="branch_city"
-                          placeholder="Enter Bank Branch City"
-                          required
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.branch_district}
-                          error={errors.branch_district}
-                          touched={touched.branch_district}
-                          label="Bank Branch District"
-                          name="branch_district"
-                          placeholder="Bank Branch District"
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.branch_state}
-                          error={errors.branch_state}
-                          touched={touched.branch_state}
-                          label="Bank Branch State "
-                          name="branch_state"
-                          placeholder="Enter Bank Branch State"
-                          required
-                        />
-                        <InputBox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.email}
-                          error={errors.email}
-                          touched={touched.email}
-                          label="Email Id"
-                          name="email"
-                          placeholder="Enter Email Id"
-                        />
-
-                      </div>
-                      <div className="mt-4 flex items-center gap-5 justify-end">
-                        <PrimaryButton
-                          onClick={handleOpenAddBankAccount}
-                          buttonType="button"
-                          variant="cancel"
-                        >
-                          Close
-                        </PrimaryButton>
-
-                        {isDirty = dirty}
-
-
-                        {dirty && (
-                          <>
-                            <PrimaryButton
-                              onClick={handleReset}
-                              buttonType="button"
-                              variant="cancel"
-                            >
-                              Reset
-                            </PrimaryButton>
-                            <PrimaryButton
-                              buttonType="submit"
-                              variant="primary"
-                              className="animate-pulse"
-                            >
-                              Save
-                            </PrimaryButton>
-                          </>
-                        )}
-                      </div>
-                    </form>
-
-                  )}
-                </Formik>
-              </Popup>
-            </div>
-          </section>
-        </>
+        <Popup title="Add New Bank Account" zindex={20}>{bankAccountForm.render()}</Popup>
       )}
 
       <section>
@@ -400,21 +157,13 @@ export const HeroBankMasters = () => {
       </section>
 
       <section className="mt-8">
-        {bankAccountLoading || isSearching ? (
-          <LoaderSkeleton/>
-        ) : (
-          <AccountList
-            nextPage={() => handlePageChangeAccountList("next")}
-            prevPage={() => handlePageChangeAccountList("prev")}
-            pages={{
-              page: page,
-              totalPage: accountListData?.totalPage ?? 1,
-              currentPage: accountListData?.currentPage ?? 1,
-            }}
-            setSearchQuery={setSearchQuery}
-            setFetchQuery={handleSearchFetchQueryChange}
-          />
-        )}
+        <TableWithFeatures
+          title=""
+          center
+          columns={columns}
+          api={FINANCE_URL.BANK_MASTER_URL.get || ""}
+          numberOfRowsPerPage={10}
+        />
       </section>
     </>
   );

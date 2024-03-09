@@ -55,12 +55,14 @@ class BankMasterDao {
           {
             bank: {
               name: {
-                equals: search,
+                contains: search,
                 mode: "insensitive",
-              }
+              },
             },
           },
-          { ifsc_code: { equals: search, mode: "insensitive" } }
+          { ifsc_code: { contains: search, mode: "insensitive" } },
+          { branch: { contains: search, mode: "insensitive" } }
+
         ],
       }
     }
@@ -94,6 +96,18 @@ class BankMasterDao {
         branch_district: true,
         email: true,
         contact_no: true,
+        ulb:{
+          select:{
+            id: true,
+            ulbs: true
+          }
+        },
+        bank_type:{
+          select:{
+            id: true,
+            name: true
+          }
+        }
       },
     };
     const data = await prisma.bank_masters.findFirst(query);

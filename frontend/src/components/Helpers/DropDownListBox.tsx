@@ -24,6 +24,7 @@ interface DropDownListBoxProps {
   required?: boolean | false;
   onChange: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur: (e?: React.FocusEvent<HTMLSelectElement>) => void;
+  isReadOnly: boolean;
 }
 
 
@@ -74,6 +75,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
           id={fieldId}
+          disabled={props.isReadOnly}
         >
           <option value="-1">{props.placeholder}</option>
 

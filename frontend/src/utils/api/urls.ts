@@ -75,7 +75,7 @@ export const FINANCE_URL: Urls = {
   },
 
   BANK_MASTER_URL: {
-    get: "/bank-master/get-all?limit=10",
+    get: "/bank-master/get-all",
     create: "/bank-master/create",
     update: "/bank-master/update",
     getById: "/bank-master/get-by-id",

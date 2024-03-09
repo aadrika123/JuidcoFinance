@@ -15,11 +15,30 @@ export const bankMasterValidation = Joi.object({
   branch_city: Joi.string().required(),
   branch_state: Joi.string().required(),
   branch_district: Joi.string(),
-  email: Joi.string().email(),
+  email: Joi.string().email({ tlds: { allow: false } }),
   contact_no: Joi.string().regex(/^\d{10}$/),
 });
 
-// arrange request data for store and update
+
+// validating updation data
+export const bankMasterUpdateValidation = Joi.object({
+  id: Joi.number().required(),
+  bank_id: Joi.number(),
+  bank_type_id: Joi.number(),
+  ulb_id: Joi.number(),
+  ifsc_code: Joi.string(),
+  branch: Joi.string(),
+  micr_code: Joi.string(),
+  branch_address: Joi.string(),
+  branch_city: Joi.string(),
+  branch_state: Joi.string(),
+  branch_district: Joi.string(),
+  email: Joi.string().email({ tlds: { allow: false } }),
+  contact_no: Joi.string().regex(/^\d{10}$/),
+});
+
+
+// arrange request data for store
 export const requestData = (req: Request): BankRequestData => {
   return {
     bank_id: req.body.bank_id,

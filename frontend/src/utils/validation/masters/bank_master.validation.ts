@@ -7,13 +7,13 @@ export const AddBankDetailsSchema = Yup.object().shape({
   bank_id: Yup.number().required("Bank name is required").notOneOf([-1], "Bank name is required."),
   ifsc_code: Yup.string().required("IFSC Code is required"),
   branch: Yup.string().required("Branch Name is required"),
-  micr_code: Yup.string(),
+  micr_code: Yup.string().nullable(),
   branch_address: Yup.string().required("Branch Address is required"),
-  contact_no: Yup.string().matches(/^\d{10}$/, "Invalid phone number"),
+  contact_no: Yup.string().matches(/^\d{10}$/, "Invalid phone number").nullable(),
   branch_city: Yup.string().required("Branch City is required"),
-  branch_district: Yup.string(),
+  branch_district: Yup.string().nullable(),
   branch_state: Yup.string().required("Branch State is required"),
-  email: Yup.string().email("Invalid email address"),
+  email: Yup.string().email("Invalid email address").nullable(),
 });
 
 export const initialBankDetailsValues: AddBankDetailsData = {

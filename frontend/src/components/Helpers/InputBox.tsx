@@ -34,7 +34,7 @@ const InputBox: React.FC<InputBoxProps> = (props) => {
 
         </label>
         <input
-          readOnly={props.isReadOnly}
+          disabled={props.isReadOnly}
           placeholder={props.placeholder}
           onChange={props.onChange}
           onBlur={props.onBlur}
