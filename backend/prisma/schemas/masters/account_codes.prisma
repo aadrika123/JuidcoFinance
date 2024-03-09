@@ -27,6 +27,8 @@ model account_codes {
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
 
+  receipt_registers receipt_registers[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }

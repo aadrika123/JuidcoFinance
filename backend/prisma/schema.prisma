@@ -418,10 +418,11 @@ model account_codes {
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
 
+  receipt_registers receipt_registers[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
-
 /// Administrative Ward
 model adminis_wards {
   id                   Int                    @id @default(autoincrement())
@@ -482,15 +483,16 @@ model banks {
   name   String
   remark String
 
-  cheque_issuances      cheque_issuances[]
-  bank_masters          bank_masters[]
-  chequebook_entries    cheque_book_entries[]
-  vendor_masters        vendor_masters[]
+  cheque_issuances   cheque_issuances[]
+  bank_masters       bank_masters[]
+  chequebook_entries cheque_book_entries[]
+  vendor_masters     vendor_masters[]
 
-  created_at       DateTime           @default(now()) @map("created_at")
-  updated_at       DateTime           @updatedAt @map("updated_at")
+  receipt_registers receipt_registers[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }
-
 /// Bills Payment Entry
 model bill_payment_entries {
   id      Int    @id @default(autoincrement())
@@ -652,6 +654,9 @@ model employees {
 
   request_account_codes request_account_codes[]
 
+  receipt_entered_by receipt_registers[] @relation("entered_by")
+  receipt_checked_by receipt_registers[] @relation("checked_by")
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
@@ -693,6 +698,7 @@ model modules {
   updated_at       DateTime           @updatedAt @map("updated_at")
 }
 
+
 //// Municipality Code
 model municipality_codes {
   id            Int     @id @default(autoincrement())
@@ -710,12 +716,13 @@ model municipality_codes {
   loan_managements    loan_managements[]
   bank_masters        bank_masters[]
 
-   request_account_codes   request_account_codes[]
+  request_account_codes request_account_codes[]
+
+  receipt_registers receipt_registers[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
-
 //// OTPs
 model otps {
   id            Int         @id   @default(autoincrement())
@@ -764,6 +771,47 @@ model receipt_entries {
   updated_at DateTime @updatedAt @map("updated_at")
 }
 
+////receipt_modes: Managed by: Sanjiv Kumar
+model receipt_modes {
+    id                Int                 @id @default(autoincrement())
+    name              String
+    receipt_registers receipt_registers[]
+    created_at        DateTime            @default(now()) @map("created_at")
+    updated_at        DateTime            @updatedAt @map("updated_at")
+}
+
+////receipt_register: Managed by: Sanjiv Kumar
+model receipt_registers {
+  id                    Int                @id @default(autoincrement())
+  receipt_no            String
+  ulb_id                Int
+  ulb                   municipality_codes @relation(fields: [ulb_id], references: [id])
+  primary_acc_code_id   Int
+  primary_acc_code      account_codes      @relation(fields: [primary_acc_code_id], references: [id])
+  revenue_module_id     Int
+  revenue_module        revenue_modules     @relation(fields: [revenue_module_id], references: [id])
+  paid_by               String
+  receipt_mode_id       Int
+  receipt_mode          receipt_modes       @relation(fields: [receipt_mode_id], references: [id])
+  receipt_date          DateTime
+  cheque_or_draft_no    String
+  bank_id               Int?
+  bank                  banks?              @relation(fields: [bank_id], references: [id])
+  cash_amount           Float?
+  bank_acc_no           String?
+  deposit_date          DateTime?
+  realisation_date      DateTime?
+  wheather_returned     Boolean?
+  remarks               String
+  entered_by_id         Int
+  entered_by            employees          @relation("entered_by", fields: [entered_by_id], references: [id])
+  entered_by_print_name String
+  checked_by_id         Int
+  checked_by            employees          @relation("checked_by", fields: [checked_by_id], references: [id])
+  checked_by_print_name String
+  created_at            DateTime           @default(now()) @map("created_at")
+  updated_at            DateTime           @updatedAt @map("updated_at")
+}
 //// Receipt Type
 model receipt_types {
   id         Int               @id @default(autoincrement())
@@ -789,6 +837,15 @@ model request_account_codes {
     status      String             @default("pending")
     created_at  DateTime           @default(now()) @map("created_at")
     updated_at  DateTime           @updatedAt @map("updated_at")
+}
+
+////revenue_modules: Managed by: Sanjiv Kumar
+model revenue_modules {
+    id                Int                 @id @default(autoincrement())
+    name              String
+    receipt_registers receipt_registers[]
+    created_at        DateTime            @default(now()) @map("created_at")
+    updated_at        DateTime            @updatedAt @map("updated_at")
 }
 
 //// subledgers

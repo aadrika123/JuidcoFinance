@@ -24,6 +24,9 @@ model employees {
 
   request_account_codes request_account_codes[]
 
+  receipt_entered_by receipt_registers[] @relation("entered_by")
+  receipt_checked_by receipt_registers[] @relation("checked_by")
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }

@@ -168,7 +168,7 @@ export const SubLedgure = () => {
     <>
     <Toaster/>
       {isOpen && (
-        <Popup title="" width="30%" bgColor="primary_bg">
+        <Popup title="" width="40%" bgColor="primary_bg">
           <SuccesfullConfirm
             message="Your Request Sent Successfully"
             handleContinueButton={onClose}
@@ -180,7 +180,7 @@ export const SubLedgure = () => {
         validationSchema={RequestAccCodesDetailsSchema}
         onSubmit={onSubmit}
       />
-      <section>
+      <section className=" shadow-lg border p-4">
         <div className="flex items-center justify-between">
           <SubHeading className="text-2xl">Chart of Accounts</SubHeading>
           {tabIndex === 1 && (

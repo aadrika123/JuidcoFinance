@@ -14,11 +14,11 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
 
   return (
     <>
-      <div className="overflow-x-auto border-[2px] border-zinc-400">
+      <div className="overflow-x-auto border-[2px] border-zinc-300">
         <table className="table table-md">
-          <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
+          <thead className="  text-[1rem] bg-primary_bg_gray text-black border border-t-2 border-zinc-300 ">
             <tr>
-              <th className="border border-zinc-400">
+              <th className="border border-zinc-300">
                 <div className="flex gap-2 w-16 font-medium text-center">
                   <span>Sr No.</span>
                   <span>
@@ -37,43 +37,43 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
                   </span>
                 </div>
               </th>
-              <th className="border border-zinc-400 font-medium">
+              <th className="border border-zinc-300 font-medium">
                 <div className="flex gap-2">
                   <span>Vendor Type</span>
                 </div>
               </th>
 
-              <th className="border border-zinc-400 font-medium">
+              <th className="border border-zinc-300 font-medium">
                 <div className="flex gap-2">
                   <span>Vendor No.</span>
                 </div>
               </th>
 
-              <th className="border  border-zinc-400 w-[20%] font-medium">
+              <th className="border  border-zinc-300 w-[20%] font-medium">
                 <div className="flex gap-2">
                   <span>Vendor Name</span>
                 </div>
               </th>
 
-              <th className="border  border-zinc-400 font-medium">
+              <th className="border  border-zinc-300 font-medium">
                 <div className="flex gap-2">
                   <span>TIN No</span>
                 </div>
               </th>
 
-              <th className="border  border-zinc-400 font-medium">
+              <th className="border  border-zinc-300 font-medium">
                 <div className="flex gap-2">
                   <span>GST No</span>
                 </div>
               </th>
 
-              <th className="border  border-zinc-400 font-medium">
+              <th className="border  border-zinc-300 font-medium">
                 <div className="flex gap-2">
                   <span>Authorized</span>
                 </div>
               </th>
 
-              <th className="border   border-zinc-400 font-medium">
+              <th className="border   border-zinc-300 font-medium">
                 <div className="flex gap-2">
                   <span>Edit</span>
                   <span>
@@ -93,7 +93,7 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
                 </div>
               </th>
 
-              <th className="border  border-zinc-400  font-medium">
+              <th className="border  border-zinc-300  font-medium">
                 <div className="flex gap-2">
                   <span>View </span>
                   <span>
@@ -133,40 +133,40 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
           </thead>
           <tbody className="">
             {props.data?.map((d, index: number) => (
-              <tr key={index} className="border border-zinc-400 text-secondary">
+              <tr key={index} className="border border-zinc-300 text-secondary">
                 {/* ID */}
-                <td className="border border-zinc-400">{d?.id}</td>
+                <td className="border border-zinc-300">{d?.id}</td>
 
                 {/* Name of Bank */}
-                <td className="border border-zinc-400">
+                <td className="border border-zinc-300">
                   {d?.vendor_type?.name}
                 </td>
 
                 {/*  IFSC Code */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">{d?.vendor_no}</div>
                 </td>
 
                 {/* BRANCH */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex ">
                     <div className="flex justify-center">{d?.name}</div>
                   </div>
                 </td>
 
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex ">
                     <div className="flex justify-center">{d?.tin_no}</div>
                   </div>
                 </td>
 
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex">
                     <div className="flex justify-center">{d?.gst_no}</div>
                   </div>
                 </td>
 
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">
                     <div className="flex justify-center">
                       {d?.is_authorized ? "Yes" : "No"}
@@ -175,7 +175,7 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
                 </td>
 
                 {/* Edit */}
-                <td className="border border-zinc-400">
+                <td className="border border-zinc-300">
                   <Link href={`${pathName}/edit/${d.id}`}>
                     <div className="flex justify-center opacity-90">
                       <span>Edit</span>
@@ -208,7 +208,7 @@ const BankAccountsTable: React.FC<BackAccountTableProps> = (props) => {
                 </td>
 
                 {/* View / Print */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">
                     <Link href={`${pathName}/view/${d.id}`}>
                       <div className="flex justify-center opacity-90">

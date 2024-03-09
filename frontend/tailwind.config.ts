@@ -16,8 +16,12 @@ const config: Config = {
       colors: {
         primary: "#6366F1",
         secondary: "#4F4F55",
-        primary_green: "#12743B",
-        primary_bg: "#F8FFF7",
+        // primary_green: "#12743B",
+        primary_green: "#4338ca",
+        primary_bg_indigo: "#4338ca",      // We are not using it for now, will use it  #6366f1
+        primary_bg_gray: "#e5e7eb",      // We are not using it for now, will use it
+        secondary_black: "#000000",
+        primary_bg: "#F8FFF7"
       },
       fontSize: {
         sub_head: " 1.22294rem",

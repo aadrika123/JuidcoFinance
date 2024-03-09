@@ -53,7 +53,7 @@ const DebouncedSearch: React.FC<DebouncedSearchProps> = (props) => {
           onChange={handleChange}
           type="text"
           placeholder="Type here"
-          className="input bg-transparent border-primary_green w-full max-w-xs pl-10"
+          className="input bg-transparent border-zinc-400 shadow-lg w-full max-w-xs pl-10"
         />
       </div>
     </>

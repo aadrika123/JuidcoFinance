@@ -14,9 +14,9 @@ class AuthDao {
   }
 
   login = async (credentials: any) => {
-    const { password, user_id, designation_id } = credentials;
+    const { password, email } = credentials;
     const employee = await prisma.employees.findFirst({
-      where: { user_id, designation_id },
+      where: { email },
       select: {
         id: true,
         user_id: true,

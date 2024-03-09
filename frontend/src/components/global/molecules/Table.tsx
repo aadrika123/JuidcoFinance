@@ -56,27 +56,19 @@ const Table = <T,>({
         center={center}
         cellValue={column.caption}
         key={index}
+        className="bg-gray-200"
       />
     );
   });
 
   const rows = !data?.length ? (
-    <Trow className="flex items-center justify-center" scrollable={scrollable}>
-      <Tdata
-        className="border-none"
-        scrollable={scrollable}
-        value="No data"
-        colSpan={columns.length}
-      />
+    <Trow className="">
+      <Tdata className="border-none" value="No data" colSpan={columns.length} />
     </Trow>
   ) : (
     data?.map((row, index) => {
       return (
-        <Trow
-          key={index}
-          scrollable={scrollable}
-          className={`border border-zinc-400 text-secondary`}
-        >
+        <Trow key={index} className={`border-t border-zinc-400 text-secondary`}>
           {columns.map((column, index2) => {
             const value = row[column.name as keyof typeof row];
             const isoDatePattern =
@@ -86,8 +78,8 @@ const Table = <T,>({
               ? dayjs(`${value}`).format("DD MMM YYYY")
               : typeof value === "object"
                 ? (value as ObjectContent).type ||
-                (value as ObjectContent).name ||
-                (value as ObjectContent).code
+                  (value as ObjectContent).name ||
+                  (value as ObjectContent).code
                 : column.name === "id"
                   ? index + 1 + (pageNo - 1) * (limit || data.length)
                   : column.value
@@ -98,14 +90,7 @@ const Table = <T,>({
                         : "No"
                       : (value as string);
 
-            return (
-              <Tdata
-                width={column.width}
-                scrollable
-                key={index2}
-                value={value1}
-              />
-            );
+            return <Tdata width={column.width} key={index2} value={value1} />;
           })}
         </Trow>
       );
@@ -114,26 +99,22 @@ const Table = <T,>({
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <div className="overflow-x-auto border-[1px] border-zinc-400">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div
+          className={`hide-scrollbar overflow-x-auto ${scrollable && height}`}
+        >
           <table className={`table table-md`}>
             <thead className="text-[1rem] bg-primary_green text-white">
-              <Trow scrollable={scrollable} className="w-full">
+              <Trow
+                className={`w-full ${scrollable && "overflow-y-auto sticky top-0"}`}
+              >
                 {headers}
               </Trow>
             </thead>
-            <tbody
-              className={`${scrollable && `block overflow-y-auto ${height}`}`}
-            >
-              {rows}
-            </tbody>
+            <tbody className="">{rows}</tbody>
           </table>
         </div>
       </motion.div>
-
     </>
   );
 };

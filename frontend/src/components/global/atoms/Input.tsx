@@ -47,7 +47,7 @@ const Input: React.FC<InputProps> = (props) => {
           onFocus={handleFocus}
           type={props.type}
           value={props?.value}
-          className={`text-primary h-[40px] p-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
+          className={`text-primary h-[40px] p-3 rounded border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
           id={fieldId}
         />

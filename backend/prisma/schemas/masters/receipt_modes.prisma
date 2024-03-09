@@ -1,0 +1,8 @@
+////receipt_modes: Managed by: Sanjiv Kumar
+model receipt_modes {
+    id                Int                 @id @default(autoincrement())
+    name              String
+    receipt_registers receipt_registers[]
+    created_at        DateTime            @default(now()) @map("created_at")
+    updated_at        DateTime            @updatedAt @map("updated_at")
+}

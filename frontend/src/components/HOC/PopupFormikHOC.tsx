@@ -24,7 +24,7 @@ const PopupFormikHOC = <P extends FormikWrapperProps>(
       <>
         {isPopupOpen && (
           <Popup title={title}>
-            <WrappedComponent {...props} onClose={handleClosePopup} />
+            <WrappedComponent {...props} onClose={handleClosePopup} removeShadow={true} />
           </Popup>
         )}
       </>

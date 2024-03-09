@@ -44,7 +44,8 @@ type FinanceUrlKeys =
   | "BALANCE_TRACKING_URL"
   | "LOAN_MANAGEMENT_URL"
   | "ADVANCE_MANAGEMENT_URL"
-  | "AUTH_URL";
+  | "AUTH_URL"
+  | "RECEIPT_REGISTER";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -264,4 +265,10 @@ export const FINANCE_URL: Urls = {
     update: "/advance-management/update",
     getById: "advance-management/get-by-id",
   },
+  RECEIPT_REGISTER: {
+    create: "/receipt-register/create",
+    get: "/receipt-register/get-all",
+    update: "/receipt-register/update",
+    getById: "receipt-register/get-by-id",
+  }
 };

@@ -19,7 +19,7 @@ export function HeaderWidget(props: HeaderWidgetProps) {
   const pathName = usePathname();
 
   const EditHeader = (
-    <div className="overflow-x-auto flex justify-between pb-[2rem]">
+    <div className="overflow-x-auto flex justify-between">
       <div className="flex items-center">
         <SubHeading className="text-2xl">Edit {props.title}</SubHeading>
       </div>
@@ -27,7 +27,7 @@ export function HeaderWidget(props: HeaderWidgetProps) {
   );
 
   const AddHeader = (
-    <div className="overflow-x-auto flex justify-between pb-[2rem]">
+    <div className="overflow-x-auto flex justify-between">
       <div className="flex items-center">
         <SubHeading className="text-2xl">{props.title}</SubHeading>
       </div>
@@ -42,17 +42,22 @@ export function HeaderWidget(props: HeaderWidgetProps) {
   );
 
   const ViewHeader = (
-    <div className="overflow-x-auto flex justify-between pb-[2rem]">
+    <div className="overflow-x-auto flex justify-between">
       <div className="flex items-center">
         <SubHeading className="text-2xl">View {props.title}</SubHeading>
       </div>
     </div>
   );
-  return props.variant === "edit"
-  ? EditHeader
-  :props.variant === "add"
-    ? AddHeader
-    : props.variant === "view"
-      ? ViewHeader
-      : null;
+
+  return (
+    <div className="border shadow-xl p-4 mb-10">
+      {props.variant === "edit"
+        ? EditHeader
+        : props.variant === "add"
+          ? AddHeader
+          : props.variant === "view"
+            ? ViewHeader
+            : null}
+    </div>
+  );
 }

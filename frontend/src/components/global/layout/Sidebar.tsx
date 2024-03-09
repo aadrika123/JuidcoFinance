@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { sidebarLinks } from "@/json/sidebar.json";
 import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;
 }
@@ -12,22 +13,29 @@ interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
 const Sidebar: React.FC<SideBarProps> = (props) => {
   const pathName = usePathname();
   const [data, setData] = useState<string | null>();
+  const userData = useSelector((state: any) => state.user.user);
+  const [user, setUser] = useState<any>()
 
-  useEffect(()=> {
-    setData(localStorage.getItem('openPage'));
-  },[])
+  useEffect(() => {
+    setData(localStorage.getItem("openPage"));
+    setUser(JSON.parse(userData))
+  }, []);
   const handleClick = (moduleName: string) => {
-    localStorage.setItem('openPage', moduleName);
+    localStorage.setItem("openPage", moduleName);
   };
 
   return (
-    <div {...props}>
+    <div style={{height: "calc(100vh - 3.5rem)"}} {...props}>
       <section>
-        <div className="w-full flex items-center justify-center p-5">
-          <Image src="/logo/jh-logo.png" width={100} height={100} alt="logo" />
+        <div className="w-full flex flex-col items-center justify-center p-5">
+          <Image src="/profile.png" width={100} height={100} alt="logo" />
+          <h1 className="text-black font-bold text-lg my-2">{user?.name}</h1>
+          <h2 className="text-gray-400 font-bold text-xs">
+            {user?.designation?.name}
+          </h2>
         </div>
-
-        <div>
+        <hr />
+        <div className="mt-4">
           {sidebarLinks.modules?.map((link, index: number) => {
             return (
               <div className="h-[100%]" key={index}>
@@ -44,7 +52,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                         <ul>
                           {link.subModules?.map((sub, index: number) => (
                             <li key={index} className="mt-5 w-[90%]">
-                              <details open={data === sub?.moduleName} >
+                              <details open={data === sub?.moduleName}>
                                 <summary
                                   className={`${
                                     pathName.startsWith(sub.path)
@@ -59,11 +67,17 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                 </summary>
                                 <ul>
                                   {sub.subModules?.map((link, i: number) => (
-                                    <li onClick={() => handleClick(sub.moduleName)} key={i} className={`mt-3 ml-5`}>
+                                    <li
+                                      onClick={() =>
+                                        handleClick(sub.moduleName)
+                                      }
+                                      key={i}
+                                      className={`mt-3 ml-5`}
+                                    >
                                       <Link
                                         className={`text-[0.9375rem] p-2 ${
                                           pathName === link.path
-                                            ? "text-black font-medium bg-black bg-opacity-20"
+                                            ? "text-black font-medium bg-primary_green bg-opacity-20"
                                             : "text-primary"
                                         } `}
                                         href={link.path}
