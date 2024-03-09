@@ -1,7 +1,6 @@
 'use client'
 
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import DownloadButton from "@/components/global/atoms/DownloadButton";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import { usePathname, useRouter } from "next/navigation";

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { bankMasterValidation } from "../../requests/masters/bankMasterValidation";
+import { bankMasterUpdateValidation, bankMasterValidation } from "../../requests/masters/bankMasterValidation";
 import { sendResponse } from "../../../../util/sendResponse";
 import BankMasterDao from "../../dao/masters/bankMasterDao";
 import ResMessage from "../../responseMessage/masters/bankMasterMessage";
@@ -146,7 +146,7 @@ class BankMasterController {
   // Update bank details by Id
   update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = bankMasterValidation.validate(req.body);
+      const { error } = bankMasterUpdateValidation.validate(req.body);
 
       if (error)
         return sendResponse(

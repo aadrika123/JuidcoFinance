@@ -14,10 +14,10 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        primary: "#3A3838",
+        primary: "#6366F1",
         secondary: "#4F4F55",
         primary_green: "#12743B",
-        primary_bg: "#F8FFF7"
+        primary_bg: "#F8FFF7",
       },
       fontSize: {
         sub_head: " 1.22294rem",
