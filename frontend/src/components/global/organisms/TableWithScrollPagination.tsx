@@ -96,8 +96,8 @@ const TableWithScrollPagination = <T,>({
 
   return (
     <>
-      <section className="border border-primary_green bg-white rounded-lg p-6 px-10">
-        <div className="flex justify-between items-center mb-2">
+      <section className="border shadow-xl bg-white rounded-lg p-6 px-10">
+        <div className="flex justify-between items-center mb-6">
           <div className="text-primary_green rounded-md px-2 pb-1 bg-primary_green text-sub_head font-semibold flex items-center">
             <Select
               label=""

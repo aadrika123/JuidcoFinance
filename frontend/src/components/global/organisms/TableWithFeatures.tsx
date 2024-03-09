@@ -99,7 +99,7 @@ const TableWithFeatures = <T,>({
 
   return (
     <>
-      <section className="border bg-white rounded-lg border-primary_green p-6 px-10">
+      <section className="border bg-white shadow-xl p-6 px-10">
         <div className="flex justify-between items-center">
           <div className="text-secondary text-sub_head font-semibold">
             {title}

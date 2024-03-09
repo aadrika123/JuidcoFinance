@@ -16,7 +16,7 @@ const Tdata: React.FC<TdataProps> = (props) => {
     <td
       {...rest}
       key={`cell-${key}`}
-      className={`border-l border-zinc-400 ${className}`}
+      className={`${className}`}
     >
       <div className="flex justify-center text-start">{value}</div>
     </td>

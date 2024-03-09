@@ -37,16 +37,21 @@ export const HeroReceiptRegister = () => {
     );
   };
 
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useState(true);
 
-  const handleCheckbox = () =>{
-    setChecked(checked)
-  }
+  const handleCheckbox = () => {
+    setChecked(!checked);
+  };
 
   const sButton = (id: string) => {
     return (
       <>
-        <Checkboxes value={checked} onChange={handleCheckbox} className="checkbox checked:bg-primary_green" name="x"/>
+        <Checkboxes
+          value={String(checked)}
+          onChange={handleCheckbox}
+          className="checkbox checked:bg-primary_green"
+          name="x"
+        />
       </>
     );
   };
@@ -107,8 +112,6 @@ export const HeroReceiptRegister = () => {
     },
   ];
 
-  
-
   return (
     <>
       <HeaderWidget variant="add" title={"Receipt Register Entry"} />
@@ -117,7 +120,7 @@ export const HeroReceiptRegister = () => {
         columns={columns}
         api={FINANCE_URL.RECEIPT_REGISTER.get || ""}
         numberOfRowsPerPage={10}
-        footer={<Footer/>}
+        footer={<Footer />}
       />
     </>
   );
@@ -127,20 +130,20 @@ const Footer = () => {
   const footerData = [
     {
       key: "Opening Balance",
-      value: ()=>{},
+      value: () => {},
     },
     {
       key: "Days Total",
-      value: ()=>{},
+      value: () => {},
     },
     {
       key: "Closing Total",
-      value: ()=>{},
+      value: () => {},
     },
   ];
   return (
     <div>
-     <TotalCountTable footerData={footerData} />
+      <TotalCountTable footerData={footerData} />
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div className="flex flex-col">
           <h2 className="mt-6 text-secondary">Entered By</h2>

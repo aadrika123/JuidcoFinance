@@ -12,7 +12,7 @@ type PrimaryAccountingProps = {
 const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
   return (
     <>
-      <section className="border rounded-lg bg-white border-primary_green p-6 px-10">
+      <section className="border bg-white shadow-2xl p-6 px-10">
         <div className="flex items-center justify-between">
           <SubHeading>Primary Accounting Codes</SubHeading>
           <DebouncedSearch onChange={props.onSearchTextChange} />

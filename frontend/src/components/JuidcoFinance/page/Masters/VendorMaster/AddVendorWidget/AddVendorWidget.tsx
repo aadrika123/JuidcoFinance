@@ -8,7 +8,7 @@ const AddVendorWidget: React.FC = () => {
   const pathName = usePathname();
   return (
     <>
-      <div className="overflow-x-auto flex justify-between">
+      <div className="overflow-x-auto flex shadow-lg p-4 border justify-between">
         <div className="flex items-center">
           <SubHeading className="text-2xl">Vendor Master</SubHeading>
         </div>

@@ -17,28 +17,52 @@ export const sidebarLinks: SidebarLinksProps = {
       ),
       subModules: [
         {
-          moduleName: "Masters",
+          moduleName: "Home",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
-              alt="masters"
+              src="/icons/sidebar/finance.svg"
+              alt="home"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/master",
-          subModules: [
-            { moduleName: " Charts of Account", path: "/finance/masters" },
-            { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
-            {
-              moduleName: "Vendor Masters",
-              path: "/finance/masters/vendor-master",
-            },
-            {
-              moduleName: "Cheque Book Entry",
-              path: "/finance/masters/chequebook-master",
-            },
-          ],
+          path: "/finance/home",
+          // subModules: [
+          //   { moduleName: "Charts of Account", path: "/finance/masters" },
+          //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+          //   {
+          //     moduleName: "Vendor Masters",
+          //     path: "/finance/masters/vendor-master",
+          //   },
+          //   {
+          //     moduleName: "Cheque Book Entry",
+          //     path: "/finance/masters/chequebook-master",
+          //   },
+          // ],
+        },
+        {
+          moduleName: "Dashboard",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="dashboard"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/dashboard",
+          // subModules: [
+          //   { moduleName: "Charts of Account", path: "/finance/masters" },
+          //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+          //   {
+          //     moduleName: "Vendor Masters",
+          //     path: "/finance/masters/vendor-master",
+          //   },
+          //   {
+          //     moduleName: "Cheque Book Entry",
+          //     path: "/finance/masters/chequebook-master",
+          //   },
+          // ],
         },
         {
           moduleName: "Revenue Collection",
@@ -56,6 +80,36 @@ export const sidebarLinks: SidebarLinksProps = {
               moduleName: "Receipt Register",
               path: "/finance/revenue-collection/receipt-register",
             },
+            {
+              moduleName: "Collection Register",
+              path: "/finance/revenue-collection/collection-register",
+            },
+            {
+              moduleName: "Summary of Daily Collection",
+              path: "/finance/revenue-collection/daily-collection",
+            },
+          ],
+        },
+        {
+          moduleName: "Revenue Receivable",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="revenue-receivable"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/revenue-receivable",
+          subModules: [
+            {
+              moduleName: "Demand Register",
+              path: "/finance/revenue-receivable/demand-register",
+            },
+            {
+              moduleName: "Summary of Bills Raised",
+              path: "/finance/revenue-receivable/bills-raised",
+            },
           ],
         },
         {
@@ -72,9 +126,25 @@ export const sidebarLinks: SidebarLinksProps = {
           subModules: [
             { moduleName: "Voucher Entry", path: "/finance/documentation/voucher-entry" },
             {
-              moduleName: "Cheque Issue Entry",
-              path: "/finance/documentation/cheque-issue-entry",
+              moduleName: "Cash Book",
+              path: "/finance/documentation/cash-book",
             },
+            {
+              moduleName: "Journal Book",
+              path: "/finance/documentation/journal-book",
+            },
+            {
+              moduleName: "Ledger Book",
+              path: "/finance/documentation/ledger-book",
+            },
+            {
+              moduleName: "General Ledger",
+              path: "/finance/documentation/general-ledger",
+            },
+            // {
+            //   moduleName: "Cheque Issue Entry",
+            //   path: "/finance/documentation/cheque-issue-entry",
+            // },
             // {
             //   moduleName: "Stop Payment Order ",
             //   path: "/workorder",
@@ -85,7 +155,6 @@ export const sidebarLinks: SidebarLinksProps = {
             // },
           ],
         },
-
         {
           moduleName: "Transactions",
           icon: (
@@ -112,6 +181,54 @@ export const sidebarLinks: SidebarLinksProps = {
               path: "/finance/transaction/bills-invoice-entry",
             },
           ],
+        },
+        {
+          moduleName: "Masters",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="masters"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/master",
+          subModules: [
+            { moduleName: " Charts of Account", path: "/finance/masters" },
+            { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+            {
+              moduleName: "Vendor Masters",
+              path: "/finance/masters/vendor-master",
+            },
+            {
+              moduleName: "Cheque Book Entry",
+              path: "/finance/masters/chequebook-master",
+            },
+          ],
+        },
+        {
+          moduleName: "Payment Methods",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="payment"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/payment-methods",
+          // subModules: [
+          //   { moduleName: "Charts of Account", path: "/finance/masters" },
+          //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+          //   {
+          //     moduleName: "Vendor Masters",
+          //     path: "/finance/masters/vendor-master",
+          //   },
+          //   {
+          //     moduleName: "Cheque Book Entry",
+          //     path: "/finance/masters/chequebook-master",
+          //   },
+          // ],
         },
         {
           moduleName: "Budgeting",
@@ -157,6 +274,54 @@ export const sidebarLinks: SidebarLinksProps = {
             {
               moduleName: "Advance Managements",
               path: "/finance/budgeting/advance-management",
+            },
+          ],
+        },
+        {
+          moduleName: "Bank Reconciliation",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="payment"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/bank-reconciliation",
+          // subModules: [
+          //   { moduleName: "Charts of Account", path: "/finance/masters" },
+          //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+          //   {
+          //     moduleName: "Vendor Masters",
+          //     path: "/finance/masters/vendor-master",
+          //   },
+          //   {
+          //     moduleName: "Cheque Book Entry",
+          //     path: "/finance/masters/chequebook-master",
+          //   },
+          // ],
+        },
+        {
+          moduleName: "Financial Statements",
+          icon: (
+            <Image
+              src="/icons/sidebar/masters.svg"
+              alt="payment"
+              width={100}
+              height={100}
+            />
+          ),
+          path: "/finance/financial-statements",
+          subModules: [
+            { moduleName: "Trail Balance", path: "/finance/financial-statements/trail-balance" },
+            { moduleName: "Adjusted Trail Balance", path: "/finance/financial-statements/adjusted-trail-balance" },
+            {
+              moduleName: "Income Statement",
+              path: "/finance/financial-statements/income-statement",
+            },
+            {
+              moduleName: "Balance Sheet",
+              path: "/finance/financial-statements/balance-sheet",
             },
           ],
         },

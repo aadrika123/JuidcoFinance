@@ -35,7 +35,7 @@ const SearchBox: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
         <input
           type="text"
           placeholder="Type here"
-          className="input bg-transparent border-primary_green w-full max-w-xs pl-10"
+          className="input bg-transparent shadow-lg border-zinc-400 border- w-full max-w-xs pl-10"
           {...props}
         />
       </div>

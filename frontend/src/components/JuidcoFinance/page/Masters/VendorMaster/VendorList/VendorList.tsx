@@ -17,7 +17,7 @@ type VendorListProps = {
 const VendorList: React.FC<VendorListProps> = (props) => {
 
   return (
-    <section className="border rounded-lg bg-white border-primary_green p-6 px-10">
+    <section className="border shadow-2xl bg-white p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>Vendor List</SubHeading>
         <SearchBox

@@ -56,19 +56,19 @@ const Table = <T,>({
         center={center}
         cellValue={column.caption}
         key={index}
-        className="bg-primary_green"
+        className="bg-gray-200"
       />
     );
   });
 
   const rows = !data?.length ? (
-    <Trow className="flex items-center justify-center">
+    <Trow className="">
       <Tdata className="border-none" value="No data" colSpan={columns.length} />
     </Trow>
   ) : (
     data?.map((row, index) => {
       return (
-        <Trow key={index} className={`border border-zinc-400 text-secondary`}>
+        <Trow key={index} className={`border-t border-zinc-400 text-secondary`}>
           {columns.map((column, index2) => {
             const value = row[column.name as keyof typeof row];
             const isoDatePattern =
@@ -101,7 +101,7 @@ const Table = <T,>({
     <>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <div
-          className={`hide-scrollbar overflow-x-auto ${scrollable && height} border-[1px] border-zinc-400`}
+          className={`hide-scrollbar overflow-x-auto ${scrollable && height}`}
         >
           <table className={`table table-md`}>
             <thead className="text-[1rem] bg-primary_green text-white">
@@ -111,7 +111,7 @@ const Table = <T,>({
                 {headers}
               </Trow>
             </thead>
-            <tbody>{rows}</tbody>
+            <tbody className="">{rows}</tbody>
           </table>
         </div>
       </motion.div>

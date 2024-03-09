@@ -10,12 +10,12 @@ interface TheadProps {
 }
 
 const Thead: React.FC<TheadProps> = (props) => {
-  const { cellValue, key, className, center, color, width} = props;
+  const { cellValue, key, className, center, color="text-black", width} = props;
 
   return (
     <th
       key={`headCell-${key}`}
-      className={`border-l border-zinc-400 ${width} ${className} ${color}`}
+      className={`${width} ${className} ${color}`}
     >
       <div
         className={`flex gap-2 font-medium text-center ${

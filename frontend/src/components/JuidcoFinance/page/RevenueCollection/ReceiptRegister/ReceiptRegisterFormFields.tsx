@@ -26,6 +26,7 @@ export interface FormikWrapperProps {
   ) => void;
   readonly?: boolean;
   onClose?: () => void;
+  removeShadow?: boolean;
   title: string;
   resetInitialValue?: () => void;
 }
@@ -38,10 +39,13 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     readonly = false,
     onClose,
     enableReinitialize,
+    removeShadow=false,
   } = props;
 
   return (
-    <section className="border bg-white rounded-lg border-[#12743B] p-6 px-10">
+    <section
+      className={`bg-white ${removeShadow ? "px-3" : "shadow-2xl p-6 border"} `}
+    >
       <div>
         <Formik
           initialValues={initialValues}

@@ -52,7 +52,7 @@ export const HeroAddVendor = () => {
   return (
     <>
       <Toaster />
-      <section className="border rounded-lg bg-white border-primary_green p-6 px-10">
+      <section className="border bg-white shadow-xl p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Add Vendor</SubHeading>
         </div>

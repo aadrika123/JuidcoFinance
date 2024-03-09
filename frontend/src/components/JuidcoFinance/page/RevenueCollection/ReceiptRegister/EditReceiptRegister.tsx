@@ -49,7 +49,7 @@ export const EditReceiptRegister = ({
     (async function () {
       const res = await axios({
         method: "GET",
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.getById}/${ReceiptRegisterID}`,
+        url: `${FINANCE_URL.RECEIPT_REGISTER.getById}/${ReceiptRegisterID}`,
       });
 
       setInitialData((prev) => {

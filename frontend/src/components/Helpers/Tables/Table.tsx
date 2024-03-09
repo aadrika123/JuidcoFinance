@@ -8,45 +8,45 @@ interface TableDataProps {
 const Table: React.FC<TableDataProps> = (props) => {
   return (
     <>
-      <div className="hide-scrollbar overflow-x-auto border-[2px] border-zinc-400 h-[550px] overflow-y-auto">
+      <div className="hide-scrollbar overflow-x-auto border-[2px] border-zinc-300 h-[550px] overflow-y-auto">
         <p className="p-4  text-zinc-700 text-center">
           Identification Codes for ULBs at Jharkhand{" "}
         </p>
 
         <table className="table table-md">
-          <thead className="text-[1rem] text-white border border-t-2 border-zinc-400 sticky top-0">
+          <thead className="text-[1rem] text-secondary_black border border-t-2 border-zinc-300 sticky top-0">
             <tr className="">
-              <th className="border border-zinc-400 p-0">
-                <div className="font-medium bg-primary_green p-4">
+              <th className="border border-zinc-300 p-0">
+                <div className="font-medium bg-primary_bg_gray p-4">
                   <span>ULBs</span>
                 </div>
               </th>
-              <th className="border border-zinc-400 w-[20%] font-medium p-0">
-                <div className="font-medium bg-primary_green p-4">
+              <th className="border border-zinc-300 w-[20%] font-medium p-0">
+                <div className="font-medium bg-primary_bg_gray p-4">
                   <span>DISTRICT</span>
                 </div>
               </th>
 
-              <th colSpan={2} className="border-2 border-zinc-400 font-medium p-0">
-              <div className="font-medium bg-primary_green p-4">
+              <th colSpan={2} className="border-2 border-zinc-300 font-medium p-0">
+              <div className="font-medium bg-primary_bg_gray p-4">
                   <span>State Code</span>
                 </div>
               </th>
 
-              <th className="border  border-zinc-400 font-medium p-0" colSpan={2}>
-              <div className="font-medium bg-primary_green p-4">
+              <th className="border  border-zinc-300 font-medium p-0" colSpan={2}>
+              <div className="font-medium bg-primary_bg_gray p-4">
                   <span>District Code</span>
                 </div>
               </th>
 
-              <th colSpan={2} className="border   border-zinc-400 font-medium p-0">
-              <div className="font-medium bg-primary_green p-4">
+              <th colSpan={2} className="border   border-zinc-300 font-medium p-0">
+              <div className="font-medium bg-primary_bg_gray p-4">
                   <span>Category</span>
                 </div>
               </th>
 
-              <th colSpan={2} className="border  border-zinc-400  font-medium p-0">
-              <div className="font-medium bg-primary_green p-4">
+              <th colSpan={2} className="border  border-zinc-300  font-medium p-0">
+              <div className="font-medium bg-primary_bg_gray p-4">
                   <span>Code </span>
                 </div>
               </th>
@@ -54,15 +54,15 @@ const Table: React.FC<TableDataProps> = (props) => {
           </thead>
           <tbody className="">
             {props.data?.map((d, index: number) => (
-              <tr key={index} className="border border-zinc-400 text-secondary">
+              <tr key={index} className="border border-zinc-300 text-secondary">
                 {/* ULB'S */}
-                <td className="border border-zinc-400">{d?.ulbs}</td>
+                <td className="border border-zinc-300">{d?.ulbs}</td>
 
                 {/* DISTRICT */}
-                <td className="border border-zinc-400">{d?.district} </td>
+                <td className="border border-zinc-300">{d?.district} </td>
 
                 {/* STATE CODE */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">{d?.state_code[0]}</div>
                 </td>
                 <td>
@@ -71,7 +71,7 @@ const Table: React.FC<TableDataProps> = (props) => {
                 {/* STATE CODE */}
 
                 {/* DISTRICT CODE */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">
                     {d?.district_code[0]}
                   </div>
@@ -84,7 +84,7 @@ const Table: React.FC<TableDataProps> = (props) => {
                 {/* DISTRICT CODE */}
 
                 {/* CATEGORY */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">{d?.category[0]}</div>
                 </td>
                 <td>
@@ -93,7 +93,7 @@ const Table: React.FC<TableDataProps> = (props) => {
                 {/* CATEGORY */}
 
                 {/* CODE */}
-                <td className="border border-zinc-400 ">
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">{d?.code[0]}</div>
                 </td>
                 <td>
