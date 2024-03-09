@@ -5,11 +5,11 @@ const receipt_register_seeder = async () => {
   const number_of_records = 10;
   for (let i = 0; i < number_of_records; i++) {
     const record = {
-      receipt_no: faker.lorem.sentence(),
+      receipt_no: faker.random.alphaNumeric(6),
       ulb_id: 1,
       primary_acc_code_id: 1,
       revenue_module_id: 1,
-      paid_by: faker.lorem.sentence(),
+      paid_by: faker.person.fullName(),
       receipt_mode_id: 1,
       receipt_date: faker.date.past(),
       cheque_or_draft_no: faker.random.numeric(8),

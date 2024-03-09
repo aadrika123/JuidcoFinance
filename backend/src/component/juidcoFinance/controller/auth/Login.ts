@@ -3,6 +3,7 @@ import CommonRes from "../../../../util/helper/commonResponse";
 import { resObj } from "../../../../util/types";
 import { resMessage } from "../../responseMessage/commonMessage";
 import AuthDao from "../../dao/auth/authDao";
+import { loginValidation } from "../../requests/auth/loginValidation";
 
 /**
  * | Author- Sanjiv Kumar
@@ -32,6 +33,12 @@ class AuthController {
     };
 
     try {
+
+      const { error } = loginValidation.validate(req.body);
+
+      if(error)
+        return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
       const data = await this.dao.login(req.body);
 
       if (!data)
