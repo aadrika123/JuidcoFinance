@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef} from "react";
 import { initialBankDetailsValues } from "@/utils/validation/masters/bank_master.validation";
 import axios from "@/lib/axiosConfig";
 import { AddBankDetailsData } from "@/utils/types/bank_master_types";
@@ -14,6 +14,10 @@ import SuccesfullConfirmPopup from "@/components/global/molecules/general/Succes
 import { ViewBankHeader } from "./molecules/ViewBankHeader";
 import ToggleButton from "@/components/global/atoms/ToggleButton";
 import BankAccountForm from "./molecules/BankAccountForm";
+import Button from "@/components/global/atoms/Button";
+import { useReactToPrint } from 'react-to-print';
+import { PrintReadyBankComponent } from "./molecules/PrintReadyBankComponent";
+
 
 const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   const [bankAccountDetails, setBankAccountDetails] = useState<AddBankDetailsData>(initialBankDetailsValues);
@@ -22,6 +26,11 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
 
   const [readOnly, setReadOnly] = useState<boolean>(true);
+
+  const componentRef = useRef(null);
+  const printIt = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
 
 
@@ -49,18 +58,21 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
     Object.keys(data).forEach(key => {
       const val = data[key as keyof typeof data];
       if (val == null) {
-               data[key] = "";
-        }
-      });
+        data[key] = "";
+      }
+    });
 
     const new_data = {
       ...data,
       bank_id: data.bank.id,
+      bank: data.bank.name,
       ulb_id: data.ulb.id,
-      bank_type_id: data.bank_type.id
+      ulb: data.ulb.ulbs,
+      bank_type_id: data.bank_type.id,
+      bank_type: data.bank_type.name,
     };
 
-    
+
     setBankAccountDetails(new_data);
     return new_data;
   };
@@ -138,7 +150,7 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
 
 
   const enablEditingMode = (editing: boolean) => {
-    if(!editing){
+    if (!editing) {
       bankAccountForm.resetForm();
     }
     setReadOnly(!editing)
@@ -147,13 +159,25 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   const buttons = () => {
     return (
       <>
-        <ToggleButton name="Edit" onToggle={enablEditingMode}/>
+        <ToggleButton name="Edit" onToggle={enablEditingMode} />
+        <Button onClick={printIt} variant="primary">Print</Button>
       </>
     );
   }
 
+
+  
+
+
   return (
     <>
+
+      <div style={{ display: "none" }}>
+      {/* <div> */}
+        <div ref={componentRef}>
+          <PrintReadyBankComponent bank={bankAccountDetails} />
+        </div>
+      </div>
 
       {isDataLossPopupOpen && (
         <LosingDataConfirmPopup cancel={() => setDataLossPopupOpen(false)} continue={goBack} />
@@ -165,13 +189,14 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
 
 
 
-      <ViewBankHeader title="View/Edit Bank Account" buttons={buttons}/>
-        < section className="border bg-white rounded-lg border-primary_green p-6 px-10">
+      <ViewBankHeader title="View/Edit Bank Account" buttons={buttons}   />
+      
+      < section className="border bg-white rounded-lg border-primary_green p-6 px-10">
 
         {isFetching ? (
           <Loader />
         ) : (
-          bankAccountForm.render()
+            bankAccountForm.render()         
         )}
 
       </section>

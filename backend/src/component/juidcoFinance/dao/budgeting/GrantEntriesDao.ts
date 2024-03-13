@@ -83,7 +83,7 @@ class GrantEntriesDao {
         blnce_trckng: {
           select: {
             id: true,
-            balance_amount: true
+            total_balance: true
           },
         },
         refund_date: true,
@@ -218,7 +218,7 @@ class GrantEntriesDao {
         blnce_trckng: {
           select: {
             id: true,
-            balance_amount: true
+            total_balance: true
           },
         },
         refund_date: true,

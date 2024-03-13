@@ -61,9 +61,11 @@ model balance_trackings{
   primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
 
 
-	balance_amount      Float
-
-  grant_entries grant_entries[]
+	debit_balance		Float
+	credit_balance		Float
+	total_balance		Float
+	
+	grant_entries grant_entries[]
 
 
 	created_at          DateTime            @default(now()) @map("created_at")
@@ -398,6 +400,9 @@ model account_codes {
   detail_code String
   description String
 
+  code_type_id Int
+  code_type accounting_code_types @relation(fields: [code_type_id], references: [id])
+  
   parent_id Int? @default(0)
 
   remark String?
@@ -423,6 +428,17 @@ model account_codes {
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
+
+////bank_types: Managed by: Bijoy Paitandi
+model accounting_code_types{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+
+	bank_masters account_codes[]
+}
+
 /// Administrative Ward
 model adminis_wards {
   id                   Int                    @id @default(autoincrement())

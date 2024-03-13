@@ -9,16 +9,19 @@ interface PopupProps {
     title?: string | "",
     children: React.ReactNode;
     zindex: number;
+    width?: number;
 }
 
-const Popup: React.FC<PopupProps> = ({ title, children, zindex}: PopupProps) => {
+const Popup: React.FC<PopupProps> = ({ title, children, zindex, width}: PopupProps) => {
     const zindex2 = zindex + 10;
     
+    const widthh = width || 40;
+    console.log(widthh);
     return (
 
         <>
             <div className={`fixed top-0 left-0 w-full h-full bg-black opacity-40 z-${zindex}`}></div>
-            <section className={`fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] max-h-[90%] overflow-auto z-${zindex2} rounded-xl hide-scrollbar`}>
+            <section className={`fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[${widthh}%] max-h-[90%] overflow-auto z-${zindex2} rounded-xl hide-scrollbar`}>
                 <div className={`relative z-${zindex2}`}>
 
                     <div className=" w-full rounded-lg h-auto backdrop-blur-lg bg-white border shadow-lg flex flex-col  p-5">

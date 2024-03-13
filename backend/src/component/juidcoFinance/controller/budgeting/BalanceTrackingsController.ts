@@ -93,7 +93,7 @@ class BalanceTrackingsController {
       // validate id
       const { error } = Joi.object({
         id: Joi.number().required().greater(0)
-      }).validate({'id': id});
+      }).validate({ 'id': id });
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
@@ -115,44 +115,148 @@ class BalanceTrackingsController {
 
 
 
-    // Get single biull invoice details by Id
-    getBalance = async (
-      req: Request,
-      res: Response,
-      apiId: string
-    ): Promise<Response> => {
-      const resObj: resObj = {
-        apiId,
-        action: "GET",
-        version: "1.0",
-      };
-      try {
-        const id: number = Number(req.params.id);
-  
-        // validate id
-        const { error } = Joi.object({
-          id: Joi.number().required().greater(0)
-        }).validate({'id': id});
-  
-        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
-  
-        const data = await this.balanceTrackingsDao.getBalance(id);
-  
-        if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMesg).NOT_FOUND,
-            data,
-            resObj,
-            res
-          );
-  
-        return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
-      } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
-      }
+  // Get single biull invoice details by Id
+  getBalance = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
     };
-  
-  
+    try {
+      const id: number = Number(req.params.id);
+
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required().greater(0)
+      }).validate({ 'id': id });
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.balanceTrackingsDao.getBalance(id);
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMesg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+
+  // Get limited bill invoices list
+  getLatestBalances = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    try {
+      const data = await this.balanceTrackingsDao.getLatestBalances(req);
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMesg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  getScheduleReport = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    try {
+
+      const id: number = Number(req.params.id);
+
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required().greater(0)
+      }).validate({ 'id': id });
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+
+      const data = await this.balanceTrackingsDao.getScheduleReport(id);
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMesg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+
+  getGeneralLedgerReport = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    try {
+
+      const id: number = Number(req.params.id);
+
+      // validate id
+      const { error } = Joi.object({
+        id: Joi.number().required().greater(0)
+      }).validate({ 'id': id });
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+
+      const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id);
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMesg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
 
 }
 
