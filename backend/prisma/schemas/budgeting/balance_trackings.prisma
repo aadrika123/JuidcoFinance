@@ -6,9 +6,11 @@ model balance_trackings{
   primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
 
 
-	balance_amount      Float
-
-  grant_entries grant_entries[]
+	debit_balance		Float
+	credit_balance		Float
+	total_balance		Float
+	
+	grant_entries grant_entries[]
 
 
 	created_at          DateTime            @default(now()) @map("created_at")

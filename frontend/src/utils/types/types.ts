@@ -37,10 +37,14 @@ export type ChartsOfAccountsProps<T> = {
 
 //Account code types //
 export type AccountingTableData = {
+  id: number;
+  code: string;
+  code_type: number;
   major_head: string;
   minor_head: string;
   detail_code: string;
   description: string;
+  balance: number;
 };
 // function code types //
 export type FunctionTableData = {

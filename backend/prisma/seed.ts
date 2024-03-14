@@ -51,8 +51,35 @@ import receipt_modes_seeder from "./seeder/masters/receipt_modes_seeder";
 import revenue_modules_seeder from "./seeder/masters/revenue_modules_seeder";
 import bank_types_seeder from "./seeder/masters/bank_types_seeder";
 import daily_receipt_balance_seeder from "./seeder/revenueCollection/daily_receipt_balances_seeder";
+import accounting_code_types_seeder from "./seeder/masters/accounting_code_types_seeder";
 
 const prisma = new PrismaClient();
+
+
+const seed_reference_tables = async() => {
+  await bank_types_seeder();
+  
+  await udhd_sub_departments_seeder();
+
+  await function_codes_seeder();
+
+  await banks_seeder();
+
+  await bill_types_seeder();
+  await vendor_types_seeder();
+
+  await receipt_modes_seeder();
+
+  await revenue_modules_seeder();
+
+  await accounting_code_types_seeder();
+}
+
+
+const seed_level1_dependent_tables = async () => {
+  await account_codes_seeder();
+}
+
 async function main() {
 
   // await udhd_sub_departments_seeder();
@@ -70,22 +97,11 @@ async function main() {
 
   // return;
 
-  await bank_types_seeder();
-  
-  await udhd_sub_departments_seeder();
+  await seed_reference_tables();
 
-  await account_codes_seeder();
-
-  await function_codes_seeder();
-
-  await banks_seeder();
-
-  await bill_types_seeder();
-  await vendor_types_seeder();
-
-  await receipt_modes_seeder();
-
-  await revenue_modules_seeder();
+  setTimeout(async () => {
+    seed_level1_dependent_tables();
+  }, 500);
 
   setTimeout(async () => {
     await designations_seeder();

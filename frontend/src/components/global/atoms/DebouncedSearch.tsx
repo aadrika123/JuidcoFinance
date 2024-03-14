@@ -2,10 +2,11 @@ import React from "react";
 
 interface DebouncedSearchProps {
   onChange: (e: string) => void;
+  debounceDuration?: number | 1000; // default 1 second
 }
 
 const DebouncedSearch: React.FC<DebouncedSearchProps> = (props) => {
-  const debounceTime = 1000; // 1 second
+  const debounceTime = props.debounceDuration;
   const [searchText, setSearchText] = React.useState("");
 
   React.useEffect(() => {

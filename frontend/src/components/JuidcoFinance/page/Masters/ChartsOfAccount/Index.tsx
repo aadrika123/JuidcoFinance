@@ -73,7 +73,7 @@ export const SubLedgure = () => {
     isLoading: accountingLoading,
     refetch: reloadAccountingCodeData,
   } = useCodeQuery<ChartsOfAccountsProps<AccountingTableData>>(
-    "get-account-code"
+    "balance-trackings/get-balances"
   );
 
   // QUERYING FUNCTION CODE

@@ -1,0 +1,10 @@
+
+////bank_types: Managed by: Bijoy Paitandi
+model accounting_code_types{
+	id                  Int                 @id @default(autoincrement())
+	name                String
+	created_at          DateTime            @default(now()) @map("created_at")
+	updated_at          DateTime            @updatedAt @map("updated_at")
+
+	bank_masters account_codes[]
+}
