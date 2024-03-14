@@ -104,6 +104,7 @@ export const EditBudgetAppro = ({
 
   /////////////// Handle Select Primary Accounting Code ////////////////
   const handleSelectPrimaryCode = async (id: string | number) => {
+    console.log(id)
     try {
       const res = await axios({
         url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,

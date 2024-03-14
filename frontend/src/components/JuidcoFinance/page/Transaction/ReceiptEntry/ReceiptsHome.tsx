@@ -26,7 +26,7 @@ export const ReceiptsHome = () => {
 
   const onDownloadButtonClick = (id: string) => {
     const uri = `/api/v1/finance/receipt-entry/get-pdf/${id}`;
-    var link = document.createElement("a");
+    const link = document.createElement("a");
     link.setAttribute('download', `Receipt${id}.pdf`);
     link.href = uri;
     document.body.appendChild(link);

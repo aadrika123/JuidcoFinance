@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import axios from "@/lib/axiosConfig";
 import AddBankHeader from "./molecules/AddBankHeader";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Toaster } from "react-hot-toast";
 import { initialBankDetailsValues } from "@/utils/validation/masters/bank_master.validation";
 import type {
@@ -13,7 +13,7 @@ import type {
 import { FINANCE_URL } from "@/utils/api/urls";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import LosingDataConfirmPopup from "@/components/global/molecules/general/LosingDataConfirmPopup";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 import Popup from "@/components/global/molecules/general/Popup";

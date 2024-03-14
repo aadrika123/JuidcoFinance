@@ -14,7 +14,7 @@ type PrimaryAccountingProps = {
 };
 
 const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
-  enum CodeType {Schedule = 1, GeneralLedger = 2, Ledger = 3}; 
+  enum CodeType {Schedule = 1, GeneralLedger = 2, Ledger = 3}
   const [account, setAccount] = useState<AccountingTableData | null>();
 
   const onViewButtonClick = (d: AccountingTableData) => {

@@ -1,3 +1,4 @@
+import React from 'react';
 import { AddBankDetailsData } from "@/utils/types/bank_master_types";
 
 interface PrintReadyBankComponentProps {

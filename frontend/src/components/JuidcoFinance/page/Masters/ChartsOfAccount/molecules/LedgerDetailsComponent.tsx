@@ -24,7 +24,7 @@ const LedgerDetailsComponent: React.FC<LedgerDetailsComponentProps> = ({ data, o
         <div ref={componentRef} className="m-4">
 
           <style type="text/css" media="print">{"\
-            @page {\ size: landscape;\ }\
+            @page { size: landscape;}\
           "}</style>
 
           <div className="m-2 w-[100%] text-center text-2xl" >Ledger</div>
