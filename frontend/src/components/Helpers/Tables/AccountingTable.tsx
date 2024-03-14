@@ -1,4 +1,5 @@
 import Button from "@/components/global/atoms/Button";
+import { fc } from "@/utils/helper";
 import { AccountingTableData } from "@/utils/types/types";
 import React from "react";
 
@@ -115,8 +116,8 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
                 <td className="border border-zinc-300 ">{d?.description}</td>
                 {/* DESCRIPTION */}
 
-                <td className="border border-zinc-300 ">{d?.balance < 0 ? -d.balance:0}</td>
-                <td className="border border-zinc-300 ">{d?.balance >= 0 ? d.balance:0}</td>
+                <td className="border border-zinc-300 ">{fc(d?.balance < 0 ? -d.balance:0)}</td>
+                <td className="border border-zinc-300 ">{fc(d?.balance >= 0 ? d.balance:0)}</td>
                 <td className="border border-zinc-300">
                   <Button variant="primary" onClick={() => props.onViewButtonClick(d)}>View</Button>
                 </td>

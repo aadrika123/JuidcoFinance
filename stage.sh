@@ -2,6 +2,7 @@
 SERVER_PORT=5001
 DB_PASSWORD="judico@2024"
 
+
 installModules () {
     echo "Installing frontend node modules ..."
     npm --prefix ./frontend install
@@ -41,6 +42,9 @@ startServices(){
     cd ..
     pm2 list
 }
+
+
+
 
 installModules
 resetDatabases

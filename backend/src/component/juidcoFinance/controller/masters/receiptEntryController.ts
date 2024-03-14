@@ -11,7 +11,7 @@ import MemoryStream from 'memorystream';
 import latex from 'node-latex';
 import fs from 'fs';
 import dayjs from "dayjs";
-import lescape from 'escape-latex'
+import lescape from 'escape-latex';
 
 
 /**
