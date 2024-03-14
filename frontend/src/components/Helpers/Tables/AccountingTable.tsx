@@ -115,8 +115,8 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
                 <td className="border border-zinc-300 ">{d?.description}</td>
                 {/* DESCRIPTION */}
 
-                <td className="border border-zinc-300 ">{d?.balance >= 0 ? d.balance:0}</td>
                 <td className="border border-zinc-300 ">{d?.balance < 0 ? -d.balance:0}</td>
+                <td className="border border-zinc-300 ">{d?.balance >= 0 ? d.balance:0}</td>
                 <td className="border border-zinc-300">
                   <Button variant="primary" onClick={() => props.onViewButtonClick(d)}>View</Button>
                 </td>

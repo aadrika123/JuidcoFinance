@@ -4,6 +4,7 @@ import axios from "@/lib/axiosConfig";
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery } from "react-query";
+import { fc } from "@/utils/helper";
 
 
 interface GeneralLedgerDetailsComponentProps {
@@ -108,12 +109,12 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
                 <tr>
                   <th className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray">
                     <div className="text-center bg-primary_bg_gray p-4">
-                      <span>DR (₹)</span>
+                      <span>DR</span>
                     </div>
                   </th>
                   <th className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray">
                     <div className="text-center bg-primary_bg_gray p-4">
-                      <span>CR (₹)</span>
+                      <span>CR</span>
                     </div>
                   </th>
                 </tr>
@@ -162,8 +163,8 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
                     <td className="border border-zinc-300 ">{d?.description}</td>
                     {/* DESCRIPTION */}
 
-                    <td className="border border-zinc-300 ">{d?.balance >= 0 ? d.balance : 0}</td>
-                    <td className="border border-zinc-300 ">{d?.balance < 0 ? -d.balance : 0}</td>
+                    <td className="border border-zinc-300 ">{fc(d?.balance >= 0 ? d.balance : 0)}</td>
+                    <td className="border border-zinc-300 ">{fc(d?.balance < 0 ? -d.balance : 0)}</td>
                     
                   </tr>
                 ))}

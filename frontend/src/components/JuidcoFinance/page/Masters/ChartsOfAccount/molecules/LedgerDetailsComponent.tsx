@@ -1,4 +1,5 @@
 import Button from "@/components/global/atoms/Button";
+import { fc } from "@/utils/helper";
 import { AccountingTableData } from "@/utils/types/types";
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -50,21 +51,21 @@ const LedgerDetailsComponent: React.FC<LedgerDetailsComponentProps> = ({ data, o
             <tbody>
               <tr>
                 <td className="border border-slate-300 px-2"></td>
-                <td className="border border-slate-300 px-2">{data?.code}</td>
+                <td className="border border-slate-300 px-2"><span className={data?.balance>=0?"invisible":"visible"}>{data?.code}</span></td>
+                <td className="border border-slate-300 px-2"><span className={data?.balance>=0?"invisible":"visible"}>{data?.description}</span></td>
                 <td className="border border-slate-300 px-2"></td>
+                <td className="border border-slate-300 px-2"><span className={data?.balance>=0?"invisible":"visible"}>{fc(data?.balance < 0 ? -data.balance : 0)}</span></td>
                 <td className="border border-slate-300 px-2"></td>
-                <td className="border border-slate-300 px-2">{data?.balance >= 0 ? data.balance : 0}</td>
+                <td className="border border-slate-300 px-2"><span className={data?.balance<0?"invisible":"visible"}>{data?.code}</span></td>
+                <td className="border border-slate-300 px-2"><span className={data?.balance<0?"invisible":"visible"}>{data?.description}</span></td>
                 <td className="border border-slate-300 px-2"></td>
-                <td className="border border-slate-300 px-2">{data?.code}</td>
-                <td className="border border-slate-300 px-2"></td>
-                <td className="border border-slate-300 px-2"></td>
-                <td className="border border-slate-300 px-2">{data?.balance < 0 ? -data.balance : 0}</td>
+                <td className="border border-slate-300 px-2"><span className={data?.balance<0?"invisible":"visible"}>{fc(data?.balance >= 0 ? data.balance : 0)}</span></td>
 
               </tr>
             </tbody>
           </table>
         </div>
-        
+
         <div className="flex justify-end mt-4">
           <div className="flex justify-between gap-3">
             <Button onClick={printIt} variant="primary">Print</Button>

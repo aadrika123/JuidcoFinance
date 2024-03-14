@@ -4,10 +4,16 @@ import axios from "@/lib/axiosConfig"
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery } from "react-query";
+import { fc } from "@/utils/helper";
 
 interface ScheduleDetailsComponentProps {
   scheduleId: number;
   onClose: () => void;
+}
+
+interface YearlyData {
+  general_ledgers: AccountingTableData[],
+  remissions?: AccountingTableData
 }
 
 interface ScheduleReport {
@@ -15,8 +21,9 @@ interface ScheduleReport {
   code: string,
   description: string;
   balance: number,
-  general_ledgers: AccountingTableData[],
-  remissions?: AccountingTableData
+  prev_balance: number,
+  current_year: YearlyData,
+  prev_year: YearlyData
 }
 
 const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ scheduleId, onClose }: ScheduleDetailsComponentProps) => {
@@ -79,43 +86,46 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ sch
             </thead>
 
             <tbody>
-              {data?.general_ledgers?.map((d) => (
+              {data?.current_year?.general_ledgers?.map((d, i) => (
                 <tr key={d.code}>
                   <td className="border border-slate-300 px-4">{threeDigitCode + "-" + d.code.substring(3, 5)}</td>
                   <td className="border border-slate-300 px-4">{d.description}</td>
-                  <td className="border border-slate-300 px-4 text-right">{d.balance}</td>
-                  <td className="border border-slate-300 px-4 text-right">{d.balance}</td>
+                  <td className="border border-slate-300 px-4 text-right">{fc(d.balance)}</td>
+                  <td className="border border-slate-300 px-4 text-right">{fc(data.prev_year.general_ledgers[i].balance)}</td>
                 </tr>
               ))}
 
-              <tr>
-                <td className="border border-slate-300"></td>
-                <td className="border border-slate-300 px-4 font-bold">Subtotal</td>
-                <td className="border border-slate-300 px-4 text-right">{data?.balance}</td>
-                <td className="border border-slate-300 px-4 text-right">{data?.balance}</td>
-              </tr>
+              {data?.balance && (
+                <tr>
+                  <td className="border border-slate-300"></td>
+                  <td className="border border-slate-300 px-4 font-bold">Subtotal</td>
+                  <td className="border border-slate-300 px-4 text-right">{fc(data.balance)}</td>
+                  <td className="border border-slate-300 px-4 text-right">{fc(data.prev_balance)}</td>
+                </tr>
 
-              {data?.remissions && (
+              )}
+
+              {data?.current_year?.remissions && data?.prev_year?.remissions && (
                 <>
                   <tr>
-                    <td className="border border-slate-300 px-4">{threeDigitCode + "-" + data.remissions.code.substring(3, 5)}</td>
-                    <td className="border border-slate-300 px-4">Less<br />{data.remissions.description}</td>
-                    <td className="border border-slate-300 px-4 text-right">{data.remissions.balance}</td>
-                    <td className="border border-slate-300 px-4 text-right">{data.remissions.balance}</td>
+                    <td className="border border-slate-300 px-4">{threeDigitCode + "-" + data.current_year.remissions.code.substring(3, 5)}</td>
+                    <td className="border border-slate-300 px-4">Less<br />{data.current_year.remissions.description}</td>
+                    <td className="border border-slate-300 px-4 text-right">{fc(data.current_year.remissions.balance)}</td>
+                    <td className="border border-slate-300 px-4 text-right">{fc(data.prev_year.remissions.balance)}</td>
                   </tr>
 
                   <tr>
                     <td className="border border-slate-300 px-4"></td>
                     <td className="border border-slate-300 px-4">Subtotal</td>
-                    <td className="border border-slate-300 px-4 text-right">{data.remissions.balance}</td>
-                    <td className="border border-slate-300 px-4 text-right">{data.remissions.balance}</td>
+                    <td className="border border-slate-300 px-4 text-right">{fc(data.current_year.remissions.balance)}</td>
+                    <td className="border border-slate-300 px-4 text-right">{fc(data.prev_year.remissions.balance)}</td>
                   </tr>
 
                   <tr>
                     <td className="border border-slate-300 px-4"></td>
                     <td className="border border-slate-300 px-4 font-bold">Total {data?.description}</td>
-                    <td className="border border-slate-300 px-4 text-right">{data.balance - data.remissions.balance}</td>
-                    <td className="border border-slate-300 px-4 text-right">{data.balance - data.remissions.balance}</td>
+                    <td className="border border-slate-300 px-4 text-right">{fc(data.balance - data.current_year.remissions.balance)}</td>
+                    <td className="border border-slate-300 px-4 text-right">{fc(data.prev_balance - data.prev_year.remissions.balance)}</td>
                   </tr>
 
                 </>

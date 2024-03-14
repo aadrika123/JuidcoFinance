@@ -28,7 +28,7 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
     <>
       { account != null && account.code_type == CodeType.Ledger && (
         <>
-        <Popup zindex={40} width={80}>
+        <Popup zindex={40} width={90}>
           <LedgerDetailsComponent data={account} onClose={closePopup}/>
         </Popup>
         </>

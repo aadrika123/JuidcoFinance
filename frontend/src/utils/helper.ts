@@ -49,3 +49,13 @@ export const filterValBefStoring = (values: any) => {
     return mapingObject(values); // Return the modified values
   }
 };
+
+
+  // format currency: Bijoy Paitandi
+  export const fc = (n: number) => {
+    return n.toLocaleString("en-IN", {
+      maximumFractionDigits: 2,
+      style: 'currency',
+      currency: 'INR'
+    });
+  }
