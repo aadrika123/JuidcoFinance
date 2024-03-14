@@ -158,7 +158,7 @@ class BudgetAppropriationsDao {
   };
 
 
-  getCurrentAmounts = async (id: number) => {
+  getCurrentAmounts = async () => {
     const acc = await prisma.$queryRaw`SELECT a.primary_acc_code_id as id, a.approved_amount, b.balance_amount FROM budget_appropriations a left join balance_trackings b on a.primary_acc_code_id = b.primary_acc_code_id limit 1`;
     if (!acc){
       return generateRes(null);

@@ -823,27 +823,18 @@ model receipt_registers {
   checked_by_id         Int?
   checked_by            employees?         @relation("checked_by", fields: [checked_by_id], references: [id])
   checked_by_print_name String?
-  isChecked             Boolean            @default(false)
+  isChecked             Boolean             @default(false)
   created_at            DateTime           @default(now()) @map("created_at")
   updated_at            DateTime           @updatedAt @map("updated_at")
 }
-
-////receipt_register: Managed by: Sanjiv Kumar
-model daily_receipt_balances{
-  id                    Int               @id @default(autoincrement())
-  opening_balance       Float?
-  created_at            DateTime          @default(now()) @map("created_at")
-  updated_at            DateTime          @updatedAt @map("updated_at")
-}
-
 //// Receipt Type
 model receipt_types {
-  id         Int                @id @default(autoincrement())
+  id         Int               @id @default(autoincrement())
   name       String
   remark     String?
   receipts   receipt_entries[]
-  created_at DateTime           @default(now()) @map("created_at")
-  updated_at DateTime           @updatedAt @map("updated_at")
+  created_at DateTime          @default(now()) @map("created_at")
+  updated_at DateTime          @updatedAt @map("updated_at")
 }
 
 ///// Request New Account Codes : Managed By : Sanjiv Kumar
@@ -993,6 +984,14 @@ model voucher_types {
   updated_at      DateTime          @updatedAt @map("updated_at")
 }
 
+////receipt_register: Managed by: Sanjiv Kumar
+
+model daily_receipt_balances{
+  id                    Int               @id @default(autoincrement())
+  opening_balance       Float?
+  created_at            DateTime          @default(now()) @map("created_at")
+  updated_at            DateTime          @updatedAt @map("updated_at")
+}
 //// Bill Invoice Table : Managed By: Bijoy Paitandi
 model bill_invoices {
   id            Int            @id @default(autoincrement())

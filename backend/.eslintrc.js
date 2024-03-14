@@ -30,5 +30,6 @@ module.exports = {
     ],
     "rules": {
         "@typescript-eslint/no-explicit-any": "off" // Add this line to turn off the rule
-    }
+    },
+    "ignorePatterns": ["temp.js", "**/vendor/*.js"]
 }

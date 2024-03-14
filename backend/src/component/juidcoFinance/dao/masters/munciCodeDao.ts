@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, municipality_codes } from "@prisma/client";
+import { PrismaClient, municipality_codes } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
 import { Request } from "express";
 

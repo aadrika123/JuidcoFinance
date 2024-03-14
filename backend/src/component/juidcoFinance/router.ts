@@ -201,7 +201,7 @@ class FinanceRoute {
 
     (new AuthRoute()).configure(app, "43");  // 43
 
-    (new UDHDSubDepartmentRoute().configure(app, "44"));; // 44
+    (new UDHDSubDepartmentRoute().configure(app, "44")); // 44
 
     (new RevenueModulesRoute().configure(app, "45")); // 45
 

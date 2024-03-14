@@ -1,15 +1,10 @@
 import {
     ServerUnaryCall,
     sendUnaryData,
-    ServerWritableStream,
-    ServerReadableStream,
-    ServerErrorResponse,
   } from "@grpc/grpc-js";
 
-import { PrismaClient, Prisma } from "@prisma/client";
-
 import { IHoldingAndTaxServer } from "../proto/holding_and_tax_grpc_pb";
-import { AccountingEntry, DemandsOnExistingAssessments, GeneralResponse } from "../proto/holding_and_tax_pb";
+import { DemandsOnExistingAssessments, GeneralResponse } from "../proto/holding_and_tax_pb";
   
 
 

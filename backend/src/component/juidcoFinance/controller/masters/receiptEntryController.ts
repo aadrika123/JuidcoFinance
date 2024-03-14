@@ -11,7 +11,7 @@ import MemoryStream from 'memorystream';
 import latex from 'node-latex';
 import fs from 'fs';
 import dayjs from "dayjs";
-var lescape = require('escape-latex');
+import lescape from 'escape-latex'
 
 
 /**
@@ -181,7 +181,7 @@ class ReceiptEntryController {
 
       
       const texFile = './src/data/typesettings/receipt.tex';
-      var texTemplate = fs.readFileSync(texFile).toString();
+      const texTemplate = fs.readFileSync(texFile).toString();
 
       const data1 = {...data,
         receipt_type: data.receipt_type.name,
@@ -194,7 +194,7 @@ class ReceiptEntryController {
       const texData = texTemplate.replace(
         /%(\w*)%/g, // or /{(\w*)}/g for "{this} instead of %this%"
         function( m, key ){
-          return data1.hasOwnProperty( key ) ? lescape(data1[ key as keyof typeof data1 ]) : "";
+          return Object.prototype.hasOwnProperty.call(data1, key) ? lescape(data1[ key as keyof typeof data1 ]) : "";
         }
       );
 

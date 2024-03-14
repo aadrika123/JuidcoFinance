@@ -162,7 +162,7 @@ class BudgetAppropriationsController {
   
         if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
   
-        const data = await this.budgetAppropriationsDao.getCurrentAmounts(id);
+        const data = await this.budgetAppropriationsDao.getCurrentAmounts();
   
         if (!data)
           return CommonRes.SUCCESS(

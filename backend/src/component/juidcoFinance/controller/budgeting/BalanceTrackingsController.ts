@@ -3,7 +3,7 @@ import CommonRes from "../../../../util/helper/commonResponse";
 import { resObj } from "../../../../util/types";
 import { resMessage } from "../../responseMessage/commonMessage";
 import Joi from "joi";
-import { balanceTrackingsValidation, balanceTrackingsValidationWithID } from "../../requests/budgeting/balanceTrackingsValidation";
+import { balanceTrackingsValidation } from "../../requests/budgeting/balanceTrackingsValidation";
 import BalanceTrackingsDao from "../../dao/budgeting/BalanceTrackingsDao";
 
 /**

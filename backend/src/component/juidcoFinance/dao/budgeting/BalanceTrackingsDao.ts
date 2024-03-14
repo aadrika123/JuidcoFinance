@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { Prisma, PrismaClient, account_codes, balance_trackings } from "@prisma/client";
+import { Prisma, PrismaClient, account_codes } from "@prisma/client";
 import { generateRes } from "../../../../util/generateRes";
 import { multiRequestData } from "../../requests/budgeting/balanceTrackingsValidation";
 
@@ -14,7 +14,7 @@ import { multiRequestData } from "../../requests/budgeting/balanceTrackingsValid
 
 const prisma = new PrismaClient();
 
-enum CodeType { Schedule = 1, GeneralLedger = 2, Ledger = 3 };
+enum CodeType { Schedule = 1, GeneralLedger = 2, Ledger = 3 }
 
 
 interface GeneralLedgerData {
@@ -205,7 +205,7 @@ class BalanceTrackingsDao {
 
     // console.log(scheduleRecords);
     if (scheduleRecords.length == 0 || scheduleRecords[0].code_type_id !== CodeType.Schedule) {
-      return Promise<{}>;
+      return Promise<any>;
     }
     const scheduleRecord = scheduleRecords[0];
 
@@ -216,7 +216,7 @@ class BalanceTrackingsDao {
 
     // console.log(scheduleRecords);
     if (scheduleRecordsPrevYear.length == 0) {
-      return Promise<{}>;
+      return Promise<object>;
     }
     const scheduleRecordPrevYear = scheduleRecordsPrevYear[0];
 
@@ -246,7 +246,7 @@ class BalanceTrackingsDao {
 
     // console.log(scheduleRecords);
     if (generalLedgers.length == 0 || generalLedgers[0].code_type_id !== CodeType.GeneralLedger) {
-      return Promise<{}>;
+      return Promise<object>;
     }
 
     const generalLedger = generalLedgers[0];

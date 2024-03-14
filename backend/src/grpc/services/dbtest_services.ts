@@ -2,8 +2,6 @@ import {
     ServerUnaryCall,
     sendUnaryData,
     ServerWritableStream,
-    ServerReadableStream,
-    ServerErrorResponse,
   } from "@grpc/grpc-js";
 
 import { PrismaClient, Prisma } from "@prisma/client";
@@ -14,7 +12,7 @@ import { Bank, BankRequest, BanksRequest } from "../proto/dbtest_pb";
 
 
 export const DatabaseTestServer: IDatabaseTesterServer = {
-  getBanksStreamed: async function (call: ServerWritableStream<BankRequest, Bank>): Promise<void> {
+  getBanksStreamed: async function (): Promise<void> {
     
   },
   getBank: async function (call: ServerUnaryCall<BankRequest, Bank>, callback: sendUnaryData<Bank>): Promise<void> {
