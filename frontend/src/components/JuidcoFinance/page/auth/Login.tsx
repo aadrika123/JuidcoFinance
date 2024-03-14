@@ -39,7 +39,7 @@ const Login = () => {
 
       res.data.data
         ? (dispatch(login(res.data.data)),
-          window.location.replace("/finance/masters"))
+          window.location.replace("/finance/home"))
         : setErrorMsg("You have entered wrong credentials !!");
     } catch (error) {
       setErrorMsg("Something Went Wrong!!");
@@ -109,7 +109,7 @@ const Login = () => {
                     />
                   </div>
 
-                  <div className="grid mt-10">
+                  <div className="grid mt-6">
                     <Button
                       className="w-[100%] flex justify-center mt-6"
                       variant="primary"
@@ -136,7 +136,7 @@ const Login = () => {
                 </form>
               )}
             </Formik>
-            <div className="my-4">
+            <div className="my-2">
               <div className="flex flex-col items-center justify-center flex-wrap gapx-x-2 gap-y-2 w-full poppins">
                 <span
                   className="text-gray-700 text-sm font-semibold cursor-pointer w-full text-center"

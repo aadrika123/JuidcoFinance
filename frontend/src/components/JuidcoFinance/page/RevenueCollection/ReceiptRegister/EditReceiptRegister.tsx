@@ -12,6 +12,7 @@ import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
 import FormikW from "./ReceiptRegisterFormFields";
+import { useSelector } from "react-redux";
 
 export const EditReceiptRegister = ({
   ReceiptRegisterID,
@@ -19,6 +20,14 @@ export const EditReceiptRegister = ({
   ReceiptRegisterID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [data, setData] = useState<any>();
+  const [user, setUser] = useState<any>();
+  const userData = useSelector((state: any) => state.user.user);
+  const [inEditMode, setInEditMode] = useState(false);
+
+  useEffect(() => {
+    setUser(userData);
+  }, []);
 
   const [initialData, setInitialData] = useState<ReceiptRegisterDetailsData>({
     receipt_no: "",
@@ -29,12 +38,12 @@ export const EditReceiptRegister = ({
     receipt_mode_id: "",
     receipt_date: "",
     cheque_or_draft_no: "",
-    bank_id: "",
+    bank_amount: "",
     cash_amount: "",
     bank_acc_no: "",
     deposit_date: "",
     realisation_date: "",
-    wheather_returned: "",
+    wheather_returned: true,
     remarks: "",
     entered_by_id: "",
     entered_by_print_name: "",
@@ -51,7 +60,7 @@ export const EditReceiptRegister = ({
         method: "GET",
         url: `${FINANCE_URL.RECEIPT_REGISTER.getById}/${ReceiptRegisterID}`,
       });
-
+      setData(res.data.data);
       setInitialData((prev) => {
         return {
           ...prev,
@@ -63,19 +72,22 @@ export const EditReceiptRegister = ({
           receipt_mode_id: res.data.data.receipt_mode.id,
           receipt_date: DateFormatter(res.data.data.receipt_date),
           cheque_or_draft_no: res.data.data.cheque_or_draft_no,
-          bank_id: res.data.data.bank.id,
+          bank_amount: res.data.data.bank_amount,
           cash_amount: res.data.data.cash_amount,
           bank_acc_no: res.data.data.bank_acc_no,
           deposit_date: DateFormatter(res.data.data.deposit_date),
           realisation_date: DateFormatter(res.data.data.realisation_date),
           wheather_reaturned: res.data.data.wheather_reaturned,
           remarks: res.data.data.remarks,
-          entered_by: res.data.data.entered_by,
-          designation: res.data.data.designation,
-          print_name: res.data.data.print_name,
-          checked_by: res.data.data.checked_by,
-          designation1: res.data.data.designation1,
-          print_name1: res.data.data.print_name1,
+          entered_by_id: res.data.data.entered_by.id,
+          entered_by_print_name: res.data.data.entered_by_print_name,
+          checked_by_id: res.data.data.checked_by_id?.id,
+          checked_by_print_name: res.data.data.checked_by_print_name,
+          del_checked_by_name: res.data.data.checked_by?.name,
+          del_checked_by_designation:
+            res.data.data.checked_by?.designation.name,
+          del_entered_by_name: res.data.data.entered_by.name,
+          del_entered_by_designation: res.data.data.entered_by.designation.name,
         };
       });
     })();
@@ -87,7 +99,7 @@ export const EditReceiptRegister = ({
   ): Promise<ReceiptRegisterDetailsData> => {
     try {
       const res = await axios({
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.update}`,
+        url: `${FINANCE_URL.RECEIPT_REGISTER.update}`,
         method: "POST",
         data: {
           id: Number(ReceiptRegisterID),
@@ -124,12 +136,23 @@ export const EditReceiptRegister = ({
     mutate(filterValBefStoring(values));
   };
 
+  /////// Handle Edit Mode /////////
+  const handleEditMode = () => {
+    setInEditMode(!inEditMode);
+  };
+
   return (
     <>
       <Toaster />
       <HeaderWidget
-        title="Edit Receipt Register"
+        title="Receipt Register"
         variant={searchParams == "view" ? "view" : "edit"}
+        editVisible={
+          data?.entered_by?.id === user?.id &&
+          user?.designation?.udhd.name === "ULB" &&
+            user?.designation?.name === "Accounts Department – Accountant"
+        }
+        handleEditMode={handleEditMode}
       />
       <FormikW
         title="Edit Receipt Register"
@@ -137,7 +160,7 @@ export const EditReceiptRegister = ({
         enableReinitialize={true}
         validationSchema={receiptRegisterDetailsSchema}
         onSubmit={onSubmit}
-        readonly={searchParams === "view"}
+        readonly={searchParams === "view" || !inEditMode}
       />
     </>
   );

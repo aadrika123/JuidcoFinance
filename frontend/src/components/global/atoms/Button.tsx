@@ -15,6 +15,7 @@ interface ButtonProps {
   className?: string;
   buttontype?: string;
   variant: "primary" | "danger" | "cancel";
+  disabled?: boolean;
 }
 
 const buttonVariants = cva(
@@ -22,10 +23,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary_green",
-        danger: "bg-red-400",
+        primary: "bg-primary_green hover:text-white",
+        danger: "bg-red-400 hover:text-white",
         cancel:
-          "bg-white border text-neutral-800 border-primary_green hover:bg-indigo-600  hover:text-neutral-700",
+          "bg-white border text-neutral-800 border-primary_green hover:bg-indigo-600  hover:text-white",
       },
     },
     defaultVariants: {
@@ -39,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({ className, variant, ...props }) => {
     <button
       type={props.buttontype as "submit" | "reset" | "button" | undefined}
       className={cn(buttonVariants({ className, variant }))}
+
       {...props}
     >
       {props.children}

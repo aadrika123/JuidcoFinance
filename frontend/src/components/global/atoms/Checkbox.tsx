@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 
 /**
  * | Author- Sanjiv Kumar
@@ -21,16 +21,33 @@ interface CheckboxProps {
 }
 
 const Checkboxes: React.FC<CheckboxProps> = (props) => {
-  const { label, name, ...rest } = props;
+  const { label, name, onChange, ...rest } = props;
   const fieldId = "id_" + name;
+
+  const [checked, setChecked] = useState<any>(true);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setChecked(!checked);
+    if (onChange) {
+      onChange(e);
+    }
+  };
 
   return (
     <div>
       <div className="flex items-center">
-        <input disabled={props.readonly} checked={props.value? true: false} className="mr-1 cursor-pointer" name={name} type="checkbox" id={fieldId} 
-        {...rest}
+        <input
+          disabled={props.readonly}
+          checked={checked}
+          className="mr-1 cursor-pointer"
+          name={name}
+          type="checkbox"
+          id={fieldId}
+          onChange={handleChange}
+          {...rest}
         />
-        <label className="text-secondary text-sm" htmlFor={fieldId}>{label}</label>
+        <label className="text-secondary text-sm" htmlFor={fieldId}>
+          {label}
+        </label>
       </div>
       {props.touched && props.error && (
         <div className="text-red-500">{props.error}</div>

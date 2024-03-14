@@ -31,10 +31,16 @@ export const filterValBefStoring = (values: any) => {
     const modifiedObj = {...obj};
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(modifiedObj, key)) {
-        if (key.toLowerCase().endsWith("id_name") || key === "id") {
+
+        if(!modifiedObj[key] || modifiedObj[key] === "" || modifiedObj[key] === undefined){
+          delete modifiedObj[key];
+        }
+        if (key.toLowerCase().endsWith("id_name") || key === "id" || key.toLowerCase().startsWith("del_")) {
           delete modifiedObj[key];
         } else if (key.toLowerCase().endsWith("date")) {
-          modifiedObj[key] = `${new Date(modifiedObj[key]).toISOString()}`;
+          if(modifiedObj[key]){
+            modifiedObj[key] = `${new Date(modifiedObj[key])?.toISOString()}`;
+          }
         }
       }
     }

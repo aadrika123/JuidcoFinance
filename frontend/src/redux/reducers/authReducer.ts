@@ -1,8 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 
+const loginData = Cookies.get("loginData");
+
 const initialState = {
-  user: Cookies.get("loginData") || null,
+  user: loginData ? JSON.parse(loginData) : null,
 };
 
 const authSlice = createSlice({

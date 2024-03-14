@@ -45,7 +45,10 @@ type FinanceUrlKeys =
   | "LOAN_MANAGEMENT_URL"
   | "ADVANCE_MANAGEMENT_URL"
   | "AUTH_URL"
-  | "RECEIPT_REGISTER";
+  | "RECEIPT_REGISTER"
+  | "REVENUE_MODULE"
+  | "RECEIPT_MODE"
+  | "OPENING_BALANCE";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -64,6 +67,7 @@ type Urls = {
     login?: string;
     getUDHD?: string;
     getDesig?: string;
+    approve?: string;
   };
 };
 
@@ -269,6 +273,17 @@ export const FINANCE_URL: Urls = {
     create: "/receipt-register/create",
     get: "/receipt-register/get-all",
     update: "/receipt-register/update",
-    getById: "receipt-register/get-by-id",
-  }
+    getById: "/receipt-register/get-by-id",
+    approve: "/receipt-register/approve",
+  },
+  REVENUE_MODULE: {
+    get: "/revenue-modules/get-all",
+  },
+  RECEIPT_MODE: {
+    get: "/receipt-modes/get-all",
+  },
+  OPENING_BALANCE: {
+    create: "/receipt-register/opening-balance/create",
+    update: "/receipt-register/opening-balance/update",
+  },
 };

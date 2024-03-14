@@ -2,20 +2,23 @@
  * Author: Krish
  * status: close
  */
-
+'use client'
 import React from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
-import PrimaryButton from "@/components/Helpers/Button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Button from "@/components/global/atoms/Button";
 
-type HeaderFactory = "edit" | "add" | "view";
+type HeaderFactory = "edit" | "add" | "view" | "";
 interface HeaderWidgetProps {
   title: string;
   variant: HeaderFactory;
+  editVisible?: boolean | false;
+  handleEditMode?: ()=> void;
 }
 
 export function HeaderWidget(props: HeaderWidgetProps) {
+  const {editVisible = false} = props;
   const pathName = usePathname();
 
   const EditHeader = (
@@ -33,9 +36,9 @@ export function HeaderWidget(props: HeaderWidgetProps) {
       </div>
       <div className="flex">
         <Link href={`${pathName}/add`}>
-          <PrimaryButton variant="primary" className="rounded-3xl">
+          <Button variant="primary" className="rounded-3xl">
             + Add {props.title}
-          </PrimaryButton>
+          </Button>
         </Link>
       </div>
     </div>
@@ -46,8 +49,24 @@ export function HeaderWidget(props: HeaderWidgetProps) {
       <div className="flex items-center">
         <SubHeading className="text-2xl">View {props.title}</SubHeading>
       </div>
+      <div className="flex">
+        {editVisible && <Link href={`${pathName.replace("mode=view", "mode=view")}`}>
+          <Button onClick={props.handleEditMode} variant="primary" className="rounded">
+            Edit
+          </Button>
+        </Link>}
+        <Button variant="primary" className="rounded ml-2">
+          Print
+        </Button>
+      </div>
     </div>
   );
+
+  const Header = (
+    <div className="flex items-center">
+        <SubHeading className="text-2xl">View {props.title}</SubHeading>
+      </div>
+  )
 
   return (
     <div className="border shadow-xl p-4 mb-10">
@@ -57,7 +76,7 @@ export function HeaderWidget(props: HeaderWidgetProps) {
           ? AddHeader
           : props.variant === "view"
             ? ViewHeader
-            : null}
+            : Header}
     </div>
   );
 }

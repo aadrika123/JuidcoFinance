@@ -37,6 +37,7 @@ const Input: React.FC<InputProps> = (props) => {
       <div className="flex flex-col gap-1">
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
+          {props.isRequired? (<span className="text-red-600 pl-2">*</span>):("")}
         </label>
         <input
           disabled={props.readonly}

@@ -10,6 +10,7 @@ import { useField } from "formik";
 
 interface Option {
     id: number;
+    value?: string | number;
     name?: string;
     type?: string;
     code?: string;
@@ -29,6 +30,7 @@ interface SelectProps {
   readonly?: boolean;
   className?: string;
   visibility?: boolean;
+  isRequired?: boolean | false;
   handler?: (id: number | string) => void;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
@@ -61,6 +63,7 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
       <div className="flex flex-col gap-1">
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
+          {props.isRequired? (<span className="text-red-600 pl-2">*</span>):("")}
         </label>
         <select
           disabled={props.readonly}
@@ -73,7 +76,7 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
         >
           <option selected value="">{props.placeholder}</option>
           {props?.data.map((d: Option) => (
-            <option key={d?.id} value={d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
+            <option key={d?.id} value={d?.value ? d?.value :d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
               {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}
             </option>
           ))}

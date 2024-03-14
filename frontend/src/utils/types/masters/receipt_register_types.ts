@@ -12,18 +12,21 @@ export interface ReceiptRegisterDetailsData {
   receipt_mode_id: number | string;
   receipt_date?: string;
   cheque_or_draft_no?: string;
-  bank_id_name?: string;
-  bank_id: number | string;
+  bank_amount: number | string;
   cash_amount: number | string;
   bank_acc_no?: string;
   deposit_date?: string;
   realisation_date?: string;
-  wheather_returned?: string;
+  wheather_returned?: boolean;
   remarks: string;
-  entered_by_id: number | string;
-  entered_by_print_name: string;
-  checked_by_id: number | string;
+  entered_by_id?: number | string;
+  entered_by_print_name?: string;
+  checked_by_id?: number | string;
   checked_by_print_name?: string;
+  del_checked_by_name?: string;
+  del_checked_by_designation?: string;
+  del_entered_by_name?: string;
+  del_entered_by_designation?: string;
 }
 
 export interface ResponseData {

@@ -6,6 +6,7 @@ import React, { ReactElement, ReactNode } from "react";
 import Thead from "../atoms/Thead";
 import Tdata from "../atoms/Tdata";
 import Trow from "../atoms/Trow";
+import utc from "dayjs/plugin/utc"
 
 /**
  * | Author- Sanjiv Kumar
@@ -48,6 +49,7 @@ const Table = <T,>({
   scrollable = false,
   height = "h-96",
 }: SimpleTableProps<T>) => {
+  dayjs.extend(utc);
   const headers = columns.map((column, index) => {
     return (
       <Thead
@@ -75,11 +77,11 @@ const Table = <T,>({
               /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
 
             const value1: ReactNode | string = isoDatePattern.test(`${value}`)
-              ? dayjs(`${value}`).format("DD MMM YYYY")
+              ? dayjs.utc(`${value}`).format("DD MMM YYYY")
               : typeof value === "object"
-                ? (value as ObjectContent).type ||
-                  (value as ObjectContent).name ||
-                  (value as ObjectContent).code
+                ? (value as ObjectContent)?.type ||
+                  (value as ObjectContent)?.name ||
+                  (value as ObjectContent)?.code
                 : column.name === "id"
                   ? index + 1 + (pageNo - 1) * (limit || data.length)
                   : column.value
@@ -102,6 +104,7 @@ const Table = <T,>({
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <div
           className={`hide-scrollbar overflow-x-auto ${scrollable && height}`}
+          id="table-with-pegination"
         >
           <table className={`table table-md`}>
             <thead className="text-[1rem] bg-primary_green text-white">

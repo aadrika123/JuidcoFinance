@@ -8,6 +8,8 @@ import Input from "@/components/global/atoms/Input";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
+import { useSelector } from "react-redux";
+import SelectForNoApi from "@/components/global/atoms/SelectForNoApi";
 
 /**
  * | Author- Sanjiv Kumar
@@ -32,6 +34,9 @@ export interface FormikWrapperProps {
 }
 
 const FormikW: React.FC<FormikWrapperProps> = (props) => {
+  const user = useSelector((state: any) => state.user.user);
+  /////////////// For Transforming in JSON
+
   const {
     initialValues,
     validationSchema,
@@ -39,7 +44,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     readonly = false,
     onClose,
     enableReinitialize,
-    removeShadow=false,
+    removeShadow = false,
   } = props;
 
   return (
@@ -73,6 +78,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.receipt_no}
                     touched={touched.receipt_no}
                     readonly={readonly}
+                    isRequired
                     label="Receipt Number"
                     name="receipt_no"
                     placeholder="Enter Receipt Number"
@@ -85,6 +91,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.ulb_id}
                     touched={touched.ulb_id}
                     readonly={readonly}
+                    isRequired
                     label="ULBs"
                     name="ulb_id"
                     placeholder="Select ULBs"
@@ -98,6 +105,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.primary_acc_code_id}
                     touched={touched.primary_acc_code_id}
                     readonly={readonly}
+                    isRequired
                     label="Primary Accounting Code"
                     name="primary_acc_code_id"
                     placeholder="Select Primary Accounting Code"
@@ -111,10 +119,11 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.revenue_module_id}
                     touched={touched.revenue_module_id}
                     readonly={readonly}
+                    isRequired
                     label="Revenue Module Name"
                     name="revenue_module_id"
                     placeholder="Select Revenue Module Name"
-                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                    api={`${FINANCE_URL.REVENUE_MODULE.get}`}
                   />
 
                   <Input
@@ -124,6 +133,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.paid_by}
                     touched={touched.paid_by}
                     readonly={readonly}
+                    isRequired
                     label="Paid By"
                     name="paid_by"
                     placeholder="Enter Paid By"
@@ -136,10 +146,11 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.receipt_mode_id}
                     touched={touched.receipt_mode_id}
                     readonly={readonly}
+                    isRequired
                     label="Mode of Receipt"
                     name="receipt_mode_id"
                     placeholder="Select Mode of Receipt"
-                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                    api={`${FINANCE_URL.RECEIPT_MODE.get}`}
                   />
 
                   <Input
@@ -149,6 +160,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.receipt_date}
                     touched={touched.receipt_date}
                     readonly={readonly}
+                    isRequired
                     label="Receipt Date"
                     name="receipt_date"
                     type="date"
@@ -167,7 +179,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="Enter Cheque / Draft No"
                   />
 
-                  <Select
+                  {/* <Select
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.bank_id}
@@ -178,6 +190,19 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     name="bank_id"
                     placeholder="Select Bank"
                     api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
+                  /> */}
+
+                  <Input
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.bank_amount}
+                    error={errors.bank_amount}
+                    touched={touched.bank_amount}
+                    readonly={readonly}
+                    label="Bank Amount"
+                    name="bank_amount"
+                    type="number"
+                    placeholder="Enter Bank Amount"
                   />
 
                   <Input
@@ -231,18 +256,29 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="undefined"
                   />
 
-                  <Input
+                  <SelectForNoApi
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.wheather_returned}
+                    value={String(values.wheather_returned)}
                     error={errors.wheather_returned}
                     touched={touched.wheather_returned}
                     readonly={readonly}
                     label="Wheather Returned"
-                    name="wheather_reaturned"
-                    placeholder="Enter Wheather Returned"
+                    name="wheather_returned"
+                    placeholder="Select Weather Returned"
+                    data={[
+                      {
+                        id: 1,
+                        name: "Yes",
+                        value: "true",
+                      },
+                      {
+                        id: 2,
+                        name: "No",
+                        value: "false",
+                      },
+                    ]}
                   />
-
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -250,6 +286,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.remarks}
                     touched={touched.remarks}
                     readonly={readonly}
+                    isRequired
                     label="Remarks"
                     name="remarks"
                     placeholder="Enter Remarks"
@@ -258,26 +295,23 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
 
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="flex flex-col">
-                    <h2 className="mt-6 text-secondary">Entered By</h2>
+                    <h2 className="mt-6 text-secondary">
+                      Entered By<span className="text-red-600 pl-2">*</span>
+                    </h2>
                     <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      // value={values.entered_by}
-                      // error={errors.entered_by}
-                      // touched={touched.entered_by}
-                      readonly={readonly}
+                      value={values.del_entered_by_name || user?.name}
+                      readonly={true}
                       label=""
                       name="entered_by"
                       placeholder="Enter Name"
                     />
 
                     <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      // value={values.designation}
-                      // error={errors.designation}
-                      // touched={touched.designation}
-                      readonly={readonly}
+                      value={
+                        values.del_entered_by_designation ||
+                        user?.designation?.name
+                      }
+                      readonly={true}
                       label=""
                       name="designation"
                       placeholder="Enter Designation"
@@ -295,44 +329,38 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       placeholder="Enter Print Name"
                     />
                   </div>
-                  <div className="flex flex-col">
-                    <h2 className="mt-6 text-secondary">Checked By</h2>
-                    <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      // value={values.checked_by}
-                      // error={errors.checked_by}
-                      // touched={touched.checked_by}
-                      readonly={readonly}
-                      label=""
-                      name="checked_by"
-                      placeholder="Enter Name"
-                    />
+                  {readonly && (
+                    <div className="flex flex-col">
+                      <h2 className="mt-6 text-secondary">Checked By</h2>
+                      <Input
+                        value={values.del_checked_by_name}
+                        readonly={readonly}
+                        label=""
+                        name="checked_by"
+                        placeholder="Enter Name"
+                      />
 
-                    <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      // value={values.designation1}
-                      // error={errors.designation1}
-                      // touched={touched.designation1}
-                      readonly={readonly}
-                      label=""
-                      name="designation1"
-                      placeholder="Enter Designation1"
-                    />
+                      <Input
+                        value={values.del_checked_by_designation}
+                        readonly={readonly}
+                        label=""
+                        name="designation1"
+                        placeholder="Enter Designation"
+                      />
 
-                    <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.checked_by_print_name}
-                      error={errors.checked_by_print_name}
-                      touched={touched.checked_by_print_name}
-                      readonly={readonly}
-                      label=""
-                      name="checked_by_print_name"
-                      placeholder="Enter Print Name"
-                    />
-                  </div>
+                      <Input
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.checked_by_print_name}
+                        error={errors.checked_by_print_name}
+                        touched={touched.checked_by_print_name}
+                        readonly={readonly}
+                        label=""
+                        name="checked_by_print_name"
+                        placeholder="Enter Print Name"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 

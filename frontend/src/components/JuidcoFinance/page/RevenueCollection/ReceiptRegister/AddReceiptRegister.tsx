@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
 import FormikW from "./ReceiptRegisterFormFields";
+import { useSelector } from "react-redux";
 
 interface UpdatedModeType {
   id: number | string;
@@ -24,6 +25,9 @@ const Hoc = PopupFormikHOC(FormikW);
 
 export const AddReceiptRegister = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user.user);
+   /////////////// For Transforming in JSON
+
   const queryClient = new QueryClient();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
@@ -38,17 +42,15 @@ export const AddReceiptRegister = () => {
     receipt_mode_id: "",
     receipt_date: "",
     cheque_or_draft_no: "",
-    bank_id: "",
+    bank_amount: "",
     cash_amount: "",
     bank_acc_no: "",
     deposit_date: "",
     realisation_date: "",
-    wheather_returned: "",
+    wheather_returned: true,
     remarks: "",
-    entered_by_id: "",
-    entered_by_print_name: "",
-    checked_by_id: "",
-    checked_by_print_name: "",
+    entered_by_id: user?.id,
+    entered_by_print_name: ""
   };
 
   const [data, setData] = useState<ReceiptRegisterDetailsData[]>([]);
@@ -67,7 +69,7 @@ export const AddReceiptRegister = () => {
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
     if (!isUpdateMode.isOnEdit) {
-      setData((prev) => [...prev, { id: prev.length + 1, ...values }]);
+      setData((prev) => [...prev, { id: prev.length + 1, ...values, entered_by_id: user.id }]);
     } else {
       setData((prev) => {
         const updatedData = prev.map((item) => {
@@ -90,20 +92,15 @@ export const AddReceiptRegister = () => {
                 values.receipt_mode_id_name || item.receipt_mode_id_name,
               receipt_date: values.receipt_date,
               cheque_or_draft_no: values.cheque_or_draft_no,
-              bank_id: values.bank_id,
-              bank_id_name: values.bank_id_name || item.bank_id_name,
+              bank_amount: values.bank_amount || item.bank_amount,
               cash_amount: values.cash_amount,
               bank_acc_no: values.bank_acc_no,
               deposit_date: values.deposit_date,
               realisation_date: values.realisation_date,
               wheather_reaturned: values.wheather_reaturned,
               remarks: values.remarks,
-              entered_by: values.entered_by,
-              designation: values.designation,
-              print_name: values.print_name,
-              checked_by: values.checked_by,
-              designation1: values.designation1,
-              print_name1: values.print_name1,
+              entered_by_id: user.id,
+              entered_by_print_name: values.entered_by_print_name,
             };
           } else {
             return item;
@@ -121,8 +118,9 @@ export const AddReceiptRegister = () => {
     values: ReceiptRegisterDetailsData
   ): Promise<ReceiptRegisterDetailsData> => {
     try {
+      console.log("first", filterValBefStoring(values))
       const res = await axios({
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.create}`,
+        url: `${FINANCE_URL.RECEIPT_REGISTER.create}`,
         method: "POST",
         data: filterValBefStoring(values),
       });
@@ -191,7 +189,7 @@ export const AddReceiptRegister = () => {
       receipt_mode_id: data[Id - 1]?.receipt_mode_id,
       receipt_date: data[Id - 1]?.receipt_date,
       cheque_or_draft_no: data[Id - 1]?.cheque_or_draft_no,
-      bank_id: data[Id - 1]?.bank_id,
+      bank_amount: data[Id - 1]?.bank_amount,
       cash_amount: data[Id - 1]?.cash_amount,
       bank_acc_no: data[Id - 1]?.bank_acc_no,
       deposit_date: data[Id - 1]?.deposit_date,
@@ -199,9 +197,7 @@ export const AddReceiptRegister = () => {
       wheather_returned: data[Id - 1]?.wheather_returned,
       remarks: data[Id - 1]?.remarks,
       entered_by_id: data[Id - 1]?.entered_by_id,
-      entered_by_print_name: data[Id - 1]?.entered_by_print_name,
-      checked_by_id: data[Id - 1]?.checked_by_id,
-      checked_by_print_name: data[Id - 1]?.checked_by_print_name,
+      entered_by_print_name: data[Id - 1]?.entered_by_print_name
     }));
     dispatch(openPopup());
   };
@@ -261,6 +257,7 @@ export const AddReceiptRegister = () => {
       <TableWithCount
         data={data}
         scrollable
+        center
         title="Add Receipt Register Table"
         columns={columns}
         footerData={footerData}
