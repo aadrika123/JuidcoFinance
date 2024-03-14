@@ -1,0 +1,8 @@
+////receipt_register: Managed by: Sanjiv Kumar
+
+model daily_receipt_balances{
+  id                    Int               @id @default(autoincrement())
+  opening_balance       Float?
+  created_at            DateTime          @default(now()) @map("created_at")
+  updated_at            DateTime          @updatedAt @map("updated_at")
+}

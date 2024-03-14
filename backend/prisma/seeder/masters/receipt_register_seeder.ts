@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 const receipt_register_seeder = async () => {
-  const number_of_records = 10;
+  const number_of_records = 20;
   for (let i = 0; i < number_of_records; i++) {
     const record = {
       receipt_no: faker.random.alphaNumeric(6),
@@ -13,7 +13,7 @@ const receipt_register_seeder = async () => {
       receipt_mode_id: 1,
       receipt_date: faker.date.past(),
       cheque_or_draft_no: faker.random.numeric(8),
-      bank_id: 1,
+      bank_amount: faker.datatype.number(),
       cash_amount: faker.datatype.number(),
       bank_acc_no: String(faker.datatype.number(8)),
       deposit_date: faker.date.past(),

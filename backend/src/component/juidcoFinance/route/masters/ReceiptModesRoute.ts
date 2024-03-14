@@ -18,7 +18,7 @@ class ReceiptModesRoute {
   }
 
   configure(app: express.Application, apiId: string): void {
-    app.route(`${baseUrl}/receipt-modes/get`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "01"));
+    app.route(`${baseUrl}/receipt-modes/get-all`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "01"));
   }
 }
 

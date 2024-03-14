@@ -27,8 +27,14 @@ class AuthDao {
           select: {
             id: true,
             name: true,
-          },
-        },
+            udhd:{
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        }
       },
     });
 

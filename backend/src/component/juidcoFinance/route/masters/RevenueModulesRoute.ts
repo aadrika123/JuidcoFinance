@@ -17,7 +17,7 @@ class RevenueModulesRoute {
   }
 
   configure(app: express.Application, apiId: string): void {
-    app.route(`${baseUrl}/revenue-modules/get`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "01"));
+    app.route(`${baseUrl}/revenue-modules/get-all`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "01"));
   }
 }
 

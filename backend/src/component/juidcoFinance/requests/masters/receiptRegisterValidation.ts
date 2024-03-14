@@ -10,7 +10,7 @@ export interface ReceiptRegisterRequestData {
   receipt_mode_id: number;
   receipt_date: Date;
   cheque_or_draft_no: string;
-  bank_id: number;
+  bank_amount: number;
   cash_amount: number;
   bank_acc_no: string;
   deposit_date: Date;
@@ -32,7 +32,7 @@ const receiptRegisterSchema = Joi.object({
   receipt_mode_id: Joi.number().required(),
   receipt_date: Joi.date().required(),
   cheque_or_draft_no: Joi.string(),
-  bank_id: Joi.number(),
+  bank_amount: Joi.number(),
   cash_amount: Joi.number(),
   bank_acc_no: Joi.string(),
   deposit_date: Joi.date(),
@@ -61,7 +61,7 @@ export const requestData = (req: Request): ReceiptRegisterRequestData => {
     receipt_mode_id: req.body.receipt_mode_id,
     receipt_date: req.body.receipt_date,
     cheque_or_draft_no: req.body.cheque_or_draft_no,
-    bank_id: req.body.bank_id,
+    bank_amount: req.body.bank_amount,
     cash_amount: req.body.cash_amount,
     bank_acc_no: req.body.bank_acc_no,
     deposit_date: req.body.deposit_date,
@@ -88,7 +88,7 @@ export const multiRequestData = (
       receipt_mode_id: item.receipt_mode_id,
       receipt_date: item.receipt_date,
       cheque_or_draft_no: item.cheque_or_draft_no,
-      bank_id: item.bank_id,
+      bank_amount: item.bank_amount,
       cash_amount: item.cash_amount,
       bank_acc_no: item.bank_acc_no,
       deposit_date: item.deposit_date,
@@ -103,3 +103,25 @@ export const multiRequestData = (
   }
   return data;
 };
+
+const receiptRegisterIdsSchema = Joi.object({
+  id: Joi.number().required(),
+});
+
+export const receiptRegisterApproveSchema = Joi.object({
+  checked_by_id: Joi.number().required(),
+  checked_by_print_name: Joi.string().required(),
+  ids: Joi.array().required().items(
+    receiptRegisterIdsSchema
+  ),
+});
+
+export const openingBalanceSchema = Joi.object({
+  opening_balance: Joi.number().required()
+})
+
+export const updateOpeningBalanceSchema = Joi.object({
+  id: Joi.number().required(),
+  opening_balance: Joi.number().required()
+})
+

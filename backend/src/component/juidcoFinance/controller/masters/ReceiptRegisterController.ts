@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Joi from "joi";
 import ReceiptRegisterDao from "../../dao/masters/ReceiptRegisterDao";
-import { receiptRegisterValidation, receiptRegisterValidationWithID } from "../../requests/masters/receiptRegisterValidation";
+import { openingBalanceSchema, receiptRegisterApproveSchema, receiptRegisterValidation, receiptRegisterValidationWithID, updateOpeningBalanceSchema } from "../../requests/masters/receiptRegisterValidation";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
 import { resObj } from "../../../../util/types";
@@ -140,6 +140,83 @@ class ReceiptRegisterController {
       return CommonRes.SERVER_ERROR(error, resObj, res);
     }
   };
+
+  // Appropve or Check payment entry details by Id
+  approve = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
+    try {
+      const { error } = receiptRegisterApproveSchema.validate(req.body);
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.receiptRegisterDao.approve(req);
+      return CommonRes.CREATED(
+        resMessage(this.initMesg).UPDATED,
+        data,
+        resObj,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  };
+
+  // Create Opeining Balance
+  createOpeningBal = async(req: Request, res: Response, apiId: string) => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
+    try{
+      const { error } = openingBalanceSchema.validate(req.body);
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.receiptRegisterDao.createOpeningBal(req);
+      return CommonRes.CREATED(
+        resMessage('Opening Balance').CREATED,
+        data,
+        resObj,
+        res
+      );
+    }catch(error: any){
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  }
+
+
+  // Update Opeining Balance
+  updateOpeningBal = async(req: Request, res: Response, apiId: string) => {
+    const resObj: resObj = {
+      apiId,
+      action: "POST",
+      version: "1.0",
+    };
+    try{
+      const { error } = updateOpeningBalanceSchema.validate(req.body);
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+
+      const data = await this.receiptRegisterDao.updateOpeningBal(req);
+      return CommonRes.CREATED(
+        resMessage('Opening Balance').UPDATED,
+        data,
+        resObj,
+        res
+      );
+    }catch(error: any){
+      return CommonRes.SERVER_ERROR(error, resObj, res);
+    }
+  }
 }
 
 export default ReceiptRegisterController;

@@ -54,7 +54,7 @@ const employees_seeder = async () => {
       {
         name: "Prity Singh",
         designation: "Accounts Department – Accountant",
-        email: 'viizz29@gmail.com',
+        email: 'prity29@gmail.com',
         user_id: 'prity29',
       },
       {

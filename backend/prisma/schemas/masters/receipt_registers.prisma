@@ -12,9 +12,8 @@ model receipt_registers {
   receipt_mode_id       Int
   receipt_mode          receipt_modes       @relation(fields: [receipt_mode_id], references: [id])
   receipt_date          DateTime
-  cheque_or_draft_no    String
-  bank_id               Int?
-  bank                  banks?              @relation(fields: [bank_id], references: [id])
+  cheque_or_draft_no    String?
+  bank_amount           Float?
   cash_amount           Float?
   bank_acc_no           String?
   deposit_date          DateTime?
@@ -24,9 +23,10 @@ model receipt_registers {
   entered_by_id         Int
   entered_by            employees          @relation("entered_by", fields: [entered_by_id], references: [id])
   entered_by_print_name String
-  checked_by_id         Int
-  checked_by            employees          @relation("checked_by", fields: [checked_by_id], references: [id])
-  checked_by_print_name String
+  checked_by_id         Int?
+  checked_by            employees?         @relation("checked_by", fields: [checked_by_id], references: [id])
+  checked_by_print_name String?
+  isChecked             Boolean             @default(false)
   created_at            DateTime           @default(now()) @map("created_at")
   updated_at            DateTime           @updatedAt @map("updated_at")
 }

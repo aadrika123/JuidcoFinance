@@ -50,6 +50,7 @@ import receipt_register_seeder from "./seeder/masters/receipt_register_seeder";
 import receipt_modes_seeder from "./seeder/masters/receipt_modes_seeder";
 import revenue_modules_seeder from "./seeder/masters/revenue_modules_seeder";
 import bank_types_seeder from "./seeder/masters/bank_types_seeder";
+import daily_receipt_balance_seeder from "./seeder/revenueCollection/daily_receipt_balances_seeder";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -257,6 +258,8 @@ async function main() {
     await advance_management_seeder();
 
     await receipt_register_seeder();
+
+    await daily_receipt_balance_seeder();
   }, 6000);
 
 
