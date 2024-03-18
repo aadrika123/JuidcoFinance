@@ -26,7 +26,7 @@ const HomeCard: React.FC<HomeCardProps> = (props) => {
           {props.title}
         </h2>
         <div
-          className={`h-9 w-6 rounded-lg font-bold flex items-center justify-center ${props.color === "green" ? "text-[#10904D] bg-[#B7FBD4]" : "text-primary_green bg-[#EEF2FF]"} `}
+          className={`h-9 w-6 rounded-lg font-bold flex items-center justify-center ${props.color === "green" ? "text-[#10904D] bg-[#B7FBD4]" : "text-primary_bg_indigo bg-[#EEF2FF]"} `}
         >
           0
         </div>

@@ -15,7 +15,7 @@ describe("Button component", () => {
 
     const button = getByText("Click me");
 
-    expect(button).toHaveClass("bg-primary_green");
+    expect(button).toHaveClass("bg-primary_bg_indigo");
 
     fireEvent.click(button);
 

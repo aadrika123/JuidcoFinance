@@ -191,7 +191,7 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
 
       <ViewBankHeader title="View/Edit Bank Account" buttons={buttons}   />
       
-      < section className="border bg-white rounded-lg border-primary_green p-6 px-10">
+      < section className="border bg-white rounded-lg border-primary_bg_indigo p-6 px-10">
 
         {isFetching ? (
           <Loader />

@@ -19,7 +19,7 @@ interface InputProps {
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  isRequired?: boolean | false;
+  required?: boolean | false;
 }
 
 const Input: React.FC<InputProps> = (props) => {
@@ -37,11 +37,11 @@ const Input: React.FC<InputProps> = (props) => {
       <div className="flex flex-col gap-1">
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
-          {props.isRequired? (<span className="text-red-600 pl-2">*</span>):("")}
+          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
         </label>
         <input
           disabled={props.readonly}
-          required={props.isRequired}
+          required={props.required}
           placeholder={props.placeholder}
           onChange={props.onChange}
           onBlur={props.onBlur}

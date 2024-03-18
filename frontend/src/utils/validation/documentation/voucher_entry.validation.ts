@@ -1,33 +1,34 @@
-import * as yup from "yup";
-
-export const voucherSchema = yup.object().shape({
-  voucher_date: yup.date().required("Voucher date is required"),
-  voucher_type_id: yup
-    .number()
-    .required("Voucher type ID is required")
-    .positive("Voucher type ID must be positive"),
-  narration: yup.string().required("Narration is required"),
-  department_id: yup
-    .number()
-    .required("Department ID is required")
-    .positive("Department ID must be positive"),
-  adminis_ward_id: yup
-    .number()
-    .required("Adminis ward ID is required")
-    .positive("Adminis ward ID must be positive"),
-  voucher_sub_id: yup
-    .number()
-    .required("Voucher sub ID is required")
-    .positive("Voucher sub ID must be positive"),
-  sub_ledger_id: yup
-    .number()
-    .required("Sub ledger ID is required")
-    .positive("Sub ledger ID must be positive"),
-  amount: yup
-    .number()
-    .required("Amount is required")
-    .moreThan(0, "Amount must be greater than 0"),
-  dr_cr_id: yup
-    .number()
-    .required("Dr/Cr is required"),
-});
+import * as Yup from "yup";
+export const voucherEntryDetailsSchema = Yup.object().shape({
+voucher_type_id: Yup.number().required("Voucher Type  is required"),
+ulb_id: Yup.number().required("Ulb  is required"),
+date: Yup.string().required("Date is required"),
+fund_id: Yup.number().required("Fund  is required"),
+journal_voucher_no: Yup.string().required("Journal Voucher No is required"),
+bank_id: Yup.number().required("Bank  is required"),
+payment_date: Yup.string().required("Payment Date is required"),
+department_id: Yup.number().required("Department  is required"),
+pay_slip_ref_no: Yup.string().required("Pay Slip Ref No is required"),
+pay_slip_date: Yup.string().required("Pay Slip Date is required"),
+crv_bpv_no: Yup.string().required("Crv Bpv No is required"),
+receipt_date: Yup.string().required("Receipt Date is required"),
+primary_acc_code_id: Yup.number().required("Primary Acc Code  is required"),
+payment_order_no: Yup.string().required("Payment Order No is required"),
+acc_description: Yup.string().required("Acc Description is required"),
+debit_amount: Yup.number().required("Debit Amount is required"),
+credit_amount: Yup.number().required("Credit Amount is required"),
+remittance_money_no: Yup.string().required("Remittance Money No is required"),
+amount: Yup.number().required("Amount is required"),
+cheque_no: Yup.string().required("Cheque No is required"),
+total_amount: Yup.number().required("Total Amount is required"),
+amount_in_words: Yup.string().required("Amount In Words is required"),
+prepared_by: Yup.string().required("Prepared By is required"),
+prepared_by_date: Yup.string().required("Prepared By Date is required"),
+verified_by_id: Yup.number().required("Verified By  is required"),
+verified_by_date: Yup.string().required("Verified By Date is required"),
+approved_by_id: Yup.number().required("Approved By  is required"),
+approved_by_date: Yup.string().required("Approved By Date is required"),
+posted_by_id: Yup.number().required("Posted By  is required"),
+posted_by_date: Yup.string().required("Posted By Date is required"),
+receiver_name: Yup.string().required("Receiver Name is required"),
+})

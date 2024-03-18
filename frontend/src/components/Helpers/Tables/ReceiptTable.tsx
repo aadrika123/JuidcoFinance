@@ -15,7 +15,7 @@ const ReceiptTable: React.FC = () => {
     <>
       <div className="overflow-x-auto border-[2px] border-zinc-400">
         <table className="table table-md">
-          <thead className="  text-[1rem] bg-primary_green text-white border border-t-2 border-zinc-400 ">
+          <thead className="  text-[1rem] bg-primary_bg_indigo text-white border border-t-2 border-zinc-400 ">
             <tr>
               <th className="border border-zinc-400">
                 <div className="flex gap-2 font-medium text-center">

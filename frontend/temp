@@ -126,7 +126,7 @@ const Table = () => {
     <>
       <div className="overflow-x-auto">
         <table className="table table-md border">
-          <thead className="bg-primary_green text-white ">
+          <thead className="bg-primary_bg_indigo text-white ">
             <tr className=" ">
               <th className="border border-zinc-200 p-4 flex items-center gap-2">
                 Sr No.

@@ -9,7 +9,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { useSelector } from "react-redux";
-import SelectForNoApi from "@/components/global/atoms/SelectForNoApi";
+import RadioButtons from "@/components/global/atoms/RadioButton";
 
 /**
  * | Author- Sanjiv Kumar
@@ -78,7 +78,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.receipt_no}
                     touched={touched.receipt_no}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Receipt Number"
                     name="receipt_no"
                     placeholder="Enter Receipt Number"
@@ -91,7 +91,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.ulb_id}
                     touched={touched.ulb_id}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="ULBs"
                     name="ulb_id"
                     placeholder="Select ULBs"
@@ -105,7 +105,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.primary_acc_code_id}
                     touched={touched.primary_acc_code_id}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Primary Accounting Code"
                     name="primary_acc_code_id"
                     placeholder="Select Primary Accounting Code"
@@ -119,7 +119,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.revenue_module_id}
                     touched={touched.revenue_module_id}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Revenue Module Name"
                     name="revenue_module_id"
                     placeholder="Select Revenue Module Name"
@@ -133,7 +133,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.paid_by}
                     touched={touched.paid_by}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Paid By"
                     name="paid_by"
                     placeholder="Enter Paid By"
@@ -146,7 +146,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.receipt_mode_id}
                     touched={touched.receipt_mode_id}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Mode of Receipt"
                     name="receipt_mode_id"
                     placeholder="Select Mode of Receipt"
@@ -160,7 +160,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.receipt_date}
                     touched={touched.receipt_date}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Receipt Date"
                     name="receipt_date"
                     type="date"
@@ -255,26 +255,22 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     type="date"
                     placeholder="undefined"
                   />
-
-                  <SelectForNoApi
+                  <RadioButtons
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={String(values.wheather_returned)}
+                    value={`${values.wheather_returned}`}
                     error={errors.wheather_returned}
                     touched={touched.wheather_returned}
                     readonly={readonly}
                     label="Wheather Returned"
                     name="wheather_returned"
-                    placeholder="Select Weather Returned"
-                    data={[
+                    options={[
                       {
-                        id: 1,
-                        name: "Yes",
+                        key: "Yes",
                         value: "true",
                       },
                       {
-                        id: 2,
-                        name: "No",
+                        key: "No",
                         value: "false",
                       },
                     ]}
@@ -286,7 +282,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     error={errors.remarks}
                     touched={touched.remarks}
                     readonly={readonly}
-                    isRequired
+                    required
                     label="Remarks"
                     name="remarks"
                     placeholder="Enter Remarks"

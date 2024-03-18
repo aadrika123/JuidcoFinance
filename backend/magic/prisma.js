@@ -20,7 +20,7 @@ const getSchemaFileList = async (folder, list) => {
 
     for (let i = 0; i < subFolders.length; i++) {
         await getSchemaFileList(subFolders[i], list);
-    };
+    }
 }
 
 

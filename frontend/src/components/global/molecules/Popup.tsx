@@ -10,15 +10,16 @@ interface PopupProps {
   bgColor? : string;
   width?: string;
   height?: string;
+  opacity?: string;
 }
 
-const Popup: React.FC<PopupProps> = ({ children, title, closeModal, width="70%", bgColor="white" }) => {
+const Popup: React.FC<PopupProps> = ({ children, title, closeModal, width="70%", bgColor="white", opacity="" }) => {
   return (
     <>
       <div className="fixed top-0 left-0 w-full h-full bg-black opacity-40 z-30"></div>
       <section className={`fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[${width}] max-h-[90%] overflow-auto z-50 rounded-xl hide-scrollbar`}>
         <div className="relative z-50 ">
-          <div className={`w-full rounded-lg h-auto backdrop-blur-lg bg-${bgColor} border shadow-lg flex flex-col  p-5`}>
+          <div className={`w-full rounded-lg h-auto backdrop-blur-lg bg-${bgColor} border shadow-lg flex flex-col ${opacity} p-5`}>
             <Heading>{title}</Heading>
             <div className="flex flex-col w-full gap-5 mt-5">{children}</div>
             {closeModal && (

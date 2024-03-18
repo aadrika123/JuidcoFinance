@@ -23,5 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/redux/store.js", "__test__/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "magic"]
 }

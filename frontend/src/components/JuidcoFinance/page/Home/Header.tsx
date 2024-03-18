@@ -5,11 +5,11 @@ const HomeHeader = () => {
   return (
     <div className="bg-white flex items-center justify-between p-4 shadow-lg border">
       <div>
-        <h2 className="text-secondary_black text-base font-semibold">
+        <h2 className="text-secondary_black text-base font-semibold max-sm:text-sm">
           Finance Home Page
         </h2>
 
-        <p className="text-sm flex items-center">
+        <p className="text-sm flex items-center max-sm:text-xs">
           <svg
             width="15"
             height="15"
@@ -39,14 +39,14 @@ const HomeHeader = () => {
           verified account
         </p>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center max-sm:flex-col gap-1">
         <Button
           variant="primary"
-          className="mr-2 bg-white text-secondary_black shadow-lg border rounded-2xl"
+          className="mr-2 bg-white text-secondary_black shadow-lg border rounded-2xl max-sm:text-[10px] text-nowrap"
         >
           Change Password
         </Button>
-        <Button variant="primary" className="shadow-xl border rounded-2xl">
+        <Button variant="primary" className="shadow-xl border rounded-2xl max-sm:text-[10px]">
           View Profile
         </Button>
       </div>

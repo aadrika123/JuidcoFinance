@@ -65,7 +65,7 @@ export const HeroReceiptRegister = () => {
       <>
         <Checkboxes
           onChange={() => handleCheckbox(id)}
-          className="checkbox checked:bg-primary_green"
+          className="checkbox checked:bg-primary_bg_indigo"
           name="x"
         />
       </>

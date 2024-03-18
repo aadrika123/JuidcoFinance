@@ -30,7 +30,7 @@ const RequestNewAccountCode: React.FC<FormikWrapperProps> = (props) => {
     onClose,
   } = props;
   return (
-    <section className="border bg-white rounded-lg border-primary_green p-6 px-10">
+    <section className="border bg-white rounded-lg border-primary_bg_indigo p-6 px-10">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

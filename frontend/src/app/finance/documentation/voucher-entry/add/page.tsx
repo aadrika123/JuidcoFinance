@@ -1,4 +1,4 @@
-import { AddVoucherEntry } from "@/components/JuidcoFinance/page/Documentation/VoucherEntry/AddVoucher/Index";
+import { AddVoucherEntry } from "@/components/JuidcoFinance/page/Documentation/VoucherEntry/AddVoucherEntry";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 

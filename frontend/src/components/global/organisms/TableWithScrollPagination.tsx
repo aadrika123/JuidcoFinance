@@ -142,12 +142,12 @@ const TableWithScrollPagination = <T,>({
     <>
       <section className="border shadow-xl bg-white p-6 px-10">
         <div className="flex justify-between items-center mb-6">
-          <div className="text-primary_green rounded-md px-2 pb-1 bg-primary_green text-sub_head font-semibold flex items-center">
+          <div className="text-primary_bg_indigo rounded-md px-2 pb-1 bg-primary_bg_indigo text-sub_head font-semibold flex items-center">
             <Select
               label=""
               name="ulb_id"
               placeholder="ULB Name"
-              className="w-48 text-primary_green bg-white outline-none"
+              className="w-48 text-primary_bg_indigo bg-white outline-none"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
             />

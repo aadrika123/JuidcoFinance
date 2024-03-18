@@ -19,7 +19,7 @@ interface InputBox2Props {
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e?: React.FocusEvent<HTMLInputElement>) => void;
-  isRequired?: boolean | false;
+  required?: boolean | false;
 }
 
 const InputBox2: React.FC<InputBox2Props> = (props) => {
@@ -33,7 +33,7 @@ const InputBox2: React.FC<InputBox2Props> = (props) => {
         </label>
         <input
           readOnly={props.isReadOnly}
-          required={props.isRequired}
+          required={props.required}
           placeholder={props.placeholder}
           onChange={props.onChange}
           onBlur={props.onBlur}
