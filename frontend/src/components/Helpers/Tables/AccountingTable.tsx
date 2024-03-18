@@ -18,7 +18,7 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
             <tr className="bg-white text-center">
               <th
                 className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray"
-                colSpan={3} rowSpan={2}
+                colSpan={3}
               >
                 <div className="text-center bg-primary_bg_gray p-4">
                   Major Head
@@ -26,7 +26,7 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
               </th>
               <th
                 className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray"
-                colSpan={2} rowSpan={2}
+                colSpan={2}
               >
                 <div className="text-center bg-primary_bg_gray p-4">                
                   <span>Minor Head</span>
@@ -35,7 +35,7 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
 
               <th
                 className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray"
-                colSpan={2} rowSpan={2}
+                colSpan={2}
               >
                 <div className="text-center bg-primary_bg_gray p-4">
                   <span>Detail Head</span>
@@ -52,6 +52,12 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
               <div className="text-center bg-primary_bg_gray p-4">
                   <span>Balances</span>
                 </div>
+
+                <div className="text-center bg-primary_bg_gray p-4 flex justify-between">
+                  <div className="ml-8">DR</div>
+                  <div className="mr-8">CR</div>
+                </div>
+
               </th>
               <th className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray" rowSpan={2}>
               <div className="text-center bg-primary_bg_gray p-4">
@@ -59,18 +65,7 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
                 </div>
               </th>
             </tr>
-            <tr>
-              <th className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray">
-              <div className="text-center bg-primary_bg_gray p-4">
-                  <span>DR (₹)</span>
-                </div>
-              </th>
-              <th className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray">
-              <div className="text-center bg-primary_bg_gray p-4">
-                  <span>CR (₹)</span>
-                </div>
-              </th>
-           </tr>
+            
           </thead>
           <tbody className="">
             {props.data?.map((d, index: number) => (
