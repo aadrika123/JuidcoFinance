@@ -24,7 +24,7 @@ interface RadioButtonProps {
   touched?: boolean | undefined;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handler?: (id: number | string) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -33,7 +33,7 @@ const RadioButtons: React.FC<RadioButtonProps> = (props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange && onChange(e);
-    handler && handler(e);
+    handler && handler(e.target.value);
   };
   return (
     <div>
@@ -45,16 +45,17 @@ const RadioButtons: React.FC<RadioButtonProps> = (props) => {
               <div className="flex items-center mr-3" key={option.key}>
                 <input
                   disabled={props.readonly}
-                  className="cursor-pointer mr-1 w-4 h-4 checkbox checkbox-success bg-gray-100 focus:ring-primary_green dark:ring-offset-gray-100 focus:ring-2 dark:bg-gray-100 dark:border-primary_green focus:border-white"
-                  // className="cursor-pointer mr-1 w-4 h-4 checkbox text-yellow-400 bg-gray-100 border-red-600 focus:ring-primary_green dark:ring-offset-gray-100 focus:ring-2 dark:bg-gray-100 dark:border-primary_green focus:border-white"
-                  // className="cursor-pointer mr-1 checkbox checkbox-success w-4 h-4 text-primary_green bg-white focus:ring-primary_green dark:ring-offset-white focus:ring-offset-white focus:ring-2 dark:bg-white border-primary_green"
+                  // className="cursor-pointer mr-1 w-4 h-4 checkbox checkbox-success bg-gray-100 focus:ring-primary_bg_indigo dark:ring-offset-gray-100 focus:ring-2 dark:bg-gray-100 dark:border-primary_bg_indigo focus:border-white "
+                  className="mr-1 appearance-none border border-zinc-400 rounded w-6 h-6 checked:bg-primary_bg_indigo checked:text-white  checked:border-transparent cursor-pointer"
+                  // className="cursor-pointer mr-1 w-4 h-4 checkbox text-yellow-400 bg-gray-100 border-red-600 focus:ring-primary_bg_indigo dark:ring-offset-gray-100 focus:ring-2 dark:bg-gray-100 dark:border-primary_bg_indigo focus:border-white"
+                  // className="cursor-pointer mr-1 checkbox checkbox-success w-4 h-4 text-primary_bg_indigo bg-white focus:ring-primary_bg_indigo dark:ring-offset-white focus:ring-offset-white focus:ring-2 dark:bg-white border-primary_bg_indigo"
                   type="radio"
                   id={option.value}
                   {...field}
                   {...rest}
                   onChange={handleChange}
                   value={option.value}
-                  checked={field.value === option.value}
+                  checked={String(field.value) === option.value}
                 />
                 <label
                   className="text-secondary text-sm selected"

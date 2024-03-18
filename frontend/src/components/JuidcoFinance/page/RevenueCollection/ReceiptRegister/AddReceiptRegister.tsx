@@ -9,7 +9,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
-import goBack, { filterValBefStoring } from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
@@ -40,14 +40,14 @@ export const AddReceiptRegister = () => {
     revenue_module_id: "",
     paid_by: "",
     receipt_mode_id: "",
-    receipt_date: "",
+    receipt_date: DateFormatter(String(new Date())),
     cheque_or_draft_no: "",
     bank_amount: "",
     cash_amount: "",
     bank_acc_no: "",
     deposit_date: "",
     realisation_date: "",
-    wheather_returned: true,
+    wheather_returned: undefined,
     remarks: "",
     entered_by_id: user?.id,
     entered_by_print_name: ""
@@ -97,7 +97,7 @@ export const AddReceiptRegister = () => {
               bank_acc_no: values.bank_acc_no,
               deposit_date: values.deposit_date,
               realisation_date: values.realisation_date,
-              wheather_reaturned: values.wheather_reaturned,
+              wheather_returned: Boolean(values.wheather_returned),
               remarks: values.remarks,
               entered_by_id: user.id,
               entered_by_print_name: values.entered_by_print_name,
@@ -118,7 +118,6 @@ export const AddReceiptRegister = () => {
     values: ReceiptRegisterDetailsData
   ): Promise<ReceiptRegisterDetailsData> => {
     try {
-      console.log("first", filterValBefStoring(values))
       const res = await axios({
         url: `${FINANCE_URL.RECEIPT_REGISTER.create}`,
         method: "POST",
@@ -222,7 +221,12 @@ export const AddReceiptRegister = () => {
     },
     {
       name: "cash_amount",
-      caption: "Amount",
+      caption: "Cash Amount",
+      width: "w-[25%]",
+    },
+    {
+      name: "bank_amount",
+      caption: "Bank Amount",
       width: "w-[25%]",
     },
     {

@@ -99,7 +99,7 @@ const HeroHomePage = () => {
         Home
       </h1>
       <HomeHeader />
-      <div className="flex items-center justify-between my-6">
+      <div className="flex items-center justify-between flex-wrap my-6 gap-5 max-md:justify-center">
         <HomeCard color="green" title="Number of Receipts" />
         <HomeCard color="blue" title="Number of Payments" />
         <RactangleCard title="Receipt Register" />

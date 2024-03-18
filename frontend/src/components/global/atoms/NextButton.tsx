@@ -9,7 +9,7 @@ const NextButton: React.FC<NextButtonProps> = ({
 }) => {
   return (
     <button
-      className={"bg-primary_green p-2.5 px-5 text-[0.875rem] flex items-center gap-3 btn-neutral hover:border-neutral-400 rounded-md font-medium text-white hover:bg-neutral-700 hover:text-white"}
+      className={"bg-primary_bg_indigo p-2.5 px-5 text-[0.875rem] flex items-center gap-3 btn-neutral hover:border-neutral-400 rounded-md font-medium text-white hover:bg-neutral-700 hover:text-white"}
       {...props}
     >
       Next

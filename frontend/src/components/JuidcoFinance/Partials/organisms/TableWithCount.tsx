@@ -60,7 +60,7 @@ const TableWithCount: React.FC<TableHOCProps<unknown>> = (props) => {
   return (
     <>
       {isOpen && (
-        <Popup width="30%" bgColor="primary_bg" title="">
+        <Popup width="30%" bgColor="[#E3E8FF]" title="" opacity="bg-opacity-15">
           <LosingDataConfirm
             cancel={handleConfirmButton}
             continue={state === "back" ? goBack : props.handleResetTable}

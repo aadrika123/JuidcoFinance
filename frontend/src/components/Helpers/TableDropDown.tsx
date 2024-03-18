@@ -16,7 +16,7 @@ interface DropDownListProps {
   api: string;
   className?: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  isRequired?: boolean | false;
+  required?: boolean | false;
 }
 
 interface DropDownList {
@@ -49,7 +49,7 @@ const TableDropDownList: React.FC<DropDownListProps> = (props) => {
       <div className="flex flex-col gap-1">
         <select
           onChange={props.onChange}
-          required={props.isRequired}
+          required={props.required}
           value={props.value}
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}

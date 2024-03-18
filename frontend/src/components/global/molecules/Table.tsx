@@ -107,7 +107,7 @@ const Table = <T,>({
           id="table-with-pegination"
         >
           <table className={`table table-md`}>
-            <thead className="text-[1rem] bg-primary_green text-white">
+            <thead className="text-[1rem] bg-primary_bg_indigo text-white">
               <Trow
                 className={`w-full ${scrollable && "overflow-y-auto sticky top-0"}`}
               >

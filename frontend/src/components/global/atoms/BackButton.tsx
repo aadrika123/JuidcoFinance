@@ -11,10 +11,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary_green",
+        primary: "bg-primary_bg_indigo",
         danger: "bg-red-400",
         cancel:
-          "bg-white border text-neutral-800 border-primary_green hover:bg-neutral-50  hover:text-neutral-700",
+          "bg-white border text-neutral-800 border-primary_bg_indigo hover:bg-neutral-50  hover:text-neutral-700",
       },
     },
     defaultVariants: {

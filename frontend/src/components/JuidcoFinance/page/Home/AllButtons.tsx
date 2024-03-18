@@ -9,7 +9,7 @@ const AllHomeButtons = () => {
         <React.Fragment key={index}>
           <Button
             variant="primary"
-            className={`bg-white text-primary_green border border-primary_green rounded-none p-1 px-2 text-nowrap ${index === 0 && 'active'}`}
+            className={`bg-white text-primary_bg_indigo border border-primary_bg_indigo rounded-none p-1 px-2 text-nowrap ${index === 0 && 'active'}`}
           >
             {item.name}
           </Button>

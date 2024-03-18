@@ -9,6 +9,9 @@ export async function middleware(request: NextRequest) {
   if (!user) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   } 
+  if(request.url === 'http://localhost:5000/' || request.url === 'http://localhost:5000/finance'){
+    return NextResponse.redirect(new URL("/finance/home", request.url));
+  }
   // return i18nRouter(request, i18nConfig);
   // return NextResponse.redirect(new URL(request.url, request.url));
 }

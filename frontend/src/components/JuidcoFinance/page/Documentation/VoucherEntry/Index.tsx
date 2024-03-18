@@ -1,3 +1,9 @@
+/**
+ * Author: Sanjiv Kumar
+ * date: 02-09-2024
+ * status: open
+ */
+
 "use client";
 
 import React from "react";
@@ -28,23 +34,15 @@ export const HeroVoucherEntry = () => {
     );
   };
 
-  // -------------Print Button ( Upcomming Print Feature )-----------------//
-  // const pButton = (id: string) => {
-  //   return (
-  //     <>
-  //       <ViewIconButton onClick={() => onViewButtonClick1(id)} />
-  //     </>
-  //   );
-  // };
-  // -------------Print Button ( Upcomming Print Feature )-----------------//
-
   const column = [
     { name: "id", caption: "Sr. No.", width: "w-[5%]" },
-    { name: "voucher_no", caption: "Voucher No", width: "w-[15%]" },
-    { name: "voucher_date", caption: "Voucher Date", width: "w-[10%]" },
-    { name: "voucher_type", caption: "Voucher Type", width: "w-[15%]" },
-    { name: "narration", caption: "Narration", width: "w-[40%]" },
-    // { name: "print", caption: "Print", value: pButton, width: "w-[5%]" },
+    { name: "vendor", caption: "Vendor Name", width: "w-[10%]" },
+    { name: "type", caption: "Bill Type", width: "w-[10%]" },
+    { name: "bill_no", caption: "Bill Number", width: "w-[10%]" },
+    { name: "department", caption: "Department", width: "w-[15%]" },
+    { name: "bill_date", caption: "Bill Date ", width: "w-[10%]" },
+    { name: "narration", caption: "Narration ", width: "w-[25%]" },
+    { name: "is_authorized", caption: "Is Authorized ", width: "w-[5%]" },
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,
@@ -60,7 +58,7 @@ export const HeroVoucherEntry = () => {
         title="Voucher List"
         center
         columns={column}
-        api={FINANCE_URL.VOUCHER_ENTRY_URL.get || ""}
+        api={FINANCE_URL.BILL_PAYMENT_ENTRY_URL.get || ""}
         numberOfRowsPerPage={10}
       />
     </>

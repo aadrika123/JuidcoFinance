@@ -55,12 +55,12 @@ const Footer: React.FC<FooterProps> = (props) => {
     },
     {
       key: "Days Total",
-      value: balances?.total_amount,
+      value: balances?.total_amount || 0,
     },
     {
       key: "Closing Total",
       value:
-        balances?.total_amount + balances?.opening_balance?.opening_balance,
+        balances?.total_amount + balances?.opening_balance?.opening_balance || 0,
     },
   ];
 
