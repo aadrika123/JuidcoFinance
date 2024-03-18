@@ -1,15 +1,35 @@
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+
+import readXlsxFile from "read-excel-file/node";
+
 const prisma = new PrismaClient();
+
 const revenue_modules_seeder = async () => {
-  const number_of_records = 10;
-  for (let i = 0; i < number_of_records; i++) {
-    const record = {
-      name: faker.lorem.word(),
-      created_at: faker.date.past(),
-      updated_at: faker.date.recent(),
-    };
-    await prisma.revenue_modules.create({ data: record });
-  }
+  ///////////////// Modules ////////////////////////
+  
+  const file_path = "./prisma/data/module-names.xlsx";
+
+
+  readXlsxFile(file_path).then(async (rows) => {
+    const n = rows.length;
+    for (let i = 1; i < 12; i++) {
+      const row = rows[i];
+      const record = {
+        data: {
+          // id: parseInt(row[0].toString()),
+          name: row[1].toString(),
+          created_at: faker.date.past(),
+          updated_at: faker.date.recent(),
+        },
+      };
+
+      await prisma.$transaction([
+          prisma.revenue_modules.create(record)
+      ]);
+    }
+  });
 };
+
 export default revenue_modules_seeder;
+
