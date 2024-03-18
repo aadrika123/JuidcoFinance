@@ -1,5 +1,9 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import Chart from "react-apexcharts";
+
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false, 
+});
 
 interface PieChartProps {
   title: string;
@@ -7,9 +11,21 @@ interface PieChartProps {
   subTitle2?: string;
 }
 
+interface ChartOptions {
+  labels: string[];
+  colors: string[];
+  dataLabels: {
+    enabled: boolean;
+  };
+  legend: {
+    position: "right" | "top" | "bottom" | "left" | undefined;
+    offsetY: number;
+  };
+}
+
 const PieChart: React.FC<PieChartProps> = (props) => {
   const { title, subTitle1, subTitle2 } = props;
-  const options = {
+  const options: {chartOptions: ChartOptions, series:number[]} = {
     series: [44, 60],
     chartOptions: {
       labels: ["2021", "2022"],
@@ -18,7 +34,7 @@ const PieChart: React.FC<PieChartProps> = (props) => {
         enabled: false,
       },
       legend: {
-        position: "right",
+        position: "right", // Or any other valid position value
         offsetY: 80,
       },
     },

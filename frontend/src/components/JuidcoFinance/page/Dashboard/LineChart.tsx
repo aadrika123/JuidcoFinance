@@ -1,5 +1,9 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import Chart from "react-apexcharts";
+
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false, 
+});
 
 const LineChart = () => {
   const options = {
