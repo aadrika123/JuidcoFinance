@@ -1,3 +1,5 @@
+"use client"
+
 import HeroLoginPage from "@/components/JuidcoFinance/page/auth/Index";
 import React from "react";
 

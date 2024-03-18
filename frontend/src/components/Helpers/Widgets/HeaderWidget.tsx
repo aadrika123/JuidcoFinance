@@ -64,7 +64,7 @@ export function HeaderWidget(props: HeaderWidgetProps) {
 
   const Header = (
     <div className="flex items-center">
-        <SubHeading className="text-2xl">View {props.title}</SubHeading>
+        <SubHeading className="text-2xl">{props.title}</SubHeading>
       </div>
   )
 

@@ -24,7 +24,7 @@ interface RadioButtonProps {
   touched?: boolean | undefined;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handler?: (id: number | string) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -33,7 +33,7 @@ const RadioButtons: React.FC<RadioButtonProps> = (props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange && onChange(e);
-    handler && handler(e);
+    handler && handler(e.target.value);
   };
   return (
     <div>

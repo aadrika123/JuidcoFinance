@@ -44,6 +44,12 @@ class ReceiptRegisterDao {
       req.query.ulb !== undefined && req.query.ulb !== ""
         ? Number(req.query.ulb)
         : false;
+
+    const moduleId =
+      req.query.module !== undefined && req.query.module !== ""
+        ? Number(req.query.module)
+        : false;
+
     const date =
       req.query.date !== undefined && req.query.date !== ""
         ? String(req.query.date)
@@ -52,37 +58,32 @@ class ReceiptRegisterDao {
     if (order != -1 && order != 1) {
       order = 1;
     }
-    
+
     const searchCondition = `'%${search}%'`;
 
-    const d = `AND(
-      mc.ulbs ILIKE ${searchCondition} OR
-      ac.code ILIKE ${searchCondition} OR
-      rmodule.name ILIKE ${searchCondition} OR
-      rmode.name ILIKE ${searchCondition}
-    )`;
+    let a = "";
+    if(search){
+      a += ` AND(
+        mc.ulbs ILIKE ${searchCondition} OR
+        ac.code ILIKE ${searchCondition} OR
+        rmodule.name ILIKE ${searchCondition} OR
+        rmode.name ILIKE ${searchCondition}
+      )`;
+    }
 
-    const a: string =
-      search && ulbId && date
-        ? `${d} AND
-            (
-              mc.id = ${ulbId} AND
-              DATE (rr.receipt_date) = '${date}'
-            )`
-        : search && !ulbId && !date
-        ? `${d}`
-        : search && ulbId && !date
-        ? `${d} AND mc.id = ${ulbId}`
-        : !search && ulbId && date
-        ? `AND (
-          mc.id = ${ulbId} AND
-          DATE (rr.receipt_date) = '${date}'
-        )`
-        : search && !ulbId && date
-        ? `${d} AND DATE (rr.receipt_date) = '${date}'`
-        : !search && !ulbId && date
-        ? `AND DATE (rr.receipt_date) = '${date}'`
-        : !search && !date && ulbId ? `AND mc.id = ${ulbId}` : "";
+    if(ulbId){
+      a += ` AND mc.id = ${ulbId}`
+    }
+
+    if(moduleId){
+      a += ` AND rmodule.id = ${moduleId}`
+    }
+
+    if(date){
+      a += ` AND DATE(rr.receipt_date) = '${date}'`;
+    }
+
+    
 
     const opDate: string = date ? `AND DATE (drb.created_at) = '${date}'` : "";
 
@@ -105,7 +106,7 @@ class ReceiptRegisterDao {
     mc.id as ulb_id,
     mc.ulbs,
     ac.id as primary_acc_code_id,
-    ac.code as primary_acc_code,
+    ac.code as primary_acc_code_name,
     rmodule.id as revenue_module_id,
     rmodule.name as revenue_module_name,
     rmode.id as receipt_mode_id,
@@ -390,21 +391,21 @@ class ReceiptRegisterDao {
   };
 
   /////////// Create Opening Balance
-  createOpeningBal = async(req: Request)=>{
+  createOpeningBal = async (req: Request) => {
     return await prisma.daily_receipt_balances.create({
-      data:{
+      data: {
         opening_balance: req.body.opening_balance
       }
     })
   }
 
   /////////// Update Opening Balance
-  updateOpeningBal = async(req: Request)=>{
+  updateOpeningBal = async (req: Request) => {
     return await prisma.daily_receipt_balances.update({
-      where:{
+      where: {
         id: req.body.id
       },
-      data:{
+      data: {
         opening_balance: req.body.opening_balance
       }
     })
