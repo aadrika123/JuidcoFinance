@@ -26,11 +26,7 @@ class Middleware {
   };
 
   //// Verify the generated token
-  jwtVerify = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  jwtVerify = async (req: Request, res: Response, next: NextFunction) => {
     const resObj: resObj = {
       apiId: "Not related to APIs",
       action: "Token Verification",
@@ -41,20 +37,23 @@ class Middleware {
     const token = bearerHeader?.split(" ")[1];
     if (token && typeof token !== "undefined") {
       try {
-        await jwt.verify(token, secret);
+        const data: any = await jwt.verify(token, secret);
+        res.locals.user = data?.authData;
         next();
       } catch (error: any) {
-        return CommonRes.VALIDATION_ERROR(
+        return CommonRes.UNAUTHORISED(
           resMessage(this.initMsg).INVALID,
           resObj,
-          res
+          res,
+          req
         );
       }
     } else {
-      return CommonRes.VALIDATION_ERROR(
+      return CommonRes.UNAUTHORISED(
         resMessage(this.initMsg).NOT_FOUND,
         resObj,
-        res
+        res,
+        req
       );
     }
   };

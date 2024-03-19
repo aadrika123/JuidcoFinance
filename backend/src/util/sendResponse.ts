@@ -28,13 +28,14 @@ export const sendResponse = async (
     message = message?.message || message;
   }
 
+  const totalTime = process.hrtime(res.locals.startTime);
   const jsonRes = {
     status,
     message,
     "meta-data": {
       apiId,
       version,
-      responseTime: res.locals.responseTime,
+      responseTime: totalTime[0] * 1000 + totalTime[1] / 1e6,
       action,
       deviceId,
     },
