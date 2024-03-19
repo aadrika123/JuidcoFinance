@@ -1,0 +1,3 @@
+{"level":"info","message":{"data":[{"id":1,"name":"ICICI"},{"id":2,"name":"SBI"},{"id":3,"name":"BANK OF BARODA"}],"metaData":{"action":"GET","apiId":"2201","version":"1.0"}},"service":"user-service"}
+{"level":"info","message":{"data":[{"id":1,"name":"ICICI"},{"id":2,"name":"SBI"},{"id":3,"name":"BANK OF BARODA"}],"metaData":{"action":"GET","apiId":"2201","version":"1.0"}},"service":"user-service"}
+{"level":"info","message":{"data":[{"id":1,"name":"ICICI"},{"id":2,"name":"SBI"},{"id":3,"name":"BANK OF BARODA"}],"metaData":{"action":"GET","apiId":"2201","version":"1.0"}},"service":"user-service","timestamp":"2024-03-19T12:21:01.149Z"}
