@@ -5,13 +5,12 @@ import type { NextRequest } from "next/server";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
+  
   const user = request.cookies.get("loginData")?.value;
   if (!user) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    return NextResponse.redirect(new URL("/finance/auth/login", request.url));
   } 
-  if(request.url === 'http://localhost:5000/' || request.url === 'http://localhost:5000/finance'){
-    return NextResponse.redirect(new URL("/finance/home", request.url));
-  }
+
   // return i18nRouter(request, i18nConfig);
   // return NextResponse.redirect(new URL(request.url, request.url));
 }
@@ -20,6 +19,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // matcher: '/((?!api|static|.*\\..*|_next).*)'
   matcher: [
-    '/((?!api|_next/static|_next/image|johar.png|Juidco.png|Jhar_logo.png|favicon.ico|auth/login).*)',
+    '/((?!api|_next/static|_next/image|johar.png|Juidco.png|Jhar_logo.png|favicon.ico|auth/login|profile.png).*)',
   ],
 };

@@ -8,16 +8,15 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "jest",
-    "build": "npx tsc",
+    "build": "./proto/build.sh && npx tsc && cp -R ./src/grpc/proto ./build/grpc",
     "lint": "eslint src/",
     "start": "tsc && node build/server.js",
     "dev": "nodemon src/server.ts",
     "migrate": "rm -rf prisma/migrations &&  npx prisma migrate dev --name init",
-    "migrate2": "rm -rf prisma/migrations && npx prisma migrate dev --name init",
     "magic": "node magic/index.js",
-    "build2": "npx tsc && cp -R ./src/grpc/proto ./build/grpc",
     "doc": "python3 magic/gen_doc.py",
-    "pdftest": "node typesettings/pdf.ts"
+    "pdftest": "node typesettings/pdf.ts",
+    "buildgrpc": "./proto/build.sh"
   },
   "author": "Aadrika Enterprises",
   "license": "ISC",
@@ -43,8 +42,7 @@
     "nodemailer": "^6.9.11",
     "nodemon": "^3.0.3",
     "read-excel-file": "^5.7.1",
-    "uuid": "^9.0.1",
-    "winston": "^3.12.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.9",

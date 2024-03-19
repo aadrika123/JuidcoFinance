@@ -1,6 +1,11 @@
 import React from "react";
 import Image from "next/image";
 import { SidebarLinksProps } from "@/utils/types/types";
+import financeLogo from "@/assets/icons/sidebar/finance.svg";
+import mastersLogo from "@/assets/icons/sidebar/masters.svg";
+import docLogo from "@/assets/icons/sidebar/doc.svg";
+import transactionsLogo from "@/assets/icons/sidebar/transaction.svg";
+import paymentLogo from "@/assets/icons/sidebar/payment.svg";
 
 export const sidebarLinks: SidebarLinksProps = {
   modules: [
@@ -9,7 +14,7 @@ export const sidebarLinks: SidebarLinksProps = {
       path: "/",
       icon: (
         <Image
-          src="/icons/sidebar/finance.svg"
+          src={financeLogo}
           alt="finance"
           width={100}
           height={100}
@@ -20,13 +25,13 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Home",
           icon: (
             <Image
-              src="/icons/sidebar/finance.svg"
+              src={financeLogo}
               alt="home"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/home",
+          path: "/home",
           // subModules: [
           //   { moduleName: "Charts of Account", path: "/finance/masters" },
           //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
@@ -44,25 +49,25 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Revenue Collection",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
+              src={mastersLogo}
               alt="revenue-collection"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/revenue-collection",
+          path: "/revenue-collection",
           subModules: [
             {
               moduleName: "Receipt Register",
-              path: "/finance/revenue-collection/receipt-register",
+              path: "/revenue-collection/receipt-register",
             },
             {
               moduleName: "Collection Register",
-              path: "/finance/revenue-collection/collection-register",
+              path: "/revenue-collection/collection-register",
             },
             {
               moduleName: "Summary of Daily Collection",
-              path: "/finance/revenue-collection/daily-collection",
+              path: "/revenue-collection/daily-collection",
             },
           ],
         },
@@ -70,21 +75,21 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Revenue Receivable",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
+              src={mastersLogo}
               alt="revenue-receivable"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/revenue-receivable",
+          path: "/revenue-receivable",
           subModules: [
             {
               moduleName: "Demand Register",
-              path: "/finance/revenue-receivable/demand-register",
+              path: "/revenue-receivable/demand-register",
             },
             {
               moduleName: "Summary of Bills Raised",
-              path: "/finance/revenue-receivable/bills-raised",
+              path: "/revenue-receivable/bills-raised",
             },
           ],
         },
@@ -92,66 +97,66 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Documentation & Record Keeping",
           icon: (
             <Image
-              src="/icons/sidebar/doc.svg"
+              src={docLogo}
               alt="document"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/documentation",
+          path: "/documentation",
           subModules: [
-            { moduleName: "Voucher Entry", path: "/finance/documentation/voucher-entry" },
+            { moduleName: "Voucher Entry", path: "/documentation/voucher-entry" },
             {
               moduleName: "Cash Book",
-              path: "/finance/documentation/cash-book",
+              path: "/documentation/cash-book",
             },
             {
               moduleName: "Journal Book",
-              path: "/finance/documentation/journal-book",
+              path: "/documentation/journal-book",
             },
-            { moduleName: " Charts of Account", path: "/finance/documentation" }
+            { moduleName: " Charts of Account", path: "/documentation" }
           ],
         },
         {
           moduleName: "Transactions",
           icon: (
             <Image
-              src="/icons/sidebar/transaction.svg"
+              src={paymentLogo}
               alt="document"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/transaction",
+          path: "/transaction",
           subModules: [
-            { moduleName: "Receipt Entry ", path: "/finance/transaction/receipt-entry" },
+            { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
             {
               moduleName: "Direct Payment Entry",
-              path: "/finance/transaction/direct-payment-entry",
+              path: "/transaction/direct-payment-entry",
             },
             {
               moduleName: "Bills Payment Entry",
-              path: "/finance/transaction/bills-payment-entry",
+              path: "/transaction/bills-payment-entry",
             },
             {
               moduleName: "Bills Invoice Entry",
-              path: "/finance/transaction/bills-invoice-entry",
+              path: "/transaction/bills-invoice-entry",
             },
             {
               moduleName: "Investments",
-              path: "/finance/transaction/investments",
+              path: "/transaction/investments",
             },
             {
               moduleName: "Grant Managements",
-              path: "/finance/transaction/grant-management",
+              path: "/transaction/grant-management",
             },
             {
               moduleName: "Loans - Borrowings Managements",
-              path: "/finance/transaction/loan-management",
+              path: "/transaction/loan-management",
             },
             {
               moduleName: "Advance Managements",
-              path: "/finance/transaction/advance-management",
+              path: "/transaction/advance-management",
             },
           ],
         },
@@ -159,22 +164,22 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Masters",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
+              src={mastersLogo}
               alt="masters"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/master",
+          path: "/master",
           subModules: [
-            { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
+            { moduleName: "Bank Masters", path: "/masters/bank-master" },
             {
               moduleName: "Vendor Masters",
-              path: "/finance/masters/vendor-master",
+              path: "/masters/vendor-master",
             },
             {
               moduleName: "Cheque Book Entry",
-              path: "/finance/masters/chequebook-master",
+              path: "/masters/chequebook-master",
             },
           ],
         },
@@ -182,30 +187,30 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Budgeting",
           icon: (
             <Image
-              src="/icons/sidebar/transaction.svg"
+              src={transactionsLogo}
               alt="budgeting"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/budgeting",
+          path: "/budgeting",
           subModules: [
-            { moduleName: "Receipt Budget", path: "/finance/budgeting/receipt-budget" },
+            { moduleName: "Receipt Budget", path: "/budgeting/receipt-budget" },
             {
               moduleName: "Budget Appropriations",
-              path: "/finance/budgeting/budget-appropriations",
+              path: "/budgeting/budget-appropriations",
             },
             {
               moduleName: "Budget Re-Appropriations",
-              path: "/finance/budgeting/budget-re-appropriations",
+              path: "/budgeting/budget-re-appropriations",
             },
             {
               moduleName: "Opening Balance Entry",
-              path: "/finance/budgeting/opening-balance",
+              path: "/budgeting/opening-balance",
             },
             {
               moduleName: "Revised Budget",
-              path: "/finance/budgeting/revised-budget",
+              path: "/budgeting/revised-budget",
             }
           ],
         },
@@ -213,22 +218,22 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Financial Statements",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
+              src={mastersLogo}
               alt="payment"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/financial-statements",
+          path: "/financial-statements",
           subModules: [
-            { moduleName: "Trail Balance", path: "/finance/financial-statements/trail-balance" },
+            { moduleName: "Trail Balance", path: "/financial-statements/trail-balance" },
             {
               moduleName: "Income Statement",
-              path: "/finance/financial-statements/income-statement",
+              path: "/financial-statements/income-statement",
             },
             {
               moduleName: "Balance Sheet",
-              path: "/finance/financial-statements/balance-sheet",
+              path: "/financial-statements/balance-sheet",
             },
           ],
         },
@@ -236,13 +241,13 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Dashboard",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
+              src={mastersLogo}
               alt="dashboard"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/dashboard",
+          path: "/dashboard",
           // subModules: [
           //   { moduleName: "Charts of Account", path: "/finance/masters" },
           //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
@@ -260,38 +265,38 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Corrections and Reversals",
           icon: (
             <Image
-              src="/icons/sidebar/masters.svg"
+              src={mastersLogo}
               alt="payment"
               width={100}
               height={100}
             />
           ),
-          path: "/finance/corrections-reversals",
+          path: "/corrections-reversals",
           subModules: [
-            { moduleName: "Stop Payment Order", path: "/finance/corrections-reversals/stop-payment-order" },
+            { moduleName: "Stop Payment Order", path: "/corrections-reversals/stop-payment-order" },
             {
               moduleName: "Cancel Cheque",
-              path: "/finance/corrections-reversals/Cancel Cheque",
+              path: "/corrections-reversals/Cancel Cheque",
             },
             {
               moduleName: "Cancel Voucher",
-              path: "/finance/corrections-reversals/cancel-voucher",
+              path: "/corrections-reversals/cancel-voucher",
             },
             {
               moduleName: "Cancel Bill",
-              path: "/finance/corrections-reversals/cancel-bill",
+              path: "/corrections-reversals/cancel-bill",
             },
             {
               moduleName: "Cancel Receipt",
-              path: "/finance/corrections-reversals/cancel-receipt",
+              path: "/corrections-reversals/cancel-receipt",
             },
             {
               moduleName: "Cancel Demand",
-              path: "/finance/corrections-reversals/cancel-demand",
+              path: "/corrections-reversals/cancel-demand",
             },
             {
               moduleName: "Bank Recounciliation",
-              path: "/finance/corrections-reversals/bank-recounciliation",
+              path: "/corrections-reversals/bank-recounciliation",
             },
           ],
         },

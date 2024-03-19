@@ -2,6 +2,9 @@
 
 PROTO_DIR=./src/grpc/proto
 
+
+mkdir $PROTO_DIR
+
 # Generate JavaScript code
 npx grpc_tools_node_protoc \
     --js_out=import_style=commonjs,binary:${PROTO_DIR} \

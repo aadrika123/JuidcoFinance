@@ -1,4 +1,7 @@
+import Image from "next/image";
 import React from "react";
+import moneyLogo from "@/assets/svg/money.svg";
+import cashLogo from "@/assets/svg/cash.svg";
 
 type HomeCardProps = {
   title: string;
@@ -17,9 +20,9 @@ const HomeCard: React.FC<HomeCardProps> = (props) => {
           className={`h-9 w-9 rounded-full flex items-center justify-center  ${props.color === "green" ? "bg-[#B7FBD4]" : " bg-[#EEF2FF]"}`}
         >
           {props.color === "green" ? (
-            <img src="/icons/svg/money.svg" alt="money-icon" />
+            <Image src={moneyLogo} alt="money-icon" width="45" height="44"/>
           ) : (
-            <img src="/icons/svg/cash.svg" alt="cash-icon" />
+            <Image src={cashLogo} alt="cash-icon" width="56" height="44"/>
           )}
         </div>
         <h2 className="text-secondary_black text-sm font-semibold mx-4">

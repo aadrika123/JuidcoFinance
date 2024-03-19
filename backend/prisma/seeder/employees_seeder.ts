@@ -30,31 +30,31 @@ const employees_seeder = async () => {
       {
         name: "Rakesh Kumar",
         designation: "Junior Engineer",
-        email: "viizz29@gmail.com",
+        email: "rakesh@gmail.com",
         user_id: "rakesh29",
       },
       {
         name: "Prince Kumar",
         designation: "Assistant Engineer",
-        email: "viizz29@gmail.com",
+        email: "prince@gmail.com",
         user_id: "prince29",
       },
       {
         name: "Krish Vishwakarma",
         designation: "Executive Engineer",
-        email: "viizz29@gmail.com",
+        email: "krish@gmail.com",
         user_id: "krish29"
       },
       {
         name: "Jaydeep Gupta",
         designation: "Executive Officer / AMC",
-        email: 'viizz29@gmail.com',
+        email: 'jaydeep@gmail.com',
         user_id: "jaydeep29",
       },
       {
         name: "Prity Singh",
         designation: "Accounts Department – Accountant",
-        email: 'prity29@gmail.com',
+        email: 'prity@gmail.com',
         user_id: 'prity29',
       },
       {
@@ -66,13 +66,13 @@ const employees_seeder = async () => {
       {
         name: "Sanjiv Kumar",
         designation: "Accounts Department – Manager",
-        email: 'sanjivkumarhzb1427@gmail.com',
+        email: 'sanjiv@gmail.com',
         user_id: "sanjiv36"
       },
       {
         name: "Bijoy Paitandi",
         designation: "Internal Auditor",
-        email: 'viizz29@gmail.com',
+        email: 'bijoy@gmail.com',
         user_id: 'viizz29'
       }
     ];

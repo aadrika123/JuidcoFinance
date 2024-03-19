@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resMessage = exports.baseUrl = void 0;
-exports.baseUrl = `/api/v1/finance`;
+exports.baseUrl = `/finance/api/v1`;
 // Common response message
 /**
  * Author: Krish
