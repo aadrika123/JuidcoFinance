@@ -28,7 +28,7 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
     <>
       { account != null && account.code_type == CodeType.Ledger && (
         <>
-        <Popup zindex={40} width={90}>
+        <Popup zindex={50} width={90}>
           <LedgerDetailsComponent data={account} onClose={closePopup}/>
         </Popup>
         </>
@@ -36,7 +36,7 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
 
       { account != null && account.code_type == CodeType.GeneralLedger && (
         <>
-          <Popup zindex={40} width={80}>
+          <Popup zindex={50} width={80}>
             <GeneralLedgerDetailsComponent generalLedgerId = {account.id} onClose={closePopup}/>
           </Popup>
         </>
@@ -44,7 +44,7 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
 
     { account != null && account.code_type == CodeType.Schedule && (
         <>
-        <Popup zindex={40} width={80}>
+        <Popup zindex={50} width={80}>
           <ScheduleDetailsComponent scheduleId={account.id} onClose={closePopup}/>
         </Popup>
         </>

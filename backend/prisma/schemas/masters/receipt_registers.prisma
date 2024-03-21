@@ -1,4 +1,4 @@
-////receipt_register: Managed by: Sanjiv Kumar
+////receipt_register: Managed by: Sanjiv Kumar (has history)
 model receipt_registers {
   id                    Int                @id @default(autoincrement())
   receipt_no            String

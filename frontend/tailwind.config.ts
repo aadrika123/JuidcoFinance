@@ -35,6 +35,10 @@ const config: Config = {
       fontSize: {
         sub_head: " 1.22294rem",
       },
+      zIndex: {
+        '100': '100',
+        '200': '200'
+      }
     },
   },
   plugins: [require("daisyui")],

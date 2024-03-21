@@ -1,8 +1,7 @@
 'use client'
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import Header from "../global/layout/Header";
 import Sidebar from "../global/layout/Sidebar";
-import Loading from "./Loading";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -19,7 +18,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
     <>
       <main>
-        <Suspense fallback={<Loading />}>
           <div className="h-screen">
             <Header onClick={handleToggle} />
             <div className="flex">
@@ -32,7 +30,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
               </section>
             </div>
           </div>
-        </Suspense>
       </main>
     </>
   );

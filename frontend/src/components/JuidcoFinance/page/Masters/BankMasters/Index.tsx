@@ -13,21 +13,26 @@ import type {
 import { FINANCE_URL } from "@/utils/api/urls";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import LosingDataConfirmPopup from "@/components/global/molecules/general/LosingDataConfirmPopup";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
+import RandomWorkingPopup2 from "@/components/global/molecules/general/RandomWorkingPopup2";
 
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
 export const HeroBankMasters = () => {
   const pathName = usePathname();
+  const router = useRouter();
+
 
   const [isAddBankAccountOpen, setIsBankAccountOpen] = useState<boolean>(false);
   const [isDataLossPopupOpen, setDataLossPopupOpen] = useState<boolean>(false);
   const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
+  const [isWaitingForNextPage, setWaitingForNextPage] = useState<boolean>(false);
 
 
   let isDirty = false;
@@ -72,7 +77,7 @@ export const HeroBankMasters = () => {
   };
 
   // mutate Bank Details
-  const { mutate } = useMutation<AddBankDetailsData, Error, AddBankDetailsData>(
+  const { mutate, isLoading: isSaving } = useMutation<AddBankDetailsData, Error, AddBankDetailsData>(
     createBankDetails,
     {
       onSuccess: () => {
@@ -94,12 +99,14 @@ export const HeroBankMasters = () => {
   );
 
   const onViewButtonClick = (id: string) => {
-    window.open(`${pathName}/${id}`, "_self");
+    setWaitingForNextPage(true);
+    router.push(`${pathName}/${id}`);
   };
 
 
 
   const onSubmit = (values: AddBankDetailsData) => {
+  
     console.log(values)
     mutate(values);
   }
@@ -147,9 +154,10 @@ export const HeroBankMasters = () => {
         <SuccesfullConfirmPopup message="Recorded Successfully"/>
       )}
 
+      <RandomWorkingPopup show={isSaving || isWaitingForNextPage} />
 
       {isAddBankAccountOpen && (
-        <Popup title="Add New Bank Account" zindex={20}>{bankAccountForm.render()}</Popup>
+        <Popup title="Add New Bank Account" zindex={10} width={80}>{bankAccountForm.render()}</Popup>
       )}
 
       <section>

@@ -13,7 +13,7 @@ interface PopupProps {
 }
 
 const Popup: React.FC<PopupProps> = ({ title, children, zindex, width}: PopupProps) => {
-    const zindex2 = zindex + 10;
+    const zindex2 = zindex;
     
     const widthh = width || 40;
     console.log(widthh);

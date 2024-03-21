@@ -5,6 +5,7 @@ import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery } from "react-query";
 import { fc } from "@/utils/helper";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 
 interface GeneralLedgerDetailsComponentProps {
@@ -42,6 +43,7 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
   const {
     data: data,
     isError: dataError,
+    isLoading: isLoading
   } = useQuery(["schedule-report", generalLedgerId], fetchData);
 
   if (dataError) {
@@ -55,6 +57,9 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
 
   return (
     <>
+
+      <RandomWorkingPopup show={isLoading}/>
+
       <div className="m-4 p-10 border-2 rounded text-black">
         <div ref={componentRef} className="m-4">
 

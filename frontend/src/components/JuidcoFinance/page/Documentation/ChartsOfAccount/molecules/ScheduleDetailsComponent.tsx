@@ -5,6 +5,8 @@ import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery } from "react-query";
 import { fc } from "@/utils/helper";
+import WorkingPopup from "@/components/global/molecules/general/WorkingPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface ScheduleDetailsComponentProps {
   scheduleId: number;
@@ -47,6 +49,7 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ sch
   const {
     data: data,
     isError: dataError,
+    isLoading: isLoading,
   } = useQuery(["schedule-report", scheduleId], fetchData);
 
   if (dataError) {
@@ -61,6 +64,8 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ sch
   return (
     <>
 
+      <RandomWorkingPopup show={isLoading}/>
+    
       <div className="m-4 p-10 border-2 rounded text-black">
 
         <div ref={componentRef} className="m-4">

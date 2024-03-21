@@ -109,7 +109,7 @@ const Table = <T,>({
           <table className={`table table-md`}>
             <thead className="text-[1rem] bg-primary_bg_indigo text-white">
               <Trow
-                className={`w-full ${scrollable && "overflow-y-auto sticky top-0"}`}
+                className={`w-full ${scrollable && "overflow-y-auto sticky top-0 z-10"}`}
               >
                 {headers}
               </Trow>

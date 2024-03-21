@@ -472,7 +472,7 @@ model adminis_wards {
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
 
-/// BankMaster
+/// BankMaster (has history)
 model bank_masters {
   id                  Int      @id @default(autoincrement())
 
@@ -499,6 +499,32 @@ model bank_masters {
   updated_at          DateTime @updatedAt @map("updated_at")
 }
 
+model bank_masters_history {
+id						Int
+
+bank_id             Int
+
+bank_type_id        Int
+
+ulb_id              Int
+
+micr_code           String?
+ifsc_code           String
+branch              String
+branch_address      String
+branch_city         String
+branch_state        String
+branch_district     String?
+email               String?
+contact_no          String?
+
+created_at						DateTime?
+updated_at						DateTime?
+
+
+record_id                  Int      @id @default(autoincrement())
+record_created_at          DateTime @default(now()) @map("record_created_at")
+}
 
 ////bank_types: Managed by: Bijoy Paitandi
 model bank_types{
@@ -812,7 +838,7 @@ model receipt_modes {
     updated_at        DateTime            @updatedAt @map("updated_at")
 }
 
-////receipt_register: Managed by: Sanjiv Kumar
+////receipt_register: Managed by: Sanjiv Kumar (has history)
 model receipt_registers {
   id                    Int                @id @default(autoincrement())
   receipt_no            String
@@ -843,6 +869,34 @@ model receipt_registers {
   isChecked             Boolean             @default(false)
   created_at            DateTime           @default(now()) @map("created_at")
   updated_at            DateTime           @updatedAt @map("updated_at")
+}
+model receipt_registers_history {
+id						Int
+receipt_no            String
+ulb_id                Int
+primary_acc_code_id   Int
+revenue_module_id     Int
+paid_by               String
+receipt_mode_id       Int
+receipt_date          DateTime
+cheque_or_draft_no    String?
+bank_amount           Float?
+cash_amount           Float?
+bank_acc_no           String?
+deposit_date          DateTime?
+realisation_date      DateTime?
+wheather_returned     Boolean?
+remarks               String
+entered_by_id         Int
+entered_by_print_name String
+checked_by_id         Int?
+checked_by_print_name String?
+isChecked             Boolean             @default(false)
+created_at						DateTime?
+updated_at						DateTime?
+
+record_id                    Int                @id @default(autoincrement())
+record_created_at            DateTime           @default(now()) @map("record_created_at")
 }
 //// Receipt Type
 model receipt_types {
