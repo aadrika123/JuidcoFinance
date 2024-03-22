@@ -76,7 +76,7 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
         >
           <option selected value="">{props.placeholder}</option>
           {props?.data.map((d: Option) => (
-            <option key={d?.id} value={d?.value ? d?.value :d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
+            <option key={d?.id} value={d?.value ? d?.value : d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
               {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}
             </option>
           ))}

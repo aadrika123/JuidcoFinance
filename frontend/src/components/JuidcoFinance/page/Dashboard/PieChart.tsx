@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
 import React from "react";
-
 const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, 
+  ssr: false,
 });
 
 interface PieChartProps {
@@ -62,14 +61,13 @@ const PieChart: React.FC<PieChartProps> = (props) => {
           </div>
         )}
       </div>
-      {typeof window !== "undefined" && (
         <Chart
           options={options.chartOptions}
           series={options.series}
           type="pie"
-          width="280"
+          width={280}
+          height={200}
         />
-      )}
     </div>
   );
 };

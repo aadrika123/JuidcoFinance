@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import { DateFormatter, filterValBefStoring } from "@/utils/helper";
@@ -8,10 +8,10 @@ import { QueryClient, useMutation } from "react-query";
 import toast, { Toaster } from "react-hot-toast";
 import goBack from "@/utils/helper";
 import { useSearchParams } from "next/navigation";
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
+const HeaderWidget = lazy(()=>import("@/components/Helpers/Widgets/HeaderWidget").then(module => ({ default: module.HeaderWidget })));
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
-import FormikW from "./ReceiptRegisterFormFields";
+const FormikW = lazy(()=>import("./ReceiptRegisterFormFields"))
 import { useSelector } from "react-redux";
 
 export const EditReceiptRegister = ({

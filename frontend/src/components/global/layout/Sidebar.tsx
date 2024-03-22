@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import defaultProfilePic from "@/assets/icons/profile2.png";
 
+
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className: string;
 }
@@ -36,7 +37,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
     <div style={{ height: "calc(100vh - 3.5rem)" }} {...props}>
       <section>
         <div className="w-full flex flex-col items-center justify-center p-5">
-          <Image src={defaultProfilePic} width={100} height={100} alt="logo" />
+          <Image src={defaultProfilePic} width={100} height={100} alt="logo1x" />
           <h1 className="text-black font-bold text-lg my-2">{user?.name}</h1>
           <h2 className="text-gray-400 font-bold text-xs">
             {user?.designation?.name}

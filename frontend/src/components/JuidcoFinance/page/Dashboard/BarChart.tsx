@@ -1,9 +1,10 @@
+'use client'
 import dynamic from "next/dynamic";
 import React from "react";
-
 const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, 
+  ssr: false,
 });
+
 
 interface BarChartProps {
   title: string;
@@ -79,14 +80,13 @@ const BarChart: React.FC<BarChartProps> = (props) => {
       <h1 className="text-secondary_black font-semibold flex flex-col items-center">
         {title}
       </h1>
-      {typeof window !== "undefined" && (
         <Chart
           options={options}
           series={options.series}
           type="bar"
-          height="130"
+          height={130}
+          width={200}
         />
-      )}
     </div>
   );
 };

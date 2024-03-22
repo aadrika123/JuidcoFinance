@@ -6,8 +6,9 @@
 
 "use client";
 
-import React from "react";
-import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
+import React, { lazy } from "react";
+// import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
+const TableWithFeatures = lazy(()=> import("@/components/global/organisms/TableWithFeatures"))
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname } from "next/navigation";
