@@ -26,7 +26,7 @@ class BillInvoicesRoute {
         this.controller.create(req, res, apiId + "01")
       );
     app.route(`${this.baseUrl}/get-all`).get(
-      this.middleware.jwtVerify,
+      this.middleware.publicValidation,
       (req: Request, res: Response) =>
         this.controller.get(req, res, apiId + "02")
     );
