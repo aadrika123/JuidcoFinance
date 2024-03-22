@@ -1,2 +1,3 @@
 {"level":"error","message":{"metaData":{"action":"Token Verification","apiId":"Not related to APIs","version":"1.0"}},"service":"user-service"}
 {"level":"error","message":{"metaData":{"action":"Token Verification","apiId":"Not related to APIs","version":"1.0"}},"service":"user-service","timestamp":"2024-03-19T12:36:54.414Z"}
+{"level":"error","message":{"metaData":{"action":"Authentication","apiId":"2201","version":"1.0"}},"service":"user-service","timestamp":"2024-03-22T05:52:15.256Z"}

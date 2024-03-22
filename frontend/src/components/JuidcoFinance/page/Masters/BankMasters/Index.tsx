@@ -19,7 +19,6 @@ import SuccesfullConfirmPopup from "@/components/global/molecules/general/Succes
 import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
-import RandomWorkingPopup2 from "@/components/global/molecules/general/RandomWorkingPopup2";
 
 // Imports //----------------------------------------------------------------
 
