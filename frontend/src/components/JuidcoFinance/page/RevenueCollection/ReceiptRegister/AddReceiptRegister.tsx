@@ -2,7 +2,7 @@
 
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
@@ -13,7 +13,7 @@ import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
 import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
-import FormikW from "./ReceiptRegisterFormFields";
+const FormikW = lazy(()=> import("./ReceiptRegisterFormFields"))
 import { useSelector } from "react-redux";
 
 interface UpdatedModeType {
