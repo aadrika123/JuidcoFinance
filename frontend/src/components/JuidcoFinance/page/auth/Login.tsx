@@ -9,7 +9,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/reducers/authReducer";
-import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 
 interface LoginInitialData {
   user_id: string;
@@ -20,7 +20,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState<string>();
   const [hide, setHide] = useState(true);
-  const [loaderVisible, setLoaderVisible] = useState<boolean>(false);
+  const [workingAnimation, activateWorkingAnimation, hideWorkingAnimation] = useWorkingAnimation();
 
   const LoginSchema = Yup.object().shape({
     user_id: Yup.string().required("User Id is required"),
@@ -30,7 +30,7 @@ const Login = () => {
   ///////////////// Handling Login Logics /////////////
 
   const handleLogin = async (values: LoginInitialData) => {
-    setLoaderVisible(true);
+    activateWorkingAnimation();
     try {
       const res = await axios({
         url: FINANCE_URL.AUTH_URL.login,
@@ -44,9 +44,9 @@ const Login = () => {
       res.data.data
         ? (dispatch(login(res.data.data)),
           window.location.replace("/finance/home"))
-        : setErrorMsg("You have entered wrong credentials !!"), setLoaderVisible(false);
+        : setErrorMsg("You have entered wrong credentials !!");
     } catch (error) {
-      setLoaderVisible(false);
+      hideWorkingAnimation();
       setErrorMsg("Something Went Wrong!!");
       console.log(error);
     }
@@ -58,7 +58,7 @@ const Login = () => {
 
   return (
     <>
-    <RandomWorkingPopup show={loaderVisible}/>
+      {workingAnimation}
 
       <div className="max-w-full w-full px-2 sm:px-12 lg:pr-20 mb-12 lg:mb-0">
         <div className="relative">

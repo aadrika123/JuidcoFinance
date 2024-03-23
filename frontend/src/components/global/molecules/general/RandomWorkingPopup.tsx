@@ -10,8 +10,8 @@ interface RandomWorkingPopupProps {
 
 const spinnerProps = {
   visible: true,
-  height: "80",
-  width: "80",
+  height: "160",
+  width: "160",
   ariaLabel: "loading",
   wrapperStyle: {},
   wrapperClass: "dna-wrapper",
@@ -22,6 +22,7 @@ const spinners = [DNA, BallTriangle, ColorRing, Watch, ProgressBar, RotatingLine
 
 const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWorkingPopupProps) => {
   const delay = 500;
+  const dotCount = 3;
   const [step, setStep] = useState<number>(0);
   const spinnerID = useDailyRandomNumber("RandomworkingPopup", spinners.length);
 
@@ -30,7 +31,7 @@ const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWor
     
     const delayInputTimeoutId = setTimeout(() => {
     
-      setStep(step > 2 ? 0 : step + 1);
+      setStep(step < dotCount ? step + 1:0); 
     }, delay);
     return () => clearTimeout(delayInputTimeoutId);
   });
@@ -43,12 +44,12 @@ const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWor
 
     <>
       {show && (
-        <Popup title="" zindex={50} width={30}>
-          <div className="flex flex-col justify-center items-center w-auto">
+        <Popup title="" zindex={50} width={80}>
+          <div className="flex flex-col justify-center items-center w-40">
 
             {spinners[spinnerID](spinnerProps)}
 
-            <span className="text-[20px] text-black my-8">Working {".".repeat(step)}</span>
+            <span className="text-[20px] text-black my-8">Working {".".repeat(step).padEnd(dotCount, "\u00A0")}</span>
           </div>
         </Popup>
       )}

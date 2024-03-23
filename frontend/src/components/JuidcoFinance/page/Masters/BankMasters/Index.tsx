@@ -19,6 +19,7 @@ import SuccesfullConfirmPopup from "@/components/global/molecules/general/Succes
 import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 
 // Imports //----------------------------------------------------------------
 
@@ -31,7 +32,7 @@ export const HeroBankMasters = () => {
   const [isAddBankAccountOpen, setIsBankAccountOpen] = useState<boolean>(false);
   const [isDataLossPopupOpen, setDataLossPopupOpen] = useState<boolean>(false);
   const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
-  const [isWaitingForNextPage, setWaitingForNextPage] = useState<boolean>(false);
+  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
 
 
   let isDirty = false;
@@ -98,14 +99,13 @@ export const HeroBankMasters = () => {
   );
 
   const onViewButtonClick = (id: string) => {
-    setWaitingForNextPage(true);
+    activateWorkingAnimation();
     router.push(`${pathName}/${id}`);
   };
 
 
 
   const onSubmit = (values: AddBankDetailsData) => {
-  
     console.log(values)
     mutate(values);
   }
@@ -145,6 +145,8 @@ export const HeroBankMasters = () => {
     <>
       <Toaster />
 
+      {workingAnimation}
+
       {isDataLossPopupOpen && (
         <LosingDataConfirmPopup cancel={() => setDataLossPopupOpen(false)} continue={() => closePopups()} />
       )}
@@ -153,7 +155,7 @@ export const HeroBankMasters = () => {
         <SuccesfullConfirmPopup message="Recorded Successfully"/>
       )}
 
-      <RandomWorkingPopup show={isSaving || isWaitingForNextPage} />
+      <RandomWorkingPopup show={isSaving} />
 
       {isAddBankAccountOpen && (
         <Popup title="Add New Bank Account" zindex={10} width={80}>{bankAccountForm.render()}</Popup>

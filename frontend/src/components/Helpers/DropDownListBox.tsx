@@ -55,6 +55,7 @@ const DropDownListBox: React.FC<DropDownListBoxProps> = (props) => {
   } = useQuery([fieldId], fetchData);
   
   if (dataError) {
+    console.log(dataError);
     throw new Error("Fatal Error!");
   }
     

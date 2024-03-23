@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { sidebarLinks } from "@/json/sidebar.json";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import defaultProfilePic from "@/assets/icons/profile2.png";
+import { LinkWithLoader } from "../atoms/LinkWithLoader";
 
 
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -100,7 +100,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                         key={i}
                                         className={`mt-3 ml-5`}
                                       >
-                                        <Link
+                                        <LinkWithLoader
                                           className={`text-[0.9375rem] p-2 ${
                                             pathName === link.path
                                               ? "text-black font-medium bg-primary_bg_indigo bg-opacity-20"
@@ -109,7 +109,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                           href={link.path}
                                         >
                                           {link.moduleName}
-                                        </Link>
+                                        </LinkWithLoader>
                                       </li>
                                     ))}
                                   </ul>

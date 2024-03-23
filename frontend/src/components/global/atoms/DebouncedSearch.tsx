@@ -1,6 +1,7 @@
 import React from "react";
 
 interface DebouncedSearchProps {
+  onSearching?: (e: boolean) => void;
   onChange: (e: string) => void;
   debounceDuration?: number | 1000; // default 1 second
 }
@@ -11,6 +12,7 @@ const DebouncedSearch: React.FC<DebouncedSearchProps> = (props) => {
 
   React.useEffect(() => {
     const delayInputTimeoutId = setTimeout(() => {
+      if(props.onSearching) props.onSearching(false);
       props.onChange(searchText);
     }, debounceTime);
     return () => clearTimeout(delayInputTimeoutId);
@@ -18,7 +20,11 @@ const DebouncedSearch: React.FC<DebouncedSearchProps> = (props) => {
 
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchText(event.target.value);
+      const st = event.target.value;
+      
+      if(props.onSearching) props.onSearching(true);
+      
+      setSearchText(st);
   }
 
   return (
