@@ -8,7 +8,7 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf ./build && npx tsc && ./proto/build.sh && cp -R ./src/grpc/proto ./build/src/grpc",
+    "build": "rm -rf ./build && ./proto/build.sh && npx tsc && cp -R ./src/grpc/proto ./build/src/grpc",
     "lint": "eslint src/",
     "start": "node build/src/server.js",
     "dev": "nodemon src/server.ts",
