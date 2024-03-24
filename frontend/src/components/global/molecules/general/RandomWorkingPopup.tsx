@@ -18,13 +18,10 @@ const spinnerProps = {
   color: "#4338ca"
 };
 
-const spinners = [DNA, BallTriangle, ColorRing, Watch, ProgressBar, RotatingLines, Circles];
-
 const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWorkingPopupProps) => {
   const delay = 500;
   const dotCount = 3;
   const [step, setStep] = useState<number>(0);
-  const spinnerID = useDailyRandomNumber("RandomworkingPopup", spinners.length);
 
   
   useEffect(() => {
@@ -38,7 +35,9 @@ const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWor
 
 
 
-
+  const spinners = [DNA, BallTriangle, ColorRing, Watch, ProgressBar, RotatingLines, Circles];
+  const spinnerID = useDailyRandomNumber("RandomworkingPopup", spinners.length);
+  const spinner = spinners[spinnerID](spinnerProps);
   
   return (
 
@@ -47,7 +46,7 @@ const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWor
         <Popup title="" zindex={50} width={80}>
           <div className="flex flex-col justify-center items-center w-40">
 
-            {spinners[spinnerID](spinnerProps)}
+            {spinner}
 
             <span className="text-[20px] text-black my-8">Working {".".repeat(step).padEnd(dotCount, "\u00A0")}</span>
           </div>
