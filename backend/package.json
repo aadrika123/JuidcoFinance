@@ -8,9 +8,9 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "jest",
-    "build": "./proto/build.sh && npx tsc && cp -R ./src/grpc/proto ./build/grpc",
+    "build": "rm -rf ./build && npx tsc && ./proto/build.sh && cp -R ./src/grpc/proto ./build/src/grpc",
     "lint": "eslint src/",
-    "start": "tsc && node build/server.js",
+    "start": "node build/src/server.js",
     "dev": "nodemon src/server.ts",
     "migrate": "rm -rf prisma/migrations &&  npx prisma migrate dev --name init",
     "magic": "node magic/index.js",
