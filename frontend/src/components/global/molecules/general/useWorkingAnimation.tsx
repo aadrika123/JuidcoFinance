@@ -3,19 +3,13 @@ import RandomWorkingPopup from './RandomWorkingPopup';
 
 
 export function useWorkingAnimation(): [ReactNode, () => void, ()=> void] {
-  const [workingAnimation, setWorkingAnimation] = useState<ReactNode | null>(null);
+  const [show, setShow] = useState<boolean>(false);
 
-  const activateWorkingAnimation = () => {
-    setWorkingAnimation(
-      <>
-      <RandomWorkingPopup show={true}/>
-      </>
-    );
-  }
+  const activateWorkingAnimation = () => {setShow(true);}
 
-  const hideWorkingAnimation = () => {
-    setWorkingAnimation(null);
-  }
+  const hideWorkingAnimation = () => {setShow(false);}
+
+  const workingAnimation = (<RandomWorkingPopup show={show}/>);
 
   return [workingAnimation, activateWorkingAnimation, hideWorkingAnimation];
 }

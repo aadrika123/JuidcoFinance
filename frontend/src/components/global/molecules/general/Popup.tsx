@@ -16,7 +16,6 @@ const Popup: React.FC<PopupProps> = ({ title, children, zindex, width}: PopupPro
     const zindex2 = zindex;
     
     const widthh = width || 40;
-    console.log(widthh);
     return (
 
         <>
