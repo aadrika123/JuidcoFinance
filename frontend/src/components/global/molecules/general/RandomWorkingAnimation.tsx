@@ -17,13 +17,11 @@ const spinnerProps = {
   color: "#4338ca"
 };
 
-const spinners = [DNA, BallTriangle, ColorRing, Watch, ProgressBar, RotatingLines, Circles];
 
 const RandomWorkingAnimation: React.FC<RandomWorkingAnimationProps> = ({ show }: RandomWorkingAnimationProps) => {
   const delay = 500;
   const dotCount = 3;
   const [step, setStep] = useState<number>(0);
-  const spinnerID = useDailyRandomNumber("RandomWorkingAnimation", spinners.length);
 
 
   useEffect(() => {
@@ -37,6 +35,10 @@ const RandomWorkingAnimation: React.FC<RandomWorkingAnimationProps> = ({ show }:
 
 
 
+  const spinners = [DNA, BallTriangle, ColorRing, Watch, ProgressBar, RotatingLines, Circles];
+  const spinnerID = useDailyRandomNumber("RandomworkingAnimation", spinners.length);
+  const spinner = spinners[spinnerID](spinnerProps);
+
 
 
   return (
@@ -44,7 +46,7 @@ const RandomWorkingAnimation: React.FC<RandomWorkingAnimationProps> = ({ show }:
     <>
       {show && (
         <div className="block flex flex-col justify-center items-center w-40">
-            {spinners[spinnerID](spinnerProps)}
+            {spinner}
           <span className="text-[20px] text-black my-8">Working {".".repeat(step).padEnd(dotCount, "\u00A0")}</span>
         </div>
       )}

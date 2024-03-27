@@ -9,6 +9,7 @@ import LedgerDetailsComponent from "./LedgerDetailsComponent";
 import GeneralLedgerDetailsComponent from "./GeneralLedgerDetailsComponent";
 import ScheduleDetailsComponent from "./ScheduleDetailsComponent";
 import Loader from "@/components/Helpers/Basic/Loader";
+import { escapeRegExp } from "@/utils/helper";
 
 type PrimaryAccountingProps = {
   data: AccountingTableData[];
@@ -21,6 +22,8 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
   const [searchText, setSearchText] = useState<string>("");
   const [tableData, setTableData] = useState<AccountingTableData[]>(props.data);
   const [searchCondition, setSearchCondition] = useState<RegExp | null>(null);
+  const [hideZeroBalances, setHideZeroBalances] = useState<boolean>(false);
+
 
   const onViewButtonClick = (d: AccountingTableData) => {
     setAccount(d);
@@ -32,18 +35,29 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
     setAccount(null);
   }
 
+  
+
   useEffect(() => {
-    const reg = new RegExp(`(${searchText})`, "gi");
+    const escapedST = escapeRegExp(searchText);
+    const reg = new RegExp(`(${escapedST})`, "gi");
     if (searchText.length == 0) {
-      setTableData(props.data);
-      setSearchCondition(null);
+      if(!hideZeroBalances){
+        setTableData(props.data);
+        setSearchCondition(null);  
+      }else{
+        setTableData(props.data.filter(function (el) {
+          return el.balance!=0;
+        }));
+      }
     } else {
       setTableData(props.data.filter(function (el) {
-        return el.description.search(reg) != -1;
+        const text = el.code.concat(el.description);
+        return hideZeroBalances? el.balance!=0 && text.search(reg) != -1 : text.search(reg) != -1;
       }));
       setSearchCondition(reg);
     }
-  }, [searchText]);
+  }, [searchText, hideZeroBalances]);
+
 
 
   return (
@@ -83,7 +97,7 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
 
         <div className="mt-8">
           {searching ? (<Loader />) : (
-              <AccountingTable data={tableData} onViewButtonClick={onViewButtonClick} searchCondition={searchCondition} />
+              <AccountingTable data={tableData} onViewButtonClick={onViewButtonClick} searchCondition={searchCondition} handleHideZeroBalancesCheckbox={setHideZeroBalances} hideZeroBalances={hideZeroBalances}/>
           )}
         </div>
 

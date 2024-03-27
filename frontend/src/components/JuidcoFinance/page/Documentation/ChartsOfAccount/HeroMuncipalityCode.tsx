@@ -4,6 +4,7 @@ import { MuncipalityTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import MunicipalityCodeTable from "@/components/Helpers/Tables/MunicipalityCodeTable";
 import Loader from "@/components/Helpers/Basic/Loader";
+import { escapeRegExp } from "@/utils/helper";
 
 type HeroMuncipalityCodeProps = {
   data: MuncipalityTableData[];
@@ -16,7 +17,9 @@ const HeroMuncipalityCode: React.FC<HeroMuncipalityCodeProps> = (props) => {
   const [searchCondition, setSearchCondition] = useState<RegExp | null>(null);
 
   useEffect(()=>{
-    const reg = new RegExp(`(${searchText})`,"gi");
+    const escapedST = escapeRegExp(searchText);
+    const reg = new RegExp(`(${escapedST})`,"gi");
+
     if(searchText.length == 0){
       setTableData(props.data);
       setSearchCondition(null);

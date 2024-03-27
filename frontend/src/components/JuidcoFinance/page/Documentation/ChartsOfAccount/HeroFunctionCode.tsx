@@ -4,6 +4,7 @@ import FunctionCodeTable from "@/components/Helpers/Tables/FunctionCodeTable";
 import { FunctionTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import Loader from "@/components/Helpers/Basic/Loader";
+import { escapeRegExp } from "@/utils/helper";
 
 type FunctionCodeProps = {
   data: FunctionTableData[];
@@ -18,7 +19,8 @@ const FunctionCode: React.FC<FunctionCodeProps> = (props) => {
 
 
   useEffect(()=>{
-    const reg = new RegExp(`(${searchText})`,"gi");
+    const escapedST = escapeRegExp(searchText);
+    const reg = new RegExp(`(${escapedST})`,"gi");
     if(searchText.length == 0){
       setTableData(props.data);
       setSearchCondition(null);
