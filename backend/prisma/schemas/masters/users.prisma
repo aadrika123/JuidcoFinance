@@ -1,0 +1,47 @@
+/////// users Managed by: Sanjiv Kumar //////////////
+model users {
+  id                   Int      @id @default(autoincrement())
+  user_name            String?
+  mobile               String?
+  email                String
+  email_verified_at    DateTime?
+  user_type            String?
+  ulb_id               Int
+  password             String
+  suspended            Boolean
+  super_user           Boolean?
+  description          String?
+  remember_token       String
+  workflow_participant Boolean
+  photo_relative_path  String?
+  photo                String?
+  sign_relative_path   String?
+  signature            String?
+  old_ids              Int?
+  name                 String
+  old_password         String?
+  user_code            String?
+  alternate_mobile     String?
+  address              String?
+  wf_roleusermaps      wf_roleusermaps[]
+  cheque_book_entries  cheque_book_entries[]
+  bill_payment_entries bill_payment_entries[]
+  dir_payment_entries  dir_payment_entries[]
+  cheque_issuances     cheque_issuances[]
+  investments          investments[]
+  grant_entries        grant_entries[]
+
+  advance_officer     advance_managements[] @relation("officer")
+  advance_pwd_officer advance_managements[] @relation("pwd_officer")
+
+  loan_officer     loan_managements[] @relation("officer")
+  loan_employee    loan_managements[] @relation("user")
+  loan_designation loan_managements[] @relation("designation")
+
+  request_account_codes request_account_codes[]
+
+  receipt_entered_by receipt_registers[] @relation("entered_by")
+  receipt_checked_by receipt_registers[] @relation("checked_by")
+  created_at           DateTime? @default(now()) @map("created_at")
+  updated_at           DateTime @updatedAt @map("updated_at")
+}

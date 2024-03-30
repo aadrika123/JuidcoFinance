@@ -16,7 +16,7 @@ const investments_seeder = async () => {
             face_value_amount: faker.datatype.number(),
             interest_due_date: faker.date.past(),
             interest_due_amount: faker.datatype.number(),
-            employee_id: 1,
+            user_id: 1,
             interest_recovered_amount: faker.datatype.number(),
             interest_recovery_date: faker.date.past(),
             acc_adj_recovery_date: faker.date.past(),

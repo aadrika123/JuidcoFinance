@@ -18,7 +18,7 @@ class AuditTrail {
     try {
       await prisma.audit_trails.create({
         data: {
-          error: error,
+          error: String(error),
           message: error.message,
           meta_data: {
             ...resObj,

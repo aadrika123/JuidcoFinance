@@ -32,7 +32,7 @@ const loan_management_seeder = async () => {
       balance_interest: faker.datatype.number(),
       balance_total_amount: faker.datatype.number(),
       balance_remarks: faker.lorem.sentence(),
-      employee_id: 1,
+      user_id: 1,
       designation_id: 1,
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),

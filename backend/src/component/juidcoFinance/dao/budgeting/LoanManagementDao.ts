@@ -89,7 +89,7 @@ class LoanManagementDao {
         balance_interest: true,
         balance_total_amount: true,
         balance_remarks: true,
-        employee: {
+        user: {
           select: {
             id: true,
             name: true,
@@ -202,7 +202,7 @@ class LoanManagementDao {
         balance_interest: true,
         balance_total_amount: true,
         balance_remarks: true,
-        employee: {
+        user: {
           select: {
             id: true,
             name: true,

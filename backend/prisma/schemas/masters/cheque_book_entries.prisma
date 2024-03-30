@@ -1,16 +1,14 @@
-//// Cheque Book Entry
 model cheque_book_entries {
-  id                      Int       @id @default(autoincrement())
-  date                    DateTime
-  
-  bank_id             Int
-  bank                banks   @relation(fields: [bank_id], references: [id])
+  id   Int      @id @default(autoincrement())
+  date DateTime
 
-  
+  bank_id Int
+  bank    banks @relation(fields: [bank_id], references: [id])
+
   bank_account_no         String
-  cheque_no_from          String
-  employee                employees @relation(fields: [employee_id], references: [id])
-  employee_id             Int
+  cheque_no_from          String 
+  user                    users @relation(fields: [user_id], references: [id])   
+  user_id                 Int
   bank_branch             String
   page_count              Int
   cheque_no_to            String

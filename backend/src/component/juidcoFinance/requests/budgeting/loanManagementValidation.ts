@@ -28,7 +28,7 @@ export interface LoanManagementRequestData {
   balance_interest: number;
   balance_total_amount: number;
   balance_remarks: string;
-  employee_id: number;
+  user_id: number;
   designation_id: number;
 }
 
@@ -59,7 +59,7 @@ const loanManagementSchema = Joi.object({
   balance_interest: Joi.number().required(),
   balance_total_amount: Joi.number().required(),
   balance_remarks: Joi.string().required(),
-  employee_id: Joi.number().required(),
+  user_id: Joi.number().required(),
   designation_id: Joi.number().required(),
 });
 
@@ -95,7 +95,7 @@ export const requestData = (req: Request): LoanManagementRequestData => {
     balance_interest: req.body.balance_interest,
     balance_total_amount: req.body.balance_total_amount,
     balance_remarks: req.body.balance_remarks,
-    employee_id: req.body.employee_id,
+    user_id: req.body.user_id,
     designation_id: req.body.designation_id,
   };
 };
@@ -129,7 +129,7 @@ export const multiRequestData = (req: Request): LoanManagementRequestData[] => {
       balance_interest: item.balance_interest,
       balance_total_amount: item.balance_total_amount,
       balance_remarks: item.balance_remarks,
-      employee_id: item.employee_id,
+      user_id: item.user_id,
       designation_id: item.designation_id,
     });
   }

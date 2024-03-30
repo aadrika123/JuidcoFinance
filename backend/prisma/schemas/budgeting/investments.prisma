@@ -1,36 +1,37 @@
 ////investments: Managed by: Bijoy Paitandi
 model investments {
-    id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-    ulb_id Int
-    ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
+  ulb_id Int
+  ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
 
-    primary_acc_code_id Int
-    primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
 
-    investment_no      String
-    authorization_date DateTime
-    investment_date    DateTime
-    particulars        String
+  investment_no      String
+  authorization_date DateTime
+  investment_date    DateTime
+  particulars        String
 
-    investment_type_id Int
-    investment_type    investment_types @relation(fields: [investment_type_id], references: [id])
+  investment_type_id Int
+  investment_type    investment_types @relation(fields: [investment_type_id], references: [id])
 
-    purchase_amount     Float
-    face_value_amount   Float
-    interest_due_date   DateTime
-    interest_due_amount Float
+  purchase_amount     Float
+  face_value_amount   Float
+  interest_due_date   DateTime
+  interest_due_amount Float
 
-    employee_id Int
-    employee    employees @relation(fields: [employee_id], references: [id])
+  user_id Int
+  user    users @relation(fields: [user_id], references: [id])
 
-    interest_recovered_amount Float
-    interest_recovery_date    DateTime
-    acc_adj_recovery_date     DateTime
-    realization_final_amount  Float
-    realization_date          DateTime
-    acc_adj_realization_date  DateTime
-    remarks                   String
-    created_at                DateTime @default(now()) @map("created_at")
-    updated_at                DateTime @updatedAt @map("updated_at")
+
+  interest_recovered_amount Float
+  interest_recovery_date    DateTime
+  acc_adj_recovery_date     DateTime
+  realization_final_amount  Float
+  realization_date          DateTime
+  acc_adj_realization_date  DateTime
+  remarks                   String
+  created_at                DateTime @default(now()) @map("created_at")
+  updated_at                DateTime @updatedAt @map("updated_at")
 }

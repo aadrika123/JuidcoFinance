@@ -1,0 +1,13 @@
+/////// wf_roles Managed by: Sanjiv Kumar //////////////
+
+model wf_roles {
+    id              Int       @id @default(autoincrement())
+    role_name       String
+    is_suspended    Boolean
+    created_by      Int
+    stamp_date_time DateTime?
+    old_ids         String?
+    wf_roleusermaps wf_roleusermaps[]
+    created_at      DateTime? @default(now()) @map("created_at")
+    updated_at      DateTime? @updatedAt @map("updated_at")
+}

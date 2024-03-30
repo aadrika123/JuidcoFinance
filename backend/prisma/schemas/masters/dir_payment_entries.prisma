@@ -6,7 +6,7 @@ model dir_payment_entries {
   payment_type_id    Int
   payment_type       payment_types @relation(fields: [payment_type_id], references: [id])
   payee_name_id      Int
-  payee_name         employees     @relation(fields: [payee_name_id], references: [id])
+  payee_name         users     @relation(fields: [payee_name_id], references: [id])
   narration          String
   grant_id           Int
   grant              grants        @relation(fields: [grant_id], references: [id])

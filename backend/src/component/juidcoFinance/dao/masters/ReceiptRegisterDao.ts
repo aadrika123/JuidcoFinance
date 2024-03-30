@@ -332,12 +332,22 @@ class ReceiptRegisterDao {
           select: {
             id: true,
             name: true,
-            designation: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
+            // designation: {
+            //   select: {
+            //     id: true,
+            //     name: true,
+            //   },
+            // },
+            wf_roleusermaps:{
+              select:{
+                wf_role:{
+                  select:{
+                    id: true,
+                    role_name: true,
+                  }
+                }
+              }
+            }
           },
         },
         isChecked: true,
@@ -346,12 +356,22 @@ class ReceiptRegisterDao {
           select: {
             id: true,
             name: true,
-            designation: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
+            // designation: {
+            //   select: {
+            //     id: true,
+            //     name: true,
+            //   },
+            // },
+            wf_roleusermaps:{
+              select:{
+                wf_role:{
+                  select:{
+                    id: true,
+                    role_name: true,
+                  }
+                }
+              }
+            }
           },
         },
         checked_by_print_name: true,
@@ -365,7 +385,7 @@ class ReceiptRegisterDao {
 
   // Update receipt_registers details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.receipt_registers.update({
       where: {
         id: id,
@@ -394,7 +414,7 @@ class ReceiptRegisterDao {
   createOpeningBal = async (req: Request) => {
     return await prisma.daily_receipt_balances.create({
       data: {
-        opening_balance: req.body.opening_balance
+        opening_balance: req.body.data.opening_balance
       }
     })
   }
@@ -403,10 +423,10 @@ class ReceiptRegisterDao {
   updateOpeningBal = async (req: Request) => {
     return await prisma.daily_receipt_balances.update({
       where: {
-        id: req.body.id
+        id: req.body.data.id
       },
       data: {
-        opening_balance: req.body.opening_balance
+        opening_balance: req.body.data.opening_balance
       }
     })
   }

@@ -1,48 +1,46 @@
 ////grant_entries: Managed by: Bijoy Paitandi
-model grant_entries{
-	id                  Int                 @id @default(autoincrement())
+model grant_entries {
+  id Int @id @default(autoincrement())
 
-	ulb_id              Int
-  ulb                 municipality_codes  @relation(fields: [ulb_id], references: [id])
-  
-	primary_acc_code_id Int
-  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+  ulb_id Int
+  ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
 
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
 
-	grant_id            Int
-  grant             grants       @relation(fields: [grant_id], references: [id])
+  grant_id Int
+  grant    grants @relation(fields: [grant_id], references: [id])
 
+  sanction_number String
 
-	sanction_number     String
+  grant_nature_id Int
+  grant_nature    grant_natures @relation(fields: [grant_nature_id], references: [id])
 
-	grant_nature_id     Int
-  grant_nature        grant_natures   @relation(fields: [grant_nature_id], references: [id])
+  grant_from_date   DateTime
+  grant_to_date     DateTime
+  sanctioned_amount Float
 
-	grant_from_date     DateTime
-	grant_to_date       DateTime
-	sanctioned_amount   Float
-	
   advance_rcving_date DateTime
-	advance_amount      Float
+  advance_amount      Float
 
-	expenditure_date    DateTime
+  expenditure_date DateTime
 
-	voucher_id          Int
-  voucher             voucher_entries       @relation(fields: [voucher_id], references: [id])
+  voucher_id Int
+  voucher    voucher_entries @relation(fields: [voucher_id], references: [id])
 
-	expndtre_nature_id  Int
-  expndtre_nature     expenditure_natures   @relation(fields: [expndtre_nature_id], references: [id])
+  expndtre_nature_id Int
+  expndtre_nature    expenditure_natures @relation(fields: [expndtre_nature_id], references: [id])
 
-	blnce_trckng_id     Int
-  blnce_trckng        balance_trackings     @relation(fields: [blnce_trckng_id], references: [id])
+  blnce_trckng_id Int
+  blnce_trckng    balance_trackings @relation(fields: [blnce_trckng_id], references: [id])
 
-	refund_date         DateTime
-	refund_amount       Float
+  refund_date   DateTime
+  refund_amount Float
 
-	employee_id         Int
-  employee            employees            @relation(fields: [employee_id], references: [id])
+  user_id Int
+  user    users @relation(fields: [user_id], references: [id])
 
-	signature           String
-	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
+  signature  String
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }

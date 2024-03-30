@@ -59,7 +59,7 @@ interface ChequebookRequestData {
   bank_id: number;
   bank_account_no: string;
   cheque_no_from: string;
-  employee_id: number;
+  user_id: number;
   bank_branch: string;
   page_count: number;
   cheque_no_to: string;

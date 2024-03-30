@@ -52,6 +52,7 @@ import revenue_modules_seeder from "./seeder/masters/revenue_modules_seeder";
 import bank_types_seeder from "./seeder/masters/bank_types_seeder";
 import daily_receipt_balance_seeder from "./seeder/revenueCollection/daily_receipt_balances_seeder";
 import accounting_code_types_seeder from "./seeder/masters/accounting_code_types_seeder";
+import foreign_wrapper from "./seeder/foreign_wrappter";
 
 const prisma = new PrismaClient();
 
@@ -96,6 +97,10 @@ async function main() {
 
 
   // return;
+
+  await prisma.$queryRaw`DROP TABLE users cascade`;
+  await prisma.$queryRaw`DROP TABLE wf_roles cascade`;
+  await prisma.$queryRaw`DROP TABLE wf_roleusermaps cascade`;
 
   await seed_reference_tables();
 
@@ -149,7 +154,7 @@ async function main() {
         bank_id: 1,
         bank_account_no: faker.finance.account(),
         cheque_no_from: faker.finance.creditCardNumber(),
-        employee_id: faker.datatype.number(),
+        user_id: faker.datatype.number(),
         bank_branch: faker.address.city(),
         page_count: faker.datatype.number(), // assuming page_count is a string
         cheque_no_to: faker.finance.creditCardNumber(),
@@ -176,7 +181,7 @@ async function main() {
   
           bank_account_no: item.bank_account_no,
           cheque_no_from: item.cheque_no_from,
-          employee_id: 1, //item.employee_id,
+          user_id: 1, //item.employee_id,
           bank_branch: item.bank_branch,
           page_count: item.page_count,
           cheque_no_to: item.cheque_no_to,
@@ -276,7 +281,11 @@ async function main() {
     await receipt_register_seeder();
 
     await daily_receipt_balance_seeder();
-  }, 6000);
+  }, 8000);
+
+  setTimeout(async() => {
+    await foreign_wrapper();
+  }, 9000)
 
 
 }

@@ -1,0 +1,13 @@
+/////// wf_roleusermaps Managed by: Sanjiv Kumar //////////////
+
+model wf_roleusermaps {
+    id           Int       @id @default(autoincrement())
+    wf_role_id   Int
+    wf_role      wf_roles @relation(fields: [wf_role_id], references: [id])
+    user_id      Int
+    user         users    @relation(fields: [user_id], references: [id])
+    is_suspended Boolean
+    created_by   Int?
+    created_at   DateTime? @default(now()) @map("created_at")
+    updated_at   DateTime? @updatedAt @map("updated_at")
+}

@@ -53,10 +53,20 @@ class ChequebookEntryDao {
             name: true,  
           }
         },
-        employee: {
+        user: {
           select: {
             id: true,
-            name: true
+            name: true,
+            wf_roleusermaps:{
+              select:{
+                wf_role:{
+                  select:{
+                    id: true,
+                    role_name: true,
+                  }
+                }
+              }
+            }
           }
         },
         bank_account_no: true,
@@ -84,7 +94,7 @@ class ChequebookEntryDao {
     }
 
 
-    const [data, count] = await prisma.$transaction([
+    const [data, count] :any = await prisma.$transaction([
       prisma.cheque_book_entries.findMany(query),
       prisma.cheque_book_entries.count({ where: query.where })
     ]);
@@ -135,7 +145,7 @@ class ChequebookEntryDao {
             name: true
           }
         },
-        employee: {
+        user: {
           select: {
             id: true,
             name: true
