@@ -32,7 +32,7 @@ class ReceiptRegisterController {
       version: "1.0",
     };
     try {
-      const { error } = receiptRegisterValidation.validate(req.body);
+      const { error } = receiptRegisterValidation.validate(req.body.data);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
@@ -125,7 +125,7 @@ class ReceiptRegisterController {
       version: "1.0",
     };
     try {
-      const { error } = receiptRegisterValidationWithID.validate(req.body);
+      const { error } = receiptRegisterValidationWithID.validate(req.body.data);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
@@ -177,7 +177,7 @@ class ReceiptRegisterController {
       version: "1.0",
     };
     try{
-      const { error } = openingBalanceSchema.validate(req.body);
+      const { error } = openingBalanceSchema.validate(req.body.data);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 
@@ -202,7 +202,7 @@ class ReceiptRegisterController {
       version: "1.0",
     };
     try{
-      const { error } = updateOpeningBalanceSchema.validate(req.body);
+      const { error } = updateOpeningBalanceSchema.validate(req.body.data);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 

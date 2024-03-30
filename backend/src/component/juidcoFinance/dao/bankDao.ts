@@ -12,7 +12,8 @@ class BankDao {
         name: true,
       },
     };
-    const data = prisma.banks.findMany(query);
+  
+    const data = await prisma.banks.findMany(query);
     return generateRes(data);
   };
 }

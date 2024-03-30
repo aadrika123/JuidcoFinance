@@ -69,7 +69,7 @@ class InvestmentsDao {
         face_value_amount: true,
         interest_due_date: true,
         interest_due_amount: true,
-        employee: {
+        user: {
           select: {
             id: true,
             name: true
@@ -113,7 +113,7 @@ class InvestmentsDao {
             },
           },
           {
-            employee: {
+            user: {
               name: {
                 contains: search, mode: "insensitive",
               },
@@ -163,7 +163,7 @@ class InvestmentsDao {
         face_value_amount: true,
         interest_due_date: true,
         interest_due_amount: true,
-        employee: {
+        user: {
           select: {
             id: true,
             name: true

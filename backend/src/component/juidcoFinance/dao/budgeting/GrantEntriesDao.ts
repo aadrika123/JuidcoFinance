@@ -88,11 +88,11 @@ class GrantEntriesDao {
         },
         refund_date: true,
         refund_amount: true,
-        employee: {
+        user: {
           select: {
             id: true,
             name: true,
-            designation: true,
+            // designation: true,
           },
         },
         signature: true,
@@ -148,7 +148,7 @@ class GrantEntriesDao {
             },
           },
           {
-            employee: {
+            user: {
               name: {
                 contains: search, mode: "insensitive",
               },
@@ -223,7 +223,7 @@ class GrantEntriesDao {
         },
         refund_date: true,
         refund_amount: true,
-        employee: {
+        user: {
           select: {
             id: true,
             name: true

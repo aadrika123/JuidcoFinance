@@ -23,7 +23,7 @@ const ReceiptRegister = () => {
   const pathName = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<any>();
-  const userData = useSelector((state: any) => state.user.user);
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState([]);
 
@@ -151,13 +151,13 @@ const ReceiptRegister = () => {
       value: tButton,
     },
   ];
+
   return (
     <>
       <Toaster />
       <HeaderWidget
         variant={
-          user?.designation?.udhd.name === "ULB" &&
-          user?.designation?.name === "Accounts Department – Accountant"
+          user?.role.includes("Accounts Department – Accountant")
             ? "add"
             : ""
         }

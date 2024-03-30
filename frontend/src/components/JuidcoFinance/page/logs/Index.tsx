@@ -111,6 +111,9 @@ const HeroLogsPage = () => {
     xaxis: {
       categories: graphCateg,
     },
+    yaxis: {
+      categories: [10, 20, 30, 40],
+    },
     chart: {
       toolbar: {
         show: false, // Hides the toolbar
@@ -163,7 +166,11 @@ const HeroLogsPage = () => {
                   <>
                     <div>
                       {graphCateg.length > 0 && (
-                        <LineChart width={580} options={options} />
+                        <LineChart
+                          title="Total Logs"
+                          width={580}
+                          options={options}
+                        />
                       )}
                     </div>
                   </>

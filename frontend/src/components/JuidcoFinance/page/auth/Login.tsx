@@ -5,11 +5,14 @@ import Input from "@/components/global/atoms/Input";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import React, { useState } from "react";
-import { FINANCE_URL } from "@/utils/api/urls";
-import axios from "@/lib/axiosConfig";
+// import { FINANCE_URL } from "@/utils/api/urls";
+// import axios from "@/lib/axiosConfig";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/reducers/authReducer";
+import axios from "axios";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+
+// some comment
 
 interface LoginInitialData {
   user_id: string;
@@ -32,24 +35,30 @@ const Login = () => {
   const handleLogin = async (values: LoginInitialData) => {
     activateWorkingAnimation();
     try {
-      const res = await axios({
-        url: FINANCE_URL.AUTH_URL.login,
-        method: "POST",
-        data: {
+      // "https://jharkhandegovernance.com/auth/api/login",
+      const res = await axios.post(
+        "http://localhost:8000/api/login",
+        {
           email: values.user_id,
           password: values.password,
         },
-      });
+        );
 
-      if(res.data.data){
-        dispatch(login(res.data.data)),window.location.replace("/finance/home");
-      }else{
-        setErrorMsg("You have entered wrong credentials !!");
-        hideWorkingAnimation();
-      }
-    } catch (error) { 
-      hideWorkingAnimation();
-      setErrorMsg("Wrong credentials!!");
+        // const res = await axios({
+        //   url: FINANCE_URL.AUTH_URL.login,
+        //   method: "POST",
+        //   data: {
+        //     email: values.user_id,
+        //     password: values.password,
+        //   },
+        // });
+
+      res.data.data
+        ? (dispatch(login(res.data.data)),
+          window.location.replace("/finance/home"))
+        : setErrorMsg("You have entered wrong credentials !!");
+    } catch (error) {
+      setErrorMsg("Something Went Wrong!!");
       console.log(error);
     }
   };

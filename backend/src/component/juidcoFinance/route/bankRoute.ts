@@ -14,6 +14,7 @@ class BankRoute {
   }
 
   configure(app: express.Application, apiId: string): void {
+    // (req: Request, res: Response, next: NextFunction) => this.middleware.manager(req, res, next, apiId+"01"),
     app.route(`${baseUrl}/banks/get`).get(
       (req: Request, res: Response) =>
         this.controller.get(req, res, apiId + "01")

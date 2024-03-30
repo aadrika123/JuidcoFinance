@@ -25,7 +25,7 @@ const Hoc = PopupFormikHOC(FormikW);
 
 export const AddReceiptRegister = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.user);
+  const user = useSelector((state: any) => state.user.user?.userDetails);
    /////////////// For Transforming in JSON
 
   const queryClient = new QueryClient();
@@ -47,7 +47,7 @@ export const AddReceiptRegister = () => {
     bank_acc_no: "",
     deposit_date: "",
     realisation_date: "",
-    wheather_returned: undefined,
+    wheather_returned: false,
     remarks: "",
     entered_by_id: user?.id,
     entered_by_print_name: ""
@@ -69,7 +69,7 @@ export const AddReceiptRegister = () => {
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
     if (!isUpdateMode.isOnEdit) {
-      setData((prev) => [...prev, { id: prev.length + 1, ...values, entered_by_id: user.id }]);
+      setData((prev) => [...prev, { id: prev.length + 1, ...values, entered_by_id: user.id, wheather_returned: String(values.wheather_returned) === "false" ? false : true }]);
     } else {
       setData((prev) => {
         const updatedData = prev.map((item) => {
@@ -91,13 +91,13 @@ export const AddReceiptRegister = () => {
               receipt_mode_id_name:
                 values.receipt_mode_id_name || item.receipt_mode_id_name,
               receipt_date: values.receipt_date,
-              cheque_or_draft_no: values.cheque_or_draft_no,
+              cheque_or_draft_no: values.cheque_or_draft_no || "",
               bank_amount: values.bank_amount || item.bank_amount,
               cash_amount: values.cash_amount,
-              bank_acc_no: values.bank_acc_no,
+              bank_acc_no: values.bank_acc_no || "",
               deposit_date: values.deposit_date,
               realisation_date: values.realisation_date,
-              wheather_returned: Boolean(values.wheather_returned),
+              wheather_returned: String(values.wheather_returned) === "false" ? false : true,
               remarks: values.remarks,
               entered_by_id: user.id,
               entered_by_print_name: values.entered_by_print_name,
@@ -117,13 +117,20 @@ export const AddReceiptRegister = () => {
   const handleStore = async (
     values: ReceiptRegisterDetailsData
   ): Promise<ReceiptRegisterDetailsData> => {
+   
     try {
       const res = await axios({
         url: `${FINANCE_URL.RECEIPT_REGISTER.create}`,
         method: "POST",
-        data: filterValBefStoring(values),
+        data: {
+          data: filterValBefStoring(values)
+        },
       });
-      return res.data;
+      if(res.data.status){
+
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

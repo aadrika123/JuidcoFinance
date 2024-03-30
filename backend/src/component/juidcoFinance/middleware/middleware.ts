@@ -68,10 +68,10 @@ class Middleware {
     req: Request,
     res: Response,
     next: NextFunction,
-    apiId: string,
+    apiId: string
   ) => {
     const resObj: resObj = {
-      apiId:  apiId || "Not related to APIs",
+      apiId: apiId || "Not related to APIs",
       action: "Authentication",
       version: "1.0",
     };
@@ -113,7 +113,7 @@ class Middleware {
     }
   };
 
-  //// Verify Is Accountent or not
+  //// Verify Is Manager or not Through masterDB
   manager = async (
     req: Request,
     res: Response,
@@ -121,40 +121,30 @@ class Middleware {
     apiId: string
   ) => {
     const resObj: resObj = {
-      apiId: apiId,
+      apiId: apiId || "Not related to APIs",
       action: "Authentication",
       version: "1.0",
     };
-    const secret = process.env.SECRET_KEY || "xyz";
-    const bearerHeader = req.headers["authorization"];
-    const token = bearerHeader?.split(" ")[1];
-    if (token && typeof token !== "undefined") {
-      try {
-        const data: any = await jwt.verify(token, secret);
-        res.locals.user = data?.authData;
-        if (
-          data &&
-          data?.authData?.designation?.name !== "Accounts Department – Manager"
-        ) {
-          return CommonRes.UNAUTHORISED(
-            "You are not authorised for the route",
-            resObj,
-            res,
-            req
-          );
-        }
-        next();
-      } catch (error: any) {
+    const role: any = req.body.auth;
+
+    if (
+      role !== "" &&
+      role !== undefined &&
+      Array.isArray(role) &&
+      role.length > 0
+    ) {
+      if (!role.includes("PROJECT MANAGER")) {
         return CommonRes.UNAUTHORISED(
-          resMessage(this.initMsg).INVALID,
+          "You are not authorised for the route",
           resObj,
           res,
           req
         );
       }
+      next();
     } else {
       return CommonRes.UNAUTHORISED(
-        resMessage(this.initMsg).NOT_FOUND,
+        resMessage("Role").NOT_FOUND,
         resObj,
         res,
         req

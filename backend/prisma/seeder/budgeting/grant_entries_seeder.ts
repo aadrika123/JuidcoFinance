@@ -21,7 +21,7 @@ const grant_entries_seeder = async () => {
             blnce_trckng_id: 1,
             refund_date: faker.date.past(),
             refund_amount: faker.datatype.number(),
-            employee_id: 1,
+            user_id: 1,
             signature: faker.lorem.sentence(),
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),

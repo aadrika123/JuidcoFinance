@@ -42,7 +42,7 @@ const Dashboard = () => {
           <PieChart title="Net Position" subTitle1="Previous Year" subTitle2="Current Year"  />
         </div>
         <div className="mx-4">
-          <LineChart options={options} />
+          <LineChart title="Total Revenue" options={options} />
         </div>
       </div>
       <div>

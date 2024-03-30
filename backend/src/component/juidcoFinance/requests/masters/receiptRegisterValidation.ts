@@ -53,32 +53,32 @@ export const receiptRegisterValidationWithID = receiptRegisterSchema.keys({
 });
 export const requestData = (req: Request): ReceiptRegisterRequestData => {
   return {
-    receipt_no: req.body.receipt_no,
-    ulb_id: req.body.ulb_id,
-    primary_acc_code_id: req.body.primary_acc_code_id,
-    revenue_module_id: req.body.revenue_module_id,
-    paid_by: req.body.paid_by,
-    receipt_mode_id: req.body.receipt_mode_id,
-    receipt_date: req.body.receipt_date,
-    cheque_or_draft_no: req.body.cheque_or_draft_no,
-    bank_amount: req.body.bank_amount,
-    cash_amount: req.body.cash_amount,
-    bank_acc_no: req.body.bank_acc_no,
-    deposit_date: req.body.deposit_date,
-    realisation_date: req.body.realisation_date,
-    wheather_returned: req.body.wheather_returned,
-    remarks: req.body.remarks,
-    entered_by_id: req.body.entered_by_id,
-    entered_by_print_name: req.body.entered_by_print_name,
-    checked_by_id: req.body.checked_by_id,
-    checked_by_print_name: req.body.checked_by_print_name,
+    receipt_no: req.body.data.receipt_no,
+    ulb_id: req.body.data.ulb_id,
+    primary_acc_code_id: req.body.data.primary_acc_code_id,
+    revenue_module_id: req.body.data.revenue_module_id,
+    paid_by: req.body.data.paid_by,
+    receipt_mode_id: req.body.data.receipt_mode_id,
+    receipt_date: req.body.data.receipt_date,
+    cheque_or_draft_no: req.body.data.cheque_or_draft_no,
+    bank_amount: req.body.data.bank_amount,
+    cash_amount: req.body.data.cash_amount,
+    bank_acc_no: req.body.data.bank_acc_no,
+    deposit_date: req.body.data.deposit_date,
+    realisation_date: req.body.data.realisation_date,
+    wheather_returned: req.body.data.wheather_returned,
+    remarks: req.body.data.remarks,
+    entered_by_id: req.body.data.entered_by_id,
+    entered_by_print_name: req.body.data.entered_by_print_name,
+    checked_by_id: req.body.data.checked_by_id,
+    checked_by_print_name: req.body.data.checked_by_print_name,
   };
 };
 export const multiRequestData = (
   req: Request
 ): ReceiptRegisterRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       receipt_no: item.receipt_no,
       ulb_id: item.ulb_id,

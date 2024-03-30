@@ -1,4 +1,4 @@
-export const baseUrl = `/finance/api/v1`;
+export const baseUrl = `/api/finance`;
 
 // Common response message
 /**
