@@ -62,7 +62,7 @@ const MunicipalityCodeTable: React.FC<TableDataProps> = (props) => {
                 <td className="border border-zinc-300 ">{props.searchCondition? parse(d?.ulbs.replaceAll( props.searchCondition,'<span className="bg-[#FFCD00] text-white">$1</span>')): d?.ulbs}</td>
 
                 {/* DISTRICT */}
-                <td className="border border-zinc-300">{d?.district} </td>
+                <td className="border border-zinc-300">{props.searchCondition? parse(d?.district.replaceAll( props.searchCondition,'<span className="bg-[#FFCD00] text-white">$1</span>')): d?.district}</td>
 
                 {/* STATE CODE */}
                 <td className="border border-zinc-300 ">

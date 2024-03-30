@@ -7,12 +7,7 @@ const prisma = new PrismaClient();
 // -> Belongs to Chart of Accounts
 class MuncipalityCodeDao {
   // Get All muncipilaty code
-  get = async (req: Request) => {
-    const search: string =
-      req.query.search == undefined ? "" : String(req.query.search);
-
-    const pattern1: string = `${search}%`;
-    const pattern2: string = `%${search}%`;
+  get = async () => {
 
     const data = await prisma.$queryRaw<municipality_codes[]>`
      select
@@ -22,10 +17,10 @@ class MuncipalityCodeDao {
      state_code,
      district_code,
      category,
-     code
+     code,
+     CONCAT(state_code, district_code, category, code) as full_code
      from
      municipality_codes
-     where CONCAT(state_code, district_code, category, code) LIKE ${pattern1} or ulbs LIKE ${pattern2} or district LIKE ${pattern2}
      `;
 
     return generateRes(data);

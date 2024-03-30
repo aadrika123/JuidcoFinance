@@ -25,7 +25,8 @@ const HeroMuncipalityCode: React.FC<HeroMuncipalityCodeProps> = (props) => {
       setSearchCondition(null);
     }else{
       setTableData(props.data.filter(function (el) {
-        return el.ulbs.search(reg) != -1;
+        const text = el.ulbs.concat(el.code).concat(el.district).concat(el.full_code)
+        return text.search(reg) != -1 || text.search(reg) != -1;
       }));
       setSearchCondition(reg);
     }
@@ -51,6 +52,6 @@ const HeroMuncipalityCode: React.FC<HeroMuncipalityCodeProps> = (props) => {
         
     </section>
   );
-};
+};  
 
 export default HeroMuncipalityCode;

@@ -69,3 +69,5 @@
 {"level":"error","message":"\"email\" must be a valid email","metaData":{"action":"GET","apiId":"4301","version":"1.0"},"service":"user-service","timestamp":"2024-03-24T06:52:03.219Z"}
 {"level":"error","message":"\"email\" must be a valid email","metaData":{"action":"GET","apiId":"4301","version":"1.0"},"service":"user-service","timestamp":"2024-03-24T06:52:08.399Z"}
 {"level":"error","message":"\"email\" must be a valid email","metaData":{"action":"GET","apiId":"4301","version":"1.0"},"service":"user-service","timestamp":"2024-03-24T07:17:30.430Z"}
+{"level":"error","message":"\"email\" must be a valid email","metaData":{"action":"GET","apiId":"4301","version":"1.0"},"service":"user-service","timestamp":"2024-03-29T07:08:13.531Z"}
+{"level":"error","message":"\"email\" must be a valid email","metaData":{"action":"GET","apiId":"4301","version":"1.0"},"service":"user-service","timestamp":"2024-03-29T07:08:36.243Z"}

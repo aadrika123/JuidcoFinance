@@ -41,13 +41,15 @@ const Login = () => {
         },
       });
 
-      res.data.data
-        ? (dispatch(login(res.data.data)),
-          window.location.replace("/finance/home"))
-        : setErrorMsg("You have entered wrong credentials !!");
-    } catch (error) {
+      if(res.data.data){
+        dispatch(login(res.data.data)),window.location.replace("/finance/home");
+      }else{
+        setErrorMsg("You have entered wrong credentials !!");
+        hideWorkingAnimation();
+      }
+    } catch (error) { 
       hideWorkingAnimation();
-      setErrorMsg("Something Went Wrong!!");
+      setErrorMsg("Wrong credentials!!");
       console.log(error);
     }
   };
