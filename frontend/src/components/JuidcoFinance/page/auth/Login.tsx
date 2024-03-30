@@ -5,10 +5,11 @@ import Input from "@/components/global/atoms/Input";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import React, { useState } from "react";
-import { FINANCE_URL } from "@/utils/api/urls";
-import axios from "@/lib/axiosConfig";
+// import { FINANCE_URL } from "@/utils/api/urls";
+// import axios from "@/lib/axiosConfig";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/reducers/authReducer";
+import axios from "axios";
 
 interface LoginInitialData {
   user_id: string;
@@ -29,14 +30,23 @@ const Login = () => {
 
   const handleLogin = async (values: LoginInitialData) => {
     try {
-      const res = await axios({
-        url: FINANCE_URL.AUTH_URL.login,
-        method: "POST",
-        data: {
+      // "https://jharkhandegovernance.com/auth/api/login",
+      const res = await axios.post(
+        "http://localhost:8000/api/login",
+        {
           email: values.user_id,
           password: values.password,
-        },
-      });
+        }
+      );
+
+      // const res = await axios({
+      //   url: FINANCE_URL.AUTH_URL.login,
+      //   method: "POST",
+      //   data: {
+      //     email: values.user_id,
+      //     password: values.password,
+      //   },
+      // });
 
       res.data.data
         ? (dispatch(login(res.data.data)),

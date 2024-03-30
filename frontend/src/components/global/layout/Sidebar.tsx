@@ -17,7 +17,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
   const pathName = usePathname();
   const router = useRouter();
   const [data, setData] = useState<string | null>();
-  const userData = useSelector((state: any) => state.user.user);
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [user, setUser] = useState<any>();
 
 
@@ -40,7 +40,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
           <Image src={defaultProfilePic} width={100} height={100} alt="logo1x" />
           <h1 className="text-black font-bold text-lg my-2">{user?.name}</h1>
           <h2 className="text-gray-400 font-bold text-xs">
-            {user?.designation?.name}
+            {user?.role}
           </h2>
         </div>
         <hr />
@@ -52,7 +52,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                   <ul className="h-lvh">
                     <li>
                       <details open className="w-full h-[100%]">
-                        <summary className="text-[1.125rem] p-2 px-6 whitespace-nowrap bg-primary_bg_indigo hover:bg-primary_bg_indigo rounded-none font-semibold text-white">
+                        <summary className="text-[1rem] p-2 px-6 whitespace-nowrap bg-primary_bg_indigo hover:bg-primary_bg_indigo rounded-none font-semibold text-white">
                           <i className="w-8 bg-white rounded-md p-1">
                             {link.icon}
                           </i>

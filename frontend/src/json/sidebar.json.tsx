@@ -1,11 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { SidebarLinksProps } from "@/utils/types/types";
-import financeLogo from "@/assets/icons/sidebar/finance.svg";
 import mastersLogo from "@/assets/icons/sidebar/masters.svg";
 import docLogo from "@/assets/icons/sidebar/doc.svg";
 import transactionsLogo from "@/assets/icons/sidebar/transaction.svg";
 import paymentLogo from "@/assets/icons/sidebar/payment.svg";
+import rupeeIcons from "@/assets/svg/rupee_icons.svg"
+import houseIcons from "@/assets/svg/house_icons.svg"
 
 export const sidebarLinks: SidebarLinksProps = {
   modules: [
@@ -14,7 +15,7 @@ export const sidebarLinks: SidebarLinksProps = {
       path: "/",
       icon: (
         <Image
-          src={financeLogo}
+          src={rupeeIcons}
           alt="finance"
           width={100}
           height={100}
@@ -25,7 +26,7 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Home",
           icon: (
             <Image
-              src={financeLogo}
+              src={houseIcons}
               alt="home"
               width={100}
               height={100}

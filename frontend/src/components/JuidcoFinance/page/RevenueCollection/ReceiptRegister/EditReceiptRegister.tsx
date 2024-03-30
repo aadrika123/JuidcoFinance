@@ -22,7 +22,7 @@ export const EditReceiptRegister = ({
   const searchParams = useSearchParams().get("mode");
   const [data, setData] = useState<any>();
   const [user, setUser] = useState<any>();
-  const userData = useSelector((state: any) => state.user.user);
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [inEditMode, setInEditMode] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const EditReceiptRegister = ({
     bank_acc_no: "",
     deposit_date: "",
     realisation_date: "",
-    wheather_returned: true,
+    wheather_returned: undefined,
     remarks: "",
     entered_by_id: "",
     entered_by_print_name: "",
@@ -60,6 +60,12 @@ export const EditReceiptRegister = ({
         method: "GET",
         url: `${FINANCE_URL.RECEIPT_REGISTER.getById}/${ReceiptRegisterID}`,
       });
+    
+     if(!res.data.status){
+      throw "Something Went Wrong!!!";
+     }else if(!res.data.data){
+      throw "Not Found"
+     }
       setData(res.data.data);
       setInitialData((prev) => {
         return {
@@ -71,13 +77,13 @@ export const EditReceiptRegister = ({
           paid_by: res.data.data.paid_by,
           receipt_mode_id: res.data.data.receipt_mode.id,
           receipt_date: DateFormatter(res.data.data.receipt_date),
-          cheque_or_draft_no: res.data.data.cheque_or_draft_no,
+          cheque_or_draft_no: res.data.data?.cheque_or_draft_no || "",
           bank_amount: res.data.data.bank_amount,
           cash_amount: res.data.data.cash_amount,
-          bank_acc_no: res.data.data.bank_acc_no,
+          bank_acc_no: res.data.data.bank_acc_no || "",
           deposit_date: DateFormatter(res.data.data.deposit_date),
           realisation_date: DateFormatter(res.data.data.realisation_date),
-          wheather_reaturned: res.data.data.wheather_reaturned,
+          wheather_returned: res.data.data.wheather_returned,
           remarks: res.data.data.remarks,
           entered_by_id: res.data.data.entered_by.id,
           entered_by_print_name: res.data.data.entered_by_print_name,
@@ -85,9 +91,9 @@ export const EditReceiptRegister = ({
           checked_by_print_name: res.data.data.checked_by_print_name,
           del_checked_by_name: res.data.data.checked_by?.name,
           del_checked_by_designation:
-            res.data.data.checked_by?.designation.name,
+            res.data.data.checked_by?.wf_roleusermaps[0]?.wf_role?.role_name,
           del_entered_by_name: res.data.data.entered_by.name,
-          del_entered_by_designation: res.data.data.entered_by.designation.name,
+          del_entered_by_designation: res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name,
         };
       });
     })();
@@ -97,16 +103,23 @@ export const EditReceiptRegister = ({
   const UpdateReceiptRegisterEntry = async (
     values: ReceiptRegisterDetailsData
   ): Promise<ReceiptRegisterDetailsData> => {
+    values.wheather_returned = String(values.wheather_returned) == "false" ? false : true;
+    
     try {
       const res = await axios({
         url: `${FINANCE_URL.RECEIPT_REGISTER.update}`,
         method: "POST",
         data: {
-          id: Number(ReceiptRegisterID),
-          ...values,
+          data:{
+            id: Number(ReceiptRegisterID),
+            ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
@@ -149,8 +162,7 @@ export const EditReceiptRegister = ({
         variant={searchParams == "view" ? "view" : "edit"}
         editVisible={
           data?.entered_by?.id === user?.id &&
-          user?.designation?.udhd.name === "ULB" &&
-            user?.designation?.name === "Accounts Department – Accountant"
+          user?.role.includes("Accounts Department – Accountant")
         }
         handleEditMode={handleEditMode}
       />

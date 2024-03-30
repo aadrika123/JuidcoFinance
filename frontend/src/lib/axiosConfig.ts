@@ -8,8 +8,10 @@ let user: any = "";
 if (userData) {
   user = JSON.parse(userData);
 }
+
 const instance = axios.create({
-  baseURL: "/finance/api/v1",
+  // baseURL: "http://localhost:5001/api/finance",   //// It's your backend baseUrl
+  baseURL: "http://localhost:8000/api/finance",     //// It's your local APIGetway baseUrl
   headers: {
     Authorization: `Bearer ${user?.token}`,
   },

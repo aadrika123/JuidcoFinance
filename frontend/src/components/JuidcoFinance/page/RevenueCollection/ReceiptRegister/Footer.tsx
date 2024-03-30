@@ -20,14 +20,12 @@ const Footer: React.FC<FooterProps> = (props) => {
     balances?.opening_balance?.opening_balance
   );
   const isEditable =
-    user?.designation?.udhd.name === "ULB" &&
-    user?.designation?.name === "Accounts Department – Manager"
+    user?.role.includes("Accounts Department – Manager")
       ? false
       : true;
 
   const tempUser =
-    user?.designation?.udhd.name === "ULB" &&
-    user?.designation?.name === "Accounts Department – Accountant"
+    user?.role.includes("Accounts Department – Accountant")
       ? {
           name: "Sanjiv Kumar",
           designation: { name: "Accounts Department – Manager" },
@@ -39,8 +37,7 @@ const Footer: React.FC<FooterProps> = (props) => {
     {
       key: "Opening Balance",
       value:
-        user?.designation?.udhd.name === "ULB" &&
-        user?.designation?.name === "Accounts Department – Accountant" ? (
+        user?.role.includes("Accounts Department – Accountant") ? (
           <Input
             label=""
             value={openingBal || balances?.opening_balance?.opening_balance}
@@ -63,7 +60,7 @@ const Footer: React.FC<FooterProps> = (props) => {
         balances?.total_amount + balances?.opening_balance?.opening_balance || 0,
     },
   ];
-
+console.log("sdfk", openingBal)
   //////// Handle Change
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrintName(e.target.value);
@@ -71,26 +68,36 @@ const Footer: React.FC<FooterProps> = (props) => {
 
   ////// Handle Add and Update Opening Balance
   const handleOpeningBal = async () => {
+    let res:any = "";
     try {
       !balances?.opening_balance?.opening_balance
-        ? await axios({
+        ? res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.create,
             method: "POST",
             data: {
-              opening_balance: Number(openingBal),
+              data:{
+                opening_balance: Number(openingBal),
+              }
             },
           })
-        : await axios({
+        : res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.update,
             method: "POST",
             data: {
-              id: balances?.opening_balance?.id,
-              opening_balance: Number(openingBal),
+              data:{
+                id: balances?.opening_balance?.id,
+                opening_balance: Number(openingBal),
+              }
             },
           });
 
-      toast.success('Done!!');
-      setOpeningBal(null)
+          if(res.data.status){
+            toast.success('Done!!');
+            setOpeningBal(null)
+          }else{
+            alert('Someting Went Wrong!!')
+            throw "Someting Went Wrong!!"
+          }
     } catch (error: any) {
       alert('Someting Went Wrong!!')
       console.log(error);

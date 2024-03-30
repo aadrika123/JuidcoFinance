@@ -50,7 +50,7 @@ const Home = () => {
   //////// Table View Button Feature //////////
   const onViewButtonClick1 = (id: string) => {
     router.push(
-      `/finance/revenue-collection/receipt-register/view/${id}?mode=view`
+      `/revenue-collection/receipt-register/view/${id}?mode=view`
     );
   };
 

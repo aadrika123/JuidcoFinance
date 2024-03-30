@@ -34,7 +34,7 @@ export interface FormikWrapperProps {
 }
 
 const FormikW: React.FC<FormikWrapperProps> = (props) => {
-  const user = useSelector((state: any) => state.user.user);
+  const user = useSelector((state: any) => state.user.user?.userDetails);
   /////////////// For Transforming in JSON
 
   const {
@@ -305,7 +305,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     <Input
                       value={
                         values.del_entered_by_designation ||
-                        user?.designation?.name
+                        user?.role
                       }
                       readonly={true}
                       label=""

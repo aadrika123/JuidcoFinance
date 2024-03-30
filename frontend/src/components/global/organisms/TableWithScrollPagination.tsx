@@ -21,7 +21,7 @@ interface TableWithScrollPaginProp {
   value?: () => void;
   center?: boolean;
   scrollable?: boolean;
-  handleGet?:(data: any)=> void;
+  handleGet?: (data: any) => void;
   handleApprove?: () => void;
 }
 
@@ -59,7 +59,7 @@ const TableWithScrollPagination = <T,>({
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split('T')[0]}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -69,14 +69,27 @@ const TableWithScrollPagination = <T,>({
     }
 
     // data = data.data.sort(sortByCreatedAtDesc);
-    setState((prev) => ({
-      ...prev,
-      count: data.count,
-      data: [...prev.data, ...data.data],
-    }));
-      const filteredData = data.data.map((item: any) => ({id: item.id}))
-      setFiltered(filteredData)
-      rest.handleGet && rest.handleGet({balance: data?.others, data :[...filtered, ...filteredData]})
+    if (state.data.length === 0) {
+      setState((prev) => ({
+        ...prev,
+        count: data.count,
+        data: data.data,
+      }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        count: data.count,
+        data: [...prev.data, ...data.data],
+      }));
+    }
+
+    const filteredData = data.data.map((item: any) => ({ id: item.id }));
+    setFiltered(filteredData);
+    rest.handleGet &&
+      rest.handleGet({
+        balance: data?.others,
+        data: [...filtered, ...filteredData],
+      });
     setTempFetch(false);
     setIsSearching(false);
     return data.data;
@@ -86,7 +99,7 @@ const TableWithScrollPagination = <T,>({
     isError: fetchingError,
     isLoading: isFetching,
     refetch: refetchData,
-  } = useQuery([], fetchData);
+  } = useQuery([page, searchText, ulbId, date], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
@@ -115,7 +128,7 @@ const TableWithScrollPagination = <T,>({
       }
     }
   };
-  
+
   ///////////// Listening Scroll /////////////////
   useEffect(() => {
     const element = document.getElementById("table-with-pegination");
@@ -168,7 +181,7 @@ const TableWithScrollPagination = <T,>({
           <DebouncedSearch onChange={onSearchTextChange} />
         </div>
 
-        {!tempFetch && (isFetching || isSearching) ? (
+        {tempFetch && (isFetching || isSearching || data.length === 0) ? (
           <LoaderSkeleton />
         ) : (
           <Table
@@ -179,8 +192,7 @@ const TableWithScrollPagination = <T,>({
             scrollable={scrollable}
           />
         )}
-
-        {tempFetch && <Loader className="h-8" />}
+          {tempFetch && data.length != 0  &&<Loader className="h-3" />}
         {footer}
         {/* <aside className="flex items-center justify-end py-5 gap-5">
           <Button onClick={rest.handleApprove} buttontype="button" variant="primary">
