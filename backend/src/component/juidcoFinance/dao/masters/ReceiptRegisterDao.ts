@@ -396,7 +396,7 @@ class ReceiptRegisterDao {
 
   //Appropve or Check the receipt register
   approve = async (req: Request) => {
-    const ids: [] = req.body.ids;
+    const ids: [] = req.body.data.ids;
 
     return await prisma.receipt_registers.updateMany({
       where: {
@@ -404,8 +404,8 @@ class ReceiptRegisterDao {
       },
       data: {
         isChecked: true,
-        checked_by_id: req.body.checked_by_id,
-        checked_by_print_name: req.body.checked_by_print_name,
+        checked_by_id: req.body.data.checked_by_id,
+        checked_by_print_name: req.body.data.checked_by_print_name,
       },
     });
   };

@@ -153,7 +153,7 @@ class ReceiptRegisterController {
       version: "1.0",
     };
     try {
-      const { error } = receiptRegisterApproveSchema.validate(req.body);
+      const { error } = receiptRegisterApproveSchema.validate(req.body.data);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
 

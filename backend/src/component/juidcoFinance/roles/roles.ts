@@ -4,4 +4,4 @@ class Roles {
   }
 }
 
-module.exports = Roles;
+export default Roles;

@@ -72,7 +72,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     label="Voucher Type"
                     name="voucher_type_id"
                     placeholder="Select Voucher Type"
-                    api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+                    api={`${FINANCE_URL.VOUCHER_TYPE_URL.get}`}
                     required
                   />
                 </div>

@@ -85,12 +85,18 @@ const ReceiptRegister = () => {
         url: FINANCE_URL.RECEIPT_REGISTER.approve,
         method: "POST",
         data: {
-          checked_by_id: user.id,
-          checked_by_print_name: name,
-          ids: receiptIds,
+          data:{
+            checked_by_id: user.id,
+            checked_by_print_name: name,
+            ids: receiptIds,
+          }
         },
       });
-      res && toast.success("Approved Sucessfully!!");
+      if (res.data.status) {
+        res && toast.success("Approved Sucessfully!!");
+      } else {
+        throw "Something Went Wrong!!";
+      }
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
@@ -157,9 +163,7 @@ const ReceiptRegister = () => {
       <Toaster />
       <HeaderWidget
         variant={
-          user?.role.includes("Accounts Department – Accountant")
-            ? "add"
-            : ""
+          user?.role.includes("Accounts Department – Accountant") ? "add" : ""
         }
         title={"Receipt Register Entry"}
       />
@@ -173,7 +177,7 @@ const ReceiptRegister = () => {
             user={user}
             balances={receiptData?.balance}
             handleApprove={handleApprove}
-            isThereData={receiptIds.length>0}
+            isThereData={receiptIds.length > 0}
           />
         }
         handleGet={handleGetBalance}

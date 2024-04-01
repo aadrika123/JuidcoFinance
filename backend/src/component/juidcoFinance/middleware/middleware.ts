@@ -5,13 +5,14 @@ import jwt from "jsonwebtoken";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resMessage } from "../responseMessage/commonMessage";
 import { resObj } from "../../../util/types";
+import Roles from "../roles/roles";
 
 class Middleware {
   private initMsg;
   private roles;
   constructor() {
     this.initMsg = "Token";
-    this.roles = new Roles;
+    this.roles = new Roles();
   }
 
   //// Generate the temperaury token
