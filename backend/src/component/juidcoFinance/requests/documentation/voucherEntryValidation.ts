@@ -25,23 +25,23 @@ export const voucherEntryValidationWithID = voucherEntrySchema.keys({
 // arrange request data for store and update
 export const requestData = (req: Request): VoucherEntryRequestData => {
   return {
-    voucher_no: req.body.voucher_no,
-    voucher_date: req.body.voucher_date,
-    voucher_type_id: req.body.voucher_type_id,
-    narration: req.body.narration,
-    department_id: req.body.department_id,
-    adminis_ward_id: req.body.adminis_ward_id,
-    voucher_sub_id: req.body.voucher_sub_id,
-    sub_ledger_id: req.body.sub_ledger_id,
-    amount: req.body.amount,
-    dr_cr_id: req.body.dr_cr_id,
+    voucher_no: req.body.data.voucher_no,
+    voucher_date: req.body.data.voucher_date,
+    voucher_type_id: req.body.data.voucher_type_id,
+    narration: req.body.data.narration,
+    department_id: req.body.data.department_id,
+    adminis_ward_id: req.body.data.adminis_ward_id,
+    voucher_sub_id: req.body.data.voucher_sub_id,
+    sub_ledger_id: req.body.data.sub_ledger_id,
+    amount: req.body.data.amount,
+    dr_cr_id: req.body.data.dr_cr_id,
   };
 };
 
 // arrange request data for store
 export const multiRequestData = (req: Request): VoucherEntryRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       voucher_no: generateUniquePaymentNo("VN"),
       voucher_date: item.voucher_date,

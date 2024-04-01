@@ -30,9 +30,15 @@ export const HeroAddVendor = () => {
     const res = await axios({
       url: `${FINANCE_URL.VENDOR_MASTER_URL.create}`,
       method: "POST",
-      data: values,
-    });
-    return res.data;
+      data: {
+          data: values
+        },
+      });
+      if(res.data.status){
+
+        return res.data;
+      } 
+      throw "Something Went Wrong";
   };
   const { mutate } = useMutation(createVendorDetails, {
     onSuccess: () => {

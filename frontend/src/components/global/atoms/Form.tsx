@@ -91,9 +91,15 @@ export default function Form(props: FormProps) {
     const res = await axios({
       url: props.uri,
       method: "POST",
-      data: values,
-    });
-    return res.data;
+      data: {
+          data: values
+        },
+      });
+      if(res.data.status){
+
+        return res.data;
+      } 
+      throw "Something Went Wrong";
   };
 
   // Mutate properties

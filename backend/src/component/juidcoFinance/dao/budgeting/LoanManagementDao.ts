@@ -224,7 +224,7 @@ class LoanManagementDao {
 
   // Update loan_managements details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.loan_managements.update({
       where: {
         id: id,

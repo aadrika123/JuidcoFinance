@@ -107,9 +107,15 @@ export const HeroAddBillPaymentEntry = () => {
      const res = await axios({
         url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.create}`,
         method: "POST",
-        data: filterValBefStoring(values),
-      });
+        data: {
+        data: filterValBefStoring(values)
+      },
+    });
+    if(res.data.status){
+
       return res.data;
+    } 
+    throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

@@ -30,7 +30,8 @@ class VoucherTypeController {
           "GET",
           "1501",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -44,7 +45,7 @@ class VoucherTypeController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "1501", "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", "1501", "1.0", res, req);
     }
   };
 }

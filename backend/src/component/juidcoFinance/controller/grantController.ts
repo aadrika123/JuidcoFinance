@@ -32,7 +32,8 @@ class GrantController {
           "GET",
           "1201",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -54,7 +55,8 @@ class GrantController {
         "GET",
         "1201",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };

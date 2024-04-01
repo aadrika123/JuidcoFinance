@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
     basePath: '/finance',
-    async redirects() {
+    env: {
+      backend: 'http://jharkhandegov.com:8000',
+    },
+     async redirects() {
       return [
         {
           source: '/',
@@ -11,6 +14,4 @@ const nextConfig = {
       ]
     },
   }
-
-module.exports = nextConfig
 

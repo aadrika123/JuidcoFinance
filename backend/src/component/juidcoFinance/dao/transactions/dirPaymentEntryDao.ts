@@ -143,7 +143,7 @@ class DirPaymentEntryDao {
 
   // Update payment entry details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.dir_payment_entries.update({
       where: {
         id: id,

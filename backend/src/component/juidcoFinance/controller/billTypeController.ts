@@ -32,7 +32,8 @@ class BillTypeController {
           "GET",
           "1401",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -54,7 +55,8 @@ class BillTypeController {
         "GET",
         "1401",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };

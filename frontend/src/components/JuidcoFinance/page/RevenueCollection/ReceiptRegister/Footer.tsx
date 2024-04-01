@@ -60,7 +60,7 @@ const Footer: React.FC<FooterProps> = (props) => {
         balances?.total_amount + balances?.opening_balance?.opening_balance || 0,
     },
   ];
-console.log("sdfk", openingBal)
+
   //////// Handle Change
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrintName(e.target.value);

@@ -109,11 +109,16 @@ export const EditLoanManagement = ({
         url: `${FINANCE_URL.LOAN_MANAGEMENT_URL.update}`,
         method: "POST",
         data: {
-          id: Number(LoanManagementID),
-          ...values,
+          data:{
+            id: Number(LoanManagementID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

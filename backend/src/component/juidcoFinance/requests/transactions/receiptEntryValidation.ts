@@ -44,17 +44,17 @@ export const receiptValidationWithID = receiptSchema.keys({
 export const requestData = (req: Request): ReceiptRequestData => {
 
   return {
-    receipt_no: req.body.receipt_no,
-    date: req.body.date,
-    paid_by: req.body.paid_by,
-    email: req.body.email,
-    module_id: req.body.module_id,
-    receipt_type_id: req.body.receipt_type_id,
-    mobile_no: req.body.mobile_no,
-    admin_ward_id: req.body.admin_ward_id,
-    narration: req.body.narration,
-    subledger_id: req.body.subledger_id,
-    amount: req.body.amount
+    receipt_no: req.body.data.receipt_no,
+    date: req.body.data.date,
+    paid_by: req.body.data.paid_by,
+    email: req.body.data.email,
+    module_id: req.body.data.module_id,
+    receipt_type_id: req.body.data.receipt_type_id,
+    mobile_no: req.body.data.mobile_no,
+    admin_ward_id: req.body.data.admin_ward_id,
+    narration: req.body.data.narration,
+    subledger_id: req.body.data.subledger_id,
+    amount: req.body.data.amount
   };
 };
 
@@ -62,7 +62,7 @@ export const requestData = (req: Request): ReceiptRequestData => {
 // collect request data for storing
 export const multiRequestData = (req: Request): ReceiptRequestData [] => {
   const data = [];
-  for(const item of req.body) {
+  for(const item of req.body.data) {
     data.push({
       receipt_no: item.receipt_no,
       date: item.date,

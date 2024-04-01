@@ -57,11 +57,16 @@ export const EditReceiptBudget = ({
         url: `${FINANCE_URL.RECEIPT_BUDGET_URL.update}`,
         method: "POST",
         data: {
-          id: Number(ReceiptBudgetID),
-          ...values,
+          data:{
+            id: Number(ReceiptBudgetID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

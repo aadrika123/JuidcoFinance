@@ -78,11 +78,16 @@ export const EditBudgetReAppro = ({
         url: `${FINANCE_URL.BUDGET_RE_APPRO_URL.update}`,
         method: "POST",
         data: {
-          id: Number(BudgetReApproID),
-          ...values,
+          data:{
+            id: Number(BudgetReApproID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

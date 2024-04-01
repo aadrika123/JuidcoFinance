@@ -74,11 +74,16 @@ export const EditReceipt = ({
         url: `/receipt-entry/update`,
         method: "POST",
         data: {
-          id: Number(receiptID),
-          ...values,
+          data:{
+            id: Number(receiptID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

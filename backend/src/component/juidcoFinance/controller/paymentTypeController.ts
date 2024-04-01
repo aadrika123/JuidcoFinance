@@ -32,7 +32,8 @@ class PaymentTypeController {
           "GET",
           "1001",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -54,7 +55,8 @@ class PaymentTypeController {
         "GET",
         "1001",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };

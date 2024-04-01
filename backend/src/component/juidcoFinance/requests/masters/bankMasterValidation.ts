@@ -39,19 +39,19 @@ export const bankMasterUpdateValidation = Joi.object({
 
 
 // arrange request data for store
-export const requestData = (req: Request): BankRequestData => {
+export const requestData = (data: any): BankRequestData => {
   return {
-    bank_id: req.body.bank_id,
-    ulb_id: req.body.ulb_id,
-    bank_type_id: req.body.bank_type_id,
-    ifsc_code: req.body.ifsc_code,
-    branch: req.body.branch,
-    micr_code: req.body.micr_code,
-    branch_address: req.body.branch_address,
-    branch_city: req.body.branch_city,
-    branch_state: req.body.branch_state,
-    branch_district: req.body.branch_district,
-    email: req.body.email,
-    contact_no: req.body.contact_no,
+    bank_id: data.bank_id,
+    ulb_id: data.ulb_id,
+    bank_type_id: data.bank_type_id,
+    ifsc_code: data.ifsc_code,
+    branch: data.branch,
+    micr_code: data.micr_code,
+    branch_address: data.branch_address,
+    branch_city: data.branch_city,
+    branch_state: data.branch_state,
+    branch_district: data.branch_district,
+    email: data.email,
+    contact_no: data.contact_no,
   };
 };

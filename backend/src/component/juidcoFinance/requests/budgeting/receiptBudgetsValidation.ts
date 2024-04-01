@@ -19,14 +19,14 @@ export const receiptBudgetsValidationWithID = receiptBudgetsSchema.keys({
 });
 export const requestData = (req: Request): ReceiptBudgetsRequestData => {
   return {
-    fin_year_id: req.body.fin_year_id,
-    primary_acc_code_id: req.body.primary_acc_code_id,
-    amount: req.body.amount,
+    fin_year_id: req.body.data.fin_year_id,
+    primary_acc_code_id: req.body.data.primary_acc_code_id,
+    amount: req.body.data.amount,
   };
 };
 export const multiRequestData = (req: Request): ReceiptBudgetsRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       fin_year_id: item.fin_year_id,
       primary_acc_code_id: item.primary_acc_code_id,

@@ -51,30 +51,30 @@ export const investmentsValidationWithID = investmentsSchema.keys({
 });
 export const requestData = (req: Request): InvestmentsRequestData => {
   return {
-    ulb_id: req.body.ulb_id,
-    primary_acc_code_id: req.body.primary_acc_code_id,
-    investment_no: req.body.investment_no,
-    authorization_date: req.body.authorization_date,
-    investment_date: req.body.investment_date,
-    particulars: req.body.particulars,
-    investment_type_id: req.body.investment_type_id,
-    purchase_amount: req.body.purchase_amount,
-    face_value_amount: req.body.face_value_amount,
-    interest_due_date: req.body.interest_due_date,
-    interest_due_amount: req.body.interest_due_amount,
-    user_id: req.body.user_id,
-    interest_recovered_amount: req.body.interest_recovered_amount,
-    interest_recovery_date: req.body.interest_recovery_date,
-    acc_adj_recovery_date: req.body.acc_adj_recovery_date,
-    realization_final_amount: req.body.realization_final_amount,
-    realization_date: req.body.realization_date,
-    acc_adj_realization_date: req.body.acc_adj_realization_date,
-    remarks: req.body.remarks,
+    ulb_id: req.body.data.ulb_id,
+    primary_acc_code_id: req.body.data.primary_acc_code_id,
+    investment_no: req.body.data.investment_no,
+    authorization_date: req.body.data.authorization_date,
+    investment_date: req.body.data.investment_date,
+    particulars: req.body.data.particulars,
+    investment_type_id: req.body.data.investment_type_id,
+    purchase_amount: req.body.data.purchase_amount,
+    face_value_amount: req.body.data.face_value_amount,
+    interest_due_date: req.body.data.interest_due_date,
+    interest_due_amount: req.body.data.interest_due_amount,
+    user_id: req.body.data.user_id,
+    interest_recovered_amount: req.body.data.interest_recovered_amount,
+    interest_recovery_date: req.body.data.interest_recovery_date,
+    acc_adj_recovery_date: req.body.data.acc_adj_recovery_date,
+    realization_final_amount: req.body.data.realization_final_amount,
+    realization_date: req.body.data.realization_date,
+    acc_adj_realization_date: req.body.data.acc_adj_realization_date,
+    remarks: req.body.data.remarks,
   };
 };
 export const multiRequestData = (req: Request): InvestmentsRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       ulb_id: item.ulb_id,
       primary_acc_code_id: item.primary_acc_code_id,

@@ -30,7 +30,8 @@ class DepartmentController {
           "GET",
           "0601",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -52,7 +53,8 @@ class DepartmentController {
         "GET",
         "0601",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };

@@ -46,9 +46,15 @@ export const AddChequebook = () => {
     const res = await axios({
       url: `${APIs.chequebook_mater$create}`,
       method: "POST",
-      data: values,
-    });
-    return res.data;
+      data: {
+          data: values
+        },
+      });
+      if(res.data.status){
+
+        return res.data;
+      } 
+      throw "Something Went Wrong";
   };
   const { mutate } = useMutation(createChequebookDetails, {
     onSuccess: () => {

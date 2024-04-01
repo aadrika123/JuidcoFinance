@@ -13,7 +13,7 @@ class BankMasterDao {
   // store bank details in DB
   store = async (req: Request) => {
     return await prisma.bank_masters.create({
-      data: requestData(req),
+      data: requestData(req.body.data),
     });
   };
 
@@ -117,7 +117,7 @@ class BankMasterDao {
   // Update bank details
   update = async (req: Request) => {
 
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
 
     const [copy, record] = await prisma.$transaction([
 
@@ -127,7 +127,7 @@ class BankMasterDao {
         where: {
           id: id,
         },
-        data: requestData(req),
+        data: req.body.data,
       }),
     ])
 

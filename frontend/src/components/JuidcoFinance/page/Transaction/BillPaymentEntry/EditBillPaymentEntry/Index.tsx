@@ -76,11 +76,16 @@ export const EditBillPaymentEntry = ({
         url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          id: Number(BillPaymentID),
-          ...values,
+          data:{
+            id: Number(BillPaymentID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

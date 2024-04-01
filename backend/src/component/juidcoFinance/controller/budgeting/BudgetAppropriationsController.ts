@@ -32,9 +32,9 @@ class BudgetAppropriationsController {
       version: "1.0",
     };
     try {
-      const { error } = budgetAppropriationsValidation.validate(req.body);
+      const { error } = budgetAppropriationsValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.budgetAppropriationsDao.store(req);
       return CommonRes.CREATED(
@@ -44,7 +44,7 @@ class BudgetAppropriationsController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -72,7 +72,7 @@ class BudgetAppropriationsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -95,7 +95,7 @@ class BudgetAppropriationsController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.budgetAppropriationsDao.getById(id);
 
@@ -109,7 +109,7 @@ class BudgetAppropriationsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -125,9 +125,9 @@ class BudgetAppropriationsController {
       version: "1.0",
     };
     try {
-      const { error } = budgetAppropriationsValidationWithID.validate(req.body);
+      const { error } = budgetAppropriationsValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.budgetAppropriationsDao.update(req);
       return CommonRes.CREATED(
@@ -137,7 +137,7 @@ class BudgetAppropriationsController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -160,7 +160,7 @@ class BudgetAppropriationsController {
           id: Joi.number().required().greater(0)
         }).validate({'id': id});
   
-        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
   
         const data = await this.budgetAppropriationsDao.getCurrentAmounts();
   
@@ -174,7 +174,7 @@ class BudgetAppropriationsController {
   
         return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
       } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
+        return CommonRes.SERVER_ERROR(error, resObj, res, req);
       }
     };
 

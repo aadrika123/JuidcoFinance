@@ -3,6 +3,8 @@ import { bankMasterUpdateValidation, bankMasterValidation } from "../../requests
 import { sendResponse } from "../../../../util/sendResponse";
 import BankMasterDao from "../../dao/masters/bankMasterDao";
 import ResMessage from "../../responseMessage/masters/bankMasterMessage";
+import CommonRes from "../../../../util/helper/commonResponse";
+import { resObj } from "../../../../util/types";
 
 /**
  * | Author- Sanjiv Kumar
@@ -20,7 +22,7 @@ class BankMasterController {
   // Create
   create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = bankMasterValidation.validate(req.body);
+      const { error } = bankMasterValidation.validate(req.body.data);
 
       if (error)
         return sendResponse(
@@ -31,7 +33,8 @@ class BankMasterController {
           "POST",
           "0401",
           "1.0",
-          res
+          res,
+          req
         );
 
       const data = await this.bankMasterDao.store(req);
@@ -55,7 +58,8 @@ class BankMasterController {
         "POST",
         "0401",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -74,7 +78,8 @@ class BankMasterController {
           "GET",
           "0402",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -96,7 +101,8 @@ class BankMasterController {
         "GET",
         "0402",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -116,7 +122,8 @@ class BankMasterController {
           "GET",
           "0403",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -138,15 +145,21 @@ class BankMasterController {
         "GET",
         "0403",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
 
   // Update bank details by Id
   update = async (req: Request, res: Response): Promise<Response> => {
+    const resObj:resObj = {
+      action: "POST",
+      apiId: "0404",
+      version: "1.0"
+    }
     try {
-      const { error } = bankMasterUpdateValidation.validate(req.body);
+      const { error } = bankMasterUpdateValidation.validate(req.body.data);
 
       if (error)
         return sendResponse(
@@ -157,7 +170,8 @@ class BankMasterController {
           "POST",
           "0404",
           "1.0",
-          res
+          res,
+          req
         );
 
       const data = await this.bankMasterDao.update(req);
@@ -172,16 +186,7 @@ class BankMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-        "",
-        500,
-        "POST",
-        "0404",
-        "1.0",
-        res
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, res, req)
     }
   };
 }

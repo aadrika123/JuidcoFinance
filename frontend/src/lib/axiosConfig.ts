@@ -11,7 +11,7 @@ if (userData) {
 
 const instance = axios.create({
   // baseURL: "http://localhost:5001/api/finance",   //// It's your backend baseUrl
-  baseURL: "http://localhost:8000/api/finance",     //// It's your local APIGetway baseUrl
+  baseURL: `${process.env.backend}/api/finance`,     //// It's your local APIGetway baseUrl
   headers: {
     Authorization: `Bearer ${user?.token}`,
   },

@@ -161,7 +161,7 @@ class BillInvoicesDao {
 
   // Update payment entry details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.bill_invoices.update({
       where: {
         id: id,

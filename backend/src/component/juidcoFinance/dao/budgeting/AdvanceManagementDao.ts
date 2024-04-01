@@ -242,7 +242,7 @@ class AdvanceManagementDao {
 
   // Update advance_managements details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.advance_managements.update({
       where: {
         id: id,

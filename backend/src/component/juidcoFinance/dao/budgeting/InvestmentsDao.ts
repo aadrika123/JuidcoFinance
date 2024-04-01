@@ -187,7 +187,7 @@ class InvestmentsDao {
 
   // Update investments details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.investments.update({
       where: {
         id: id,

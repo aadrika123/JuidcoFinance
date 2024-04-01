@@ -49,29 +49,29 @@ export const grantEntriesValidationWithID = grantEntriesSchema.keys({
 });
 export const requestData = (req: Request): GrantEntriesRequestData => {
   return {
-    ulb_id: req.body.ulb_id,
-    primary_acc_code_id: req.body.primary_acc_code_id,
-    grant_id: req.body.grant_id,
-    sanction_number: req.body.sanction_number,
-    grant_nature_id: req.body.grant_nature_id,
-    grant_from_date: req.body.grant_from_date,
-    grant_to_date: req.body.grant_to_date,
-    sanctioned_amount: req.body.sanctioned_amount,
-    advance_rcving_date: req.body.advance_rcving_date,
-    advance_amount: req.body.advance_amount,
-    expenditure_date: req.body.expenditure_date,
-    voucher_id: req.body.voucher_id,
-    expndtre_nature_id: req.body.expndtre_nature_id,
-    blnce_trckng_id: req.body.blnce_trckng_id,
-    refund_date: req.body.refund_date,
-    refund_amount: req.body.refund_amount,
-    user_id: req.body.user_id,
-    signature: req.body.signature,
+    ulb_id: req.body.data.ulb_id,
+    primary_acc_code_id: req.body.data.primary_acc_code_id,
+    grant_id: req.body.data.grant_id,
+    sanction_number: req.body.data.sanction_number,
+    grant_nature_id: req.body.data.grant_nature_id,
+    grant_from_date: req.body.data.grant_from_date,
+    grant_to_date: req.body.data.grant_to_date,
+    sanctioned_amount: req.body.data.sanctioned_amount,
+    advance_rcving_date: req.body.data.advance_rcving_date,
+    advance_amount: req.body.data.advance_amount,
+    expenditure_date: req.body.data.expenditure_date,
+    voucher_id: req.body.data.voucher_id,
+    expndtre_nature_id: req.body.data.expndtre_nature_id,
+    blnce_trckng_id: req.body.data.blnce_trckng_id,
+    refund_date: req.body.data.refund_date,
+    refund_amount: req.body.data.refund_amount,
+    user_id: req.body.data.user_id,
+    signature: req.body.data.signature,
   };
 };
 export const multiRequestData = (req: Request): GrantEntriesRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       ulb_id: item.ulb_id,
       primary_acc_code_id: item.primary_acc_code_id,

@@ -30,26 +30,26 @@ export const dirPaymentEntryValidationAlongWithID = dirPaymentEntrySchema.keys({
 // arrange request data for update
 export const requestData = (req: Request): DirPaymentEntryRequestData => {
   return {
-    payment_date: req.body.payment_date,
-    payment_no: req.body.payment_no,
-    payment_type_id: req.body.payment_type_id,
-    payee_name_id: req.body.payee_name_id,
-    narration: req.body.narration,
-    grant_id: req.body.grant_id,
-    user_common_budget: req.body.user_common_budget,
-    adminis_ward_id: req.body.adminis_ward_id,
-    address: req.body.address,
-    department_id: req.body.department_id,
-    payment_mode: req.body.payment_mode,
-    subledger_id: req.body.subledger_id,
-    amount: req.body.amount,
+    payment_date: req.body.data.payment_date,
+    payment_no: req.body.data.payment_no,
+    payment_type_id: req.body.data.payment_type_id,
+    payee_name_id: req.body.data.payee_name_id,
+    narration: req.body.data.narration,
+    grant_id: req.body.data.grant_id,
+    user_common_budget: req.body.data.user_common_budget,
+    adminis_ward_id: req.body.data.adminis_ward_id,
+    address: req.body.data.address,
+    department_id: req.body.data.department_id,
+    payment_mode: req.body.data.payment_mode,
+    subledger_id: req.body.data.subledger_id,
+    amount: req.body.data.amount,
   };
 };
 
 // arrange request data for store
 export const multiRequestData = (req: Request): DirPaymentEntryRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       payment_date: item.payment_date,
       payment_no: generateUniquePaymentNo("pn"),

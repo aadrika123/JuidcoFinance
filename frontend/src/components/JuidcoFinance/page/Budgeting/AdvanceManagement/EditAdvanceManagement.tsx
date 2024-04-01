@@ -121,11 +121,16 @@ export const EditAdvanceManagement = ({
         url: `${FINANCE_URL.ADVANCE_MANAGEMENT_URL.update}`,
         method: "POST",
         data: {
-          id: Number(AdvanceManagementID),
-          ...values,
+          data:{
+            id: Number(AdvanceManagementID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

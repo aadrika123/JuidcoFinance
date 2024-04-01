@@ -171,7 +171,7 @@ class ChequebookEntryDao {
 
   //update chequebook data
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.cheque_book_entries.update({
       where: {
         id,
