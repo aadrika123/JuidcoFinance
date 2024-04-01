@@ -11,9 +11,11 @@ const balance_trackings_seeder = async () => {
     for (let i = 0; i < acc_codes.length; i++) {
 
         const date1 = faker.date.between({ from: '2022-04-01T00:00:00.000Z', to: '2023-03-30T00:00:00.000Z' });
+        const balance = i%10 == 0 ? 0 : faker.datatype.float({ min: -100000000, max: 100000000 });
+        
         const record1 = {
             primary_acc_code_id: acc_codes[i].id,
-            total_balance: faker.datatype.float({ min: -100000000, max: 100000000 }),
+            total_balance: balance,
             debit_balance: faker.datatype.number(),
             credit_balance: faker.datatype.number(),
             created_at: date1,
@@ -25,9 +27,11 @@ const balance_trackings_seeder = async () => {
     
     for(let i=0;i<acc_codes.length;i++){
         const date2 =  faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2024-03-30T00:00:00.000Z' });
+        const balance = i%10 == 0 ? 0 : faker.datatype.float({ min: -100000000, max: 100000000 });
+        
         const record2 = {
             primary_acc_code_id: acc_codes[i].id,
-            total_balance: faker.datatype.float({ min: -100000000, max: 100000000 }),
+            total_balance: balance,
             debit_balance: faker.datatype.number(),
             credit_balance: faker.datatype.number(),
             created_at: date2,
@@ -38,9 +42,10 @@ const balance_trackings_seeder = async () => {
 
     for(let i=0;i<acc_codes.length;i++){
         const date2 =  faker.date.between({ from: '2024-04-01T00:00:00.000Z', to: '2025-03-30T00:00:00.000Z' });
+        const balance = i%10 == 0 ? 0 : faker.datatype.float({ min: -100000000, max: 100000000 });
         const record2 = {
             primary_acc_code_id: acc_codes[i].id,
-            total_balance: faker.datatype.float({ min: -100000000, max: 100000000 }),
+            total_balance: balance,
             debit_balance: faker.datatype.number(),
             credit_balance: faker.datatype.number(),
             created_at: date2,

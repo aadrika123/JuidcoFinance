@@ -10,7 +10,7 @@ const SuccesfullConfirmPopup: React.FC<SuccesfullConfirmPopupProps> = (props) =>
   const { message } = props;
   return (
 
-    <Popup title="" zindex={40}>
+    <Popup title="" zindex={50}>
       <div className="flex flex-col justify-center items-center w-auto">
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -28,7 +28,7 @@ class MuncipalityCodeController {
     apiId: string
   ): Promise<Response> => {
     try {
-      const data = await this.dao.get(req);
+      const data = await this.dao.get();
 
       if (!data)
         return sendResponse(

@@ -5,6 +5,7 @@ import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery } from "react-query";
 import { fc } from "@/utils/helper";
+import RandomWorkingAnimation from "@/components/global/molecules/general/RandomWorkingAnimation";
 
 interface ScheduleDetailsComponentProps {
   scheduleId: number;
@@ -47,6 +48,7 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ sch
   const {
     data: data,
     isError: dataError,
+    isLoading: isLoading,
   } = useQuery(["schedule-report", scheduleId], fetchData);
 
   if (dataError) {
@@ -61,7 +63,10 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ sch
   return (
     <>
 
-      <div className="m-4 p-10 border-2 rounded text-black">
+      <RandomWorkingAnimation show={isLoading}/>
+    
+      {!isLoading && (
+        <div className="m-4 p-10 border-2 rounded text-black">
 
         <div ref={componentRef} className="m-4">
 
@@ -143,6 +148,8 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({ sch
           </div>
         </div>
       </div>
+      )}
+      
 
     </>
   );

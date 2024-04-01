@@ -20,7 +20,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
     <>
       <main>
-        <Suspense fallback={<Loading />}>
+          <Suspense fallback={<Loading />}>
           <div className="h-screen">
             <Header onClick={handleToggle} />
             <div className="flex">
@@ -35,7 +35,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
               </section>
             </div>
           </div>
-        </Suspense>
+          </Suspense>
       </main>
     </>
   );

@@ -8,8 +8,10 @@ import { resObj } from "../../../util/types";
 
 class Middleware {
   private initMsg;
+  private roles;
   constructor() {
     this.initMsg = "Token";
+    this.roles = new Roles;
   }
 
   //// Generate the temperaury token
@@ -133,7 +135,8 @@ class Middleware {
       Array.isArray(role) &&
       role.length > 0
     ) {
-      if (!role.includes("PROJECT MANAGER")) {
+      
+      if (!this.roles.isProjectManager(role)) {
         return CommonRes.UNAUTHORISED(
           "You are not authorised for the route",
           resObj,

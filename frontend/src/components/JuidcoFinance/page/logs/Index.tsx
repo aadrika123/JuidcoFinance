@@ -3,13 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import axios from "@/lib/axiosConfig";
 import Loader from "@/components/global/atoms/Loader";
-import LineChart from "../Dashboard/LineChart";
+import dynamic from "next/dynamic";
+const LineChart = dynamic(() => import("../Dashboard/LineChart"), {
+  ssr: false,
+});
+
 import moment from "moment";
-import {
-  BearAnimation,
-  CelebrationAnimation,
-  EmojiAnimation,
-} from "./LogAnimation";
+const BearAnimation = dynamic(() => import("./LogAnimation").then(module => ({default: module.BearAnimation} )), {
+  ssr: false,
+});
+const EmojiAnimation = dynamic(() => import("./LogAnimation").then(module => ({default: module.EmojiAnimation} )), {
+  ssr: false,
+});
+const CelebrationAnimation = dynamic(() => import("./LogAnimation").then(module => ({default: module.CelebrationAnimation} )), {
+  ssr: false,
+});
 
 interface LogCardsProps {
   data: any;

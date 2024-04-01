@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 ////advance_management: Managed by: Sanjiv Kumar
 model advance_managements {
   id                                             Int                @id @default(autoincrement())
@@ -321,7 +322,6 @@ model grant_entries {
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
-
 ////grant_natures: Managed by: Bijoy Paitandi
 model grant_natures {
   id      Int    @id @default(autoincrement())
@@ -383,7 +383,6 @@ model investments {
   created_at                DateTime @default(now()) @map("created_at")
   updated_at                DateTime @updatedAt @map("updated_at")
 }
-
 ///loan_management: Managed by: Sanjiv Kumar
 model loan_managements {
   id                            Int                @id @default(autoincrement())
@@ -428,7 +427,6 @@ model loan_managements {
   created_at                    DateTime           @default(now()) @map("created_at")
   updated_at                    DateTime           @updatedAt @map("updated_at")
 }
-
 ////opening_balances: Managed by: Bijoy Paitandi
 model opening_balances {
   id Int @id @default(autoincrement())
@@ -541,7 +539,7 @@ model adminis_wards {
   updated_at DateTime @updatedAt @map("updated_at")
 }
 
-/// BankMaster
+/// BankMaster (has history)
 model bank_masters {
   id Int @id @default(autoincrement())
 
@@ -566,6 +564,33 @@ model bank_masters {
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
+}
+
+model bank_masters_history {
+id						Int
+
+bank_id             Int
+
+bank_type_id        Int
+
+ulb_id              Int
+
+micr_code           String?
+ifsc_code           String
+branch              String
+branch_address      String
+branch_city         String
+branch_state        String
+branch_district     String?
+email               String?
+contact_no          String?
+
+created_at						DateTime?
+updated_at						DateTime?
+
+
+record_id                  Int      @id @default(autoincrement())
+record_created_at          DateTime @default(now()) @map("record_created_at")
 }
 
 ////bank_types: Managed by: Bijoy Paitandi
@@ -621,7 +646,6 @@ model bill_payment_entries {
   created_at        DateTime       @default(now()) @map("created_at")
   updated_at        DateTime       @updatedAt @map("updated_at")
 }
-
 /// Bill Stages
 model bill_stages {
   id         Int      @id @default(autoincrement())
@@ -645,7 +669,6 @@ model bill_types {
   updated_at           DateTime               @updatedAt @map("updated_at")
 }
 
-//// Cheque Book Entry
 model cheque_book_entries {
   id   Int      @id @default(autoincrement())
   date DateTime
@@ -726,7 +749,6 @@ model dir_payment_entries {
   created_at   DateTime @default(now()) @map("created_at")
   updated_at   DateTime @updatedAt @map("updated_at")
 }
-
 /// Employee
 model employees {
   id             Int          @id @default(autoincrement())
@@ -878,6 +900,7 @@ model receipt_modes {
   created_at        DateTime            @default(now()) @map("created_at")
   updated_at        DateTime            @updatedAt @map("updated_at")
 }
+
 
 ////receipt_register: Managed by: Sanjiv Kumar
 model receipt_registers {

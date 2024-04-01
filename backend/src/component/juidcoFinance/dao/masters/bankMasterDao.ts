@@ -116,14 +116,24 @@ class BankMasterDao {
 
   // Update bank details
   update = async (req: Request) => {
+
     const id: number = req.body.id;
-    return await prisma.bank_masters.update({
-      where: {
-        id: id,
-      },
-      data: requestData(req),
-    });
-  };
+
+    const [copy, record] = await prisma.$transaction([
+
+      prisma.$queryRaw`insert into bank_masters_history select * from bank_masters where id=${id}`,
+
+      prisma.bank_masters.update({
+        where: {
+          id: id,
+        },
+        data: requestData(req),
+      }),
+    ])
+
+    console.log(copy);
+    return record;
+  }
 }
 
 export default BankMasterDao;

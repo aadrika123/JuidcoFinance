@@ -6,6 +6,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/reducers/authReducer";
 import Button from "../atoms/Button";
+import { useWorkingAnimation } from "../molecules/general/useWorkingAnimation";
 
 interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -14,9 +15,13 @@ interface SideBarProps extends React.HTMLAttributes<HTMLDivElement> {
 const Header: React.FC<SideBarProps> = (props) => {
   // const pathName = usePathname();
   const dispatch = useDispatch();
+  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+
+
 
   //__________ Logout Functionality _____________//
   const handleClick = () => {
+    activateWorkingAnimation();
     dispatch(logout());
     window.location.reload();
   };
@@ -44,6 +49,10 @@ const Header: React.FC<SideBarProps> = (props) => {
   // _________ Bread Crumb ________________//
 
   return (
+    
+    <>
+    {workingAnimation}
+
     <div
       className={`border-b sticky top-0 shadow-md flex h-[3.5rem] items-center justify-between px-5  ${props.className}`}
     >
@@ -130,6 +139,7 @@ const Header: React.FC<SideBarProps> = (props) => {
         </Button>
       </div>
     </div>
+    </>
   );
 };
 

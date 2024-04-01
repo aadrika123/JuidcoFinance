@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef} from "react";
+import React, { useState, useRef, useEffect} from "react";
 import { initialBankDetailsValues } from "@/utils/validation/masters/bank_master.validation";
 import axios from "@/lib/axiosConfig";
 import { AddBankDetailsData } from "@/utils/types/bank_master_types";
@@ -17,6 +17,7 @@ import BankAccountForm from "./molecules/BankAccountForm";
 import Button from "@/components/global/atoms/Button";
 import { useReactToPrint } from 'react-to-print';
 import { PrintReadyBankComponent } from "./molecules/PrintReadyBankComponent";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 
 const ViewBankAccount = ({ bankID }: { bankID: string }) => {
@@ -81,6 +82,7 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   const {
     isError: fetchingError,
     isLoading: isFetching,
+    refetch: reloadData,
   } = useQuery(["bank-details", bankID], loadBankDetails);
 
   if (fetchingError) {
@@ -104,7 +106,7 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
     }
   };
 
-  const { mutate } = useMutation(updateBankDetails, {
+  const { mutate, isLoading: isSaving } = useMutation(updateBankDetails, {
     onSuccess: () => {
       setSuccessNotificationOpen(true);
 
@@ -167,17 +169,23 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
 
 
   
+  useEffect(() => {
+    reloadData();
+  });
+
 
 
   return (
     <>
-
       <div style={{ display: "none" }}>
       {/* <div> */}
         <div ref={componentRef}>
           <PrintReadyBankComponent bank={bankAccountDetails} />
         </div>
       </div>
+
+        <RandomWorkingPopup show={isSaving}/>
+
 
       {isDataLossPopupOpen && (
         <LosingDataConfirmPopup cancel={() => setDataLossPopupOpen(false)} continue={goBack} />

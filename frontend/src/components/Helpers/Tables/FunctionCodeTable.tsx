@@ -1,13 +1,20 @@
 import { FunctionTableData } from "@/utils/types/types";
 import React from "react";
+import {motion} from "framer-motion";
+import parse from 'html-react-parser';
+
+
 
 interface FunctionCodeProps {
   data: FunctionTableData[];
+  searchCondition: RegExp | null;
 }
 const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
 
   return (
     <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+
       <div className="hide-scrollbar overflow-x-auto h-[550px] overflow-y-auto border">
         <table className="table table-md">
           <thead className=" text-secondary_black text-[1rem] border border-t-2 border-zinc-300 ">
@@ -90,7 +97,7 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
                   {/* Code Center */}
 
                   {/* DESCRIPTION */}
-                  <td className="border border-zinc-300 min-w-[55%]">{d?.description}</td>
+                  <td className="border border-zinc-300 ">{props.searchCondition? parse(d?.description.replaceAll( props.searchCondition,'<span className="bg-[#FFCD00] text-white">$1</span>')): d?.description}</td>
                   {/* DESCRIPTION */}
                 </tr>
               );
@@ -98,6 +105,8 @@ const FunctionCodeTable: React.FC<FunctionCodeProps> = (props) => {
           </tbody>
         </table>
       </div>
+      </motion.div>
+
     </>
   );
 };

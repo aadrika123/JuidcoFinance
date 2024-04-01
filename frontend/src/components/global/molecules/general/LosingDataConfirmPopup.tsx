@@ -15,7 +15,7 @@ const LosingDataConfirmPopup: React.FC<LosingDataConfirmPopupProps> = (props) =>
   }
   return (
 
-    <Popup title="" zindex={40}>
+    <Popup title="" zindex={50}>
 
       <div className="flex flex-col justify-center items-center w-auto">
         <svg

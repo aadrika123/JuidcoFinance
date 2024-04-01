@@ -10,6 +10,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/reducers/authReducer";
 import axios from "axios";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+
+// some comment
 
 interface LoginInitialData {
   user_id: string;
@@ -20,6 +23,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState<string>();
   const [hide, setHide] = useState(true);
+  const [workingAnimation, activateWorkingAnimation, hideWorkingAnimation] = useWorkingAnimation();
 
   const LoginSchema = Yup.object().shape({
     user_id: Yup.string().required("User Id is required"),
@@ -29,6 +33,7 @@ const Login = () => {
   ///////////////// Handling Login Logics /////////////
 
   const handleLogin = async (values: LoginInitialData) => {
+    activateWorkingAnimation();
     try {
       // "https://jharkhandegovernance.com/auth/api/login",
       const res = await axios.post(
@@ -36,23 +41,27 @@ const Login = () => {
         {
           email: values.user_id,
           password: values.password,
-        }
-      );
+        },
+        );
 
-      // const res = await axios({
-      //   url: FINANCE_URL.AUTH_URL.login,
-      //   method: "POST",
-      //   data: {
-      //     email: values.user_id,
-      //     password: values.password,
-      //   },
-      // });
+        // const res = await axios({
+        //   url: FINANCE_URL.AUTH_URL.login,
+        //   method: "POST",
+        //   data: {
+        //     email: values.user_id,
+        //     password: values.password,
+        //   },
+        // });
 
-      res.data.data
-        ? (dispatch(login(res.data.data)),
-          window.location.replace("/finance/home"))
-        : setErrorMsg("You have entered wrong credentials !!");
+      if(res.data.status){
+        dispatch(login(res.data.data));
+          window.location.replace("/finance/home");
+      }else{
+        hideWorkingAnimation();
+        setErrorMsg("You have entered wrong credentials !!");
+      }
     } catch (error) {
+      hideWorkingAnimation();
       setErrorMsg("Something Went Wrong!!");
       console.log(error);
     }
@@ -64,6 +73,8 @@ const Login = () => {
 
   return (
     <>
+      {workingAnimation}
+
       <div className="max-w-full w-full px-2 sm:px-12 lg:pr-20 mb-12 lg:mb-0">
         <div className="relative">
           <div className="p-6 sm:py-8 sm:px-12 rounded-lg bg-white darks:bg-gray-800 shadow-xl">

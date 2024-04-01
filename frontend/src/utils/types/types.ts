@@ -61,5 +61,6 @@ export type MuncipalityTableData = {
   district_code: string;
   category: string;
   code: string;
+  full_code: string;
 };
 // Chart of Accounts Types //

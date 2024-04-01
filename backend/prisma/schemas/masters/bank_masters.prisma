@@ -1,4 +1,4 @@
-/// BankMaster
+/// BankMaster (has history)
 model bank_masters {
   id                  Int      @id @default(autoincrement())
 

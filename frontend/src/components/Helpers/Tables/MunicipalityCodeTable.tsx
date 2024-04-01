@@ -1,11 +1,14 @@
 import { MuncipalityTableData } from "@/utils/types/types";
 import React from "react";
+import parse from 'html-react-parser';
+
 
 interface TableDataProps {
   data: MuncipalityTableData[];
+  searchCondition: RegExp | null;
 }
 
-const Table: React.FC<TableDataProps> = (props) => {
+const MunicipalityCodeTable: React.FC<TableDataProps> = (props) => {
   return (
     <>
       <div className="hide-scrollbar overflow-x-auto border-[2px] border-zinc-300 h-[550px] overflow-y-auto">
@@ -56,10 +59,10 @@ const Table: React.FC<TableDataProps> = (props) => {
             {props.data?.map((d, index: number) => (
               <tr key={index} className="border border-zinc-300 text-secondary">
                 {/* ULB'S */}
-                <td className="border border-zinc-300">{d?.ulbs}</td>
+                <td className="border border-zinc-300 ">{props.searchCondition? parse(d?.ulbs.replaceAll( props.searchCondition,'<span className="bg-[#FFCD00] text-white">$1</span>')): d?.ulbs}</td>
 
                 {/* DISTRICT */}
-                <td className="border border-zinc-300">{d?.district} </td>
+                <td className="border border-zinc-300">{props.searchCondition? parse(d?.district.replaceAll( props.searchCondition,'<span className="bg-[#FFCD00] text-white">$1</span>')): d?.district}</td>
 
                 {/* STATE CODE */}
                 <td className="border border-zinc-300 ">
@@ -109,4 +112,4 @@ const Table: React.FC<TableDataProps> = (props) => {
   );
 };
 
-export default Table;
+export default MunicipalityCodeTable;
