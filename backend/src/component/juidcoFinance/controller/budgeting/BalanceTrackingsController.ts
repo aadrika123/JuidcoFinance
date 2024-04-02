@@ -32,9 +32,9 @@ class BalanceTrackingsController {
       version: "1.0",
     };
     try {
-      const { error } = balanceTrackingsValidation.validate(req.body);
+      const { error } = balanceTrackingsValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.balanceTrackingsDao.store(req);
       return CommonRes.CREATED(
@@ -44,7 +44,7 @@ class BalanceTrackingsController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -72,7 +72,7 @@ class BalanceTrackingsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -95,7 +95,7 @@ class BalanceTrackingsController {
         id: Joi.number().required().greater(0)
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.balanceTrackingsDao.getById(id);
 
@@ -109,7 +109,7 @@ class BalanceTrackingsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -134,7 +134,7 @@ class BalanceTrackingsController {
         id: Joi.number().required().greater(0)
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.balanceTrackingsDao.getBalance(id);
 
@@ -148,7 +148,7 @@ class BalanceTrackingsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -177,7 +177,7 @@ class BalanceTrackingsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -200,7 +200,7 @@ class BalanceTrackingsController {
         id: Joi.number().required().greater(0)
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
 
       const data = await this.balanceTrackingsDao.getScheduleReport(id);
@@ -215,7 +215,7 @@ class BalanceTrackingsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -239,7 +239,7 @@ class BalanceTrackingsController {
         id: Joi.number().required().greater(0)
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
 
       const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id);
@@ -254,7 +254,7 @@ class BalanceTrackingsController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 

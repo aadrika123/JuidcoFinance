@@ -44,17 +44,17 @@ export const billInvoicesValidationWithID = billInvoicesSchema.keys({
 export const requestData = (req: Request): BillInvoicesRequestData => {
 
   return {
-    bill_no: req.body.bill_no,
-    type_id: req.body.type_id,
-    vendor_id: req.body.vendor_id,
-    department_id: req.body.department_id,
-    bill_date: req.body.bill_date,
-    entry_date: req.body.entry_date,
-    stage_id: req.body.stage_id,
-    address: req.body.address,
-    narration: req.body.narration,
-    admin_ward_id: req.body.admin_ward_id,
-    amount: req.body.amount
+    bill_no: req.body.data.bill_no,
+    type_id: req.body.data.type_id,
+    vendor_id: req.body.data.vendor_id,
+    department_id: req.body.data.department_id,
+    bill_date: req.body.data.bill_date,
+    entry_date: req.body.data.entry_date,
+    stage_id: req.body.data.stage_id,
+    address: req.body.data.address,
+    narration: req.body.data.narration,
+    admin_ward_id: req.body.data.admin_ward_id,
+    amount: req.body.data.amount
   };
 };
 
@@ -62,7 +62,7 @@ export const requestData = (req: Request): BillInvoicesRequestData => {
 // collect request data for storing
 export const multiRequestData = (req: Request): BillInvoicesRequestData [] => {
   const data = [];
-  for(const item of req.body) {
+  for(const item of req.body.data) {
     data.push({
       bill_no: item.bill_no,
       type_id: item.type_id,

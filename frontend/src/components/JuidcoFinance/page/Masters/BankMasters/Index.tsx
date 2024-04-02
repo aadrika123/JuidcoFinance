@@ -70,7 +70,9 @@ export const HeroBankMasters = () => {
     const res = await axios({
       url: `${FINANCE_URL.BANK_MASTER_URL.create}`,
       method: "POST",
-      data: values,
+      data: {
+        data: values
+      },
     });
 
     return res.data;

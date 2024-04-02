@@ -38,11 +38,16 @@ export const HeroEditVendor = ({ vendorID }: { vendorID: string }) => {
         url: `${FINANCE_URL.VENDOR_MASTER_URL.update}`,
         method: "POST",
         data: {
-          id: vendorDetails?.id,
-          ...values,
+          data:{
+            id: vendorDetails?.id,
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

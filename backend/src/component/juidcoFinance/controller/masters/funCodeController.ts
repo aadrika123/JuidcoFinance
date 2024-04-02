@@ -59,7 +59,8 @@ class FunCodeController {
         "GET",
         "0201",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -80,7 +81,7 @@ class FunCodeController {
 
       return CommonRes.SUCCESS("Function Codes Found Successfully", data, resObj, res)
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   }
 }

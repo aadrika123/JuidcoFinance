@@ -33,9 +33,9 @@ class DirPaymentEntryController {
       version: "1.0",
     };
     try {
-      const { error } = dirPaymentEntryValidation.validate(req.body);
+      const { error } = dirPaymentEntryValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.dirPaymentEntryDao.store(req);
       return CommonRes.CREATED(
@@ -45,7 +45,7 @@ class DirPaymentEntryController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -73,7 +73,7 @@ class DirPaymentEntryController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -96,7 +96,7 @@ class DirPaymentEntryController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.dirPaymentEntryDao.getById(id);
 
@@ -110,7 +110,7 @@ class DirPaymentEntryController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -126,9 +126,9 @@ class DirPaymentEntryController {
       version: "1.0",
     };
     try {
-      const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body);
+      const { error } = dirPaymentEntryValidationAlongWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.dirPaymentEntryDao.update(req);
       return CommonRes.CREATED(
@@ -138,7 +138,7 @@ class DirPaymentEntryController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 }

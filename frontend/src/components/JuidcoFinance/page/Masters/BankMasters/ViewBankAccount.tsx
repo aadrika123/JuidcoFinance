@@ -96,9 +96,13 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
         url: `${FINANCE_URL.BANK_MASTER_URL.update}`,
         method: "POST",
         data: {
-          id: bankAccountDetails?.id,
-          ...values,
+          data:{
+            id: bankAccountDetails?.id,
+            ...values,  
+          }
         },
+
+        
       });
       return res;
     } catch (error) {
@@ -171,7 +175,7 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   
   useEffect(() => {
     reloadData();
-  });
+  },[]);
 
 
 

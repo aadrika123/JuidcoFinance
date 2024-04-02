@@ -46,7 +46,7 @@ export const AddReceipt = () => {
   const [data, setData] = useState<ReceiptDataProps[]>([]);
   const [initialData, setInitialData] = useState<ReceiptDataProps>(initialValue);
   //////////// Reseting InitialData on FormikPopup off //////////////
-  const resetInitialValue = () =>{
+  const resetInitialValue = () => {
     setInitialData(initialValue);
   }
 
@@ -73,19 +73,19 @@ export const AddReceipt = () => {
               module_id_name: values.module_id_name || item.module_id_name,
 
               paid_by: values.paid_by,
-              
+
               receipt_type_id: values.receipt_type_id,
               receipt_type_id_name: values.receipt_type_id_name || item.receipt_type_id_name,
-              
+
               mobile_no: values.mobile_no,
 
               admin_ward_id: values.admin_ward_id,
               admin_ward_id_name: values.admin_ward_id_name || item.admin_ward_id_name,
-              
+
               amount: values.amount,
-              
+
               narration: values.narration,
-              
+
               subledger_id: values.subledger_id,
               subledger_id_name: values.subledger_id_name || item.subledger_id_name,
 
@@ -115,12 +115,18 @@ export const AddReceipt = () => {
     values: ReceiptDataProps
   ): Promise<ReceiptDataProps> => {
     try {
-     const res = await axios({
+      const res = await axios({
         url: `${FINANCE_URL.RECEIPT_ENTRY_URL.create}`,
         method: "POST",
-        data: filterValBefStoring(values),
+        data: {
+          data: filterValBefStoring(values)
+        },
       });
-      return res.data;
+      if (res.data.status) {
+
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
@@ -128,7 +134,7 @@ export const AddReceipt = () => {
   };
 
   const { mutate } = useMutation<
-  ReceiptDataProps,
+    ReceiptDataProps,
     Error,
     any
   >(handleStore, {
@@ -180,7 +186,7 @@ export const AddReceipt = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
@@ -188,7 +194,7 @@ export const AddReceipt = () => {
   }
 
   //////////////////// Handle Reset Table List //////////////////
-  const handleResetTable = () =>{
+  const handleResetTable = () => {
     setData([]);
   }
 

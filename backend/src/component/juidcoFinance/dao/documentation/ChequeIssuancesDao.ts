@@ -210,7 +210,7 @@ class ChequeIssuancesDao {
 
   // Update cheque_issuances details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.cheque_issuances.update({
       where: {
         id: id,

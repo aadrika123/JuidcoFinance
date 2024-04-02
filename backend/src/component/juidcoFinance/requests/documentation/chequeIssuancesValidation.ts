@@ -41,24 +41,24 @@ export const chequeIssuancesValidationWithID = chequeIssuancesSchema.keys({
 });
 export const requestData = (req: Request): ChequeIssuancesRequestData => {
     return {
-        voucher_no: req.body.voucher_no,
-        voucher_date: req.body.voucher_date,
-        bill_type_id: req.body.bill_type_id,
-        narration: req.body.narration,
-        admin_ward_id: req.body.admin_ward_id,
-        payee_id: req.body.payee_id,
-        grant_id: req.body.grant_id,
-        bank_id: req.body.bank_id,
-        module_id: req.body.module_id,
-        department_id: req.body.department_id,
-        issue_date: req.body.issue_date,
-        cheque_no: req.body.cheque_no,
-        amount: req.body.amount,
+        voucher_no: req.body.data.voucher_no,
+        voucher_date: req.body.data.voucher_date,
+        bill_type_id: req.body.data.bill_type_id,
+        narration: req.body.data.narration,
+        admin_ward_id: req.body.data.admin_ward_id,
+        payee_id: req.body.data.payee_id,
+        grant_id: req.body.data.grant_id,
+        bank_id: req.body.data.bank_id,
+        module_id: req.body.data.module_id,
+        department_id: req.body.data.department_id,
+        issue_date: req.body.data.issue_date,
+        cheque_no: req.body.data.cheque_no,
+        amount: req.body.data.amount,
     };
 };
 export const multiRequestData = (req: Request): ChequeIssuancesRequestData[] => {
     const data = [];
-    for (const item of req.body) {
+    for (const item of req.body.data) {
         data.push({
             voucher_no: item.voucher_no,
             voucher_date: item.voucher_date,

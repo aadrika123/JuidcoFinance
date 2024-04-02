@@ -40,7 +40,7 @@ class ReceiptTypeController {
 
         return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 }

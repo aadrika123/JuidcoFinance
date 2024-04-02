@@ -35,21 +35,21 @@ export const budgetReappropriationsValidationWithID = budgetReappropriationsSche
 });
 export const requestData = (req: Request): BudgetReappropriationsRequestData => {
     return {
-        fin_year_id: req.body.fin_year_id,
-        primary_acc_code_id: req.body.primary_acc_code_id,
-        transaction_date: req.body.transaction_date,
-        budget_name_id: req.body.budget_name_id,
-        actual_amount: req.body.actual_amount,
-        from_primary_acc_code_id: req.body.from_primary_acc_code_id,
-        approved_amount: req.body.approved_amount,
-        balance_amount: req.body.balance_amount,
-        transfer_amount: req.body.transfer_amount,
-        remark: req.body.remark,
+        fin_year_id: req.body.data.fin_year_id,
+        primary_acc_code_id: req.body.data.primary_acc_code_id,
+        transaction_date: req.body.data.transaction_date,
+        budget_name_id: req.body.data.budget_name_id,
+        actual_amount: req.body.data.actual_amount,
+        from_primary_acc_code_id: req.body.data.from_primary_acc_code_id,
+        approved_amount: req.body.data.approved_amount,
+        balance_amount: req.body.data.balance_amount,
+        transfer_amount: req.body.data.transfer_amount,
+        remark: req.body.data.remark,
     };
 };
 export const multiRequestData = (req: Request): BudgetReappropriationsRequestData[] => {
     const data = [];
-    for (const item of req.body) {
+    for (const item of req.body.data) {
         data.push({
             fin_year_id: item.fin_year_id,
             primary_acc_code_id: item.primary_acc_code_id,

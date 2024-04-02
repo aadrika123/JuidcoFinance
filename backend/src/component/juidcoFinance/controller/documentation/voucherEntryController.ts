@@ -28,9 +28,9 @@ class VoucherEntryController {
     };
 
     try {
-      const { error } = voucherEntryValidation.validate(req.body);
+      const { error } = voucherEntryValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.voucherEntryDao.store(req);
       return CommonRes.CREATED(
@@ -40,7 +40,7 @@ class VoucherEntryController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -62,7 +62,7 @@ class VoucherEntryController {
 
       return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -84,7 +84,7 @@ class VoucherEntryController {
       }).validate({'id': id});
 
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
 
       const data = await this.voucherEntryDao.getById(id);
@@ -99,7 +99,7 @@ class VoucherEntryController {
 
       return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   }
 
@@ -113,9 +113,9 @@ class VoucherEntryController {
       apiId, action: "POST", version: "1.0",
     };
     try{
-      const {error} = voucherEntryValidationWithID.validate(req.body);
+      const {error} = voucherEntryValidationWithID.validate(req.body.data);
 
-      if(error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if(error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.voucherEntryDao.update(req);
 
@@ -126,7 +126,7 @@ class VoucherEntryController {
         res
       );
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   }
 }

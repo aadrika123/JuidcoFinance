@@ -53,7 +53,8 @@ class MuncipalityCodeController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res,
+      req);
     }
   };
 
@@ -87,7 +88,7 @@ class MuncipalityCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 }

@@ -40,7 +40,8 @@ class AccountCodeController {
           "GET",
           apiId,
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -54,7 +55,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res, req);
     }
   };
 
@@ -88,7 +89,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -122,7 +123,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -156,7 +157,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -180,7 +181,7 @@ class AccountCodeController {
         id: Joi.number().required(),
       }).validate({ id: id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.dao.getChildCodes(id);
 
@@ -199,7 +200,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -223,7 +224,7 @@ class AccountCodeController {
         id: Joi.number().required(),
       }).validate({ id: id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.dao.getParentCode(id);
 
@@ -242,7 +243,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -269,7 +270,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -286,12 +287,12 @@ class AccountCodeController {
       version: "1.0",
     };
     try {
-      const {error} = requestNewAccCodeSchema.validate(req.body)
+      const {error} = requestNewAccCodeSchema.validate(req.body.data)
 
       if(error)
-        return CommonRes.VALIDATION_ERROR(error, resObj, res);
+        return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
-      const data = await this.dao.requestNewCode(req.body);
+      const data = await this.dao.requestNewCode(req.body.data);
 
       return CommonRes.SUCCESS(
         resMessage(this.initMsg).CREATED,
@@ -300,7 +301,7 @@ class AccountCodeController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 }

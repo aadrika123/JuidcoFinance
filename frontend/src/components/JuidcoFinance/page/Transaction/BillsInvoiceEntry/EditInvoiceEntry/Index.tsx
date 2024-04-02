@@ -73,11 +73,16 @@ export const EditBillsInvoiceEntry = ({
         url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          id: Number(BillsInvoiceID),
-          ...values,
+          data:{
+            id: Number(BillsInvoiceID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

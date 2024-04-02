@@ -11,7 +11,6 @@ import { useDispatch } from "react-redux";
 import { login } from "@/redux/reducers/authReducer";
 import axios from "axios";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
-
 // some comment
 
 interface LoginInitialData {
@@ -37,7 +36,7 @@ const Login = () => {
     try {
       // "https://jharkhandegovernance.com/auth/api/login",
       const res = await axios.post(
-        "http://localhost:8000/api/login",
+        `${process.env.backend}/api/login`,
         {
           email: values.user_id,
           password: values.password,

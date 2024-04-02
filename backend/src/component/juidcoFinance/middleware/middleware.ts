@@ -5,14 +5,12 @@ import jwt from "jsonwebtoken";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resMessage } from "../responseMessage/commonMessage";
 import { resObj } from "../../../util/types";
-import Roles from "../roles/roles";
+import { RoleCheckResult, checkProjectManager } from "../roles/roles";
 
 class Middleware {
   private initMsg;
-  private roles;
   constructor() {
     this.initMsg = "Token";
-    this.roles = new Roles();
   }
 
   //// Generate the temperaury token
@@ -128,25 +126,21 @@ class Middleware {
       action: "Authentication",
       version: "1.0",
     };
-    const role: any = req.body.auth;
 
-    if (
-      role !== "" &&
-      role !== undefined &&
-      Array.isArray(role) &&
-      role.length > 0
-    ) {
-      
-      if (!this.roles.isProjectManager(role)) {
-        return CommonRes.UNAUTHORISED(
-          "You are not authorised for the route",
-          resObj,
-          res,
-          req
-        );
-      }
+    const roleCheckResult = checkProjectManager(req.body.data.auth);
+
+
+    
+    if (roleCheckResult == RoleCheckResult.NO) {
+      return CommonRes.UNAUTHORISED(
+        "You are not authorised for the route",
+        resObj,
+        res,
+        req
+      );
+    }else if(roleCheckResult == RoleCheckResult.YES){
       next();
-    } else {
+    }else {
       return CommonRes.UNAUTHORISED(
         resMessage("Role").NOT_FOUND,
         resObj,

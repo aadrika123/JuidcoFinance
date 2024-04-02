@@ -34,12 +34,12 @@ class AuthController {
 
     try {
 
-      const { error } = loginValidation.validate(req.body);
+      const { error } = loginValidation.validate(req.body.data);
 
       if(error)
-        return CommonRes.VALIDATION_ERROR(error, resObj, res);
+        return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
-      const data = await this.dao.login(req.body);
+      const data = await this.dao.login(req.body.data);
 
       if (!data)
         return CommonRes.SUCCESS(
@@ -56,7 +56,7 @@ class AuthController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -72,7 +72,7 @@ class AuthController {
       version: "1.0",
     };
     try {
-      await this.dao.sendMailOtp(req.body.email);
+      await this.dao.sendMailOtp(req.body.data.email);
 
       return CommonRes.SUCCESS(
         resMessage(this.initMsg).OTP_SENT,
@@ -81,7 +81,7 @@ class AuthController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -97,7 +97,7 @@ class AuthController {
       version: "1.0",
     };
     try {
-      const data = await this.dao.verifyMailOtp(req.body.email, req.body.otp);
+      const data = await this.dao.verifyMailOtp(req.body.data.email, req.body.data.otp);
 
       if (data === null) {
         return CommonRes.VALIDATION_ERROR("Wrong OTP entered!!!", resObj, res);
@@ -116,7 +116,7 @@ class AuthController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 }

@@ -23,15 +23,15 @@ export const balanceTrackingsValidationWithID = balanceTrackingsSchema.keys({
 });
 export const requestData = (req: Request): BalanceTrackingsRequestData => {
     return {
-        primary_acc_code_id: req.body.primary_acc_code_id,
-        total_balance: req.body.balance_amount,
-        debit_balance: req.body.debit_balance,
-        credit_balance: req.body.credit_balance
+        primary_acc_code_id: req.body.data.primary_acc_code_id,
+        total_balance: req.body.data.balance_amount,
+        debit_balance: req.body.data.debit_balance,
+        credit_balance: req.body.data.credit_balance
     };
 };
 export const multiRequestData = (req: Request): BalanceTrackingsRequestData[] => {
     const data = [];
-    for (const item of req.body) {
+    for (const item of req.body.data) {
         data.push({
             primary_acc_code_id: item.primary_acc_code_id,
             total_balance: item.balance_amount,

@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../sendResponse";
 import { resObj } from "../types";
-import { errLogger, infoLogger } from "../../../loggerConfig";
-import AuditTrail from "../../component/juidcoFinance/auditTrail/auditTrail";
 
 const CommonRes = Object.freeze({
   VALIDATION_ERROR: (
@@ -11,8 +9,6 @@ const CommonRes = Object.freeze({
     res: Response,
     req?: Request | any
   ): Promise<Response> => {
-    errLogger.error({ metaData: resObj, message: error.message });
-    new AuditTrail().store(error, resObj, res, req);
     return sendResponse(
       false,
       error,
@@ -21,7 +17,8 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
-      res
+      res,
+      req
     );
   },
   SERVER_ERROR: (
@@ -30,8 +27,6 @@ const CommonRes = Object.freeze({
     res: Response,
     req?: Request | any
   ): Promise<Response> => {
-    errLogger.error({ metaData: resObj, message: error.message });
-    new AuditTrail().store(error, resObj, res, req);
     return sendResponse(
       false,
       error,
@@ -40,7 +35,8 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
-      res
+      res,
+      req
     );
   },
   CREATED: (
@@ -49,7 +45,6 @@ const CommonRes = Object.freeze({
     resObj: resObj,
     res: Response
   ): Promise<Response> => {
-    infoLogger.info({ metaData: resObj, data: data });
     return sendResponse(
       true,
       message,
@@ -67,7 +62,6 @@ const CommonRes = Object.freeze({
     resObj: resObj,
     res: Response
   ): Promise<Response> => {
-    infoLogger.info({ metaData: resObj, data: data });
     return sendResponse(
       true,
       message,
@@ -85,8 +79,6 @@ const CommonRes = Object.freeze({
     res: Response,
     req?: Request | any
   ): Promise<Response> => {
-    errLogger.error({ metaData: resObj, message: error.message });
-    new AuditTrail().store(error, resObj, res, req);
     return sendResponse(
       false,
       error,
@@ -95,7 +87,8 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
-      res
+      res,
+      req
     );
   },
   DEFAULT: "The underlying {kind} for model {model} does not exist.",

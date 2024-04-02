@@ -26,9 +26,10 @@ class VendorMasterController {
   // create a new Vendor
   create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = vendorMasterValidation.validate(req.body);
+      const { error } = vendorMasterValidation.validate(req.body.data);
       if (error)
-        return sendResponse(false, error, "", 400, "POST", "0701", "1.0", res);
+        return sendResponse(false, error, "", 400, "POST", "0701", "1.0", res,
+          req);
 
       const data = await this.vendorMasterDao.store(req);
       return sendResponse(
@@ -74,7 +75,8 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "0702", "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", "0702", "1.0", res,
+        req);
     }
   };
 
@@ -107,20 +109,21 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "0703", "1.0", res);
+      return sendResponse(false, error, "", 500, "GET", "0703", "1.0", res, req);
     }
   };
 
   // update vendor information
   update = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = vendorMasterValidation.validate(req.body);
+      const { error } = vendorMasterValidation.validate(req.body.data);
 
       if (error)
-        return sendResponse(false, error, "", 403, "POST", "0704", "1.0", res);
+        return sendResponse(false, error, "", 403, "POST", "0704", "1.0", res,
+          req);
 
-      const data1 = await this.vendorMasterDao.getById(req.body.id);
-      req.body.vendor_no = data1.vendor_no;
+      const data1 = await this.vendorMasterDao.getById(req.body.data.id);
+      req.body.data.vendor_no = data1.vendor_no;
 
       const data = await this.vendorMasterDao.update(req);
 
@@ -135,35 +138,36 @@ class VendorMasterController {
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "POST", "0704", "1.0", res);
+      return sendResponse(false, error, "", 500, "POST", "0704", "1.0", res,
+        req);
     }
   };
 
 
-    getNames = async (req: Request, res: Response, apiId: string): Promise<Response> => {
-      const resObj: resObj = {
-        apiId,
-        action: "GET",
-        version: "1.0",
-      };
-      
-      try {
-        
-        const data = await this.vendorMasterDao.getNames();
-  
-        if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMsg).NOT_FOUND,
-            data,
-            resObj,
-            res
-          );
-  
-          return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
-      } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res);
-      }
+  getNames = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
     };
+
+    try {
+
+      const data = await this.vendorMasterDao.getNames();
+
+      if (!data)
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          res
+        );
+
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+    }
+  };
 }
 
 export default VendorMasterController;

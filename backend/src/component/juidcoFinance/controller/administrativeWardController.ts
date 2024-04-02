@@ -32,7 +32,8 @@ class AdministrativeWardController {
           "GET",
           "1101",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -54,7 +55,8 @@ class AdministrativeWardController {
         "GET",
         "1101",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };

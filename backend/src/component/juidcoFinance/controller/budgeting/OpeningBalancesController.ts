@@ -32,9 +32,9 @@ class OpeningBalancesController {
       version: "1.0",
     };
     try {
-      const { error } = openingBalancesValidation.validate(req.body);
+      const { error } = openingBalancesValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.openingBalancesDao.store(req);
       return CommonRes.CREATED(
@@ -44,7 +44,7 @@ class OpeningBalancesController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -72,7 +72,7 @@ class OpeningBalancesController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -95,7 +95,7 @@ class OpeningBalancesController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.openingBalancesDao.getById(id);
 
@@ -109,7 +109,7 @@ class OpeningBalancesController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -125,9 +125,9 @@ class OpeningBalancesController {
       version: "1.0",
     };
     try {
-      const { error } = openingBalancesValidationWithID.validate(req.body);
+      const { error } = openingBalancesValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.openingBalancesDao.update(req);
       return CommonRes.CREATED(
@@ -137,7 +137,7 @@ class OpeningBalancesController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 }

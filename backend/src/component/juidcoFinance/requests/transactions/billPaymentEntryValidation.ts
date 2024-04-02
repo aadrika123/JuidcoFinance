@@ -30,18 +30,18 @@ export const billPaymentEntryValidationAlongWithID =
 // arrange request data for update
 export const requestData = (req: Request): BillPaymentEntryRequestData => {
   return {
-    bill_no: req.body.bill_no,
-    bill_type_id: req.body.bill_type_id,
-    bill_entry_date: req.body.bill_entry_date,
-    department_id: req.body.department_id,
-    vendor_id: req.body.vendor_id,
-    address: req.body.address,
-    payee_id: req.body.payee_id,
-    adminis_ward_id: req.body.adminis_ward_id,
-    bill_amount: req.body.bill_amount,
-    advance: req.body.advance,
-    deposit: req.body.deposit,
-    deductions_amount: req.body.deductions_amount,
+    bill_no: req.body.data.bill_no,
+    bill_type_id: req.body.data.bill_type_id,
+    bill_entry_date: req.body.data.bill_entry_date,
+    department_id: req.body.data.department_id,
+    vendor_id: req.body.data.vendor_id,
+    address: req.body.data.address,
+    payee_id: req.body.data.payee_id,
+    adminis_ward_id: req.body.data.adminis_ward_id,
+    bill_amount: req.body.data.bill_amount,
+    advance: req.body.data.advance,
+    deposit: req.body.data.deposit,
+    deductions_amount: req.body.data.deductions_amount,
   };
 };
 
@@ -50,7 +50,7 @@ export const multiRequestData = (
   req: Request
 ): BillPaymentEntryRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       bill_no: item.bill_no,
       bill_type_id: item.bill_type_id,

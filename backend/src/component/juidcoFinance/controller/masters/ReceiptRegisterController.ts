@@ -34,7 +34,7 @@ class ReceiptRegisterController {
     try {
       const { error } = receiptRegisterValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.receiptRegisterDao.store(req);
       return CommonRes.CREATED(
@@ -44,7 +44,7 @@ class ReceiptRegisterController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -72,7 +72,7 @@ class ReceiptRegisterController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -95,7 +95,7 @@ class ReceiptRegisterController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.receiptRegisterDao.getById(id);
 
@@ -109,7 +109,7 @@ class ReceiptRegisterController {
 
       return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -127,7 +127,7 @@ class ReceiptRegisterController {
     try {
       const { error } = receiptRegisterValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.receiptRegisterDao.update(req);
       return CommonRes.CREATED(
@@ -137,7 +137,7 @@ class ReceiptRegisterController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -155,7 +155,7 @@ class ReceiptRegisterController {
     try {
       const { error } = receiptRegisterApproveSchema.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.receiptRegisterDao.approve(req);
       return CommonRes.CREATED(
@@ -165,7 +165,7 @@ class ReceiptRegisterController {
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   };
 
@@ -179,7 +179,7 @@ class ReceiptRegisterController {
     try{
       const { error } = openingBalanceSchema.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.receiptRegisterDao.createOpeningBal(req);
       return CommonRes.CREATED(
@@ -189,7 +189,7 @@ class ReceiptRegisterController {
         res
       );
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   }
 
@@ -204,7 +204,7 @@ class ReceiptRegisterController {
     try{
       const { error } = updateOpeningBalanceSchema.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
 
       const data = await this.receiptRegisterDao.updateOpeningBal(req);
       return CommonRes.CREATED(
@@ -214,7 +214,7 @@ class ReceiptRegisterController {
         res
       );
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res);
+      return CommonRes.SERVER_ERROR(error, resObj, res, req);
     }
   }
 }

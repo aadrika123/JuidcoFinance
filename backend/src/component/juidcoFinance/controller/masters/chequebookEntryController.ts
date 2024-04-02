@@ -20,7 +20,7 @@ class ChequebookEntryController {
     // create a new chequebook
   create = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { error } = chequebookValidation.validate(req.body);
+      const { error } = chequebookValidation.validate(req.body.data);
       if (error)
         return sendResponse(
           false,
@@ -30,7 +30,8 @@ class ChequebookEntryController {
           "POST",
           "0801",
           "1.0",
-          res
+          res,
+          req
         );
 
       const data = await this.chequebookEntryDao.store(req);
@@ -53,7 +54,8 @@ class ChequebookEntryController {
         "POST",
         "0801",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -74,7 +76,8 @@ class ChequebookEntryController {
           "GET",
           "0802",
           "1.0",
-          res
+          res,
+          req
         );
 
       return sendResponse(
@@ -96,7 +99,8 @@ class ChequebookEntryController {
         "GET",
         "0802",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -124,7 +128,8 @@ class ChequebookEntryController {
         "GET",
         "0803",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -152,7 +157,8 @@ class ChequebookEntryController {
           "POST",
           "0804",
           "1.0",
-          res
+          res,
+          req
         );
 
       // fetch the data
@@ -189,7 +195,8 @@ class ChequebookEntryController {
         "GET",
         "0703",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };
@@ -201,7 +208,7 @@ class ChequebookEntryController {
       
 
       // validate fields
-      const {error} = chequebookValidationAlongWithID.validate(req.body);
+      const {error} = chequebookValidationAlongWithID.validate(req.body.data);
     
       if (error)
         return sendResponse(
@@ -212,7 +219,8 @@ class ChequebookEntryController {
           "PATCH",
           "0805",
           "1.0",
-          res
+          res,
+          req
         );
 
       const data = await this.chequebookEntryDao.update(req);
@@ -239,7 +247,8 @@ class ChequebookEntryController {
             "PATCH",
             "0805",
             "1.0",
-            res
+            res,
+            req
           );
         }
       }
@@ -253,7 +262,8 @@ class ChequebookEntryController {
         "PATCH",
         "0805",
         "1.0",
-        res
+        res,
+        req
       );
     }
   };

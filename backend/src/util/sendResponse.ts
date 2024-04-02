@@ -1,5 +1,7 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import errorCodes from "./errorCodes";
+import { errLogger, infoLogger } from "../../loggerConfig";
+import AuditTrail from "../component/juidcoFinance/auditTrail/auditTrail";
 
 /**
  * | Response Msg Version with apiMetaData
@@ -14,10 +16,18 @@ export const sendResponse = async (
   apiId: string,
   version: string,
   res: Response,
-  deviceId?: string
+  req?: Request
 ): Promise<Response> => {
+
+  
   if (!status) {
     resData = errorCodes[resData as keyof typeof errorCodes];
+    errLogger.error({ metaData: { apiId, version, action }, message: message.message });
+    if (req) {
+      new AuditTrail().store(message, { apiId, version, action }, res, req);
+    }
+  } else {
+    infoLogger.info({ metaData: { apiId, version, action }, data: resData });
   }
 
   if (message && message?.code && message?.meta?.cause) {
@@ -37,7 +47,6 @@ export const sendResponse = async (
       version,
       responseTime: totalTime[0] * 1000 + totalTime[1] / 1e6,
       action,
-      deviceId,
     },
     data: resData,
   };

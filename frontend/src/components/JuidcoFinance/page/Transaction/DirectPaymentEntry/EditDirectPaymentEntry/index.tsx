@@ -75,11 +75,16 @@ export const EditDirectPaymentEntry = ({
         url: `${FINANCE_URL.DIRECT_PAYMENT_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          id: Number(PaymentID),
-          ...values,
+          data:{
+            id: Number(PaymentID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

@@ -82,11 +82,16 @@ export const EditChequeIssueEntry = ({
         url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.update}`,
         method: "POST",
         data: {
-          id: Number(ChequeIssueID),
-          ...values,
+          data:{
+            id: Number(ChequeIssueID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

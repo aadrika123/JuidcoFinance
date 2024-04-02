@@ -21,15 +21,15 @@ export const revisedBudgetsValidationWithID = revisedBudgetsSchema.keys({
 });
 export const requestData = (req: Request): RevisedBudgetsRequestData => {
   return {
-    primary_acc_code_id: req.body.primary_acc_code_id,
-    approved_amount: req.body.approved_amount,
-    revised_amount: req.body.revised_amount,
-    remarks: req.body.remarks,
+    primary_acc_code_id: req.body.data.primary_acc_code_id,
+    approved_amount: req.body.data.approved_amount,
+    revised_amount: req.body.data.revised_amount,
+    remarks: req.body.data.remarks,
   };
 };
 export const multiRequestData = (req: Request): RevisedBudgetsRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       primary_acc_code_id: item.primary_acc_code_id,
       approved_amount: item.approved_amount,

@@ -105,7 +105,7 @@ class RevisedBudgetsDao {
 
   // Update revised_budgets details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.revised_budgets.update({
       where: {
         id: id,

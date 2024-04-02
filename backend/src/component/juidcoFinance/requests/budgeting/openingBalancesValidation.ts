@@ -23,15 +23,15 @@ export const openingBalancesValidationWithID = openingBalancesSchema.keys({
 });
 export const requestData = (req: Request): OpeningBalancesRequestData => {
     return {
-        fin_year_id: req.body.fin_year_id,
-        dr_cr_id: req.body.dr_cr_id,
-        primary_acc_code_id: req.body.primary_acc_code_id,
-        amount: req.body.amount,
+        fin_year_id: req.body.data.fin_year_id,
+        dr_cr_id: req.body.data.dr_cr_id,
+        primary_acc_code_id: req.body.data.primary_acc_code_id,
+        amount: req.body.data.amount,
     };
 };
 export const multiRequestData = (req: Request): OpeningBalancesRequestData[] => {
     const data = [];
-    for (const item of req.body) {
+    for (const item of req.body.data) {
         data.push({
             fin_year_id: item.fin_year_id,
             dr_cr_id: item.dr_cr_id,

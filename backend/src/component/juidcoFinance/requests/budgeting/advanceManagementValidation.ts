@@ -77,48 +77,48 @@ export const advanceManagementValidationWithID = advanceManagementSchema.keys({
 });
 export const requestData = (req: Request): AdvanceManagementRequestData => {
   return {
-    ulb_id: req.body.ulb_id,
-    primary_acc_code_id: req.body.primary_acc_code_id,
-    serial_no_of_estimate: req.body.serial_no_of_estimate,
-    work_order_no: req.body.work_order_no,
-    work_name: req.body.work_name,
-    work_nature: req.body.work_nature,
-    contract_amount: req.body.contract_amount,
-    contractor_name: req.body.contractor_name,
+    ulb_id: req.body.data.ulb_id,
+    primary_acc_code_id: req.body.data.primary_acc_code_id,
+    serial_no_of_estimate: req.body.data.serial_no_of_estimate,
+    work_order_no: req.body.data.work_order_no,
+    work_name: req.body.data.work_name,
+    work_nature: req.body.data.work_nature,
+    contract_amount: req.body.data.contract_amount,
+    contractor_name: req.body.data.contractor_name,
     order_sanctioning_the_contract_no:
-      req.body.order_sanctioning_the_contract_no,
+      req.body.data.order_sanctioning_the_contract_no,
     order_sanctioning_the_contract_resolution_date:
-      req.body.order_sanctioning_the_contract_resolution_date,
+      req.body.data.order_sanctioning_the_contract_resolution_date,
     order_sanctioning_the_estimate_no:
-      req.body.order_sanctioning_the_estimate_no,
+      req.body.data.order_sanctioning_the_estimate_no,
     order_sanctioning_the_estimate_date:
-      req.body.order_sanctioning_the_estimate_date,
-    voucher_no: req.body.voucher_no,
-    date: req.body.date,
-    amount: req.body.amount,
-    officer_id: req.body.officer_id,
-    bill_no: req.body.bill_no,
-    bill_date: req.body.bill_date,
-    payable_amount: req.body.payable_amount,
-    approved_amount: req.body.approved_amount,
-    cumulative_approved_amount: req.body.cumulative_approved_amount,
-    pwd_officer_id: req.body.pwd_officer_id,
-    security_deposit_deducted_amount: req.body.security_deposit_deducted_amount,
-    tds_amount: req.body.tds_amount,
-    work_contract_tax_amount: req.body.work_contract_tax_amount,
-    material_issued_recovery_amount: req.body.material_issued_recovery_amount,
-    advance_provided_recovery_amount: req.body.advance_provided_recovery_amount,
-    other_deduction_amount: req.body.other_deduction_amount,
-    net_paid_amount: req.body.net_paid_amount,
-    department_id: req.body.department_id,
-    remarks: req.body.remarks,
+      req.body.data.order_sanctioning_the_estimate_date,
+    voucher_no: req.body.data.voucher_no,
+    date: req.body.data.date,
+    amount: req.body.data.amount,
+    officer_id: req.body.data.officer_id,
+    bill_no: req.body.data.bill_no,
+    bill_date: req.body.data.bill_date,
+    payable_amount: req.body.data.payable_amount,
+    approved_amount: req.body.data.approved_amount,
+    cumulative_approved_amount: req.body.data.cumulative_approved_amount,
+    pwd_officer_id: req.body.data.pwd_officer_id,
+    security_deposit_deducted_amount: req.body.data.security_deposit_deducted_amount,
+    tds_amount: req.body.data.tds_amount,
+    work_contract_tax_amount: req.body.data.work_contract_tax_amount,
+    material_issued_recovery_amount: req.body.data.material_issued_recovery_amount,
+    advance_provided_recovery_amount: req.body.data.advance_provided_recovery_amount,
+    other_deduction_amount: req.body.data.other_deduction_amount,
+    net_paid_amount: req.body.data.net_paid_amount,
+    department_id: req.body.data.department_id,
+    remarks: req.body.data.remarks,
   };
 };
 export const multiRequestData = (
   req: Request
 ): AdvanceManagementRequestData[] => {
   const data = [];
-  for (const item of req.body) {
+  for (const item of req.body.data) {
     data.push({
       ulb_id: item.ulb_id,
       primary_acc_code_id: item.primary_acc_code_id,

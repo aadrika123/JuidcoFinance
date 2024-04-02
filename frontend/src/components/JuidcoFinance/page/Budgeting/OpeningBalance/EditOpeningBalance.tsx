@@ -59,11 +59,16 @@ export const EditOpeningBalance = ({
         url: `${FINANCE_URL.OPENING_BALANCE_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          id: Number(OpeningBalanceID),
-          ...values,
+          data:{
+            id: Number(OpeningBalanceID),
+           ...values,
+          }
         },
       });
-      return res.data;
+      if(res.data.status){
+        return res.data;
+      } 
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;

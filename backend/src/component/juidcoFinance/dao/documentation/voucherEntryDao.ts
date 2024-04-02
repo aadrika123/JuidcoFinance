@@ -157,7 +157,7 @@ class VoucherEntryDao {
 
   // update voucher details
   update = async (req: Request) => {
-    const id: number = req.body.id;
+    const id: number = req.body.data.id;
     return await prisma.voucher_entries.update({
       where: {
         id: id,

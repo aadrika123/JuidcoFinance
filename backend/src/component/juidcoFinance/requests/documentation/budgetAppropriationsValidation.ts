@@ -27,17 +27,17 @@ export const budgetAppropriationsValidationWithID = budgetAppropriationsSchema.k
 });
 export const requestData = (req: Request): BudgetAppropriationsRequestData => {
     return {
-        fin_year_id: req.body.fin_year_id,
-        primary_acc_code_id: req.body.primary_acc_code_id,
-        remark: req.body.remark,
-        from_primary_acc_code_id: req.body.from_primary_acc_code_id,
-        approved_amount: req.body.approved_amount,
-        transfer_amount: req.body.transfer_amount,
+        fin_year_id: req.body.data.fin_year_id,
+        primary_acc_code_id: req.body.data.primary_acc_code_id,
+        remark: req.body.data.remark,
+        from_primary_acc_code_id: req.body.data.from_primary_acc_code_id,
+        approved_amount: req.body.data.approved_amount,
+        transfer_amount: req.body.data.transfer_amount,
     };
 };
 export const multiRequestData = (req: Request): BudgetAppropriationsRequestData[] => {
     const data = [];
-    for (const item of req.body) {
+    for (const item of req.body.data) {
         data.push({
             fin_year_id: item.fin_year_id,
             primary_acc_code_id: item.primary_acc_code_id,
