@@ -1,4 +1,4 @@
-import { PrismaClient, receipt_entries } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -19,8 +19,7 @@ const receipts_seeder = async () => {
 
   const number_of_receipts = 10;
   for(let i=0;i<number_of_receipts; i++){
-    const record: receipt_entries ={
-      id: i+1,
+    const record = {
       receipt_no: "R"+(i+1),
       date: faker.date.past(),
       paid_by: faker.company.name(),
@@ -30,7 +29,6 @@ const receipts_seeder = async () => {
       amount: parseFloat(faker.commerce.price()),
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
-
       admin_ward_id: random_one(admin_ward_ids),
       receipt_type_id: random_one(receipt_type_ids),
       module_id: random_one(module_ids),
