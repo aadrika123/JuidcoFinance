@@ -30,8 +30,8 @@ class ChequebookEntryController {
           "POST",
           "0801",
           "1.0",
-          res,
-          req
+          req,
+          res
         );
 
       const data = await this.chequebookEntryDao.store(req);
@@ -43,6 +43,7 @@ class ChequebookEntryController {
         "POST",
         "0801",
         "1.0",
+        req,
         res
       );
     } catch (error: any) {
@@ -54,8 +55,8 @@ class ChequebookEntryController {
         "POST",
         "0801",
         "1.0",
-        res,
-        req
+        req,
+        res
       );
     }
   };
@@ -69,15 +70,15 @@ class ChequebookEntryController {
 
       if (!data)
         return sendResponse(
-          true,
+          false,
           "No Chequebooks Found",
           data,
           200,
           "GET",
           "0802",
           "1.0",
-          res,
-          req
+          req,
+          res
         );
 
       return sendResponse(
@@ -88,6 +89,7 @@ class ChequebookEntryController {
         "GET",
         "0802",
         "1.0",
+        req,
         res
       );
     } catch (error: any) {
@@ -99,8 +101,8 @@ class ChequebookEntryController {
         "GET",
         "0802",
         "1.0",
-        res,
-        req
+        req,
+        res
       );
     }
   };
@@ -117,6 +119,7 @@ class ChequebookEntryController {
         "GET",
         "0803",
         "1.0",
+        req,
         res
       );
     } catch (error: any) {
@@ -128,8 +131,8 @@ class ChequebookEntryController {
         "GET",
         "0803",
         "1.0",
-        res,
-        req
+        req,
+        res
       );
     }
   };
@@ -157,8 +160,8 @@ class ChequebookEntryController {
           "POST",
           "0804",
           "1.0",
-          res,
-          req
+          req,
+          res
         );
 
       // fetch the data
@@ -166,13 +169,14 @@ class ChequebookEntryController {
 
       if (!data)
         return sendResponse(
-          true,
+          false,
           "Chequebook Not Found",
           data,
           200,
           "GET",
           "0804",
           "1.0",
+          req,
           res
         );
 
@@ -184,6 +188,7 @@ class ChequebookEntryController {
         "GET",
         "0804",
         "1.0",
+        req,
         res
       );
     } catch (error: any) {
@@ -195,8 +200,8 @@ class ChequebookEntryController {
         "GET",
         "0703",
         "1.0",
-        res,
-        req
+        req,
+        res
       );
     }
   };
@@ -219,8 +224,8 @@ class ChequebookEntryController {
           "PATCH",
           "0805",
           "1.0",
-          res,
-          req
+          req,
+          res
         );
 
       const data = await this.chequebookEntryDao.update(req);
@@ -233,6 +238,7 @@ class ChequebookEntryController {
         "PATCH",
         "0705",
         "1.0",
+        req,
         res
       );
     } catch (error: any) {
@@ -247,8 +253,8 @@ class ChequebookEntryController {
             "PATCH",
             "0805",
             "1.0",
-            res,
-            req
+            req,
+            res
           );
         }
       }
@@ -262,8 +268,8 @@ class ChequebookEntryController {
         "PATCH",
         "0805",
         "1.0",
-        res,
-        req
+        req,
+        res
       );
     }
   };

@@ -15,17 +15,15 @@ export const sendResponse = async (
   action: string,
   apiId: string,
   version: string,
-  res: Response,
-  req?: Request
+  req: Request,
+  res: Response
 ): Promise<Response> => {
 
   
   if (!status) {
     resData = errorCodes[resData as keyof typeof errorCodes];
     errLogger.error({ metaData: { apiId, version, action }, message: message.message });
-    if (req) {
-      new AuditTrail().store(message, { apiId, version, action }, res, req);
-    }
+      new AuditTrail().store(message, { apiId, version, action }, req, res);
   } else {
     infoLogger.info({ metaData: { apiId, version, action }, data: resData });
   }

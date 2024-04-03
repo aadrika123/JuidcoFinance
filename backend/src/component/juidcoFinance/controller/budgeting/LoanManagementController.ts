@@ -14,10 +14,10 @@ import { loanManagementValidation, loanManagementValidationWithID } from "../../
 
 class LoanManagementController {
   private loanManagementDao: LoanManagementDao;
-  private initMesg: string;
+  private initMsg: string;
   constructor() {
     this.loanManagementDao = new LoanManagementDao();
-    this.initMesg = "LoanManagement Entry";
+    this.initMsg = "LoanManagement Entry";
   }
 
   // Create
@@ -34,17 +34,18 @@ class LoanManagementController {
     try {
       const { error } = loanManagementValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.loanManagementDao.store(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).CREATED,
+        resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -63,16 +64,17 @@ class LoanManagementController {
       const data = await this.loanManagementDao.get(req);
 
       if (!data)
-        return CommonRes.SUCCESS(
-          resMessage(this.initMesg).NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -95,21 +97,22 @@ class LoanManagementController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.loanManagementDao.getById(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
-          resMessage(this.initMesg).NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -127,17 +130,18 @@ class LoanManagementController {
     try {
       const { error } = loanManagementValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.loanManagementDao.update(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).UPDATED,
+        resMessage(this.initMsg).UPDATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

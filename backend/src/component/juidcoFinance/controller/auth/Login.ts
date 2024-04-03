@@ -37,15 +37,16 @@ class AuthController {
       const { error } = loginValidation.validate(req.body.data);
 
       if(error)
-        return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+        return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.login(req.body.data);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -53,10 +54,11 @@ class AuthController {
         resMessage(this.initMsg).LOGIN,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -78,10 +80,11 @@ class AuthController {
         resMessage(this.initMsg).OTP_SENT,
         null,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -100,11 +103,12 @@ class AuthController {
       const data = await this.dao.verifyMailOtp(req.body.data.email, req.body.data.otp);
 
       if (data === null) {
-        return CommonRes.VALIDATION_ERROR("Wrong OTP entered!!!", resObj, res);
+        return CommonRes.VALIDATION_ERROR("Wrong OTP entered!!!", resObj, req, res);
       } else if (!data) {
         return CommonRes.VALIDATION_ERROR(
           "OTP has been expired!!!",
           resObj,
+          req,
           res
         );
       }
@@ -113,10 +117,11 @@ class AuthController {
         "OTP validated successfully!!!",
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

@@ -1,7 +1,5 @@
-import { sendResponse } from "../../../../util/sendResponse";
 import { Request, Response } from "express";
 import AccountingCodeDao from "../../dao/masters/accountingCodeDao";
-import ResMessage from "../../responseMessage/masters/accountCodeMessage";
 import { resObj } from "../../../../util/types";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
@@ -28,34 +26,32 @@ class AccountCodeController {
     res: Response,
     apiId: string
   ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const data = await this.dao.get(req);
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
-          data,
-          200,
-          "GET",
-          apiId,
-          "1.0",
-          res,
-          req
-        );
-
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
+      return CommonRes.NOT_FOUND(
+        resMessage(this.initMsg).NOT_FOUND,
         data,
-        200,
-        "GET",
-        apiId,
-        "1.0",
+        resObj,
+        req,
+        res
+      );
+
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -75,10 +71,11 @@ class AccountCodeController {
       const data = await this.dao.get_all();
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -86,10 +83,11 @@ class AccountCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -109,10 +107,11 @@ class AccountCodeController {
       const data = await this.dao.getMainCodes();
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -120,10 +119,11 @@ class AccountCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -143,10 +143,11 @@ class AccountCodeController {
       const data = await this.dao.getSubCodes();
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -154,10 +155,11 @@ class AccountCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -181,15 +183,16 @@ class AccountCodeController {
         id: Joi.number().required(),
       }).validate({ id: id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.getChildCodes(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -197,10 +200,11 @@ class AccountCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -224,15 +228,16 @@ class AccountCodeController {
         id: Joi.number().required(),
       }).validate({ id: id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.getParentCode(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -240,10 +245,11 @@ class AccountCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -256,10 +262,11 @@ class AccountCodeController {
     try {
       const data = await this.dao.getCodesWithParentDetail();
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -267,10 +274,11 @@ class AccountCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -290,7 +298,7 @@ class AccountCodeController {
       const {error} = requestNewAccCodeSchema.validate(req.body.data)
 
       if(error)
-        return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+        return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.requestNewCode(req.body.data);
 
@@ -298,10 +306,11 @@ class AccountCodeController {
         resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

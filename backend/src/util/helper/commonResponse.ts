@@ -6,8 +6,8 @@ const CommonRes = Object.freeze({
   VALIDATION_ERROR: (
     error: any,
     resObj: resObj,
+    req: Request,
     res: Response,
-    req?: Request | any
   ): Promise<Response> => {
     return sendResponse(
       false,
@@ -17,15 +17,15 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
-      res,
-      req
+      req,
+      res
     );
   },
   SERVER_ERROR: (
     error: any,
     resObj: resObj,
+    req: Request,
     res: Response,
-    req?: Request | any
   ): Promise<Response> => {
     return sendResponse(
       false,
@@ -35,14 +35,15 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
-      res,
-      req
+      req,
+      res
     );
   },
   CREATED: (
     message: any,
     data: unknown,
     resObj: resObj,
+    req: Request,
     res: Response
   ): Promise<Response> => {
     return sendResponse(
@@ -53,6 +54,7 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
+      req,
       res
     );
   },
@@ -60,6 +62,7 @@ const CommonRes = Object.freeze({
     message: any,
     data: unknown,
     resObj: resObj,
+    req: Request,
     res: Response
   ): Promise<Response> => {
     return sendResponse(
@@ -70,14 +73,34 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
+      req,
+      res
+    );
+  },
+  NOT_FOUND: (
+    message: any,
+    data: unknown,
+    resObj: resObj,
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    return sendResponse(
+      false,
+      message,
+      data,
+      200,
+      resObj.action,
+      resObj.apiId,
+      resObj.version,
+      req,
       res
     );
   },
   UNAUTHORISED: (
     error: any,
     resObj: resObj,
-    res: Response,
-    req?: Request | any
+    req: Request,
+    res: Response
   ): Promise<Response> => {
     return sendResponse(
       false,
@@ -87,8 +110,8 @@ const CommonRes = Object.freeze({
       resObj.action,
       resObj.apiId,
       resObj.version,
-      res,
-      req
+      req,
+      res
     );
   },
   DEFAULT: "The underlying {kind} for model {model} does not exist.",

@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../../util/sendResponse";
 import MuncipalityCodeDao from "../../dao/masters/munciCodeDao";
-import ResMessage from "../../responseMessage/masters/municCodeMessage";
 import { resObj } from "../../../../util/types";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
@@ -27,34 +25,32 @@ class MuncipalityCodeController {
     res: Response,
     apiId: string
   ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const data = await this.dao.get();
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          apiId,
-          "1.0",
+          resObj,
+          req,
           res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
         data,
-        200,
-        "GET",
-        apiId,
-        "1.0",
+        resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", apiId, "1.0", res,
-      req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -74,10 +70,11 @@ class MuncipalityCodeController {
       const data = await this.dao.get_all();
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -85,10 +82,11 @@ class MuncipalityCodeController {
         resMessage(this.initMsg).FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

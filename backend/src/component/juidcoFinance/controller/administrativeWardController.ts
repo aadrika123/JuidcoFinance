@@ -1,9 +1,10 @@
 "use strict";
 
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
 import AdministrativeWardDao from "../dao/administrativeWardDao";
-import ResMessage from "../responseMessage/adminisWardMessage";
+import CommonRes from "../../../util/helper/commonResponse";
+import { resObj } from "../../../util/types";
+import { resMessage } from "../responseMessage/commonMessage";
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 28-01-2024
@@ -13,51 +14,44 @@ import ResMessage from "../responseMessage/adminisWardMessage";
 
 class AdministrativeWardController {
   private adminsWardDao: AdministrativeWardDao;
+  private initMsg;
 
   constructor() {
     this.adminsWardDao = new AdministrativeWardDao();
+    this.initMsg = "Administrative Ward";
   }
 
   // Get limited Administrative Wards
-  getAdministrativeWards = async (req: Request, res: Response): Promise<Response> => {
+  getAdministrativeWards = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId: "1101",
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const data = await this.adminsWardDao.get();
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "1101",
-          "1.0",
-          res,
-          req
+          resObj,
+          req,
+          res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
         data,
-        200,
-        "GET",
-        "1101",
-        "1.0",
+        resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-       "",
-        500,
-        "GET",
-        "1101",
-        "1.0",
-        res,
-        req
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

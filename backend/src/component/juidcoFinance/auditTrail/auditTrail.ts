@@ -12,10 +12,12 @@ class AuditTrail {
     //
   }
 
-  store = async (error: any, resObj: resObj, res: Response, req: Request) => {
+  store = async (error: any, resObj: resObj, req: Request, res: Response) => {
     const totalTime = process.hrtime(res.locals.startTime);
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { auth, ...others } = req.body;
       await prisma.audit_trails.create({
         data: {
           error: String(error),
@@ -24,11 +26,12 @@ class AuditTrail {
             ...resObj,
             responseTime: totalTime[0] * 1000 + totalTime[1] / 1e6,
           },
-          user: res.locals.user || {
-            user: "User Not Found, BCZ of Invalid Token!!!",
+          user: {
+            user: auth,
           },
+
           payload: {
-            body: { ...req?.body },
+            body: { ...others },
             params: { ...req?.params },
             headers: { ...req?.headers },
           },
@@ -64,9 +67,12 @@ class AuditTrail {
       const query: Prisma.audit_trailsFindManyArgs = {
         take: limit,
         skip: (page - 1) * limit,
+        orderBy: {
+          created_at: 'desc'
+        }
       };
 
-      if (date !== 'undefined' && date !== "") {
+      if (date !== "undefined" && date !== "") {
         query.where = {
           created_at: {
             gte: new Date(date),
@@ -81,10 +87,11 @@ class AuditTrail {
         resMessage("Audit Trails").FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -116,10 +123,11 @@ class AuditTrail {
         resMessage("Audit Trails").FOUND,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

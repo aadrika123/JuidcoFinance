@@ -32,17 +32,18 @@ class BillPaymentEntryController {
     };
     try{
       const {error} = billPaymentEntryValidation.validate(req.body.data);
-      if(error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if(error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.store(req);
       return CommonRes.CREATED(
         resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     }catch(error){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -53,11 +54,11 @@ class BillPaymentEntryController {
       const data = await this.dao.get(req);
 
       if(!data)
-        return CommonRes.SUCCESS(resMessage(this.initMsg).NOT_FOUND, data, resObj, res);
+        return CommonRes.NOT_FOUND(resMessage(this.initMsg).NOT_FOUND, data, resObj, req, res);
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND,data, resObj,res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND,data, resObj, req, res);
     }catch(error){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }
 
@@ -76,21 +77,22 @@ class BillPaymentEntryController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.getById(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }; 
 
@@ -108,17 +110,18 @@ class BillPaymentEntryController {
       try {
         const { error } = billPaymentEntryValidationAlongWithID.validate(req.body.data);
   
-        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+        if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
   
         const data = await this.dao.update(req);
         return CommonRes.CREATED(
           resMessage(this.initMsg).UPDATED,
           data,
           resObj,
+          req,
           res
         );
       } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res, req);
+        return CommonRes.SERVER_ERROR(error, resObj, req, res);
       }
     };
 }

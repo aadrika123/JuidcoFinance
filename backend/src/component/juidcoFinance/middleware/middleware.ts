@@ -50,16 +50,16 @@ class Middleware {
         return CommonRes.UNAUTHORISED(
           resMessage(this.initMsg).INVALID,
           resObj,
-          res,
-          req
+          req,
+          res
         );
       }
     } else {
       return CommonRes.UNAUTHORISED(
         resMessage(this.initMsg).NOT_FOUND,
         resObj,
-        res,
-        req
+        req,
+        res
       );
     }
   };
@@ -91,8 +91,8 @@ class Middleware {
           return CommonRes.UNAUTHORISED(
             "You are not authorised for the route",
             resObj,
-            res,
-            req
+            req,
+            res
           );
         }
         next();
@@ -100,16 +100,16 @@ class Middleware {
         return CommonRes.UNAUTHORISED(
           resMessage(this.initMsg).INVALID,
           resObj,
-          res,
-          req
+          req,
+          res
         );
       }
     } else {
       return CommonRes.UNAUTHORISED(
         resMessage(this.initMsg).NOT_FOUND,
         resObj,
-        res,
-        req
+        req,
+        res
       );
     }
   };
@@ -135,8 +135,8 @@ class Middleware {
       return CommonRes.UNAUTHORISED(
         "You are not authorised for the route",
         resObj,
-        res,
-        req
+        req,
+        res
       );
     }else if(roleCheckResult == RoleCheckResult.YES){
       next();
@@ -144,8 +144,8 @@ class Middleware {
       return CommonRes.UNAUTHORISED(
         resMessage("Role").NOT_FOUND,
         resObj,
-        res,
-        req
+        req,
+        res
       );
     }
   };

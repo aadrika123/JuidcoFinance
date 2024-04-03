@@ -30,17 +30,18 @@ class VoucherEntryController {
     try {
       const { error } = voucherEntryValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.voucherEntryDao.store(req);
       return CommonRes.CREATED(
         resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -53,16 +54,17 @@ class VoucherEntryController {
       const data = await this.voucherEntryDao.get(req);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
-      );
+        );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -84,22 +86,23 @@ class VoucherEntryController {
       }).validate({'id': id});
 
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
 
       const data = await this.voucherEntryDao.getById(id);
 
       if(!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
-      );
+        );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }
 
@@ -115,7 +118,7 @@ class VoucherEntryController {
     try{
       const {error} = voucherEntryValidationWithID.validate(req.body.data);
 
-      if(error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if(error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.voucherEntryDao.update(req);
 
@@ -123,10 +126,11 @@ class VoucherEntryController {
         resMessage(this.initMsg).UPDATED,
         data,
         resObj,
+        req,
         res
       );
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }
 }

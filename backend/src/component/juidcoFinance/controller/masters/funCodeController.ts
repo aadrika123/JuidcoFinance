@@ -1,11 +1,10 @@
 "use strict";
 
 import { Request, Response } from "express";
-import { sendResponse } from "../../../../util/sendResponse";
 import FunctionCodeDao from "../../dao/masters/functionCodeDao";
-import ResMessage from "../../responseMessage/masters/funCodeMessage";
 import CommonRes from "../../../../util/helper/commonResponse";
 import { resObj } from "../../../../util/types";
+import { resMessage } from "../../responseMessage/commonMessage";
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 20-01-2024
@@ -15,13 +14,20 @@ import { resObj } from "../../../../util/types";
 
 class FunCodeController {
   private funCodeDao: FunctionCodeDao;
+  private initMsg;
 
   constructor() {
     this.funCodeDao = new FunctionCodeDao();
+    this.initMsg = "Function Codes";
   }
 
   // Get limited Function Codes
   getFunCode = async (req: Request, res: Response): Promise<Response> => {
+    const resObj: resObj ={
+      action: "GET",
+      apiId: "0201",
+      version: "1.0"
+    }
     try {
       const data = await this.funCodeDao.get(
         Number(req.query.page),
@@ -29,39 +35,17 @@ class FunCodeController {
       );
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
-          data,
-          200,
-          "GET",
-          "0201",
-          "1.0",
-          res
-        );
-
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
+      return CommonRes.NOT_FOUND(
+        resMessage(this.initMsg).NOT_FOUND,
         data,
-        200,
-        "GET",
-        "0201",
-        "1.0",
+        resObj,
+        req,
         res
       );
+
+      return CommonRes.SUCCESS("Function Codes Found Successfully", data, resObj, req, res)
     } catch (error: any) {
-      return sendResponse(
-        false,
-        error,
-       "",
-        500,
-        "GET",
-        "0201",
-        "1.0",
-        res,
-        req
-      );
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -75,13 +59,18 @@ class FunCodeController {
     try{
       const data = await this.funCodeDao.getAll(req);
 
-      if(!data){
-        return CommonRes.SUCCESS("Function Codes Not Found", data, resObj, res)
-      }
+      if(!data)
+      return CommonRes.NOT_FOUND(
+        resMessage(this.initMsg).NOT_FOUND,
+        data,
+        resObj,
+        req,
+        res
+      );
 
-      return CommonRes.SUCCESS("Function Codes Found Successfully", data, resObj, res)
+      return CommonRes.SUCCESS("Function Codes Found Successfully", data, resObj, req, res)
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }
 }

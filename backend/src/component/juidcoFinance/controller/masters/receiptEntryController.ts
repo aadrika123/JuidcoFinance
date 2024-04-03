@@ -42,18 +42,19 @@ class ReceiptEntryController {
 
       const { error } = receiptValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.store(req);
       return CommonRes.CREATED(
         resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
       console.log(error);
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -67,16 +68,17 @@ class ReceiptEntryController {
       const data = await this.dao.get(req);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -100,21 +102,22 @@ class ReceiptEntryController {
         id: Joi.number().required()
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.getById(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
 
   };
@@ -133,17 +136,18 @@ class ReceiptEntryController {
     try {
       const { error } = receiptValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.update(req);
       return CommonRes.CREATED(
         resMessage(this.initMsg).UPDATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -166,15 +170,16 @@ class ReceiptEntryController {
         id: Joi.number().required()
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.dao.getById(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
+        return CommonRes.NOT_FOUND(
           resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
@@ -205,7 +210,7 @@ class ReceiptEntryController {
  
       return res;
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
 
   };

@@ -14,10 +14,10 @@ import { resObj } from "../../../../util/types";
 
 class ReceiptRegisterController {
   private receiptRegisterDao: ReceiptRegisterDao;
-  private initMesg: string;
+  private initMsg: string;
   constructor() {
     this.receiptRegisterDao = new ReceiptRegisterDao();
-    this.initMesg = "ReceiptRegister Entry";
+    this.initMsg = "ReceiptRegister Entry";
   }
 
   // Create
@@ -34,17 +34,18 @@ class ReceiptRegisterController {
     try {
       const { error } = receiptRegisterValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.receiptRegisterDao.store(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).CREATED,
+        resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -63,16 +64,17 @@ class ReceiptRegisterController {
       const data = await this.receiptRegisterDao.get(req);
 
       if (!data)
-        return CommonRes.SUCCESS(
-          resMessage(this.initMesg).NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -95,21 +97,22 @@ class ReceiptRegisterController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.receiptRegisterDao.getById(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
-          resMessage(this.initMesg).NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -127,17 +130,18 @@ class ReceiptRegisterController {
     try {
       const { error } = receiptRegisterValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.receiptRegisterDao.update(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).UPDATED,
+        resMessage(this.initMsg).UPDATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -155,17 +159,18 @@ class ReceiptRegisterController {
     try {
       const { error } = receiptRegisterApproveSchema.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.receiptRegisterDao.approve(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).UPDATED,
+        resMessage(this.initMsg).UPDATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -179,17 +184,18 @@ class ReceiptRegisterController {
     try{
       const { error } = openingBalanceSchema.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.receiptRegisterDao.createOpeningBal(req);
       return CommonRes.CREATED(
         resMessage('Opening Balance').CREATED,
         data,
         resObj,
+        req,
         res
       );
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }
 
@@ -204,17 +210,18 @@ class ReceiptRegisterController {
     try{
       const { error } = updateOpeningBalanceSchema.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.receiptRegisterDao.updateOpeningBal(req);
       return CommonRes.CREATED(
         resMessage('Opening Balance').UPDATED,
         data,
         resObj,
+        req,
         res
       );
     }catch(error: any){
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   }
 }

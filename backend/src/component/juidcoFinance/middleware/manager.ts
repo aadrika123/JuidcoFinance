@@ -27,8 +27,8 @@ import { RoleCheckResult, checkProjectManager } from "../roles/roles";
       return CommonRes.UNAUTHORISED(
         "You are not authorised for the route",
         resObj,
-        res,
-        req
+        req,
+        res
       );
     }else if(roleCheckResult == RoleCheckResult.YES){
       next();
@@ -36,8 +36,8 @@ import { RoleCheckResult, checkProjectManager } from "../roles/roles";
       return CommonRes.UNAUTHORISED(
         resMessage("Role").NOT_FOUND,
         resObj,
-        res,
-        req
+        req,
+        res
       );
     }
   };

@@ -14,10 +14,10 @@ import BudgetAppropriationsDao from "../../dao/budgeting/BudgetAppropriationsDao
 
 class BudgetAppropriationsController {
   private budgetAppropriationsDao: BudgetAppropriationsDao;
-  private initMesg: string;
+  private initMsg: string;
   constructor() {
     this.budgetAppropriationsDao = new BudgetAppropriationsDao();
-    this.initMesg = "BudgetAppropriations Entry";
+    this.initMsg = "BudgetAppropriations Entry";
   }
 
   // Create
@@ -34,17 +34,18 @@ class BudgetAppropriationsController {
     try {
       const { error } = budgetAppropriationsValidation.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.budgetAppropriationsDao.store(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).CREATED,
+        resMessage(this.initMsg).CREATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -63,16 +64,17 @@ class BudgetAppropriationsController {
       const data = await this.budgetAppropriationsDao.get(req);
 
       if (!data)
-        return CommonRes.SUCCESS(
-          resMessage(this.initMesg).NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -95,21 +97,22 @@ class BudgetAppropriationsController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.budgetAppropriationsDao.getById(id);
 
       if (!data)
-        return CommonRes.SUCCESS(
-          resMessage(this.initMesg).NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
           resObj,
+          req,
           res
         );
 
-      return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -127,17 +130,18 @@ class BudgetAppropriationsController {
     try {
       const { error } = budgetAppropriationsValidationWithID.validate(req.body.data);
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.budgetAppropriationsDao.update(req);
       return CommonRes.CREATED(
-        resMessage(this.initMesg).UPDATED,
+        resMessage(this.initMsg).UPDATED,
         data,
         resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 
@@ -160,21 +164,22 @@ class BudgetAppropriationsController {
           id: Joi.number().required().greater(0)
         }).validate({'id': id});
   
-        if (error) return CommonRes.VALIDATION_ERROR(error, resObj, res, req);
+        if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
   
         const data = await this.budgetAppropriationsDao.getCurrentAmounts();
   
         if (!data)
-          return CommonRes.SUCCESS(
-            resMessage(this.initMesg).NOT_FOUND,
+          return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
             data,
             resObj,
+            req,
             res
           );
   
-        return CommonRes.SUCCESS(resMessage(this.initMesg).FOUND, data, resObj, res);
+        return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
       } catch (error: any) {
-        return CommonRes.SERVER_ERROR(error, resObj, res, req);
+        return CommonRes.SERVER_ERROR(error, resObj, req, res);
       }
     };
 

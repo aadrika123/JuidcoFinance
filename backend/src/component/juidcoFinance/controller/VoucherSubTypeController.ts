@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
-import ResMessage from "../responseMessage/vendorTypeMessage";
 import VoucherSubTypeDao from "../dao/voucherSubTypeDao";
+import { resObj } from "../../../util/types";
+import CommonRes from "../../../util/helper/commonResponse";
+import { resMessage } from "../responseMessage/commonMessage";
 
 /**
  * | Author- Krish
@@ -12,40 +13,41 @@ import VoucherSubTypeDao from "../dao/voucherSubTypeDao";
 
 class VoucherSubTypeController {
   private voucherSubTypeDao: VoucherSubTypeDao;
+  private initMsg;
+
   constructor() {
     this.voucherSubTypeDao = new VoucherSubTypeDao();
+    this.initMsg = "Vendor Sub Type"
   }
 
   // Get all vendor Types
   get = async (req: Request, res: Response): Promise<Response> => {
+    const resObj: resObj = {
+      apiId: "1601",
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const data = await this.voucherSubTypeDao.get();
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
-          data,
-          200,
-          "GET",
-          "1601",
-          "1.0",
-          res,
-          req
-        );
-
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
+      return CommonRes.NOT_FOUND(
+        resMessage(this.initMsg).NOT_FOUND,
         data,
-        200,
-        "GET",
-        "1601",
-        "1.0",
+        resObj,
+        req,
         res
       );
+
+        return CommonRes.SUCCESS(
+          resMessage(this.initMsg).FOUND,
+          data,
+          resObj,
+          req,
+          res
+        );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "1601", "1.0", res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }

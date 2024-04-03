@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { sendResponse } from "../../../util/sendResponse";
 import VoucherTypeDao from "../dao/voucherTypeDao";
-import ResMessage from "../responseMessage/vendorTypeMessage";
+import CommonRes from "../../../util/helper/commonResponse";
+import { resObj } from "../../../util/types";
+import { resMessage } from "../responseMessage/commonMessage";
 
 /**
  * | Author- Krish
@@ -12,40 +13,41 @@ import ResMessage from "../responseMessage/vendorTypeMessage";
 
 class VoucherTypeController {
   private voucherTypeDao: VoucherTypeDao;
+  private initMsg;
+
   constructor() {
     this.voucherTypeDao = new VoucherTypeDao();
+    this.initMsg = "Vendor Type";
   }
 
   // Get all vendor Types
   get = async (req: Request, res: Response): Promise<Response> => {
+    const resObj: resObj = {
+      apiId: "1501",
+      action: "GET",
+      version: "1.0",
+    };
     try {
       const data = await this.voucherTypeDao.get();
 
       if (!data)
-        return sendResponse(
-          true,
-          ResMessage.NOT_FOUND,
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
           data,
-          200,
-          "GET",
-          "1501",
-          "1.0",
-          res,
-          req
+          resObj,
+          req,
+          res
         );
 
-      return sendResponse(
-        true,
-        ResMessage.FOUND,
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
         data,
-        200,
-        "GET",
-        "1501",
-        "1.0",
+        resObj,
+        req,
         res
       );
     } catch (error: any) {
-      return sendResponse(false, error, "", 500, "GET", "1501", "1.0", res, req);
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }
