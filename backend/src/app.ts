@@ -1,10 +1,10 @@
 import express from "express";
-import FinanceRoute from "./component/juidcoFinance/router";
+import FinanceRoute from "./apis/router";
 import cors from "cors";
 import {
   resourcesUsage,
   responseTime,
-} from "./component/juidcoFinance/middleware/responseTime";
+} from "./apis/middleware/responseTime";
 
 const app = express();
 app.use(express.json());

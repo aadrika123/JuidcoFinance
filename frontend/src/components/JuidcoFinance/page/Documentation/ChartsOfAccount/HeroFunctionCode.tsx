@@ -4,7 +4,7 @@ import FunctionCodeTable from "@/components/Helpers/Tables/FunctionCodeTable";
 import { FunctionTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import Loader from "@/components/Helpers/Basic/Loader";
-import { escapeRegExp } from "@/utils/helper";
+import { escapeRegExp } from "jflib";
 
 type FunctionCodeProps = {
   data: FunctionTableData[];

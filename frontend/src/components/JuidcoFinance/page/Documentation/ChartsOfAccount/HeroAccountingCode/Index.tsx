@@ -9,7 +9,7 @@ import LedgerDetailsComponent from "./LedgerDetailsComponent";
 import GeneralLedgerDetailsComponent from "./GeneralLedgerDetailsComponent";
 import ScheduleDetailsComponent from "./ScheduleDetailsComponent";
 import Loader from "@/components/Helpers/Basic/Loader";
-import { escapeRegExp } from "@/utils/helper";
+import { escapeRegExp } from "jflib";
 
 type PrimaryAccountingProps = {
   data: AccountingTableData[];

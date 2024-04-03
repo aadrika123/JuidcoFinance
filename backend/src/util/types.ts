@@ -21,20 +21,6 @@ interface ApiResponse {
   status?: boolean | true;
 }
 
-interface BankRequestData {
-  bank_id: number;
-  ulb_id: number;
-  bank_type_id: number;
-  ifsc_code: string;
-  branch: string;
-  micr_code: string;
-  branch_address: string;
-  branch_city: string;
-  branch_state: string;
-  branch_district: string;
-  email: string;
-  contact_no: string;
-}
 interface VendorRequestData {
   vendor_type_id: number;
   vendor_no: string;
@@ -130,7 +116,6 @@ export type {
   resObj,
   CandidateType,
   ApiResponse,
-  BankRequestData,
   VendorRequestData,
   ChequebookRequestData,
   DirPaymentEntryRequestData,

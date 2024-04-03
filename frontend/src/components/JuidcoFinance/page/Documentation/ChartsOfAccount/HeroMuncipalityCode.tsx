@@ -4,7 +4,8 @@ import { MuncipalityTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import MunicipalityCodeTable from "@/components/Helpers/Tables/MunicipalityCodeTable";
 import Loader from "@/components/Helpers/Basic/Loader";
-import { escapeRegExp } from "@/utils/helper";
+import {escapeRegExp} from "jflib";
+
 
 type HeroMuncipalityCodeProps = {
   data: MuncipalityTableData[];

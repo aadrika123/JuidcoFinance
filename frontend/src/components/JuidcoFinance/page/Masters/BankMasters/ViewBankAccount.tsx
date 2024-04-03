@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect} from "react";
-import { initialBankDetailsValues } from "@/utils/validation/masters/bank_master.validation";
+import { initialBankDetailsValues } from "jflib/src/validations/BankMasterValidation";
 import axios from "@/lib/axiosConfig";
-import { AddBankDetailsData } from "@/utils/types/bank_master_types";
+import { AddBankDetailsData } from "jflib/src/validations/BankMasterValidation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
 import { useMutation, useQuery } from "react-query";

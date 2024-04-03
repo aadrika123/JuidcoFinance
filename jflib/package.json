@@ -1,0 +1,19 @@
+{
+  "name": "jflib",
+  "version": "1.0.0",
+  "description": "Juidco Finance Library",
+  "main": "index.ts",
+  "files": [
+    "index.ts",
+    "src/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aadrika Enterprises",
+  "license": "ISC",
+  "dependencies": {
+    "joi": "^17.12.2",
+    "yup": "^1.4.0"
+  }
+}
