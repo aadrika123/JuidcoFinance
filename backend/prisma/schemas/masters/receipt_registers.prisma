@@ -19,7 +19,7 @@ model receipt_registers {
   bank_acc_no           String?
   deposit_date          DateTime?
   realisation_date      DateTime?
-  wheather_returned     Boolean?
+  wheather_returned     Boolean?           @default(false)
   remarks               String
   entered_by_id         Int
   entered_by            users          @relation("entered_by", fields: [entered_by_id], references: [id])
