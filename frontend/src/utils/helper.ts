@@ -11,6 +11,8 @@ export default function goBack() {
 }
 
 export function DateFormatter(date: string) {
+  if(!date) return "";
+  
   return new Date(date).toISOString().split("T")[0];
 }
 
@@ -26,6 +28,7 @@ export function formatString(input: string): string {
   return result;
 }
 
+/// Filtering unnecssary field before stroring
 export const filterValBefStoring = (values: any) => {
   function mapingObject(obj: any) {
     const modifiedObj = {...obj};

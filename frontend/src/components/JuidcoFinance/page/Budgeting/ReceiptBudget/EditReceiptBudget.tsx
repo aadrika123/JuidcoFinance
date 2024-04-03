@@ -4,15 +4,16 @@ import React, { useEffect, useState } from "react";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import { receiptBudgetDetailsSchema } from "@/utils/validation/budgeting/receipt_budget.validation";
 import { fields } from "./ReceiptBudgetFormFields";
-import { ReceiptBudgetDetailsData } from "@/utils/types/budgeting/receipt_budget_types";
+import { ReceiptBudgetDetailsData } from "./receipt_budget_types";
+import { receiptBudgetDetailsSchema } from "./receipt_budget.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditReceiptBudget = ({
   ReceiptBudgetID,
@@ -20,7 +21,7 @@ export const EditReceiptBudget = ({
   ReceiptBudgetID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
-
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [initialData, setInitialData] = useState<ReceiptBudgetDetailsData>({
     fin_year_id: "",
     primary_acc_code_id: "",
@@ -30,23 +31,38 @@ export const EditReceiptBudget = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.RECEIPT_BUDGET_URL.getById}/${ReceiptBudgetID}`,
       });
 
-      setInitialData((prev) => {
-        return {
-          ...prev,
-          fin_year_id: res.data.data.fin_year.id,
-          primary_acc_code_id: res.data.data.primary_acc_code.id,
-          amount: res.data.data.amount,
-        };
-      });
-    })();
-  }, []);
+      if (res.data.status) {
+        setInitialData((prev) => {
+          return {
+            ...prev,
+            fin_year_id: res.data.data.fin_year.id,
+            primary_acc_code_id: res.data.data.primary_acc_code.id,
+            amount: res.data.data.amount,
+          };
+        });
+      } else {
+        throw "Something Went Wrong";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["receipt-budget-get-single", ReceiptBudgetID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [ReceiptBudgetID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateReceiptBudgetEntry = async (
@@ -57,15 +73,15 @@ export const EditReceiptBudget = ({
         url: `${FINANCE_URL.RECEIPT_BUDGET_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(ReceiptBudgetID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -73,14 +89,15 @@ export const EditReceiptBudget = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     ReceiptBudgetDetailsData,
     Error,
     ReceiptBudgetDetailsData
   >(UpdateReceiptBudgetEntry, {
     onSuccess: () => {
-      toast.success("Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
+        setIsSuccess(false);
         goBack();
       }, 1000);
     },
@@ -98,20 +115,26 @@ export const EditReceiptBudget = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Receipt Budget"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikWrapper
-        title=""
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={receiptBudgetDetailsSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          title=""
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={receiptBudgetDetailsSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

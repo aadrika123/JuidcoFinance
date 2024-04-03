@@ -6,15 +6,16 @@ import { useMutation, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { SubHeading } from "@/components/Helpers/Heading";
 import * as Yup from "yup";
-import toast, { Toaster } from "react-hot-toast";
-import PrimaryButton from "@/components/Helpers/Button";
 import DateInputBox from "@/components/Helpers/DateInputBox";
-import InputBox from "@/components/Helpers/InputBox";
 import Routes from "@/json/routes.json";
 import APIs from "@/json/apis.json";
 import goBack from "@/utils/helper";
 import { FINANCE_URL } from "@/utils/api/urls";
-import DropDownList from "@/components/Helpers/DropDownList";
+import Input from "@/components/global/atoms/Input";
+import Button from "@/components/global/atoms/Button";
+import DropDownList from "@/components/global/atoms/DropDownList";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 /**
  * | Author- Bijoy Paitandi
@@ -47,29 +48,30 @@ export const AddChequebook = () => {
       url: `${APIs.chequebook_mater$create}`,
       method: "POST",
       data: {
-          data: values
-        },
-      });
-      if(res.data.status){
-
-        return res.data;
-      } 
-      throw "Something Went Wrong";
+        data: values,
+      },
+    });
+    if (res.data.status) {
+      return res.data;
+    }
+    throw "Something Went Wrong";
   };
-  const { mutate } = useMutation(createChequebookDetails, {
-    onSuccess: () => {
-      toast.success("Successfully Added Chequebook Details!");
-      setTimeout(() => {
-        goBack();
-      }, 2000);
-    },
-    onError: () => {
-      alert("There was an error, Please check your internet connection.");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries("create");
-    },
-  });
+  const { mutate, isLoading, isSuccess } = useMutation(
+    createChequebookDetails,
+    {
+      onSuccess: () => {
+        setTimeout(() => {
+          goBack();
+        }, 2000);
+      },
+      onError: () => {
+        alert("There was an error, Please check your internet connection.");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("create");
+      },
+    }
+  );
   // ----- FORMIK & YUP FORM VAIDATION ---------- //
   const AddCheckbookDetailsSchema = Yup.object().shape({
     date: Yup.date().required("Issue date is required."),
@@ -105,7 +107,9 @@ export const AddChequebook = () => {
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
 
       <section className="border bg-white shadow-xl p-6 px-10">
         <div className="flex justify-between">
@@ -141,7 +145,7 @@ export const AddChequebook = () => {
                     value={values.date}
                   />
 
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="text"
@@ -175,7 +179,7 @@ export const AddChequebook = () => {
                     name="employee_id"
                   />
 
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="text"
@@ -186,7 +190,7 @@ export const AddChequebook = () => {
                     label="Bank Branch Name"
                     name="bank_branch"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="text"
@@ -197,7 +201,7 @@ export const AddChequebook = () => {
                     label="Cheque Number From"
                     name="cheque_no_from"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="text"
@@ -208,7 +212,7 @@ export const AddChequebook = () => {
                     label="Bank Account No"
                     name="bank_account_no"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="text"
@@ -219,7 +223,7 @@ export const AddChequebook = () => {
                     label="Cheque Number To"
                     name="cheque_no_to"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="number"
@@ -233,25 +237,20 @@ export const AddChequebook = () => {
                 </div>
 
                 <div className="mt-4 flex items-center gap-5 justify-end">
-                  <PrimaryButton
-                    buttonType="button"
+                  <Button
                     onClick={() => open(Routes.chequebook_master, "_self")}
                     variant="cancel"
                   >
                     Back
-                  </PrimaryButton>
+                  </Button>
                   {dirty && (
                     <>
-                      <PrimaryButton
-                        buttonType="button"
-                        onClick={handleReset}
-                        variant="cancel"
-                      >
+                      <Button onClick={handleReset} variant="cancel">
                         Reset
-                      </PrimaryButton>
-                      <PrimaryButton buttonType="submit" variant="primary">
+                      </Button>
+                      <Button buttontype="submit" variant="primary">
                         Save
-                      </PrimaryButton>
+                      </Button>
                     </>
                   )}
                 </div>

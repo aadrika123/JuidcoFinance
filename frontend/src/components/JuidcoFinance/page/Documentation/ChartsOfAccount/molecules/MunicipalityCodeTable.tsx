@@ -1,6 +1,6 @@
-import { MuncipalityTableData } from "@/utils/types/types";
 import React from "react";
 import parse from 'html-react-parser';
+import { MuncipalityTableData } from "../types";
 
 
 interface TableDataProps {

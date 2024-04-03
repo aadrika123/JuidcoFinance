@@ -7,7 +7,7 @@ import Select from "@/components/global/atoms/Select";
 import Input from "@/components/global/atoms/Input";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
-import { AdvanceManagementDetailsData } from "@/utils/types/budgeting/advance_management_types";
+import { AdvanceManagementDetailsData } from "./advance_management_types";
 
 /**
  * | Author- Sanjiv Kumar

@@ -4,15 +4,16 @@ import React, { useEffect, useState } from "react";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import { GrantManagementDetailsData } from "@/utils/types/budgeting/grant_management_types";
-import { grantManagementDetailsSchema } from "@/utils/validation/budgeting/grant_management.validation";
 import { fields } from "./GrantManagementFormFields";
+import { GrantManagementDetailsData } from "./grant_management_types";
+import { grantManagementDetailsSchema } from "./grant_management.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditGrantManagement = ({
   GrantManagementID,
@@ -20,6 +21,7 @@ export const EditGrantManagement = ({
   GrantManagementID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const [initialData, setInitialData] = useState<GrantManagementDetailsData>({
     ulb_id: "",
@@ -43,36 +45,53 @@ export const EditGrantManagement = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.GRANT_MANAGEMENT_URL.getById}/${GrantManagementID}`,
       });
 
-      setInitialData((prev) => {
-        return {
-          ...prev,
-          ulb_id: res.data.data.ulb.id,
-          primary_acc_code_id: res.data.data.primary_acc_code.id,
-          sanction_number: res.data.data.sanction_number,
-          grant_id: res.data.data.grant.id,
-          grant_nature_id: res.data.data.grant_nature.id,
-          employee_id: res.data.data.employee.id,
-          sanctioned_amount: res.data.data.sanctioned_amount,
-          grant_from_date: DateFormatter(res.data.data.grant_from_date),
-          grant_to_date: DateFormatter(res.data.data.grant_to_date),
-          advance_amount: res.data.data.advance_amount,
-          advance_rcving_date: DateFormatter(res.data.data.advance_rcving_date),
-          expenditure_date: DateFormatter(res.data.data.expenditure_date),
-          voucher_id: res.data.data.voucher.id,
-          expenditure_nature_id: res.data.data.expenditure_nature.id,
-          refund_date: DateFormatter(res.data.data.refund_date),
-          refund_amount: res.data.data.refund_amount,
-        };
-      });
-    })();
-  }, []);
+      if (res.data.status) {
+        setInitialData((prev) => {
+          return {
+            ...prev,
+            ulb_id: res.data.data.ulb.id,
+            primary_acc_code_id: res.data.data.primary_acc_code.id,
+            sanction_number: res.data.data.sanction_number,
+            grant_id: res.data.data.grant.id,
+            grant_nature_id: res.data.data.grant_nature.id,
+            employee_id: res.data.data.employee.id,
+            sanctioned_amount: res.data.data.sanctioned_amount,
+            grant_from_date: DateFormatter(res.data.data.grant_from_date),
+            grant_to_date: DateFormatter(res.data.data.grant_to_date),
+            advance_amount: res.data.data.advance_amount,
+            advance_rcving_date: DateFormatter(
+              res.data.data.advance_rcving_date
+            ),
+            expenditure_date: DateFormatter(res.data.data.expenditure_date),
+            voucher_id: res.data.data.voucher.id,
+            expenditure_nature_id: res.data.data.expenditure_nature.id,
+            refund_date: DateFormatter(res.data.data.refund_date),
+            refund_amount: res.data.data.refund_amount,
+          };
+        });
+      } else {
+        throw "Something Went Wrong";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["grant-managemennt-get-single", GrantManagementID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [GrantManagementID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateGrantManagementEntry = async (
@@ -83,15 +102,15 @@ export const EditGrantManagement = ({
         url: `${FINANCE_URL.GRANT_MANAGEMENT_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(GrantManagementID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -99,14 +118,15 @@ export const EditGrantManagement = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     GrantManagementDetailsData,
     Error,
     GrantManagementDetailsData
   >(UpdateGrantManagementEntry, {
     onSuccess: () => {
-      toast.success("Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
+        setIsSuccess(false);
         goBack();
       }, 1000);
     },
@@ -124,20 +144,26 @@ export const EditGrantManagement = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Grant Management"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikWrapper
-        title="Grant Management"
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={grantManagementDetailsSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          title="Grant Management"
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={grantManagementDetailsSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

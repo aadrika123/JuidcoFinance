@@ -4,15 +4,16 @@ import React, { useEffect, useState } from "react";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import { RevisedBudgetDetailsData } from "@/utils/types/budgeting/revised_budget_types";
-import { revisedBudgetDetailsSchema } from "@/utils/validation/budgeting/revised_budget.validation";
 import { fields } from "./RevisedBudgetFormFields";
+import { RevisedBudgetDetailsData } from "./revised_budget_types";
+import { revisedBudgetDetailsSchema } from "./revised_budget.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditRevisedBudget = ({
   RevisedBudgetID,
@@ -20,7 +21,7 @@ export const EditRevisedBudget = ({
   RevisedBudgetID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
-
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [initialData, setInitialData] = useState<RevisedBudgetDetailsData>({
     primary_acc_code_id: "",
     approved_amount: "",
@@ -31,24 +32,38 @@ export const EditRevisedBudget = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.REVISED_BUDGET_URL.getById}/${RevisedBudgetID}`,
       });
+      if (res.data.status) {
+        setInitialData((prev) => {
+          return {
+            ...prev,
+            primary_acc_code_id: res.data.data.primary_acc_code.id,
+            approved_amount: res.data.data.approved_amount,
+            revised_amount: res.data.data.revised_amount,
+            remarks: res.data.data.remarks,
+          };
+        });
+      } else {
+        throw "Something Went Wrong";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      setInitialData((prev) => {
-        return {
-          ...prev,
-          primary_acc_code_id: res.data.data.primary_acc_code.id,
-          approved_amount: res.data.data.approved_amount,
-          revised_amount: res.data.data.revised_amount,
-          remarks: res.data.data.remarks,
-        };
-      });
-    })();
-  }, []);
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["revised-budget-get-single", RevisedBudgetID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [RevisedBudgetID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateRevisedBudgetEntry = async (
@@ -59,15 +74,15 @@ export const EditRevisedBudget = ({
         url: `${FINANCE_URL.REVISED_BUDGET_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(RevisedBudgetID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -75,14 +90,15 @@ export const EditRevisedBudget = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     RevisedBudgetDetailsData,
     Error,
     RevisedBudgetDetailsData
   >(UpdateRevisedBudgetEntry, {
     onSuccess: () => {
-      toast.success("Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
+        setIsSuccess(false);
         goBack();
       }, 1000);
     },
@@ -100,20 +116,26 @@ export const EditRevisedBudget = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Revised Budget"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikWrapper
-        title="Revised Budget"
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={revisedBudgetDetailsSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          title="Revised Budget"
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={revisedBudgetDetailsSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

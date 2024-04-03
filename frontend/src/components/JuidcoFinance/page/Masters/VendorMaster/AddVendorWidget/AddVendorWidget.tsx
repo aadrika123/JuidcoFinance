@@ -1,8 +1,8 @@
 import React from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
-import PrimaryButton from "@/components/Helpers/Button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Button from "@/components/global/atoms/Button";
 
 const AddVendorWidget: React.FC = () => {
   const pathName = usePathname();
@@ -14,9 +14,9 @@ const AddVendorWidget: React.FC = () => {
         </div>
         <div className="flex">
           <Link href={`${pathName}/add`}>
-            <PrimaryButton variant="primary" className="rounded-3xl">
+            <Button variant="primary" className="rounded-3xl">
               + Add Vendor
-            </PrimaryButton>
+            </Button>
           </Link>
         </div>
       </div>

@@ -3,15 +3,16 @@
 import React, { useEffect, useState } from "react";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import { VoucherEntryDetailsData } from "@/utils/types/documentation/voucher_entry_types";
-import { voucherEntryDetailsSchema } from "@/utils/validation/documentation/voucher_entry.validation";
 import FormikW from "./VoucherEntryFormFields";
+import { VoucherEntryDetailsData } from "./voucher_entry_types";
+import { voucherEntryDetailsSchema } from "./voucher_entry.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditVoucherEntry = ({
   VoucherEntryID,
@@ -19,6 +20,7 @@ export const EditVoucherEntry = ({
   VoucherEntryID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const [initialData, setInitialData] = useState<VoucherEntryDetailsData>({
     voucher_type_id: "",
@@ -57,51 +59,66 @@ export const EditVoucherEntry = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.getById}/${VoucherEntryID}`,
       });
 
-      setInitialData((prev) => {
-        return {
-          ...prev,
-          voucher_type_id: res.data.data.voucher_type.id,
-          ulb_id: res.data.data.ulb.id,
-          date: DateFormatter(res.data.data.date),
-          fund_id: res.data.data.fund.id,
-          journal_voucher_no: res.data.data.journal_voucher_no,
-          bank_id: res.data.data.bank.id,
-          payment_date: DateFormatter(res.data.data.payment_date),
-          department_id: res.data.data.department.id,
-          pay_slip_ref_no: res.data.data.pay_slip_ref_no,
-          pay_slip_date: DateFormatter(res.data.data.pay_slip_date),
-          crv_bpv_no: res.data.data.crv_bpv_no,
-          receipt_date: DateFormatter(res.data.data.receipt_date),
-          primary_acc_code_id: res.data.data.primary_acc_code.id,
-          payment_order_no: res.data.data.payment_order_no,
-          acc_description: res.data.data.acc_description,
-          debit_amount: res.data.data.debit_amount,
-          credit_amount: res.data.data.credit_amount,
-          remittance_money_no: res.data.data.remittance_money_no,
-          amount: res.data.data.amount,
-          cheque_no: res.data.data.cheque_no,
-          total_amount: res.data.data.total_amount,
-          amount_in_words: res.data.data.amount_in_words,
-          prepared_by: res.data.data.prepared_by,
-          prepared_by_date: DateFormatter(res.data.data.prepared_by_date),
-          verified_by_id: res.data.data.verified_by.id,
-          verified_by_date: DateFormatter(res.data.data.verified_by_date),
-          approved_by_id: res.data.data.approved_by.id,
-          approved_by_date: DateFormatter(res.data.data.approved_by_date),
-          posted_by_id: res.data.data.posted_by.id,
-          posted_by_date: DateFormatter(res.data.data.posted_by_date),
-          receiver_name: res.data.data.receiver_name,
-        };
-      });
-    })();
-  }, []);
+      if (res.data.status) {
+        setInitialData((prev) => {
+          return {
+            ...prev,
+            voucher_type_id: res.data.data.voucher_type.id,
+            ulb_id: res.data.data.ulb.id,
+            date: DateFormatter(res.data.data.date),
+            fund_id: res.data.data.fund.id,
+            journal_voucher_no: res.data.data.journal_voucher_no,
+            bank_id: res.data.data.bank.id,
+            payment_date: DateFormatter(res.data.data.payment_date),
+            department_id: res.data.data.department.id,
+            pay_slip_ref_no: res.data.data.pay_slip_ref_no,
+            pay_slip_date: DateFormatter(res.data.data.pay_slip_date),
+            crv_bpv_no: res.data.data.crv_bpv_no,
+            receipt_date: DateFormatter(res.data.data.receipt_date),
+            primary_acc_code_id: res.data.data.primary_acc_code.id,
+            payment_order_no: res.data.data.payment_order_no,
+            acc_description: res.data.data.acc_description,
+            debit_amount: res.data.data.debit_amount,
+            credit_amount: res.data.data.credit_amount,
+            remittance_money_no: res.data.data.remittance_money_no,
+            amount: res.data.data.amount,
+            cheque_no: res.data.data.cheque_no,
+            total_amount: res.data.data.total_amount,
+            amount_in_words: res.data.data.amount_in_words,
+            prepared_by: res.data.data.prepared_by,
+            prepared_by_date: DateFormatter(res.data.data.prepared_by_date),
+            verified_by_id: res.data.data.verified_by.id,
+            verified_by_date: DateFormatter(res.data.data.verified_by_date),
+            approved_by_id: res.data.data.approved_by.id,
+            approved_by_date: DateFormatter(res.data.data.approved_by_date),
+            posted_by_id: res.data.data.posted_by.id,
+            posted_by_date: DateFormatter(res.data.data.posted_by_date),
+            receiver_name: res.data.data.receiver_name,
+          };
+        });
+      } else {
+        throw "Something Went Wrong!!";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["voucher-entry-get-single", VoucherEntryID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [VoucherEntryID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateVoucherEntryEntry = async (
@@ -112,15 +129,15 @@ export const EditVoucherEntry = ({
         url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(VoucherEntryID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -128,14 +145,15 @@ export const EditVoucherEntry = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     VoucherEntryDetailsData,
     Error,
     VoucherEntryDetailsData
   >(UpdateVoucherEntryEntry, {
     onSuccess: () => {
-      toast.success("Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
+        setIsSuccess(false);
         goBack();
       }, 1000);
     },
@@ -153,19 +171,25 @@ export const EditVoucherEntry = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Edit Voucher Entry"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikW
-        title="Edit Voucher Entry"
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={voucherEntryDetailsSchema}
-        onSubmit={onSubmit}
-        readonly={searchParams === "view"}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikW
+          title="Edit Voucher Entry"
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={voucherEntryDetailsSchema}
+          onSubmit={onSubmit}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

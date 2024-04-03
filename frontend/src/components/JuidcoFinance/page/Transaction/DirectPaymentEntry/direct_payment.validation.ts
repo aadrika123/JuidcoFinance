@@ -1,5 +1,6 @@
-import { DirPaymentDataProps } from "@/utils/types/direct_payment_entry_types";
+
 import * as Yup from "yup";
+import { DirPaymentDataProps } from "./direct_payment_entry_types";
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
 export const PaymentDetailsSchema = Yup.object().shape({

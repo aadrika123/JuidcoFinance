@@ -71,6 +71,7 @@ export const HeroCollectionRegister = () => {
           ids: receiptIds,
         },
       });
+      if(!res.data.status)  throw new Error("Something Went Wrong!!");
       res && toast.success("Approved Sucessfully!!");
     } catch (error) {
       toast.error("Something Went Wrong!!");

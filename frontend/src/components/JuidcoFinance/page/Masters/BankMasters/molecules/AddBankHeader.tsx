@@ -1,6 +1,6 @@
 import React from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
-import PrimaryButton from "@/components/Helpers/Button";
+import Button from "@/components/global/atoms/Button";
 
 interface AddBankProps {
   openModal: () => void;
@@ -28,7 +28,7 @@ const AddBankHeader: React.FC<AddBankProps> = (props) => {
           </span>
         </div>
         <div className="flex">
-          <PrimaryButton
+          <Button
             onClick={props.openModal}
             variant="primary"
             className="rounded-3xl"
@@ -46,7 +46,7 @@ const AddBankHeader: React.FC<AddBankProps> = (props) => {
                 fill="white"
               />
             </svg>
-          </PrimaryButton>
+          </Button>
         </div>
       </div>
     </>

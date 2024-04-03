@@ -1,5 +1,5 @@
-import { VendorDetailsData } from "@/utils/types/vendor_master_types";
 import * as Yup from "yup";
+import { VendorDetailsData } from "./vendor_master_types";
 
 // ----- FORMIK & YUP FORM VAIDATION ---------- //
 export const VendorDetailsSchema = Yup.object().shape({

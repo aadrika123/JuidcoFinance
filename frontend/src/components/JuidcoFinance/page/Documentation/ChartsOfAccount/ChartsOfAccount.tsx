@@ -8,25 +8,19 @@ import PrimaryAccountingCode from "./HeroAccountingCode/Index"
 import axios from "@/lib/axiosConfig";
 import FunctionCode from "./HeroFunctionCode";
 import { useQuery } from "react-query";
-import Loader from "@/components/Helpers/Basic/Loader";
-import type {
-  ChartsOfAccountsProps,
-  AccountingTableData,
-  FunctionTableData,
-  MuncipalityTableData,
-} from "@/utils/types/types";
 import Button from "@/components/global/atoms/Button";
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import RequestNewAccountCode from "./RequestNewAccountCode";
-import { RequestAccCodesDetailsSchema } from "@/utils/validation/masters/request_accounting_codes.validation";
-import { PrimaryAccCodes } from "@/utils/types/primary_accounting_codes";
 import Popup from "@/components/global/molecules/Popup";
 import SuccesfullConfirm from "@/components/global/molecules/SuccesfullConfirm";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { filterValBefStoring } from "@/utils/helper";
 import toast, { Toaster } from "react-hot-toast";
+import Loader from "@/components/global/atoms/Loader";
+import { AccountingTableData, ChartsOfAccountsProps, FunctionTableData, MuncipalityTableData, PrimaryAccCodes } from "./types";
+import { RequestAccCodesDetailsSchema } from "./request_accounting_codes.validation";
 
 
 
@@ -53,7 +47,10 @@ export const ChartsOfAccount = () => {
         `/${endpoint}`,
       method: "GET",
     });
-    return res.data?.data as T;
+    if (res.data.status) {
+      return res.data?.data as T;
+    }
+    throw "Something Went Wrong!!";
   };
 
   const useCodeQuery = <T extends TableData>(endpoint: string) => {

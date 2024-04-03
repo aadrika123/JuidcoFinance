@@ -7,14 +7,15 @@ import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { ReceiptDataProps } from "@/utils/types/receipt_entry_types";
-import { ReceiptDetailsSchema } from "@/utils/validation/transactions/receipt_entry.validation";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
 import { fields } from "./RecieptEntryFormFields";
+import { ReceiptDataProps } from "./receipt_entry_types";
+import { ReceiptDetailsSchema } from "./receipt_entry.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -38,17 +39,18 @@ export const AddReceipt = () => {
     narration: "",
     subledger_id: "",
     amount: 0,
-  }
+  };
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
     id: "",
     isOnEdit: false,
   });
   const [data, setData] = useState<ReceiptDataProps[]>([]);
-  const [initialData, setInitialData] = useState<ReceiptDataProps>(initialValue);
+  const [initialData, setInitialData] =
+    useState<ReceiptDataProps>(initialValue);
   //////////// Reseting InitialData on FormikPopup off //////////////
   const resetInitialValue = () => {
     setInitialData(initialValue);
-  }
+  };
 
   /////////////// Show Form Popup on Load //////////////////////
   useEffect(() => {
@@ -75,20 +77,22 @@ export const AddReceipt = () => {
               paid_by: values.paid_by,
 
               receipt_type_id: values.receipt_type_id,
-              receipt_type_id_name: values.receipt_type_id_name || item.receipt_type_id_name,
+              receipt_type_id_name:
+                values.receipt_type_id_name || item.receipt_type_id_name,
 
               mobile_no: values.mobile_no,
 
               admin_ward_id: values.admin_ward_id,
-              admin_ward_id_name: values.admin_ward_id_name || item.admin_ward_id_name,
+              admin_ward_id_name:
+                values.admin_ward_id_name || item.admin_ward_id_name,
 
               amount: values.amount,
 
               narration: values.narration,
 
               subledger_id: values.subledger_id,
-              subledger_id_name: values.subledger_id_name || item.subledger_id_name,
-
+              subledger_id_name:
+                values.subledger_id_name || item.subledger_id_name,
             };
           } else {
             return item;
@@ -119,11 +123,10 @@ export const AddReceipt = () => {
         url: `${FINANCE_URL.RECEIPT_ENTRY_URL.create}`,
         method: "POST",
         data: {
-          data: filterValBefStoring(values)
+          data: filterValBefStoring(values),
         },
       });
       if (res.data.status) {
-
         return res.data;
       }
       throw "Something Went Wrong";
@@ -133,13 +136,12 @@ export const AddReceipt = () => {
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading, isSuccess } = useMutation<
     ReceiptDataProps,
     Error,
     any
   >(handleStore, {
     onSuccess: () => {
-      toast.success("Receipt Payment Entry Added Successfully!!!");
       setTimeout(() => {
         goBack();
       }, 1000);
@@ -190,13 +192,13 @@ export const AddReceipt = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
     setData([]);
-  }
+  };
 
   ///////////////// Edit and Remove Button JSX ///////////////
   const addButton = (id: string) => {
@@ -239,6 +241,9 @@ export const AddReceipt = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Created Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={ReceiptDetailsSchema}

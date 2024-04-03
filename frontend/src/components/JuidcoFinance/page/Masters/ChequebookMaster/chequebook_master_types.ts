@@ -1,4 +1,4 @@
-import { EmployeeDetailsData } from "./employee_types";
+import { EmployeeDetailsData } from "../../auth/employee_types";
 
 // Bank Master Types //
 export type ChequebookTableData = {
@@ -49,6 +49,7 @@ export interface ChequebookDataProps {
 
 export interface ResponseData {
   data: {
+    status: boolean;
     data: {
       date: string;
       bank_branch: string;

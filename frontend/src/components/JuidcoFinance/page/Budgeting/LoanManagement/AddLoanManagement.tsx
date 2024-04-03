@@ -10,10 +10,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { LoanManagementDetailsData } from "@/utils/types/budgeting/loan_management_types";
-import { loanManagementDetailsSchema } from "@/utils/validation/budgeting/loan_management.validation";
 import FormikW from "./LoanManagementFormFields";
+import { LoanManagementDetailsData } from "./loan_management_types";
+import { loanManagementDetailsSchema } from "./loan_management.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -144,11 +145,10 @@ export const AddLoanManagement = () => {
         url: `${FINANCE_URL.LOAN_MANAGEMENT_URL.create}`,
         method: "POST",
         data: {
-          data: filterValBefStoring(values)
+          data: filterValBefStoring(values),
         },
       });
       if (res.data.status) {
-
         return res.data;
       }
       throw "Something Went Wrong";
@@ -158,23 +158,23 @@ export const AddLoanManagement = () => {
     }
   };
 
-  const { mutate } = useMutation<LoanManagementDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    LoanManagementDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -291,6 +291,9 @@ export const AddLoanManagement = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={loanManagementDetailsSchema}

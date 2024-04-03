@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { closePopup } from "@/redux/reducers/PopupReducers";
 import { useDispatch } from "react-redux";
-import { FormikWrapperProps } from "@/utils/types/FormikTypes/formikTypes";
+import { FormikWrapperProps } from "@/utils/types/formikTypes";
 
 const PopupFormikHOC = <P extends FormikWrapperProps>(
   WrappedComponent: React.ComponentType<any>

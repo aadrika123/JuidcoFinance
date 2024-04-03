@@ -4,15 +4,16 @@ import React, { useEffect, useState } from "react";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import { BudgetReApproDetailsData } from "@/utils/types/budgeting/budget_re_appro_types";
-import { budgetReApproDetailsSchema } from "@/utils/validation/budgeting/budget_re_appro.validation";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { BudgetReApproDetailsData } from "./budget_re_appro_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { budgetReApproDetailsSchema } from "./budget_re_appro.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditBudgetReAppro = ({
   BudgetReApproID,
@@ -20,6 +21,7 @@ export const EditBudgetReAppro = ({
   BudgetReApproID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [selects, setSelects] = useState({
     f_p_codes: [],
     balance_amount: undefined,
@@ -42,8 +44,8 @@ export const EditBudgetReAppro = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.BUDGET_RE_APPRO_URL.getById}/${BudgetReApproID}`,
@@ -66,8 +68,19 @@ export const EditBudgetReAppro = ({
       });
       handleSelectPrimaryCode(res.data.data.primary_acc_code.id);
       handleSelectFromPrimaryCode(res.data.data.from_primary_acc_code.id);
-    })();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["budget-re-appro-get-single", BudgetReApproID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [BudgetReApproID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateBudgetReApproEntry = async (
@@ -78,15 +91,15 @@ export const EditBudgetReAppro = ({
         url: `${FINANCE_URL.BUDGET_RE_APPRO_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(BudgetReApproID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -94,14 +107,15 @@ export const EditBudgetReAppro = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     BudgetReApproDetailsData,
     Error,
     BudgetReApproDetailsData
   >(UpdateBudgetReApproEntry, {
     onSuccess: () => {
-      toast.success("Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
+        setIsSuccess(false);
         goBack();
       }, 1000);
     },
@@ -119,13 +133,17 @@ export const EditBudgetReAppro = ({
 
   /////////////// Handle Select Primary Accounting Code ////////////////
   const handleSelectPrimaryCode = async (id: string | number) => {
-    console.log(id)
+    console.log(id);
     try {
       const res = await axios({
         url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
-      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      if (res.data.status) {
+        setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      } else {
+        throw "Something Went Wrong";
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -139,11 +157,15 @@ export const EditBudgetReAppro = ({
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setSelects((prev) => ({
-        ...prev,
-        balance_amount: res.data?.data?.balance_amount,
-        approved_amount: res.data?.data?.approved_amount,
-      }));
+      if (res.data.status) {
+        setSelects((prev) => ({
+          ...prev,
+          balance_amount: res.data?.data?.balance_amount,
+          approved_amount: res.data?.data?.approved_amount,
+        }));
+      } else {
+        throw "Something Went Wrong";
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -202,7 +224,7 @@ export const EditBudgetReAppro = ({
           ACCESSOR: "from_primary_acc_code_id",
           PLACEHOLDER: "Select From Primary Accounting Code",
           DATA: selects.f_p_codes,
-          HANDLER: handleSelectFromPrimaryCode
+          HANDLER: handleSelectFromPrimaryCode,
         },
         {
           CONTROL: "input",
@@ -237,20 +259,26 @@ export const EditBudgetReAppro = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Budget Re-Appropriation"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikWrapper
-        title="Budget Re-Appropriation"
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={budgetReApproDetailsSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          title="Budget Re-Appropriation"
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={budgetReApproDetailsSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

@@ -1,9 +1,9 @@
-import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
-import VendorsTable from "@/components/Helpers/Tables/VendorsTable";
-import SearchBox from "@/components/Helpers/SearchBox";
 import React from "react";
-import { VendorDetailsData } from "@/utils/types/vendor_master_types";
+import { VendorDetailsData } from "../vendor_master_types";
+import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
+import Button from "@/components/global/atoms/Button";
+import VendorTable from "./VendorTable";
 
 type VendorListProps = {
   nextPage: () => void;
@@ -15,27 +15,30 @@ type VendorListProps = {
 };
 
 const VendorList: React.FC<VendorListProps> = (props) => {
-
+  const handleSearch = (text: string) => {
+    props.setSearchQuery(text);
+  };
   return (
     <section className="border shadow-2xl bg-white p-6 px-10">
       <div className="flex justify-between">
         <SubHeading>Vendor List</SubHeading>
-        <SearchBox
+        <DebouncedSearch onChange={handleSearch} />
+        {/* <Search
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             props.setSearchQuery(e.target.value)
           }
           onKeyDown={(event) => {
             if (event.key === "Enter") props.fetchVendorSearchQuery();
           }}
-        />
+        /> */}
       </div>
 
       <div className="mt-8">
-        <VendorsTable data={props.data} />
+        <VendorTable data={props.data} />
 
         <div className="flex items-center justify-end mt-5 gap-5">
           {props.page > 1 && (
-            <PrimaryButton onClick={props.prevPage} variant="primary">
+            <Button onClick={props.prevPage} variant="primary">
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -54,10 +57,10 @@ const VendorList: React.FC<VendorListProps> = (props) => {
                 </svg>
               </span>
               Previous
-            </PrimaryButton>
+            </Button>
           )}
 
-          <PrimaryButton onClick={props.nextPage} variant="primary">
+          <Button onClick={props.nextPage} variant="primary">
             Next
             <span>
               <svg
@@ -76,7 +79,7 @@ const VendorList: React.FC<VendorListProps> = (props) => {
                 />
               </svg>
             </span>
-          </PrimaryButton>
+          </Button>
         </div>
       </div>
     </section>

@@ -17,7 +17,7 @@ export interface ReceiptRegisterDetailsData {
   bank_acc_no?: string;
   deposit_date?: string;
   realisation_date?: string;
-  wheather_returned?: boolean;
+  wheather_returned?: boolean | string;
   remarks: string;
   entered_by_id?: number | string;
   entered_by_print_name?: string;

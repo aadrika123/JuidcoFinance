@@ -12,9 +12,9 @@ import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
-import { receiptBudgetDetailsSchema } from "@/utils/validation/budgeting/receipt_budget.validation";
 import { fields } from "./ReceiptBudgetFormFields";
-import { ReceiptBudgetDetailsData } from "@/utils/types/budgeting/receipt_budget_types";
+import { ReceiptBudgetDetailsData } from "./receipt_budget_types";
+import { receiptBudgetDetailsSchema } from "./receipt_budget.validation";
 
 interface UpdatedModeType {
   id: number | string;

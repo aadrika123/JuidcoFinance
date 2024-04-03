@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
-import { MuncipalityTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
-import MunicipalityCodeTable from "@/components/Helpers/Tables/MunicipalityCodeTable";
-import Loader from "@/components/Helpers/Basic/Loader";
 import { escapeRegExp } from "@/utils/helper";
+import MunicipalityCodeTable from "./molecules/MunicipalityCodeTable";
+import Loader from "@/components/global/atoms/Loader";
+import { MuncipalityTableData } from "./types";
 
 type HeroMuncipalityCodeProps = {
   data: MuncipalityTableData[];

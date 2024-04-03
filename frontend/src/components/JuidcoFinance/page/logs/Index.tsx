@@ -54,7 +54,11 @@ const HeroLogsPage = () => {
         method: "GET",
       });
 
-      res && setState((prev) => ({ ...prev, logs: res.data.data }));
+      if (res.data.status) {
+        res && setState((prev) => ({ ...prev, logs: res.data.data }));
+      } else {
+        throw "Something Went Wrong!!";
+      }
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +85,8 @@ const HeroLogsPage = () => {
         method: "GET",
       });
 
-      const d: any = [];
+      if (res.data.status) {
+        const d: any = [];
       const categ: any = [];
       res.data.data.forEach((item: { month: string; total_logs: number }) => {
         categ.push(item.month);
@@ -89,6 +94,8 @@ const HeroLogsPage = () => {
       });
 
       setState((prev) => ({ ...prev, graphData: d, graphCateg: categ }));
+      }
+      throw "Something Went Wrong!!";
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +175,7 @@ const HeroLogsPage = () => {
                       {graphCateg.length > 0 && (
                         <LineChart
                           title="Total Logs"
-                          width={580}
+                          width={"100%"}
                           options={options}
                         />
                       )}

@@ -11,10 +11,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { OpeningBalanceDetailsData } from "@/utils/types/budgeting/opening_balance_types";
-import { openingBalanceDetailsSchema } from "@/utils/validation/budgeting/opening_balance.validation";
 import { fields } from "./OpeningBalanceFormFields";
+import { OpeningBalanceDetailsData } from "./opening_balance_types";
+import { openingBalanceDetailsSchema } from "./opening_balance.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -91,37 +92,36 @@ export const AddOpeningBalance = () => {
         url: `${FINANCE_URL.OPENING_BALANCE_ENTRY_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<OpeningBalanceDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    OpeningBalanceDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -164,12 +164,12 @@ export const AddOpeningBalance = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   ///////////////// Edit and Remove Button JSX ///////////////
   const addButton = (id: string) => {
@@ -211,6 +211,9 @@ export const AddOpeningBalance = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={openingBalanceDetailsSchema}

@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect} from "react";
-import { initialBankDetailsValues } from "@/utils/validation/masters/bank_master.validation";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "@/lib/axiosConfig";
-import { AddBankDetailsData } from "@/utils/types/bank_master_types";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
 import { useMutation, useQuery } from "react-query";
@@ -15,16 +13,19 @@ import { ViewBankHeader } from "./molecules/ViewBankHeader";
 import ToggleButton from "@/components/global/atoms/ToggleButton";
 import BankAccountForm from "./molecules/BankAccountForm";
 import Button from "@/components/global/atoms/Button";
-import { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from "react-to-print";
 import { PrintReadyBankComponent } from "./molecules/PrintReadyBankComponent";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
-
+import { AddBankDetailsData } from "./bank_master_types";
+import { initialBankDetailsValues } from "./bank_master.validation";
 
 const ViewBankAccount = ({ bankID }: { bankID: string }) => {
-  const [bankAccountDetails, setBankAccountDetails] = useState<AddBankDetailsData>(initialBankDetailsValues);
+  const [bankAccountDetails, setBankAccountDetails] =
+    useState<AddBankDetailsData>(initialBankDetailsValues);
 
   const [isDataLossPopupOpen, setDataLossPopupOpen] = useState<boolean>(false);
-  const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
+  const [isSuccessNotificationOpen, setSuccessNotificationOpen] =
+    useState<boolean>(false);
 
   const [readOnly, setReadOnly] = useState<boolean>(true);
 
@@ -33,30 +34,28 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
     content: () => componentRef.current,
   });
 
-
-
   const queryClient = useQueryClient();
 
   let isDirty = false;
   const onDirty = (arg: boolean): boolean => {
     isDirty = arg;
     return isDirty;
-  }
+  };
 
-
-  const loadBankDetails = async (
-  ): Promise<AddBankDetailsData> => {
+  const loadBankDetails = async (): Promise<AddBankDetailsData> => {
     const res = await axios({
       url: `${FINANCE_URL.BANK_MASTER_URL.getById}/${bankID}`,
       method: "GET",
     });
 
+    if (!res.data.status) {
+      throw "Something Went Wrong!!";
+    }
+
     const data = res.data.data;
 
-    console.log(data);
-
     // replace nulls with empty string "", ( formik does not reset the fields that have null as initial value)
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       const val = data[key as keyof typeof data];
       if (val == null) {
         data[key] = "";
@@ -73,11 +72,9 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
       bank_type: data.bank_type.name,
     };
 
-
     setBankAccountDetails(new_data);
     return new_data;
   };
-
 
   const {
     isError: fetchingError,
@@ -89,22 +86,22 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
     console.log(fetchingError);
   }
 
-
   const updateBankDetails = async (values: AddBankDetailsData) => {
     try {
       const res = await axios({
         url: `${FINANCE_URL.BANK_MASTER_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: bankAccountDetails?.id,
-            ...values,  
-          }
+            ...values,
+          },
         },
-
-        
       });
-      return res;
+
+      if(res.data.status) return res;
+
+      throw "Something Went Wrong!!!"
     } catch (error) {
       console.log(error);
     }
@@ -130,87 +127,76 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
     },
   });
 
-
-
   const handleBack = () => {
     if (isDirty) {
       setDataLossPopupOpen(true);
     } else {
       goBack();
     }
-  }
+  };
 
   const onSubmit = (values: AddBankDetailsData) => {
     values.id = parseInt(bankID);
-    console.log(values)
+    console.log(values);
     mutate(values);
-  }
+  };
 
   const bankAccountForm = new BankAccountForm({
     initialBankDetailsValues: bankAccountDetails,
     onSubmit: onSubmit,
     onBack: handleBack,
     onDirty: onDirty,
-    readOnly: readOnly
+    readOnly: readOnly,
   });
-
 
   const enablEditingMode = (editing: boolean) => {
     if (!editing) {
       bankAccountForm.resetForm();
     }
-    setReadOnly(!editing)
-  }
+    setReadOnly(!editing);
+  };
 
   const buttons = () => {
     return (
       <>
         <ToggleButton name="Edit" onToggle={enablEditingMode} />
-        <Button onClick={printIt} variant="primary">Print</Button>
+        <Button onClick={printIt} variant="primary">
+          Print
+        </Button>
       </>
     );
-  }
+  };
 
-
-  
   useEffect(() => {
     reloadData();
-  },[]);
-
-
+  }, []);
 
   return (
     <>
       <div style={{ display: "none" }}>
-      {/* <div> */}
+        {/* <div> */}
         <div ref={componentRef}>
           <PrintReadyBankComponent bank={bankAccountDetails} />
         </div>
       </div>
 
-        <RandomWorkingPopup show={isSaving}/>
-
+      <RandomWorkingPopup show={isSaving} />
 
       {isDataLossPopupOpen && (
-        <LosingDataConfirmPopup cancel={() => setDataLossPopupOpen(false)} continue={goBack} />
+        <LosingDataConfirmPopup
+          cancel={() => setDataLossPopupOpen(false)}
+          continue={goBack}
+        />
       )}
 
       {isSuccessNotificationOpen && (
         <SuccesfullConfirmPopup message="Updated Successfully" />
       )}
 
+      <ViewBankHeader title="View/Edit Bank Account" buttons={buttons} />
 
-
-      <ViewBankHeader title="View/Edit Bank Account" buttons={buttons}   />
-      
-      < section className="border bg-white rounded-lg border-primary_bg_indigo p-6 px-10">
-
-        {isFetching ? (
-          <Loader />
-        ) : (
-            bankAccountForm.render()         
-        )}
-
+      <section className="border bg-white rounded-lg border-primary_bg_indigo p-6 px-10">
+        {isFetching ? <Loader /> : bankAccountForm.render()}
       </section>
     </>
   );

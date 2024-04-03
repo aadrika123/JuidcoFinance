@@ -3,18 +3,19 @@
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
 import React, { useEffect, useState } from "react";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { ChequeIssueEntryData } from "@/utils/types/cheque_issue_entry_types";
-import { chequeIssueValidationSchema } from "@/utils/validation/documentation/cheque_issue_entry.validation";
 import { useMutation, QueryClient } from "react-query";
-import toast from "react-hot-toast";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import axios from "@/lib/axiosConfig";
+import { ChequeIssueEntryData } from "../cheque_issue_entry_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { chequeIssueValidationSchema } from "../cheque_issue_entry.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -108,50 +109,49 @@ export const AddChequeIssueEntry = () => {
         url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<ChequeIssueEntryData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Cheque Issue Entry");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something Went Wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    ChequeIssueEntryData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something Went Wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
     setData([]);
   };
 
-   ///////////////// Handle Things Before Adding New Entery ///////////
-   const handleAddNewEntery = () =>{
+  ///////////////// Handle Things Before Adding New Entery ///////////
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   ///////////////// Handling Total Count ///////////////
   const handleCount = () => {
@@ -230,8 +230,8 @@ export const AddChequeIssueEntry = () => {
   ];
 
   // Add Input Fields
-   // Add Input Fields
-   const fields: FieldTypeProps[] = [
+  // Add Input Fields
+  const fields: FieldTypeProps[] = [
     {
       CONTROL: "input",
       HEADER: "Payment Voucher No",
@@ -337,6 +337,9 @@ export const AddChequeIssueEntry = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={chequeIssueValidationSchema}

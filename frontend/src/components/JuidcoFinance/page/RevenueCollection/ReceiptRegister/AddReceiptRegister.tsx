@@ -2,7 +2,7 @@
 
 import PopupFormikHOC from "@/components/HOC/PopupFormikHOC";
 import TableWithCount from "@/components/JuidcoFinance/Partials/organisms/TableWithCount";
-import React, { lazy, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
@@ -11,10 +11,12 @@ import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
-import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
-import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
-const FormikW = lazy(()=> import("./ReceiptRegisterFormFields"))
+import FormikW from "./ReceiptRegisterFormFields";
 import { useSelector } from "react-redux";
+import { ReceiptRegisterDetailsData } from "./receipt_register_types";
+import { receiptRegisterDetailsSchema } from "./receipt_register.validation";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -26,7 +28,7 @@ const Hoc = PopupFormikHOC(FormikW);
 export const AddReceiptRegister = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.user?.userDetails);
-   /////////////// For Transforming in JSON
+  /////////////// For Transforming in JSON
 
   const queryClient = new QueryClient();
   const [isUpdateMode, setIsUpdateMode] = useState<UpdatedModeType>({
@@ -50,7 +52,7 @@ export const AddReceiptRegister = () => {
     wheather_returned: false,
     remarks: "",
     entered_by_id: user?.id,
-    entered_by_print_name: ""
+    entered_by_print_name: "",
   };
 
   const [data, setData] = useState<ReceiptRegisterDetailsData[]>([]);
@@ -69,7 +71,16 @@ export const AddReceiptRegister = () => {
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
     if (!isUpdateMode.isOnEdit) {
-      setData((prev) => [...prev, { id: prev.length + 1, ...values, entered_by_id: user.id, wheather_returned: String(values.wheather_returned) === "false" ? false : true }]);
+      setData((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          ...values,
+          entered_by_id: user.id,
+          wheather_returned:
+            String(values.wheather_returned) === "false" ? false : true,
+        },
+      ]);
     } else {
       setData((prev) => {
         const updatedData = prev.map((item) => {
@@ -97,7 +108,8 @@ export const AddReceiptRegister = () => {
               bank_acc_no: values.bank_acc_no || "",
               deposit_date: values.deposit_date,
               realisation_date: values.realisation_date,
-              wheather_returned: String(values.wheather_returned) === "false" ? false : true,
+              wheather_returned:
+                String(values.wheather_returned) === "false" ? false : true,
               remarks: values.remarks,
               entered_by_id: user.id,
               entered_by_print_name: values.entered_by_print_name,
@@ -117,43 +129,41 @@ export const AddReceiptRegister = () => {
   const handleStore = async (
     values: ReceiptRegisterDetailsData
   ): Promise<ReceiptRegisterDetailsData> => {
-   
     try {
       const res = await axios({
         url: `${FINANCE_URL.RECEIPT_REGISTER.create}`,
         method: "POST",
         data: {
-          data: filterValBefStoring(values)
+          data: filterValBefStoring(values),
         },
       });
-      if(res.data.status){
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
 
-        return res.data;
-      } 
-      throw "Something Went Wrong";
+      return res.data;
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<ReceiptRegisterDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isSuccess, isLoading } = useMutation<
+    ReceiptRegisterDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      toast.success("Added Successfully!!");
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -203,7 +213,7 @@ export const AddReceiptRegister = () => {
       wheather_returned: data[Id - 1]?.wheather_returned,
       remarks: data[Id - 1]?.remarks,
       entered_by_id: data[Id - 1]?.entered_by_id,
-      entered_by_print_name: data[Id - 1]?.entered_by_print_name
+      entered_by_print_name: data[Id - 1]?.entered_by_print_name,
     }));
     dispatch(openPopup());
   };
@@ -258,6 +268,9 @@ export const AddReceiptRegister = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Recorded Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={receiptRegisterDetailsSchema}

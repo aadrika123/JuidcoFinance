@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
-import AccountingTable from "@/components/Helpers/Tables/AccountingTable";
-
-import type { AccountingTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import Popup from "@/components/global/molecules/general/Popup";
 import LedgerDetailsComponent from "./LedgerDetailsComponent";
 import GeneralLedgerDetailsComponent from "./GeneralLedgerDetailsComponent";
 import ScheduleDetailsComponent from "./ScheduleDetailsComponent";
-import Loader from "@/components/Helpers/Basic/Loader";
 import { escapeRegExp } from "@/utils/helper";
+import AccountingTable from "../molecules/AccountingTable";
+import Loader from "@/components/global/atoms/Loader";
+import { AccountingTableData } from "../types";
 
 type PrimaryAccountingProps = {
   data: AccountingTableData[];

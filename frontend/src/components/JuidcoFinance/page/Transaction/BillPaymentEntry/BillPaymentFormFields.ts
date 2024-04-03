@@ -1,5 +1,5 @@
 import { FINANCE_URL } from "@/utils/api/urls";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
 
 // Add Input Fields
 export const fields: FieldTypeProps[] = [

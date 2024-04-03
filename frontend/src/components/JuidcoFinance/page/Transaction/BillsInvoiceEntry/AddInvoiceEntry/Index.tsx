@@ -8,13 +8,15 @@ import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { BillInvoiceDetailsData } from "@/utils/types/bills_invoice_entry_types";
-import { BillInvoiceDetailsSchema } from "@/utils/validation/transactions/bill_invoice.validation";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
 import { fields } from "../BillInvoiceFormFields";
+import { BillInvoiceDetailsData } from "../bills_invoice_entry_types";
+import { BillInvoiceDetailsSchema } from "../bill_invoice.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -105,37 +107,37 @@ export const AddBillsInvoiceEntry = () => {
         url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<BillInvoiceDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Direct Payment Entry Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    BillInvoiceDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      toast.success("Direct Payment Entry Added Successfully!!");
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -164,12 +166,12 @@ export const AddBillsInvoiceEntry = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   ///////////////// Handling Edit Functionality ///////////////
   const onEditButton = (id: string) => {
@@ -236,6 +238,9 @@ export const AddBillsInvoiceEntry = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Created Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={BillInvoiceDetailsSchema}

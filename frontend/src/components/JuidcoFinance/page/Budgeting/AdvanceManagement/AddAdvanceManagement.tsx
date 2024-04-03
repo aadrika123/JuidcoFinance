@@ -10,10 +10,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { AdvanceManagementDetailsData } from "@/utils/types/budgeting/advance_management_types";
-import { advanceManagementDetailsSchema } from "@/utils/validation/budgeting/advance_management.validation";
 import FormikW from "./AdvanceManagementFormFields";
+import { AdvanceManagementDetailsData } from "./advance_management_types";
+import { advanceManagementDetailsSchema } from "./advance_management.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -154,37 +155,36 @@ export const AddAdvanceManagement = () => {
         url: `${FINANCE_URL.ADVANCE_MANAGEMENT_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<AdvanceManagementDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    AdvanceManagementDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -310,6 +310,9 @@ export const AddAdvanceManagement = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={advanceManagementDetailsSchema}

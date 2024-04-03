@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
-import FunctionCodeTable from "@/components/Helpers/Tables/FunctionCodeTable";
-import { FunctionTableData } from "@/utils/types/types";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
-import Loader from "@/components/Helpers/Basic/Loader";
 import { escapeRegExp } from "@/utils/helper";
+import FunctionCodeTable from "./molecules/FunctionCodeTable";
+import Loader from "@/components/global/atoms/Loader";
+import { FunctionTableData } from "./types";
 
 type FunctionCodeProps = {
   data: FunctionTableData[];

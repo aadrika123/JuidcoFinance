@@ -1,7 +1,7 @@
-import { FunctionTableData } from "@/utils/types/types";
 import React from "react";
 import {motion} from "framer-motion";
 import parse from 'html-react-parser';
+import { FunctionTableData } from "../types";
 
 
 

@@ -11,7 +11,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "../atoms/nonFormik/Select";
-import Loader from "@/components/Helpers/Basic/Loader";
+import Loader from "../atoms/Loader";
 
 interface TableWithScrollPaginProp {
   footer?: React.ReactNode;
@@ -192,7 +192,7 @@ const TableWithScrollPagination = <T,>({
             scrollable={scrollable}
           />
         )}
-          {tempFetch && data.length != 0  &&<Loader className="h-3" />}
+          {tempFetch && data.length != 0  &&<Loader />}
         {footer}
         {/* <aside className="flex items-center justify-end py-5 gap-5">
           <Button onClick={rest.handleApprove} buttontype="button" variant="primary">

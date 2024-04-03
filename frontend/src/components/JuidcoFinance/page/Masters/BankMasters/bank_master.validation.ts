@@ -1,5 +1,5 @@
-import { AddBankDetailsData } from "@/utils/types/bank_master_types";
 import * as Yup from "yup";
+import { AddBankDetailsData } from "./bank_master_types";
 
 export const AddBankDetailsSchema = Yup.object().shape({
   bank_type_id: Yup.number().required("Bank type is required").notOneOf([-1], "Bank type is required"),

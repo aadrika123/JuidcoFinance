@@ -2,14 +2,14 @@
 
 import React from "react";
 import axios from "@/lib/axiosConfig";
-import FilledDisabledInputBox from "@/components/Helpers/FilledDisabledInputBox";
-import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import { useQuery } from "react-query";
-import Loader from "@/components/Helpers/Basic/Loader";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
 import dayjs from "dayjs";
+import Loader from "@/components/global/atoms/Loader";
+import Input from "@/components/global/atoms/Input";
+import Button from "@/components/global/atoms/Button";
 
 type VendorType = {
   id: BigInteger;
@@ -52,6 +52,7 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
       method: "GET",
     });
 
+    if(!res.data.status) throw "Something Went Wrong!!"
     return res.data.data;
   };
 
@@ -59,13 +60,12 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
   const {
     data: vendorData,
     isError: vendorDataError,
-    isLoading: vendorDataLoading,
+    isFetching: vendorDataLoading,
   } = useQuery(["get-single-vendor", vendorID], fetchVendorData);
 
   if (vendorDataError) {
     throw new Error("some error occurred");
   }
-
 
   return (
     <>
@@ -80,76 +80,107 @@ export const HeroViewVendor = ({ vendorID }: { vendorID: string }) => {
           ) : (
             <div>
               <div className="grid grid-cols-2 gap-x-6 gap-4">
-                <FilledDisabledInputBox
+                <Input
                   label="Vendor Type *"
                   value={vendorData?.vendor_type?.name}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Contact Number"
                   value={vendorData?.mobile_no}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Department Name"
                   value={vendorData?.department?.name}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Email Address"
                   value={vendorData?.email}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Vendor Name"
                   value={vendorData?.name}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Name of the Bank"
                   value={vendorData?.bank?.name}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Office Address"
                   value={vendorData?.contact_address}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="IFSC Code *"
                   value={vendorData?.ifsc_code}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="TIN No"
                   value={vendorData?.tin_no}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Bank Account No."
                   value={vendorData?.bank_account_no}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="GST No."
                   value={vendorData?.gst_no}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Bank Branch"
                   value={vendorData?.bank_branch_name}
+                  readonly={true}
                 />
-                <FilledDisabledInputBox
+                <Input
                   label="Aadhaar No."
                   value={vendorData?.aadhar_no}
+                  readonly={true}
                 />
                 <div className="grid grid-cols-3 gap-x-6 gap-4">
-                  <FilledDisabledInputBox
+                  <Input
                     label="Date Created"
-                    value={dayjs(`${vendorData?.created_at}`).format("DD MMM YYYY")}
+                    value={dayjs(`${vendorData?.created_at}`).format(
+                      "DD MMM YYYY"
+                    )}
+                    readonly={true}
                   />
-                  <FilledDisabledInputBox label="Date Authorized" value={vendorData?.authorized_date ? dayjs(`${vendorData?.authorized_date}`).format("DD MMM YYYY") : ""} />
-                  <FilledDisabledInputBox label="Date Modified" value={dayjs(`${vendorData?.updated_at}`).format("DD MMM YYYY") } />
+                  <Input
+                    label="Date Authorized"
+                    value={
+                      vendorData?.authorized_date
+                        ? dayjs(`${vendorData?.authorized_date}`).format(
+                            "DD MMM YYYY"
+                          )
+                        : ""
+                    }
+                    readonly={true}
+                  />
+                  <Input
+                    label="Date Modified"
+                    value={dayjs(`${vendorData?.updated_at}`).format(
+                      "DD MMM YYYY"
+                    )}
+                    readonly={true}
+                  />
                 </div>
-                <FilledDisabledInputBox
-                  label="Pan No."
-                  value={vendorData?.pan_no}
-                />
+                <Input label="Pan No." value={vendorData?.pan_no} />
               </div>
 
               <div className="flex items-center justify-end mt-5 gap-5">
-                <PrimaryButton variant={"cancel"} onClick={goBack}>Back</PrimaryButton>
+                <Button variant={"cancel"} onClick={goBack}>
+                  Back
+                </Button>
 
-                <PrimaryButton variant="primary">Print</PrimaryButton>
+                <Button variant="primary">Print</Button>
               </div>
             </div>
           )}

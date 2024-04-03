@@ -23,14 +23,17 @@ const Home = () => {
       method: "GET",
     });
 
-    let data = res.data?.data;
-    if (data == null) {
-      data = { totalPage: 0, data: [] };
-    }
+    if (res.data.status) {
+      let data = res.data?.data;
+      if (data == null) {
+        data = { totalPage: 0, data: [] };
+      }
 
-    // data = data.data.sort(sortByCreatedAtDesc);
-    setData(data.data);
-    return data.data;
+      // data = data.data.sort(sortByCreatedAtDesc);
+      setData(data.data);
+      return data.data;
+    }
+    throw "Something Went Wrong!!";
   };
 
   const {
@@ -49,9 +52,7 @@ const Home = () => {
 
   //////// Table View Button Feature //////////
   const onViewButtonClick1 = (id: string) => {
-    router.push(
-      `/revenue-collection/receipt-register/view/${id}?mode=view`
-    );
+    router.push(`/revenue-collection/receipt-register/view/${id}?mode=view`);
   };
 
   const tButton = (id: string) => {

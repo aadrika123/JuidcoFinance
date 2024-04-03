@@ -1,5 +1,5 @@
-import { AccountingTableData } from "@/utils/types/types";
 import React from "react";
+import { AccountingTableData } from "../types";
 
 interface AccoutingTableProps {
   data: AccountingTableData[];

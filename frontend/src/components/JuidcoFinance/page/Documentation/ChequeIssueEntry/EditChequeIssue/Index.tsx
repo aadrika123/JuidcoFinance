@@ -7,18 +7,19 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
-import { ChequeIssueEntryData } from "@/utils/types/cheque_issue_entry_types";
-import { chequeIssueValidationSchema } from "@/utils/validation/documentation/cheque_issue_entry.validation";
+import { ChequeIssueEntryData } from "../cheque_issue_entry_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { chequeIssueValidationSchema } from "../cheque_issue_entry.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditChequeIssueEntry = ({
   ChequeIssueID,
@@ -26,7 +27,7 @@ export const EditChequeIssueEntry = ({
   ChequeIssueID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
-
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [initialData, setInitialData] = useState<ChequeIssueEntryData>({
     voucher_no: 0,
     voucher_date: "",
@@ -45,8 +46,8 @@ export const EditChequeIssueEntry = ({
   const queryClient = new QueryClient();
 
   // Get cheque issue entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.getById}/${ChequeIssueID}`,
@@ -70,7 +71,18 @@ export const EditChequeIssueEntry = ({
           amount: res.data.data.amount,
         };
       });
-    })();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["cheque-issue-get-single", ChequeIssueID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
   }, [ChequeIssueID]);
 
   // UPDATE Cheque issue entry DETAILS
@@ -82,15 +94,15 @@ export const EditChequeIssueEntry = ({
         url: `${FINANCE_URL.CHEQUE_ISSUE_ENTRY.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(ChequeIssueID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -98,22 +110,23 @@ export const EditChequeIssueEntry = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     ChequeIssueEntryData,
     Error,
     ChequeIssueEntryData
   >(UpdateChequeIssueEntry, {
     onSuccess: () => {
-      toast.success("Updated Voucher Entry");
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        goBack();
+      }, 1000);
     },
     onError: () => {
       alert("Error updating Voucher Entry");
     },
     onSettled: () => {
       queryClient.invalidateQueries();
-      setTimeout(() => {
-        goBack();
-      }, 1000);
     },
   });
 
@@ -223,20 +236,26 @@ export const EditChequeIssueEntry = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Cheque Issue Entry"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikWrapper
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={chequeIssueValidationSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
-        title={""}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={chequeIssueValidationSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+          title={""}
+        />
+      )}
     </>
   );
 };

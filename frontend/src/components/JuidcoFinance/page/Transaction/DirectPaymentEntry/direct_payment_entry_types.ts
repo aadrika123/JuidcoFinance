@@ -53,6 +53,7 @@ export interface DirPaymentDataProps {
 ////////////////// Response Data Type //////////////////
 export interface ResponseData {
   data: {
+    status: boolean;
     data: {
       payment_date: string;
       payment_type: { id: number };

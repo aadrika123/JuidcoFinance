@@ -42,7 +42,6 @@ const Login = () => {
           password: values.password,
         },
         );
-
         // const res = await axios({
         //   url: FINANCE_URL.AUTH_URL.login,
         //   method: "POST",

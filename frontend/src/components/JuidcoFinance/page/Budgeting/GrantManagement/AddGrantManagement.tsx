@@ -11,10 +11,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { GrantManagementDetailsData } from "@/utils/types/budgeting/grant_management_types";
-import { grantManagementDetailsSchema } from "@/utils/validation/budgeting/grant_management.validation";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { GrantManagementDetailsData } from "./grant_management_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { grantManagementDetailsSchema } from "./grant_management.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -128,37 +129,36 @@ export const AddGrantManagement = () => {
         url: `${FINANCE_URL.GRANT_MANAGEMENT_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<GrantManagementDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    GrantManagementDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -259,155 +259,160 @@ export const AddGrantManagement = () => {
   ];
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   /////////////// Handle Select Primary Accounting Code ////////////////
-useEffect(()=>{
- const getEmployeeDesignation = async()=>{
-  try {
-    const res = await axios({
-      url: `${FINANCE_URL.EMPLOYEE_URL.get}`,
-      method: "GET",
-    });
-    const data = res.data.data[0];
-    setDesignation([{id: data.id, name: data.designation}])
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
- }
- getEmployeeDesignation()
-},[])
+  useEffect(() => {
+    const getEmployeeDesignation = async () => {
+      try {
+        const res = await axios({
+          url: `${FINANCE_URL.EMPLOYEE_URL.get}`,
+          method: "GET",
+        });
 
-const fields: FieldTypeProps[] = [
-  {
-    TITLE: "Grant Receipt",
-    CHILDRENS: [
-      {
-        CONTROL: "select",
-        HEADER: "ULBs",
-        ACCESSOR: "ulb_id",
-        PLACEHOLDER: "Select ULBs",
-        API: `${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`,
-      },
-      {
-        CONTROL: "select",
-        HEADER: "Primary Accounting Code",
-        ACCESSOR: "primary_acc_code_id",
-        PLACEHOLDER: "Select Primary Accounting Code",
-        API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Grant Sanction Number",
-        ACCESSOR: "sanction_number",
-        PLACEHOLDER: "Enter Sanction Number",
-      },
-      {
-        CONTROL: "select",
-        HEADER: "Name of the Grant",
-        ACCESSOR: "grant_id",
-        PLACEHOLDER: "Select Grant Name",
-        API: `${FINANCE_URL.GRANT_URL.get}`,
-      },
-      {
-        CONTROL: "select",
-        HEADER: "Nature of the Grant",
-        ACCESSOR: "grant_nature_id",
-        PLACEHOLDER: "Select Grant Nature",
-        API: `${FINANCE_URL.GRANT_URL.getNatures}`,
-      },
-      {
-        CONTROL: "selectForNoApi",
-        HEADER: "Designation of the Authority",
-        ACCESSOR: "employee_id",
-        PLACEHOLDER: "Select Designation",
-        DATA: designation,
-        READONLY: true,
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Sanctioned Amount (Rs)",
-        ACCESSOR: "sanctioned_amount",
-        PLACEHOLDER: "Enter Sanctioned Amount",
-        TYPE: "number",
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Grant From Date",
-        ACCESSOR: "grant_from_date",
-        TYPE: "date",
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Grant To Date",
-        ACCESSOR: "grant_to_date",
-        TYPE: "date",
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Grant Received in Advance Amount (Rs)",
-        ACCESSOR: "advance_amount",
-        PLACEHOLDER: "Enter Reveived in Advance Amount",
-        TYPE: "number",
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Grant Received in Advance Date",
-        ACCESSOR: "advance_rcving_date",
-        TYPE: "date",
-      },
-    ],
-  },
-  {
-    TITLE: "Expenditure Incurred On Specific Grants",
-    CHILDRENS: [
-      {
-        CONTROL: "input",
-        HEADER: "Date",
-        ACCESSOR: "expenditure_date",
-        TYPE: "date",
-      },
-      {
-        CONTROL: "select",
-        HEADER: "Voucher Number",
-        ACCESSOR: "voucher_id",
-        PLACEHOLDER: "Select Voucher Number",
-        API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
-      },
-      {
-        CONTROL: "select",
-        HEADER: "Nature of Expenditure",
-        ACCESSOR: "expenditure_nature_id",
-        PLACEHOLDER: "Select Nature of Expenditure",
-        API: `${FINANCE_URL.EXPENDITURE_NATURE_URL.get}`,
-      },
-    ],
-  },
-  {
-    TITLE: "Expenditure Incurred On Specific Grants",
-    CHILDRENS: [
-      {
-        CONTROL: "input",
-        HEADER: "Date",
-        ACCESSOR: "refund_date",
-        TYPE: "date",
-      },
-      {
-        CONTROL: "input",
-        HEADER: "Amount (Rs)",
-        ACCESSOR: "refund_amount",
-        PLACEHOLDER: "Enter Amount",
-        TYPE: "number",
-      },
-    ],
-  },
-];
+        if (res.data.status) {
+          const data = res.data.data[0];
+          setDesignation([{ id: data.id, name: data.designation.name }]);
+        } else {
+          throw "Something Went Wrong";
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    };
+    getEmployeeDesignation();
+  }, []);
+
+  const fields: FieldTypeProps[] = [
+    {
+      TITLE: "Grant Receipt",
+      CHILDRENS: [
+        {
+          CONTROL: "select",
+          HEADER: "ULBs",
+          ACCESSOR: "ulb_id",
+          PLACEHOLDER: "Select ULBs",
+          API: `${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`,
+        },
+        {
+          CONTROL: "select",
+          HEADER: "Primary Accounting Code",
+          ACCESSOR: "primary_acc_code_id",
+          PLACEHOLDER: "Select Primary Accounting Code",
+          API: `${FINANCE_URL.ACCOUNTING_CODE_URL.getMainCodes}`,
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Grant Sanction Number",
+          ACCESSOR: "sanction_number",
+          PLACEHOLDER: "Enter Sanction Number",
+        },
+        // {
+        //   CONTROL: "select",
+        //   HEADER: "Name of the Grant",
+        //   ACCESSOR: "grant_id",
+        //   PLACEHOLDER: "Select Grant Name",
+        //   API: `${FINANCE_URL.GRANT_URL.get}`,
+        // },
+        // {
+        //   CONTROL: "select",
+        //   HEADER: "Nature of the Grant",
+        //   ACCESSOR: "grant_nature_id",
+        //   PLACEHOLDER: "Select Grant Nature",
+        //   API: `${FINANCE_URL.GRANT_URL.getNatures}`,
+        // },
+        {
+          CONTROL: "selectForNoApi",
+          HEADER: "Designation of the Authority",
+          ACCESSOR: "employee_id",
+          PLACEHOLDER: "Select Designation",
+          DATA: designation,
+          READONLY: true,
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Sanctioned Amount (Rs)",
+          ACCESSOR: "sanctioned_amount",
+          PLACEHOLDER: "Enter Sanctioned Amount",
+          TYPE: "number",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Grant From Date",
+          ACCESSOR: "grant_from_date",
+          TYPE: "date",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Grant To Date",
+          ACCESSOR: "grant_to_date",
+          TYPE: "date",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Grant Received in Advance Amount (Rs)",
+          ACCESSOR: "advance_amount",
+          PLACEHOLDER: "Enter Reveived in Advance Amount",
+          TYPE: "number",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Grant Received in Advance Date",
+          ACCESSOR: "advance_rcving_date",
+          TYPE: "date",
+        },
+      ],
+    },
+    {
+      TITLE: "Expenditure Incurred On Specific Grants",
+      CHILDRENS: [
+        {
+          CONTROL: "input",
+          HEADER: "Date",
+          ACCESSOR: "expenditure_date",
+          TYPE: "date",
+        },
+        {
+          CONTROL: "select",
+          HEADER: "Voucher Number",
+          ACCESSOR: "voucher_id",
+          PLACEHOLDER: "Select Voucher Number",
+          API: `${FINANCE_URL.DEPARTMENT_URL.get}`,
+        },
+        {
+          CONTROL: "select",
+          HEADER: "Nature of Expenditure",
+          ACCESSOR: "expenditure_nature_id",
+          PLACEHOLDER: "Select Nature of Expenditure",
+          API: `${FINANCE_URL.EXPENDITURE_NATURE_URL.get}`,
+        },
+      ],
+    },
+    {
+      TITLE: "Expenditure Incurred On Specific Grants",
+      CHILDRENS: [
+        {
+          CONTROL: "input",
+          HEADER: "Date",
+          ACCESSOR: "refund_date",
+          TYPE: "date",
+        },
+        {
+          CONTROL: "input",
+          HEADER: "Amount (Rs)",
+          ACCESSOR: "refund_amount",
+          PLACEHOLDER: "Enter Amount",
+          TYPE: "number",
+        },
+      ],
+    },
+  ];
 
   const footerData = [
     {
@@ -418,6 +423,9 @@ const fields: FieldTypeProps[] = [
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={grantManagementDetailsSchema}

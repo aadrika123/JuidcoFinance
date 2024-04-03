@@ -8,6 +8,7 @@ import { SubHeading } from "@/components/Helpers/Heading";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "@/components/global/atoms/Button";
+import { LinkWithLoader } from "@/components/global/atoms/LinkWithLoader";
 
 type HeaderFactory = "edit" | "add" | "view" | "";
 interface HeaderWidgetProps {
@@ -35,11 +36,11 @@ export function HeaderWidget(props: HeaderWidgetProps) {
         <SubHeading className="text-2xl">{props.title}</SubHeading>
       </div>
       <div className="flex">
-        <Link href={`${pathName}/add`}>
+        <LinkWithLoader href={`${pathName}/add`}>
           <Button variant="primary" className="rounded-3xl">
             + Add {props.title}
           </Button>
-        </Link>
+        </LinkWithLoader>
       </div>
     </div>
   );

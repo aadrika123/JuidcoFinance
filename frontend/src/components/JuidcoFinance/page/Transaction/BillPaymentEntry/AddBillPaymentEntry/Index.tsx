@@ -8,13 +8,14 @@ import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { BillPaymentDetailsData } from "@/utils/types/bill_payment_entry_types";
-import { BillPaymentDetailsSchema } from "@/utils/validation/transactions/bill_payment.validation";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
 import { fields } from "../BillPaymentFormFields";
+import { BillPaymentDetailsData } from "../bill_payment_entry_types";
+import { BillPaymentDetailsSchema } from "../bill_payment.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -71,8 +72,7 @@ export const HeroAddBillPaymentEntry = () => {
               bill_entry_date: values.bill_entry_date,
               bill_type_id: values.bill_type_id,
               vendor_id: values.vendor_id,
-              vendor_id_name:
-                values.vendor_id_name || item.vendor_id_name,
+              vendor_id_name: values.vendor_id_name || item.vendor_id_name,
               adminis_ward_id: values.adminis_ward_id,
               adminis_ward_id_name:
                 values.adminis_ward_id_name || item.adminis_ward_id_name,
@@ -81,8 +81,7 @@ export const HeroAddBillPaymentEntry = () => {
               department_id_name:
                 values.department_id_name || item.department_id_name,
               payee_id: values.payee_id,
-              payee_id_name:
-                values.payee_id_name || item.payee_id_name,
+              payee_id_name: values.payee_id_name || item.payee_id_name,
               address: values.address,
               advance: values.advance,
               deposit: values.deposit,
@@ -104,31 +103,29 @@ export const HeroAddBillPaymentEntry = () => {
     values: BillPaymentDetailsData
   ): Promise<BillPaymentDetailsData> => {
     try {
-     const res = await axios({
+      const res = await axios({
         url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isSuccess, isLoading } = useMutation<
     BillPaymentDetailsData,
     Error,
     any
   >(handleStore, {
     onSuccess: () => {
-      toast.success("Bill Payment Entry Added Successfully!!");
       setTimeout(() => {
         goBack();
       }, 1000);
@@ -142,9 +139,9 @@ export const HeroAddBillPaymentEntry = () => {
   });
 
   //////////////////// Handle Reset Table List //////////////////
-  const handleResetTable = () =>{
+  const handleResetTable = () => {
     setData([]);
-  }
+  };
 
   ///////////////// Handling Remove item(row) from list ///////////////
   const onRemoveButton = (id: string) => {
@@ -159,12 +156,12 @@ export const HeroAddBillPaymentEntry = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   ///////////////// Handling Edit Functionality ///////////////
   const onEditButton = (id: string) => {
@@ -173,17 +170,17 @@ export const HeroAddBillPaymentEntry = () => {
     setInitialData((prev) => ({
       ...prev,
       bill_no: data[Id - 1]?.bill_no,
-    bill_entry_date: data[Id - 1]?.bill_entry_date,
-    bill_type_id: data[Id - 1]?.bill_type_id,
-    vendor_id: data[Id - 1]?.vendor_id,
-    department_id: data[Id - 1]?.department_id,
-    adminis_ward_id: data[Id - 1]?.adminis_ward_id,
-    payee_id: data[Id - 1]?.payee_id,
-    bill_amount: data[Id - 1]?.bill_amount,
-    advance: data[Id - 1]?.advance,
-    address: data[Id - 1]?.address,
-    deposit: data[Id - 1]?.deposit,
-    deductions_amount: data[Id - 1]?.deductions_amount,
+      bill_entry_date: data[Id - 1]?.bill_entry_date,
+      bill_type_id: data[Id - 1]?.bill_type_id,
+      vendor_id: data[Id - 1]?.vendor_id,
+      department_id: data[Id - 1]?.department_id,
+      adminis_ward_id: data[Id - 1]?.adminis_ward_id,
+      payee_id: data[Id - 1]?.payee_id,
+      bill_amount: data[Id - 1]?.bill_amount,
+      advance: data[Id - 1]?.advance,
+      address: data[Id - 1]?.address,
+      deposit: data[Id - 1]?.deposit,
+      deductions_amount: data[Id - 1]?.deductions_amount,
     }));
     dispatch(openPopup());
   };
@@ -212,7 +209,7 @@ export const HeroAddBillPaymentEntry = () => {
       width: "w-[30%]",
     },
     { name: "bill_amount", caption: "Bill Amount", width: "w-[20%]" },
-    
+
     {
       name: "button",
       caption: "Edit/Remove",
@@ -221,9 +218,11 @@ export const HeroAddBillPaymentEntry = () => {
     },
   ];
 
-
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Recorded Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={BillPaymentDetailsSchema}

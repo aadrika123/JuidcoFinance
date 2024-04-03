@@ -72,33 +72,36 @@ const Footer: React.FC<FooterProps> = (props) => {
   ////// Handle Add and Update Opening Balance
   const handleOpeningBal = async () => {
     try {
+      let res;
       !balances?.opening_balance?.opening_balance
-        ? await axios({
+        ? (res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.create,
             method: "POST",
             data: {
               opening_balance: Number(openingBal),
             },
-          })
-        : await axios({
+          }))
+        : (res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.update,
             method: "POST",
             data: {
               id: balances?.opening_balance?.id,
               opening_balance: Number(openingBal),
             },
-          });
+          }));
 
-      toast.success('Done!!');
-      setOpeningBal(null)
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
+
+      toast.success("Done!!");
+      setOpeningBal(null);
     } catch (error: any) {
-      alert('Someting Went Wrong!!')
+      alert("Someting Went Wrong!!");
       console.log(error);
     }
   };
   return (
     <div>
-      <Toaster/>
+      <Toaster />
       <TotalCountTable footerData={footerData} />
       <div className="grid grid-cols-2 gap-4 mt-4">
         {/* <div className="flex flex-col">
@@ -161,16 +164,18 @@ const Footer: React.FC<FooterProps> = (props) => {
           >
             Approved
           </Button>
-        ) : openingBal && (
-          <Button
-            onClick={handleOpeningBal}
-            buttontype="button"
-            variant="primary"
-          >
-            {!balances?.opening_balance?.opening_balance
-              ? "Add Opening Balance"
-              : "Updated Opening Balance"}
-          </Button>
+        ) : (
+          openingBal && (
+            <Button
+              onClick={handleOpeningBal}
+              buttontype="button"
+              variant="primary"
+            >
+              {!balances?.opening_balance?.opening_balance
+                ? "Add Opening Balance"
+                : "Updated Opening Balance"}
+            </Button>
+          )
         )}
       </aside>
     </div>

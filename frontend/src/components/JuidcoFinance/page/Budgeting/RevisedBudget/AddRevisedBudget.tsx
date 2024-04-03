@@ -11,10 +11,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { RevisedBudgetDetailsData } from "@/utils/types/budgeting/revised_budget_types";
-import { revisedBudgetDetailsSchema } from "@/utils/validation/budgeting/revised_budget.validation";
 import { fields } from "./RevisedBudgetFormFields";
+import { RevisedBudgetDetailsData } from "./revised_budget_types";
+import { revisedBudgetDetailsSchema } from "./revised_budget.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -88,37 +89,36 @@ export const AddRevisedBudget = () => {
         url: `${FINANCE_URL.REVISED_BUDGET_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<RevisedBudgetDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isSuccess, isLoading } = useMutation<
+    RevisedBudgetDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -161,12 +161,12 @@ export const AddRevisedBudget = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
-  }
+    });
+  };
 
   ///////////////// Edit and Remove Button JSX ///////////////
   const addButton = (id: string) => {
@@ -218,6 +218,9 @@ export const AddRevisedBudget = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={revisedBudgetDetailsSchema}

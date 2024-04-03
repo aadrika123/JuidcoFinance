@@ -7,9 +7,9 @@ import Select from "@/components/global/atoms/Select";
 import Input from "@/components/global/atoms/Input";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
-import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
 import { useSelector } from "react-redux";
 import RadioButtons from "@/components/global/atoms/RadioButton";
+import { ReceiptRegisterDetailsData } from "./receipt_register_types";
 
 /**
  * | Author- Sanjiv Kumar

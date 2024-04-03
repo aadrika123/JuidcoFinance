@@ -3,16 +3,21 @@
 import React, { lazy, useEffect, useState } from "react";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
-const HeaderWidget = lazy(()=>import("@/components/Helpers/Widgets/HeaderWidget").then(module => ({ default: module.HeaderWidget })));
-import { ReceiptRegisterDetailsData } from "@/utils/types/masters/receipt_register_types";
-import { receiptRegisterDetailsSchema } from "@/utils/validation/masters/receipt_register.validation";
-const FormikW = lazy(()=>import("./ReceiptRegisterFormFields"))
+const HeaderWidget = lazy(() =>
+  import("@/components/Helpers/Widgets/HeaderWidget").then((module) => ({
+    default: module.HeaderWidget,
+  }))
+);
+const FormikW = lazy(() => import("./ReceiptRegisterFormFields"));
 import { useSelector } from "react-redux";
+import { ReceiptRegisterDetailsData } from "./receipt_register_types";
+import { receiptRegisterDetailsSchema } from "./receipt_register.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditReceiptRegister = ({
   ReceiptRegisterID,
@@ -20,6 +25,7 @@ export const EditReceiptRegister = ({
   ReceiptRegisterID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const [user, setUser] = useState<any>();
   const userData = useSelector((state: any) => state.user.user?.userDetails);
@@ -54,18 +60,18 @@ export const EditReceiptRegister = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.RECEIPT_REGISTER.getById}/${ReceiptRegisterID}`,
       });
-    
-     if(!res.data.status){
-      throw "Something Went Wrong!!!";
-     }else if(!res.data.data){
-      throw "Not Found"
-     }
+
+      if (!res.data.status) {
+        throw "Something Went Wrong!!!";
+      } else if (!res.data.data) {
+        throw "Not Found";
+      }
       setData(res.data.data);
       setInitialData((prev) => {
         return {
@@ -76,12 +82,12 @@ export const EditReceiptRegister = ({
           revenue_module_id: res.data.data.revenue_module.id,
           paid_by: res.data.data.paid_by,
           receipt_mode_id: res.data.data.receipt_mode.id,
-          receipt_date: DateFormatter(res.data.data.receipt_date),
+          receipt_date: DateFormatter(res.data.data.receipt_date) || "",
           cheque_or_draft_no: res.data.data?.cheque_or_draft_no || "",
           bank_amount: res.data.data.bank_amount,
           cash_amount: res.data.data.cash_amount,
           bank_acc_no: res.data.data.bank_acc_no || "",
-          deposit_date: DateFormatter(res.data.data.deposit_date),
+          deposit_date:  DateFormatter(res.data.data.deposit_date) ,
           realisation_date: DateFormatter(res.data.data.realisation_date),
           wheather_returned: res.data.data.wheather_returned,
           remarks: res.data.data.remarks,
@@ -93,32 +99,45 @@ export const EditReceiptRegister = ({
           del_checked_by_designation:
             res.data.data.checked_by?.wf_roleusermaps[0]?.wf_role?.role_name,
           del_entered_by_name: res.data.data.entered_by.name,
-          del_entered_by_designation: res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name,
+          del_entered_by_designation:
+            res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name,
         };
       });
-    })();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { refetch: reloadData, isFetching: isFetching } = useQuery(
+    ["receipt-register-get-single", ReceiptRegisterID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [ReceiptRegisterID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateReceiptRegisterEntry = async (
     values: ReceiptRegisterDetailsData
   ): Promise<ReceiptRegisterDetailsData> => {
-    values.wheather_returned = String(values.wheather_returned) == "false" ? false : true;
-    
+    values.wheather_returned =
+      String(values.wheather_returned) == "false" ? false : true;
+
     try {
       const res = await axios({
         url: `${FINANCE_URL.RECEIPT_REGISTER.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(ReceiptRegisterID),
             ...values,
-          }
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -126,16 +145,17 @@ export const EditReceiptRegister = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     ReceiptRegisterDetailsData,
     Error,
     ReceiptRegisterDetailsData
   >(UpdateReceiptRegisterEntry, {
-    onSuccess: () => {
-      toast.success("Updated Successfully!!");
-      setTimeout(() => {
-        goBack();
-      }, 1000);
+    onSuccess:() =>{
+      setIsSuccess(true);
+      setTimeout(()=>{
+        setIsSuccess(false);
+        goBack()
+      },1000)
     },
     onError: () => {
       alert("Something went wrong!!!");
@@ -156,7 +176,9 @@ export const EditReceiptRegister = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Receipt Register"
         variant={searchParams == "view" ? "view" : "edit"}
@@ -166,14 +188,18 @@ export const EditReceiptRegister = ({
         }
         handleEditMode={handleEditMode}
       />
-      <FormikW
-        title="Edit Receipt Register"
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={receiptRegisterDetailsSchema}
-        onSubmit={onSubmit}
-        readonly={searchParams === "view" || !inEditMode}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikW
+          title="Edit Receipt Register"
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={receiptRegisterDetailsSchema}
+          onSubmit={onSubmit}
+          readonly={searchParams === "view" || !inEditMode}
+        />
+      )}
     </>
   );
 };

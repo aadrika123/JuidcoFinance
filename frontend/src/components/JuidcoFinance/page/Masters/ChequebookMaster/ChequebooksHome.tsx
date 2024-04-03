@@ -47,7 +47,6 @@ export const ChequebooksHome = () => {
     { name: 'cheque_no_to', caption: "Cheque Number To", width: "w-[5%]" },
     { name: 'employee', caption: "Employee Name", width: "w-[5%]" },
     { name: 'issuer_name', caption: "Issuer Name", width: "w-[5%]" },
-    
     {
       name: "View / Edit",
       caption: <span>View / Edit</span>,

@@ -4,15 +4,16 @@ import React, { useEffect, useState } from "react";
 import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
-import { BudgetApproDetailsData } from "@/utils/types/budgeting/budget_appro_types";
-import { budgetApproDetailsSchema } from "@/utils/validation/budgeting/budget_appro.validation";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { BudgetApproDetailsData } from "./budget_appro_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { budgetApproDetailsSchema } from "./budget_appro.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditBudgetAppro = ({
   BudgetApproID,
@@ -20,6 +21,8 @@ export const EditBudgetAppro = ({
   BudgetApproID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
   const [selects, setSelects] = useState({
     f_p_codes: [],
     approved_amount: undefined,
@@ -36,28 +39,42 @@ export const EditBudgetAppro = ({
   const queryClient = new QueryClient();
 
   // Get voucher entry bv ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res = await axios({
         method: "GET",
         url: `${FINANCE_URL.BUDGET_APPRO_URL.getById}/${BudgetApproID}`,
       });
+      if (res.data.status) {
+        setInitialData((prev) => {
+          return {
+            ...prev,
+            fin_year_id: res.data.data.fin_year.id,
+            primary_acc_code_id: res.data.data.primary_acc_code.id,
+            remark: res.data.data.remark,
+            from_primary_acc_code_id: res.data.data.from_primary_acc_code.id,
+            approved_amount: res.data.data.approved_amount,
+            transfer_amount: res.data.data.transfer_amount,
+          };
+        });
+        handleSelectPrimaryCode(res.data.data.primary_acc_code.id);
+        handleSelectFromPrimaryCode(res.data.data.from_primary_acc_code.id);
+      } else {
+        throw "Something Went Wrong";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      setInitialData((prev) => {
-        return {
-          ...prev,
-          fin_year_id: res.data.data.fin_year.id,
-          primary_acc_code_id: res.data.data.primary_acc_code.id,
-          remark: res.data.data.remark,
-          from_primary_acc_code_id: res.data.data.from_primary_acc_code.id,
-          approved_amount: res.data.data.approved_amount,
-          transfer_amount: res.data.data.transfer_amount,
-        };
-      });
-      handleSelectPrimaryCode(res.data.data.primary_acc_code.id);
-      handleSelectFromPrimaryCode(res.data.data.from_primary_acc_code.id);
-    })();
-  }, []);
+  const { isFetching: isFetching, refetch: reloadData } = useQuery(
+    ["budget-appro-get-single", BudgetApproID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [BudgetApproID]);
 
   // UPDATE VOUCHER DETAILS
   const UpdateBudgetApproEntry = async (
@@ -68,15 +85,15 @@ export const EditBudgetAppro = ({
         url: `${FINANCE_URL.BUDGET_APPRO_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(BudgetApproID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -84,14 +101,15 @@ export const EditBudgetAppro = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     BudgetApproDetailsData,
     Error,
     BudgetApproDetailsData
   >(UpdateBudgetApproEntry, {
     onSuccess: () => {
-      toast.success("Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
+        setIsSuccess(false);
         goBack();
       }, 1000);
     },
@@ -109,13 +127,17 @@ export const EditBudgetAppro = ({
 
   /////////////// Handle Select Primary Accounting Code ////////////////
   const handleSelectPrimaryCode = async (id: string | number) => {
-    console.log(id)
+    console.log(id);
     try {
       const res = await axios({
         url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
-      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      if (res.data.status) {
+        setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      } else {
+        throw "Something Went Wrong";
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -129,10 +151,14 @@ export const EditBudgetAppro = ({
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setSelects((prev) => ({
-        ...prev,
-        approved_amount: res.data?.data?.balance_amount,
-      }));
+
+      if (res.data.status) {
+        setSelects((prev) => ({
+          ...prev,
+          approved_amount: res.data?.data?.balance_amount,
+        }));
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
@@ -196,20 +222,26 @@ export const EditBudgetAppro = ({
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Budget Appropriation"
         variant={searchParams == "view" ? "view" : "edit"}
       />
-      <FormikWrapper
-        title="Budget Appropriation"
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={budgetApproDetailsSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
-      />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          title="Budget Appropriation"
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={budgetApproDetailsSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

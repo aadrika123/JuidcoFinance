@@ -3,20 +3,21 @@
 // Imports // ----------------------------------------------------------------
 import React from "react";
 import axios from "@/lib/axiosConfig";
-import InputBox from "@/components/Helpers/InputBox";
 import { useMutation, useQueryClient } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import PrimaryButton from "@/components/Helpers/Button";
 import { SubHeading } from "@/components/Helpers/Heading";
 import { Formik } from "formik";
-import type { VendorDetailsData } from "@/utils/types/vendor_master_types";
-import {
-  VendorDetailsSchema,
-  initialVendorDetails,
-} from "@/utils/validation/masters/vendor_master.validation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
-import DropDownList from "@/components/Helpers/DropDownList";
+import { VendorDetailsData } from "../vendor_master_types";
+import {
+  initialVendorDetails,
+  VendorDetailsSchema,
+} from "../vendor_master.validation";
+import Input from "@/components/global/atoms/Input";
+import Button from "@/components/global/atoms/Button";
+import DropDownList from "@/components/global/atoms/DropDownList";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 // Imports // ----------------------------------------------------------------
 
 // Main Functions // ----------------------------------------------------------------
@@ -31,18 +32,16 @@ export const HeroAddVendor = () => {
       url: `${FINANCE_URL.VENDOR_MASTER_URL.create}`,
       method: "POST",
       data: {
-          data: values
-        },
-      });
-      if(res.data.status){
-
-        return res.data;
-      } 
-      throw "Something Went Wrong";
+        data: values,
+      },
+    });
+    if (res.data.status) {
+      return res.data;
+    }
+    throw "Something Went Wrong";
   };
-  const { mutate } = useMutation(createVendorDetails, {
+  const { mutate, isLoading, isSuccess } = useMutation(createVendorDetails, {
     onSuccess: () => {
-      toast.success("Successfully Added Vendor Details!");
       setTimeout(() => {
         goBack();
       }, 1000);
@@ -57,7 +56,9 @@ export const HeroAddVendor = () => {
 
   return (
     <>
-      <Toaster />
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+<RandomWorkingPopup show={isLoading} />
       <section className="border bg-white shadow-xl p-6 px-10">
         <div className="flex justify-between">
           <SubHeading>Add Vendor</SubHeading>
@@ -95,7 +96,7 @@ export const HeroAddVendor = () => {
                     placeholder={"Select Vendor Type"}
                     api={FINANCE_URL.VENDOT_TYPE_URL.get || ""}
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.mobile_no}
@@ -117,7 +118,7 @@ export const HeroAddVendor = () => {
                     placeholder={"Select Department"}
                     api={FINANCE_URL.DEPARTMENT_URL.get || ""}
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.email}
@@ -127,7 +128,7 @@ export const HeroAddVendor = () => {
                     name="email"
                     placeholder="Enter Eamil Id"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.name}
@@ -137,7 +138,7 @@ export const HeroAddVendor = () => {
                     name="name"
                     placeholder="Enter Vendor Name"
                   />
-                  {/* <InputBox
+                  {/* <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.bank_name}
@@ -159,7 +160,7 @@ export const HeroAddVendor = () => {
                     api={FINANCE_URL.BANK_URL.get || ""}
                   />
 
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.contact_address}
@@ -170,7 +171,7 @@ export const HeroAddVendor = () => {
                     placeholder="Enter Contact Address"
                   />
 
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.ifsc_code}
@@ -180,7 +181,7 @@ export const HeroAddVendor = () => {
                     name="ifsc_code"
                     placeholder="Enter IFSC Code"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.tin_no}
@@ -190,7 +191,7 @@ export const HeroAddVendor = () => {
                     name="tin_no"
                     placeholder="Enter TIN No"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.bank_account_no}
@@ -200,7 +201,7 @@ export const HeroAddVendor = () => {
                     name="bank_account_no"
                     placeholder="Enter Bank Account No"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.gst_no}
@@ -210,7 +211,7 @@ export const HeroAddVendor = () => {
                     name="gst_no"
                     placeholder="Enter GST No"
                   />
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.bank_branch_name}
@@ -221,7 +222,7 @@ export const HeroAddVendor = () => {
                     placeholder="Enter Bank Branch"
                   />
 
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.aadhar_no}
@@ -232,7 +233,7 @@ export const HeroAddVendor = () => {
                     placeholder="Enter Aadhaar no"
                   />
                   <span></span>
-                  <InputBox
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.pan_no}
@@ -245,26 +246,18 @@ export const HeroAddVendor = () => {
                 </div>
 
                 <div className="flex items-center justify-end mt-5 gap-5">
-                  <PrimaryButton
-                    buttonType="button"
-                    variant={"cancel"}
-                    onClick={goBack}
-                  >
+                  <Button variant={"cancel"} onClick={goBack}>
                     Back
-                  </PrimaryButton>
+                  </Button>
                   {dirty && (
                     <>
-                      <PrimaryButton
-                        onClick={handleReset}
-                        buttonType="button"
-                        variant={"cancel"}
-                      >
+                      <Button onClick={handleReset} variant={"cancel"}>
                         Reset
-                      </PrimaryButton>
+                      </Button>
 
-                      <PrimaryButton buttonType="submit" variant="primary">
+                      <Button buttontype="submit" variant="primary">
                         Save
-                      </PrimaryButton>
+                      </Button>
                     </>
                   )}
                 </div>

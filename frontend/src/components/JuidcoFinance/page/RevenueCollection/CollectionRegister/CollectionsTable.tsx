@@ -10,9 +10,9 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "@/components/global/atoms/nonFormik/Select";
-import Loader from "@/components/Helpers/Basic/Loader";
 import Table, {ColumnProps} from "@/components/global/molecules/Table";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
+import Loader from "@/components/global/atoms/Loader";
 
 interface TableWithScrollPaginProp {
   footer?: React.ReactNode;
@@ -65,6 +65,8 @@ const CollectionsTable = <T,>({
       url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&module=${moduleId}&date=${date.toISOString().split('T')[0]}`,
       method: "GET",
     });
+
+    if(!res.data.status)  throw new Error("Something Went Wrong!!");
 
     let data = res.data?.data;
     if (data == null) {
@@ -197,7 +199,7 @@ const CollectionsTable = <T,>({
           />
         )}
 
-        {tempFetch && <Loader className="h-8" />}
+        {tempFetch && <Loader />}
         {footer}
         {/* <aside className="flex items-center justify-end py-5 gap-5">
           <Button onClick={rest.handleApprove} buttontype="button" variant="primary">

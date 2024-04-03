@@ -7,7 +7,7 @@ import Select from "@/components/global/atoms/Select";
 import Input from "@/components/global/atoms/Input";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
-import { VoucherEntryDetailsData } from "@/utils/types/documentation/voucher_entry_types";
+import { VoucherEntryDetailsData } from "./voucher_entry_types";
 
 /**
  * | Author- Sanjiv Kumar

@@ -1,8 +1,8 @@
 import Button from "@/components/global/atoms/Button";
 import { fc } from "@/utils/helper";
-import { AccountingTableData } from "@/utils/types/types";
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import { AccountingTableData } from "../types";
 
 interface LedgerDetailsComponentProps {
   data: AccountingTableData;

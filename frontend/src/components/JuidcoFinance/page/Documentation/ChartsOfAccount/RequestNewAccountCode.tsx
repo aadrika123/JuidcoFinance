@@ -3,9 +3,9 @@ import Input from "@/components/global/atoms/Input";
 import Select from "@/components/global/atoms/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
-import { PrimaryAccCodes } from "@/utils/types/primary_accounting_codes";
 import { Formik, FormikHelpers } from "formik";
 import React from "react";
+import { PrimaryAccCodes } from "./types";
 
 export interface FormikWrapperProps {
   initialValues: PrimaryAccCodes;

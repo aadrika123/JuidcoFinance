@@ -1,33 +1,25 @@
-/**
- * Author : Krish
- * Date : 02-02-2024
- * Use : Reusable Table for Different pages
- * Status : Open
- */
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { VendorDetailsData } from "../vendor_master_types";
 
-interface TableProps<T> {
-  columns: {
-    HEADER: string;
-    ACCESSOR: string;
-  }[];
-  data: T[];
+interface VendorTableProps {
+  data: VendorDetailsData[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Table: React.FC<TableProps<any>> = (props) => {
-  const pathName = usePathname();
+const VendorTable: React.FC<VendorTableProps> = (props) => {
+  const pathName: string = usePathname();
+
   return (
     <>
-      <div className="overflow-x-auto border-[2px] border-zinc-400">
+      <div className="overflow-x-auto border-[2px] border-zinc-300">
         <table className="table table-md">
-          <thead className="  text-[1rem] bg-primary_bg_indigo text-white border border-t-2 border-zinc-400 ">
+          <thead className="  text-[1rem] bg-primary_bg_gray text-black border border-t-2 border-zinc-300 ">
             <tr>
-              <th className="border border-zinc-400">
-                <div className="flex gap-2 w-32 font-medium text-center">
+              <th className="border border-zinc-300">
+                <div className="flex gap-2 w-16 font-medium text-center">
                   <span>Sr No.</span>
                   <span>
                     <svg
@@ -45,20 +37,45 @@ const Table: React.FC<TableProps<any>> = (props) => {
                   </span>
                 </div>
               </th>
-              {props.columns?.map((column, index: number) => (
-                <>
-                  <th
-                    className="border  border-zinc-400 font-medium"
-                    key={index}
-                  >
-                    {column.HEADER}
-                  </th>
-                </>
-              ))}
-
-              <th className="border   border-zinc-400 font-medium">
+              <th className="border border-zinc-300 font-medium">
                 <div className="flex gap-2">
-                  <span>Edit / View</span>
+                  <span>Vendor Type</span>
+                </div>
+              </th>
+
+              <th className="border border-zinc-300 font-medium">
+                <div className="flex gap-2">
+                  <span>Vendor No.</span>
+                </div>
+              </th>
+
+              <th className="border  border-zinc-300 w-[20%] font-medium">
+                <div className="flex gap-2">
+                  <span>Vendor Name</span>
+                </div>
+              </th>
+
+              <th className="border  border-zinc-300 font-medium">
+                <div className="flex gap-2">
+                  <span>TIN No</span>
+                </div>
+              </th>
+
+              <th className="border  border-zinc-300 font-medium">
+                <div className="flex gap-2">
+                  <span>GST No</span>
+                </div>
+              </th>
+
+              <th className="border  border-zinc-300 font-medium">
+                <div className="flex gap-2">
+                  <span>Authorized</span>
+                </div>
+              </th>
+
+              <th className="border   border-zinc-300 font-medium">
+                <div className="flex gap-2">
+                  <span>Edit</span>
                   <span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -76,9 +93,9 @@ const Table: React.FC<TableProps<any>> = (props) => {
                 </div>
               </th>
 
-              <th className="border  border-zinc-400  font-medium">
+              <th className="border  border-zinc-300  font-medium">
                 <div className="flex gap-2">
-                  <span>Print </span>
+                  <span>View </span>
                   <span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -115,71 +132,113 @@ const Table: React.FC<TableProps<any>> = (props) => {
             </tr>
           </thead>
           <tbody className="">
-            {props.data?.map((row, index: number) => (
-              <tr key={index} className="border border-zinc-400 text-secondary">
-                <td className="border border-zinc-400">{row.id}</td>
+            {props.data?.map((d, index: number) => (
+              <tr key={index} className="border border-zinc-300 text-secondary">
+                {/* ID */}
+                <td className="border border-zinc-300">{d?.id}</td>
 
-                {props.columns?.map((column, index: number) => (
-                  <>
-                    <td key={index}>{row[column.ACCESSOR]}</td>
-                  </>
-                ))}
+                {/* Name of Bank */}
+                <td className="border border-zinc-300">
+                  {d?.vendor_type?.name}
+                </td>
 
-                {/* Edit/View */}
-                <td className="border border-zinc-400 ">
-                  <Link href={`${pathName}/${row.id}`}>
+                {/*  IFSC Code */}
+                <td className="border border-zinc-300 ">
+                  <div className="flex justify-center">{d?.vendor_no}</div>
+                </td>
+
+                {/* BRANCH */}
+                <td className="border border-zinc-300 ">
+                  <div className="flex ">
+                    <div className="flex justify-center">{d?.name}</div>
+                  </div>
+                </td>
+
+                <td className="border border-zinc-300 ">
+                  <div className="flex ">
+                    <div className="flex justify-center">{d?.tin_no}</div>
+                  </div>
+                </td>
+
+                <td className="border border-zinc-300 ">
+                  <div className="flex">
+                    <div className="flex justify-center">{d?.gst_no}</div>
+                  </div>
+                </td>
+
+                <td className="border border-zinc-300 ">
+                  <div className="flex justify-center">
                     <div className="flex justify-center">
-                      <span>
+                      {d?.is_authorized ? "Yes" : "No"}
+                    </div>
+                  </div>
+                </td>
+
+                {/* Edit */}
+                <td className="border border-zinc-300">
+                  <Link href={`${pathName}/edit/${d.id}`}>
+                    <div className="flex justify-center opacity-90">
+                      <span>Edit</span>
+                      <span className="ml-2 mt-1">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
+                          width="15"
+                          height="14"
+                          viewBox="0 0 15 14"
                           fill="none"
                         >
+                          <rect
+                            x="0.40876"
+                            y="0.40876"
+                            width="13.3107"
+                            height="13.1825"
+                            rx="3.67884"
+                            stroke="#726E6E"
+                            strokeWidth="0.81752"
+                          />
                           <path
-                            d="M14.6795 7.58225C14.4806 7.58225 14.2899 7.66125 14.1493 7.80186C14.0087 7.94247 13.9297 8.13318 13.9297 8.33203V12.8307C13.9297 13.0296 13.8507 13.2203 13.7101 13.3609C13.5695 13.5015 13.3788 13.5805 13.1799 13.5805H2.68294C2.48409 13.5805 2.29338 13.5015 2.15277 13.3609C2.01215 13.2203 1.93316 13.0296 1.93316 12.8307V2.33377C1.93316 2.13492 2.01215 1.94421 2.15277 1.8036C2.29338 1.66299 2.48409 1.58399 2.68294 1.58399H7.18164C7.38049 1.58399 7.5712 1.505 7.71181 1.36438C7.85243 1.22377 7.93142 1.03306 7.93142 0.834208C7.93142 0.635354 7.85243 0.444643 7.71181 0.304032C7.5712 0.16342 7.38049 0.0844256 7.18164 0.0844256H2.68294C2.08638 0.0844256 1.51425 0.32141 1.09241 0.743244C0.670578 1.16508 0.433594 1.73721 0.433594 2.33377V12.8307C0.433594 13.4273 0.670578 13.9994 1.09241 14.4213C1.51425 14.8431 2.08638 15.0801 2.68294 15.0801H13.1799C13.7765 15.0801 14.3486 14.8431 14.7704 14.4213C15.1923 13.9994 15.4292 13.4273 15.4292 12.8307V8.33203C15.4292 8.13318 15.3503 7.94247 15.2096 7.80186C15.069 7.66125 14.8783 7.58225 14.6795 7.58225ZM3.43272 8.15209V11.3312C3.43272 11.53 3.51172 11.7207 3.65233 11.8613C3.79294 12.002 3.98365 12.0809 4.18251 12.0809H7.36159C7.46026 12.0815 7.55808 12.0626 7.64943 12.0253C7.74078 11.988 7.82387 11.933 7.89393 11.8635L13.0824 6.66752L15.2118 4.58312C15.2821 4.51342 15.3379 4.43049 15.3759 4.33912C15.414 4.24776 15.4336 4.14976 15.4336 4.05078C15.4336 3.9518 15.414 3.85379 15.3759 3.76243C15.3379 3.67106 15.2821 3.58813 15.2118 3.51843L12.0327 0.301863C11.963 0.231587 11.8801 0.175807 11.7887 0.137742C11.6974 0.0996761 11.5994 0.0800781 11.5004 0.0800781C11.4014 0.0800781 11.3034 0.0996761 11.212 0.137742C11.1207 0.175807 11.0377 0.231587 10.968 0.301863L8.85365 2.42375L3.65016 7.61974C3.58067 7.6898 3.52569 7.77289 3.48838 7.86424C3.45107 7.95559 3.43215 8.05341 3.43272 8.15209ZM11.5004 1.8914L13.6223 4.01329L12.5576 5.07798L10.4357 2.95609L11.5004 1.8914ZM4.93229 8.4595L9.3785 4.01329L11.5004 6.13517L7.05417 10.5814H4.93229V8.4595Z"
+                            d="M9.73084 5.61487C9.61186 5.73386 9.49637 5.84934 9.49287 5.96483C9.48238 6.07681 9.60136 6.19229 9.71334 6.30078C9.88132 6.47575 10.0458 6.63323 10.0388 6.80471C10.0318 6.97618 9.85332 7.15466 9.67485 7.32964L8.22955 8.77843L7.73262 8.2815L9.21991 6.79771L8.88396 6.46176L8.38703 6.95519L7.07471 5.64287L8.41852 4.30256C8.555 4.16608 8.78247 4.16608 8.91196 4.30256L9.73084 5.12144C9.86732 5.25092 9.86732 5.47839 9.73084 5.61487ZM3.5332 9.18788L6.87874 5.83884L8.19106 7.15116L4.84552 10.5002H3.5332V9.18788Z"
                             fill="black"
+                            fillOpacity="0.41"
                           />
                         </svg>
                       </span>
                     </div>
                   </Link>
                 </td>
-                {/* Print */}
-                <td className="border border-zinc-400 ">
+
+                {/* View / Print */}
+                <td className="border border-zinc-300 ">
                   <div className="flex justify-center">
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="19"
-                        height="19"
-                        viewBox="0 0 19 19"
-                        fill="none"
-                      >
-                        <path
-                          d="M5.03514 13.9453H3.57031C3.18181 13.9453 2.80922 13.7909 2.53451 13.5162C2.2598 13.2415 2.10547 12.8689 2.10547 12.4804V8.81835C2.10547 8.42985 2.2598 8.05727 2.53451 7.78256C2.80922 7.50785 3.18181 7.35352 3.57031 7.35352H15.289C15.6775 7.35352 16.0501 7.50785 16.3248 7.78256C16.5995 8.05727 16.7538 8.42985 16.7538 8.81835V12.4804C16.7538 12.8689 16.5995 13.2415 16.3248 13.5162C16.0501 13.7909 15.6775 13.9453 15.289 13.9453H13.8242"
-                          stroke="black"
-                          strokeWidth="1.7578"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M13.8242 11.0156H5.03516V16.875H13.8242V11.0156Z"
-                          stroke="black"
-                          strokeWidth="1.7578"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M5.03516 7.35349V2.22656H13.8242V7.35349"
-                          stroke="black"
-                          strokeWidth="1.7578"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
+                    <Link href={`${pathName}/view/${d.id}`}>
+                      <div className="flex justify-center opacity-90">
+                        <span>View</span>
+                        <span className="ml-2 mt-1">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="15"
+                            height="14"
+                            viewBox="0 0 15 14"
+                            fill="none"
+                          >
+                            <rect
+                              x="0.40876"
+                              y="0.40876"
+                              width="13.3107"
+                              height="13.1825"
+                              rx="3.67884"
+                              stroke="#726E6E"
+                              strokeWidth="0.81752"
+                            />
+                            <path
+                              d="M6.93513 6.37039C7.19504 6.37039 7.44431 6.47364 7.62809 6.65743C7.81188 6.84121 7.91513 7.09048 7.91513 7.35039C7.91513 7.6103 7.81188 7.85957 7.62809 8.04336C7.44431 8.22714 7.19504 8.33039 6.93513 8.33039C6.67522 8.33039 6.42595 8.22714 6.24217 8.04336C6.05838 7.85957 5.95513 7.6103 5.95513 7.35039C5.95513 7.09048 6.05838 6.84121 6.24217 6.65743C6.42595 6.47364 6.67522 6.37039 6.93513 6.37039ZM6.93513 4.90039C8.56846 4.90039 9.96333 5.91632 10.5285 7.35039C9.96333 8.78446 8.56846 9.80039 6.93513 9.80039C5.3018 9.80039 3.90693 8.78446 3.3418 7.35039C3.90693 5.91632 5.3018 4.90039 6.93513 4.90039ZM4.05393 7.35039C4.31796 7.88949 4.72794 8.3437 5.23727 8.66139C5.7466 8.97907 6.33485 9.14749 6.93513 9.14749C7.53541 9.14749 8.12366 8.97907 8.63299 8.66139C9.14232 8.3437 9.5523 7.88949 9.81633 7.35039C9.5523 6.81129 9.14232 6.35708 8.63299 6.03939C8.12366 5.72171 7.53541 5.55329 6.93513 5.55329C6.33485 5.55329 5.7466 5.72171 5.23727 6.03939C4.72794 6.35708 4.31796 6.81129 4.05393 7.35039Z"
+                              fill="black"
+                              fillOpacity="0.41"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </Link>
                   </div>
                 </td>
               </tr>
@@ -191,4 +250,4 @@ const Table: React.FC<TableProps<any>> = (props) => {
   );
 };
 
-export default Table;
+export default VendorTable;

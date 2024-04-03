@@ -19,36 +19,33 @@ const Footer: React.FC<FooterProps> = (props) => {
   const [openingBal, setOpeningBal] = useState(
     balances?.opening_balance?.opening_balance
   );
-  const isEditable =
-    user?.role.includes("Accounts Department – Manager")
-      ? false
-      : true;
+  const isEditable = user?.role.includes("Accounts Department – Manager")
+    ? false
+    : true;
 
-  const tempUser =
-    user?.role.includes("Accounts Department – Accountant")
-      ? {
-          name: "Sanjiv Kumar",
-          designation: { name: "Accounts Department – Manager" },
-          print_name: "Sanjiv Kumar",
-        }
-      : user;
+  const tempUser = user?.role.includes("Accounts Department – Accountant")
+    ? {
+        name: "Sanjiv Kumar",
+        designation: { name: "Accounts Department – Manager" },
+        print_name: "Sanjiv Kumar",
+      }
+    : user;
 
   const footerData = [
     {
       key: "Opening Balance",
-      value:
-        user?.role.includes("Accounts Department – Accountant") ? (
-          <Input
-            label=""
-            value={openingBal || balances?.opening_balance?.opening_balance}
-            name="opening_balance"
-            type="number"
-            className="bg-white"
-            onChange={(e) => setOpeningBal(e.target.value)}
-          />
-        ) : (
-          balances?.opening_balance?.opening_balance
-        ),
+      value: user?.role.includes("Accounts Department – Accountant") ? (
+        <Input
+          label=""
+          value={openingBal || balances?.opening_balance?.opening_balance}
+          name="opening_balance"
+          type="number"
+          className="bg-white"
+          onChange={(e) => setOpeningBal(e.target.value)}
+        />
+      ) : (
+        balances?.opening_balance?.opening_balance
+      ),
     },
     {
       key: "Days Total",
@@ -57,7 +54,8 @@ const Footer: React.FC<FooterProps> = (props) => {
     {
       key: "Closing Total",
       value:
-        balances?.total_amount + balances?.opening_balance?.opening_balance || 0,
+        balances?.total_amount + balances?.opening_balance?.opening_balance ||
+        0,
     },
   ];
 
@@ -68,44 +66,41 @@ const Footer: React.FC<FooterProps> = (props) => {
 
   ////// Handle Add and Update Opening Balance
   const handleOpeningBal = async () => {
-    let res:any = "";
+    let res: any = "";
     try {
       !balances?.opening_balance?.opening_balance
-        ? res = await axios({
+        ? (res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.create,
             method: "POST",
             data: {
-              data:{
+              data: {
                 opening_balance: Number(openingBal),
-              }
+              },
             },
-          })
-        : res = await axios({
+          }))
+        : (res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.update,
             method: "POST",
             data: {
-              data:{
+              data: {
                 id: balances?.opening_balance?.id,
                 opening_balance: Number(openingBal),
-              }
+              },
             },
-          });
+          }));
 
-          if(res.data.status){
-            toast.success('Done!!');
-            setOpeningBal(null)
-          }else{
-            alert('Someting Went Wrong!!')
-            throw "Someting Went Wrong!!"
-          }
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
+
+      toast.success("Done!!");
+      setOpeningBal(null);
     } catch (error: any) {
-      alert('Someting Went Wrong!!')
+      alert("Someting Went Wrong!!");
       console.log(error);
     }
   };
   return (
     <div>
-      <Toaster/>
+      <Toaster />
       <TotalCountTable footerData={footerData} />
       <div className="grid grid-cols-2 gap-4 mt-4">
         {/* <div className="flex flex-col">
@@ -168,16 +163,18 @@ const Footer: React.FC<FooterProps> = (props) => {
           >
             Approved
           </Button>
-        ) : openingBal && (
-          <Button
-            onClick={handleOpeningBal}
-            buttontype="button"
-            variant="primary"
-          >
-            {!balances?.opening_balance?.opening_balance
-              ? "Add Opening Balance"
-              : "Updated Opening Balance"}
-          </Button>
+        ) : (
+          openingBal && (
+            <Button
+              onClick={handleOpeningBal}
+              buttontype="button"
+              variant="primary"
+            >
+              {!balances?.opening_balance?.opening_balance
+                ? "Add Opening Balance"
+                : "Updated Opening Balance"}
+            </Button>
+          )
         )}
       </aside>
     </div>

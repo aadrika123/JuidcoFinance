@@ -1,11 +1,11 @@
 import Button from "@/components/global/atoms/Button";
-import { AccountingTableData } from "@/utils/types/types";
 import axios from "@/lib/axiosConfig";
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useQuery } from "react-query";
 import { fc } from "@/utils/helper";
 import RandomWorkingAnimation from "@/components/global/molecules/general/RandomWorkingAnimation";
+import { AccountingTableData } from "../types";
 
 
 interface GeneralLedgerDetailsComponentProps {
@@ -35,8 +35,10 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
       method: "GET",
     });
 
-    console.log(res.data);
-    return res.data?.data;
+    if (res.data.status) {
+      return res.data?.data;
+    }
+    throw "Something Went Wrong!!";
   };
 
 

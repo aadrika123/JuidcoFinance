@@ -5,14 +5,18 @@ import FormikWrapper from "@/components/global/organisms/FormikContainer";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter, filterValBefStoring } from "@/utils/helper";
-import { QueryClient, useMutation } from "react-query";
-import toast, { Toaster } from "react-hot-toast";
-import goBack from "@/utils/helper";
+import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useSearchParams } from "next/navigation";
-import { BillPaymentDetailsData, ResponseData } from "@/utils/types/bill_payment_entry_types";
-import { BillPaymentDetailsSchema } from "@/utils/validation/transactions/bill_payment.validation";
 import { fields } from "../BillPaymentFormFields";
+import {
+  BillPaymentDetailsData,
+  ResponseData,
+} from "../bill_payment_entry_types";
+import { BillPaymentDetailsSchema } from "../bill_payment.validation";
+import Loader from "@/components/global/atoms/Loader";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 export const EditBillPaymentEntry = ({
   BillPaymentID,
@@ -20,7 +24,7 @@ export const EditBillPaymentEntry = ({
   BillPaymentID: string;
 }) => {
   const searchParams = useSearchParams().get("mode");
-
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [initialData, setInitialData] = useState<BillPaymentDetailsData>({
     bill_no: "",
     bill_entry_date: "",
@@ -39,12 +43,13 @@ export const EditBillPaymentEntry = ({
   const queryClient = new QueryClient();
 
   // Get Payment entry by ID
-  useEffect(() => {
-    (async function () {
+  const fetchData = async () => {
+    try {
       const res: ResponseData = await axios({
         method: "GET",
         url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.getById}/${BillPaymentID}`,
       });
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       setInitialData((prev: BillPaymentDetailsData) => {
         return {
@@ -63,28 +68,39 @@ export const EditBillPaymentEntry = ({
           advance: res.data.data.advance,
         };
       });
-    })();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { refetch: reloadData, isFetching: isFetching } = useQuery(
+    ["bill-payment-get-single", BillPaymentID],
+    fetchData
+  );
+
+  useEffect(() => {
+    reloadData();
+  }, [BillPaymentID]);
 
   // UPDATE BILL PAYMENT ENTRY
   const UpdateBillPaymentEntry = async (
     values: BillPaymentDetailsData
   ): Promise<BillPaymentDetailsData> => {
-    console.log("first", values)
+    console.log("first", values);
     try {
       const res = await axios({
         url: `${FINANCE_URL.BILL_PAYMENT_ENTRY_URL.update}`,
         method: "POST",
         data: {
-          data:{
+          data: {
             id: Number(BillPaymentID),
-           ...values,
-          }
+            ...values,
+          },
         },
       });
-      if(res.data.status){
+      if (res.data.status) {
         return res.data;
-      } 
+      }
       throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
@@ -92,15 +108,16 @@ export const EditBillPaymentEntry = ({
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading } = useMutation<
     BillPaymentDetailsData,
     Error,
     BillPaymentDetailsData
   >(UpdateBillPaymentEntry, {
     onSuccess: () => {
-      toast.success("Bill Payment Entry Updated Successfully!!");
+      setIsSuccess(true);
       setTimeout(() => {
-        goBack();
+        setIsSuccess(false);
+        goBack()
       }, 1000);
     },
     onError: () => {
@@ -108,29 +125,37 @@ export const EditBillPaymentEntry = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries();
-      
     },
   });
 
   const onSubmit = (values: any) => {
     values.bill_entry_date = `${new Date(values.bill_entry_date).toISOString()}`;
-    console.log("sf ls df", values)
+    console.log("sf ls df", values);
     mutate(filterValBefStoring(values));
   };
 
   return (
     <>
-      <Toaster />
-      <HeaderWidget title="Bill Payment Entry" variant={searchParams == "view" ? "view" : "edit"} />
-      <FormikWrapper
-        title=""
-        initialValues={initialData}
-        enableReinitialize={true}
-        validationSchema={BillPaymentDetailsSchema}
-        onSubmit={onSubmit}
-        fields={fields}
-        readonly={searchParams === "view"}
+      {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
+      <HeaderWidget
+        title="Bill Payment Entry"
+        variant={searchParams == "view" ? "view" : "edit"}
       />
+      {isFetching ? (
+        <Loader />
+      ) : (
+        <FormikWrapper
+          title=""
+          initialValues={initialData}
+          enableReinitialize={true}
+          validationSchema={BillPaymentDetailsSchema}
+          onSubmit={onSubmit}
+          fields={fields}
+          readonly={searchParams === "view"}
+        />
+      )}
     </>
   );
 };

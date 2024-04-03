@@ -21,6 +21,7 @@ export interface BillPaymentDetailsData {
 ///////////// Response Data ////////////////////
 export interface ResponseData {
   data: {
+    status: boolean;
     data: {
       bill_entry_date: string;
       bill_type: { id: number };

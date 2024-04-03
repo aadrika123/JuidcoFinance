@@ -5,7 +5,7 @@ import { useWorkingAnimation } from '../molecules/general/useWorkingAnimation';
 
 interface LinkWithLoaderProps {
     children: ReactNode,
-    className: string,
+    className?: string,
     href: string,
 }
 

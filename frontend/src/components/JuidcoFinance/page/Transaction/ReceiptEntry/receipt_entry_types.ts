@@ -41,6 +41,7 @@ export interface ReceiptDataProps {
 
 export interface ResponseData {
   data: {
+    status: boolean;
     data: {
       date: string;
       email: string;

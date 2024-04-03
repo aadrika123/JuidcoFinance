@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import Footer from "./Footer";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 
 const ReceiptRegister = () => {
   const pathName = usePathname();
@@ -26,6 +27,7 @@ const ReceiptRegister = () => {
   const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState([]);
+  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
 
   useEffect(() => {
     setUser(userData);
@@ -33,6 +35,7 @@ const ReceiptRegister = () => {
 
   //////// Handling Viw Button
   const onViewButtonClick1 = (id: string) => {
+    activateWorkingAnimation();
     router.push(`${pathName}/view/${id}?mode=view`);
   };
 
@@ -85,18 +88,16 @@ const ReceiptRegister = () => {
         url: FINANCE_URL.RECEIPT_REGISTER.approve,
         method: "POST",
         data: {
-          data:{
+          data: {
             checked_by_id: user.id,
             checked_by_print_name: name,
             ids: receiptIds,
-          }
+          },
         },
       });
-      if (res.data.status) {
-        res && toast.success("Approved Sucessfully!!");
-      } else {
-        throw "Something Went Wrong!!";
-      }
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
+
+      res && toast.success("Approved Sucessfully!!");
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
@@ -161,6 +162,7 @@ const ReceiptRegister = () => {
   return (
     <>
       <Toaster />
+      {workingAnimation}
       <HeaderWidget
         variant={
           user?.role.includes("Accounts Department – Accountant") ? "add" : ""

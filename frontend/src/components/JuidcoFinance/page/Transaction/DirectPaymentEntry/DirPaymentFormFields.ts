@@ -1,5 +1,5 @@
 import { FINANCE_URL } from "@/utils/api/urls";
-import { Choice, FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { Choice, FieldTypeProps } from "@/utils/types/formikTypes";
 
 /////  Radio buttons list
 const choices: Choice[] = [

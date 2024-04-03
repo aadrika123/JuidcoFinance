@@ -11,10 +11,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { budgetApproDetailsSchema } from "@/utils/validation/budgeting/budget_appro.validation";
-import { BudgetApproDetailsData } from "@/utils/types/budgeting/budget_appro_types";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { BudgetApproDetailsData } from "./budget_appro_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { budgetApproDetailsSchema } from "./budget_appro.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -100,37 +101,36 @@ export const AddBudgetAppro = () => {
         url: `${FINANCE_URL.BUDGET_APPRO_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<BudgetApproDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    BudgetApproDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -139,13 +139,18 @@ export const AddBudgetAppro = () => {
 
   /////////////// Handle Select Primary Accounting Code ////////////////
   const handleSelectPrimaryCode = async (id: string | number) => {
-    console.log(id)
+    console.log(id);
     try {
       const res = await axios({
         url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
         method: "GET",
       });
-      setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+
+      if (res.data.status) {
+        setSelects((prev) => ({ ...prev, f_p_codes: res.data.data }));
+      } else {
+        throw "Something Went Wrong";
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -159,14 +164,19 @@ export const AddBudgetAppro = () => {
         url: `${FINANCE_URL.BALANCE_TRACKING_URL.get}/${id}`,
         method: "GET",
       });
-      setSelects((prev) => ({
-        ...prev,
-        approved_amount: res.data?.data?.balance_amount,
-      }));
-      setInitialData((prev) => ({
-        ...prev,
-        approved_amount: res.data?.data?.balance_amount,
-      }));
+
+      if (res.data.status) {
+        setSelects((prev) => ({
+          ...prev,
+          approved_amount: res.data?.data?.balance_amount,
+        }));
+        setInitialData((prev) => ({
+          ...prev,
+          approved_amount: res.data?.data?.balance_amount,
+        }));
+      } else {
+        throw "Something Went Wrong";
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -207,8 +217,8 @@ export const AddBudgetAppro = () => {
       approved_amount: data[Id - 1]?.approved_amount,
       transfer_amount: data[Id - 1]?.transfer_amount,
     }));
-    handleSelectPrimaryCode(data[Id - 1]?.primary_acc_code_id)
-    handleSelectFromPrimaryCode(data[Id - 1]?.from_primary_acc_code_id)
+    handleSelectPrimaryCode(data[Id - 1]?.primary_acc_code_id);
+    handleSelectFromPrimaryCode(data[Id - 1]?.from_primary_acc_code_id);
     dispatch(openPopup());
   };
 
@@ -223,16 +233,16 @@ export const AddBudgetAppro = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
+    });
     setSelects({
       f_p_codes: [],
       approved_amount: undefined,
     });
-  }
+  };
 
   // Add Table
   const columns = [
@@ -324,6 +334,9 @@ export const AddBudgetAppro = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={budgetApproDetailsSchema}

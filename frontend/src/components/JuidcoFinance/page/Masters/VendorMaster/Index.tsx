@@ -5,10 +5,10 @@ import axios from "@/lib/axiosConfig";
 import VendorList from "./VendorList/VendorList";
 import AddVendorHeader from "./AddVendorWidget/AddVendorWidget";
 import { useQuery } from "react-query";
-import { MasterProps } from "@/utils/types/types";
-import { VendorDetailsData } from "@/utils/types/vendor_master_types";
 import { FINANCE_URL } from "@/utils/api/urls";
-import Loader from "@/components/Helpers/Basic/Loader";
+import { VendorDetailsData } from "./vendor_master_types";
+import { MasterProps } from "../../Documentation/ChartsOfAccount/types";
+import Loader from "@/components/global/atoms/Loader";
 export const HeroVendorMaster = () => {
   const [page, setPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -29,6 +29,8 @@ export const HeroVendorMaster = () => {
       url: `${FINANCE_URL.VENDOR_MASTER_URL.get}&page=${page}&search=${searchQuery}`,
       method: "GET",
     });
+    if(!res.data.status)  throw new Error("Something Went Wrong!!");
+    
     return res.data?.data as MasterProps<VendorDetailsData>;
   };
 

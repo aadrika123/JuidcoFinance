@@ -11,10 +11,11 @@ import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
-import { BudgetReApproDetailsData } from "@/utils/types/budgeting/budget_re_appro_types";
-import { budgetReApproDetailsSchema } from "@/utils/validation/budgeting/budget_re_appro.validation";
-import { FieldTypeProps } from "@/utils/types/FormikTypes/formikTypes";
+import { BudgetReApproDetailsData } from "./budget_re_appro_types";
+import { FieldTypeProps } from "@/utils/types/formikTypes";
+import { budgetReApproDetailsSchema } from "./budget_re_appro.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -112,37 +113,36 @@ export const AddBudgetReAppro = () => {
         url: `${FINANCE_URL.BUDGET_RE_APPRO_URL.create}`,
         method: "POST",
         data: {
-        data: filterValBefStoring(values)
-      },
-    });
-    if(res.data.status){
-
-      return res.data;
-    } 
-    throw "Something Went Wrong";
+          data: filterValBefStoring(values),
+        },
+      });
+      if (res.data.status) {
+        return res.data;
+      }
+      throw "Something Went Wrong";
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
 
-  const { mutate } = useMutation<BudgetReApproDetailsData, Error, any>(
-    handleStore,
-    {
-      onSuccess: () => {
-        toast.success("Added Successfully!!");
-        setTimeout(() => {
-          goBack();
-        }, 1000);
-      },
-      onError: () => {
-        alert("Something went wrong!!!");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
+  const { mutate, isLoading, isSuccess } = useMutation<
+    BudgetReApproDetailsData,
+    Error,
+    any
+  >(handleStore, {
+    onSuccess: () => {
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    },
+    onError: () => {
+      alert("Something went wrong!!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 
   //////////////////// Handle Reset Table List //////////////////
   const handleResetTable = () => {
@@ -160,7 +160,7 @@ export const AddBudgetReAppro = () => {
 
   /////////////// Handle Select Primary Accounting Code ////////////////
   const handleSelectPrimaryCode = async (id: string | number) => {
-    console.log(id)
+    console.log(id);
     try {
       const res = await axios({
         url: `${FINANCE_URL.ACCOUNTING_CODE_URL.getChildCodes}/1`,
@@ -220,8 +220,8 @@ export const AddBudgetReAppro = () => {
       balance_amount: data[Id - 1]?.balance_amount,
       transfer_amount: data[Id - 1]?.transfer_amount,
     }));
-    handleSelectPrimaryCode(data[Id - 1]?.primary_acc_code_id)
-    handleSelectFromPrimaryCode(data[Id - 1]?.from_primary_acc_code_id)
+    handleSelectPrimaryCode(data[Id - 1]?.primary_acc_code_id);
+    handleSelectFromPrimaryCode(data[Id - 1]?.from_primary_acc_code_id);
     dispatch(openPopup());
   };
 
@@ -236,17 +236,17 @@ export const AddBudgetReAppro = () => {
   };
 
   ///////////////// Handle Things Before Adding New Entery ///////////
-  const handleAddNewEntery = () =>{
+  const handleAddNewEntery = () => {
     setIsUpdateMode({
       id: "",
       isOnEdit: false,
-    })
+    });
     setSelects({
       f_p_codes: [],
       balance_amount: undefined,
       approved_amount: undefined,
     });
-  }
+  };
 
   /////////////////// Field List ///////////////////////
   const fields: FieldTypeProps[] = [
@@ -373,6 +373,9 @@ export const AddBudgetReAppro = () => {
 
   return (
     <>
+      {isSuccess && <SuccesfullConfirmPopup message="Saved Successfully" />}
+
+      <RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={budgetReApproDetailsSchema}

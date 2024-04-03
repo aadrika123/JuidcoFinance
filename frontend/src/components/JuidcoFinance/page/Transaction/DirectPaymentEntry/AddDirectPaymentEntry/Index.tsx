@@ -8,13 +8,14 @@ import { useDispatch } from "react-redux";
 import { closePopup, openPopup } from "@/redux/reducers/PopupReducers";
 import { FINANCE_URL } from "@/utils/api/urls";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
-import { DirPaymentDataProps } from "@/utils/types/direct_payment_entry_types";
-import { PaymentDetailsSchema } from "@/utils/validation/transactions/direct_payment.validation";
 import axios from "@/lib/axiosConfig";
 import { QueryClient, useMutation } from "react-query";
 import goBack, { filterValBefStoring } from "@/utils/helper";
-import toast from "react-hot-toast";
 import { fields } from "../DirPaymentFormFields";
+import { DirPaymentDataProps } from "../direct_payment_entry_types";
+import { PaymentDetailsSchema } from "../direct_payment.validation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -125,13 +126,12 @@ export const HeroAddPaymentEntry = () => {
     }
   };
 
-  const { mutate } = useMutation<
+  const { mutate, isLoading, isSuccess } = useMutation<
     DirPaymentDataProps,
     Error,
     any
   >(handleStore, {
     onSuccess: () => {
-      toast.success("Direct Payment Entry Added Successfully!!");
       setTimeout(() => {
         goBack();
       }, 1000);
@@ -242,6 +242,9 @@ export const HeroAddPaymentEntry = () => {
 
   return (
     <>
+     {isSuccess && <SuccesfullConfirmPopup message="Created Successfully" />}
+
+<RandomWorkingPopup show={isLoading} />
       <Hoc
         initialValues={initialData}
         validationSchema={PaymentDetailsSchema}

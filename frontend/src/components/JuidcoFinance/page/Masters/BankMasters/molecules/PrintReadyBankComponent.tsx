@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddBankDetailsData } from "@/utils/types/bank_master_types";
+import { AddBankDetailsData } from '../bank_master_types';
 
 interface PrintReadyBankComponentProps {
   bank: AddBankDetailsData
