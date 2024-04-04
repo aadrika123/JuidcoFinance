@@ -5,8 +5,8 @@ import Routes from "@/json/routes.json";
 import { useQuery } from "react-query";
 import BackButton from "../atoms/BackButton";
 import PrintButton from "../atoms/PrintButton";
-import FilledDisabledInputBox from "@/components/Helpers/FilledDisabledInputBox";
 import Loader from "../atoms/Loader";
+import Input from "../atoms/Input";
 
 interface DropDownListItem{
     caption: string;
@@ -70,18 +70,18 @@ const DataViewForm = <T, >({title, fields, api, onBack}: DataViewFormProps) => {
             if(field.type == "date"){
                 const value1 = dayjs(new Date(value as string)).format("DD MMM YYYY");
                 return (
-                    <FilledDisabledInputBox key={`field-${index}`} label={field.caption} value={value1}/>
+                    <Input readonly key={`field-${index}`} label={field.caption} value={value1}/>
                 );
             }
         }
 
         else if(typeof value == "string"){
             return (
-                <FilledDisabledInputBox key={`field-${index}`} label={field.caption} value={value}/>
+                <Input readonly key={`field-${index}`} label={field.caption} value={value}/>
             );
         }else if(typeof value ==  "number"){
             return (
-                <FilledDisabledInputBox key={`field-${index}`} label={field.caption} value={value}/>
+                <Input readonly key={`field-${index}`} label={field.caption} value={value}/>
             );
         }
         else{

@@ -1,4 +1,5 @@
-import { PaymentTableData } from "@/utils/types/direct_payment_entry_types";
+
+import { PaymentTableData } from "@/components/JuidcoFinance/page/Transaction/DirectPaymentEntry/direct_payment_entry_types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 

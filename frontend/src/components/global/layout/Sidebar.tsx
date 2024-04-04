@@ -45,7 +45,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
         </div>
         <hr />
         <div className="mt-4">
-          {sidebarLinks.modules?.map((link, index: number) => {
+          {sidebarLinks.modules?.map((link: any, index: number) => {
             return (
               <div className="h-[100%]" key={index}>
                 <ul className="w-full menu menu-xs p-0 ">
@@ -59,7 +59,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                           {link.moduleName}
                         </summary>
                         <ul>
-                          {link.subModules?.map((sub, index: number) => (
+                          {link.subModules?.map((sub:any, index: number) => (
                             <li key={index} className="mt-5 w-[90%]">
                               <details open={data === sub?.moduleName}>
                                 {sub.subModules ? (
@@ -92,7 +92,7 @@ const Sidebar: React.FC<SideBarProps> = (props) => {
                                 )}
                                 {sub.subModules && (
                                   <ul>
-                                    {sub.subModules?.map((link, i: number) => (
+                                    {sub.subModules?.map((link:any, i: number) => (
                                       <li
                                         onClick={() =>
                                           handleClick(sub.moduleName)

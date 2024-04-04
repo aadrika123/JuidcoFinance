@@ -21,6 +21,18 @@ resetDatabases() {
 }
 
 configure(){
+    cd ./jflib
+    npm link
+    cd .. 
+
+    cd ./frontend
+    npm link jflib
+    cd ..
+
+    cd ./backend
+    npm link jflib
+    cd ..
+
     rm ./frontend/next.config.js
     cp ./staging/next.config.js ./frontend/next.config.js
 }

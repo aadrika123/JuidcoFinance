@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import { SidebarLinksProps } from "@/utils/types/types";
 import mastersLogo from "@/assets/icons/sidebar/masters.svg";
 import docLogo from "@/assets/icons/sidebar/doc.svg";
 import transactionsLogo from "@/assets/icons/sidebar/transaction.svg";
 import paymentLogo from "@/assets/icons/sidebar/payment.svg";
 import rupeeIcons from "@/assets/svg/rupee_icons.svg"
 import houseIcons from "@/assets/svg/house_icons.svg"
+import { SidebarLinksProps } from "@/components/JuidcoFinance/page/Documentation/ChartsOfAccount/types";
 
 export const sidebarLinks: SidebarLinksProps = {
   modules: [
