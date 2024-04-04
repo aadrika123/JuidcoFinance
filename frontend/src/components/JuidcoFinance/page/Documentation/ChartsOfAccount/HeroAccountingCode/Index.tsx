@@ -5,7 +5,7 @@ import Popup from "@/components/global/molecules/general/Popup";
 import LedgerDetailsComponent from "./LedgerDetailsComponent";
 import GeneralLedgerDetailsComponent from "./GeneralLedgerDetailsComponent";
 import ScheduleDetailsComponent from "./ScheduleDetailsComponent";
-import { escapeRegExp } from "@/utils/helper";
+import { escapeRegExp } from "jflib";
 import AccountingTable from "../molecules/AccountingTable";
 import Loader from "@/components/global/atoms/Loader";
 import { AccountingTableData } from "../types";

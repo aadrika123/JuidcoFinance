@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { SubHeading } from "@/components/Helpers/Heading";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
-import { escapeRegExp } from "@/utils/helper";
+import {escapeRegExp} from "jflib";
+
 import MunicipalityCodeTable from "./molecules/MunicipalityCodeTable";
 import Loader from "@/components/global/atoms/Loader";
 import { MuncipalityTableData } from "./types";

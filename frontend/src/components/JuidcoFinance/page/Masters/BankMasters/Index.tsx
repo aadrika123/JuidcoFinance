@@ -6,6 +6,10 @@ import axios from "@/lib/axiosConfig";
 import AddBankHeader from "./molecules/AddBankHeader";
 import { useMutation, useQueryClient } from "react-query";
 import { Toaster } from "react-hot-toast";
+
+import { initialBankDetailsValues } from "jflib/src/validations/BankMasterValidation";
+import type {AddBankDetailsData} from "jflib/src/validations/BankMasterValidation";
+
 import { FINANCE_URL } from "@/utils/api/urls";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import ViewIconButton from "@/components/global/atoms/ViewIconButton";
@@ -16,9 +20,6 @@ import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
-import { AddBankDetailsData } from "./bank_master_types";
-import { initialBankDetailsValues } from "./bank_master.validation";
-
 // Imports //----------------------------------------------------------------
 
 // Main Functions //

@@ -1,9 +1,9 @@
 import React from "react";
 import { Formik, FormikProps } from "formik";
+import { AddBankDetailsData } from "jflib/src/validations/BankMasterValidation";
+import { AddBankDetailsSchema } from "jflib/src/validations/BankMasterValidation";
 import APIs from "@/json/apis.json";
 import { FINANCE_URL } from "@/utils/api/urls";
-import { AddBankDetailsData } from "../bank_master_types";
-import { AddBankDetailsSchema } from "../bank_master.validation";
 import Button from "@/components/global/atoms/Button";
 import Input from "@/components/global/atoms/Input";
 import DropDownList from "@/components/global/atoms/DropDownList";

@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
-import { requestData } from "../../requests/masters/bankMasterValidation";
+import { BankMasterValidation } from "jflib";
 
 const prisma = new PrismaClient();
 
@@ -13,7 +13,7 @@ class BankMasterDao {
   // store bank details in DB
   store = async (req: Request) => {
     return await prisma.bank_masters.create({
-      data: requestData(req.body.data),
+      data: BankMasterValidation.requestData(req.body.data),
     });
   };
 
@@ -119,6 +119,7 @@ class BankMasterDao {
 
     const id: number = req.body.data.id;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [copy, record] = await prisma.$transaction([
 
       prisma.$queryRaw`insert into bank_masters_history select * from bank_masters where id=${id}`,
@@ -131,7 +132,6 @@ class BankMasterDao {
       }),
     ])
 
-    console.log(copy);
     return record;
   }
 }

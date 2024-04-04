@@ -70,7 +70,3 @@ export const filterValBefStoring = (values: any) => {
   }
 
 
-  // escape input string for in regular expressions
-  export const escapeRegExp = (text: string) => {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-  }

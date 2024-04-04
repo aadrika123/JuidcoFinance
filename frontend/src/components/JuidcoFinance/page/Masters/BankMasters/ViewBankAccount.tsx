@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect} from "react";
+import { initialBankDetailsValues } from "jflib/src/validations/BankMasterValidation";
 import axios from "@/lib/axiosConfig";
+import { AddBankDetailsData } from "jflib/src/validations/BankMasterValidation";
 import { FINANCE_URL } from "@/utils/api/urls";
 import goBack from "@/utils/helper";
 import { useMutation, useQuery } from "react-query";
@@ -16,8 +18,6 @@ import Button from "@/components/global/atoms/Button";
 import { useReactToPrint } from "react-to-print";
 import { PrintReadyBankComponent } from "./molecules/PrintReadyBankComponent";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
-import { AddBankDetailsData } from "./bank_master_types";
-import { initialBankDetailsValues } from "./bank_master.validation";
 
 const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   const [bankAccountDetails, setBankAccountDetails] =

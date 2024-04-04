@@ -1,9 +1,8 @@
 "use strict";
 
 import { baseUrl } from "../../util/common";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import BankController from "../controller/bankController";
-import { manager } from "../middleware/manager";
 
 class BankRoute {
   private controller: BankController;

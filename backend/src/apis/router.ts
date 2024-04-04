@@ -67,7 +67,6 @@ import AuditTrailRoute from "./route/auditTrail/auditTrailRoute";
 
 class FinanceRoute {
   private funCodeRoute: FunCodeRoute;
-  private bankMasterRoute: BankMasterRoute;
   private vendorTypeRoute: VendorTypeRoute;
   private departmentRoute: DepartmentRoute;
   private chequebookEntryRoute: ChequeBookEntryRoute;
@@ -92,9 +91,8 @@ class FinanceRoute {
     //  MUNCIPALITY_CODE_ROUTER ///
     (new MuncipalityCodeRoute()).configure(app, "03");
 
-    /// BANK_MASTER_ROUTE ///
-    this.bankMasterRoute = new BankMasterRoute();
-    this.bankMasterRoute.configure(app); // 04
+  
+    (new BankMasterRoute("04", app)).configure();
 
     /// VENDOR_TYPE_ROUTE ///
     this.vendorTypeRoute = new VendorTypeRoute();
