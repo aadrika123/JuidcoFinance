@@ -1,5 +1,5 @@
+import { AddBankDetailsData } from 'jflib/build/validations/BankMasterValidation';
 import React from 'react';
-import { AddBankDetailsData } from '../bank_master_types';
 
 interface PrintReadyBankComponentProps {
   bank: AddBankDetailsData

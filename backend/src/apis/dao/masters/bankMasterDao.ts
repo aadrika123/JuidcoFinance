@@ -1,4 +1,3 @@
-import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
 import { BankMasterValidation } from "jflib";
@@ -6,29 +5,17 @@ import { BankMasterValidation } from "jflib";
 const prisma = new PrismaClient();
 
 class BankMasterDao {
-  constructor() {
-    //////
-  }
 
   // store bank details in DB
-  store = async (req: Request) => {
+  store = async (data: any) => {
     return await prisma.bank_masters.create({
-      data: BankMasterValidation.requestData(req.body.data),
+      data: BankMasterValidation.requestData(data),
     });
   };
 
   // Get limited bank master
-  get = async (req: Request) => {
-    const page: number = Number(req.query.page);
-    const limit: number = Number(req.query.limit);
-    const search: string = String(req.query.search);
-    let order: number = Number(req.query.order);
-
-    if (order != -1 && order != 1) {
-      order = -1;
-    }
-
-
+  get = async (page: number, limit: number, search: string, order: number) => {
+    
     const query: Prisma.bank_mastersFindManyArgs = {
       orderBy: [
         { updated_at: order == -1 ? "desc" : "asc" }
@@ -115,9 +102,9 @@ class BankMasterDao {
   };
 
   // Update bank details
-  update = async (req: Request) => {
+  update = async (data: any) => {
 
-    const id: number = req.body.data.id;
+    const id: number = data.id;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [copy, record] = await prisma.$transaction([
@@ -128,7 +115,7 @@ class BankMasterDao {
         where: {
           id: id,
         },
-        data: req.body.data,
+        data: data,
       }),
     ])
 

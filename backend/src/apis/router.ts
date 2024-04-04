@@ -92,7 +92,7 @@ class FinanceRoute {
     (new MuncipalityCodeRoute()).configure(app, "03");
 
   
-    (new BankMasterRoute("04", app)).configure();
+    (new BankMasterRoute("4", app)).configure();
 
     /// VENDOR_TYPE_ROUTE ///
     this.vendorTypeRoute = new VendorTypeRoute();

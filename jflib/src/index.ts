@@ -1,7 +1,6 @@
 'use strict';
 
-import BankMasterValidation from "./src/validations/BankMasterValidation";
-
+import BankMasterValidation from "./validations/BankMasterValidation";
 // escape input string for in regular expressions
 const escapeRegExp = (text:string):string => {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -9,6 +8,6 @@ const escapeRegExp = (text:string):string => {
 
 
 export {
+  BankMasterValidation,
   escapeRegExp,
-  BankMasterValidation
 };
