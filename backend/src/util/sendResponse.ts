@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import errorCodes from "./errorCodes";
 import { errLogger, infoLogger } from "../../loggerConfig";
-import AuditTrail from "../component/juidcoFinance/auditTrail/auditTrail";
+import AuditTrail from "../apis/auditTrail/auditTrail";
 
 /**
  * | Response Msg Version with apiMetaData
