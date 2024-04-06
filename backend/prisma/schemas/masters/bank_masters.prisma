@@ -15,7 +15,7 @@ model bank_masters {
   ifsc_code           String
   primary_acc_code_id  Int
   primary_acc_code    account_codes   @relation(fields: [primary_acc_code_id], references: [id])
-  bank_acc_no         String
+  bank_acc_no         String @unique
   branch              String
   branch_address      String
   branch_city         String
@@ -26,4 +26,6 @@ model bank_masters {
 
   created_at          DateTime @default(now()) @map("created_at")
   updated_at          DateTime @updatedAt @map("updated_at")
+
+  @@unique([primary_acc_code, ulb_id])
 }
