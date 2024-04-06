@@ -93,7 +93,6 @@ const Footer: React.FC<FooterProps> = (props) => {
       if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       toast.success("Done!!");
-      setOpeningBal(null);
     } catch (error: any) {
       alert("Someting Went Wrong!!");
       console.log(error);
