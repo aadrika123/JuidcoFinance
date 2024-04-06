@@ -1,4 +1,4 @@
-import { ReceiptTableData } from "@/utils/types/receipt_entry_types";
+import { ReceiptTableData } from "@/components/JuidcoFinance/page/Transaction/ReceiptEntry/receipt_entry_types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 

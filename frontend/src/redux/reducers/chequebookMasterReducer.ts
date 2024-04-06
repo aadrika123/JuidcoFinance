@@ -1,4 +1,4 @@
-import { ChequebookTableData } from "@/utils/types/chequebook_master_types";
+import { ChequebookTableData } from "@/components/JuidcoFinance/page/Masters/ChequebookMaster/chequebook_master_types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 /**

@@ -53,6 +53,7 @@ import bank_types_seeder from "./seeder/masters/bank_types_seeder";
 import daily_receipt_balance_seeder from "./seeder/revenueCollection/daily_receipt_balances_seeder";
 import accounting_code_types_seeder from "./seeder/masters/accounting_code_types_seeder";
 import foreign_wrapper from "./seeder/foreign_wrappter";
+import revenue_accounted_types_seeder from "./seeder/masters/revenue_accounted_types_seeder";
 
 const prisma = new PrismaClient();
 
@@ -103,6 +104,8 @@ async function main() {
   await prisma.$queryRaw`DROP TABLE wf_roleusermaps cascade`;
 
   await seed_reference_tables();
+
+  await revenue_accounted_types_seeder();
 
   setTimeout(async () => {
     seed_level1_dependent_tables();

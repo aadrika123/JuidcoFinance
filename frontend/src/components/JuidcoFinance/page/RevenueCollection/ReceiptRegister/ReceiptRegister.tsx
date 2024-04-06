@@ -26,7 +26,7 @@ const ReceiptRegister = () => {
   const [user, setUser] = useState<any>();
   const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [receiptData, setReceiptData] = useState<any>();
-  const [receiptIds, setReceiptIds] = useState([]);
+  const [receiptIds, setReceiptIds] = useState<any>([]);
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
 
   useEffect(() => {
@@ -56,14 +56,14 @@ const ReceiptRegister = () => {
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
     const handleCheckbox = (i: string) => {
-      const updatedData: any = [...receiptData.data];
+      const updatedData: any = [...receiptIds];
       if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
-        updatedData.filter((item: any) => item.id !== i);
+        setReceiptIds(updatedData.filter((item: any) => item.id !== i));
       } else {
-        updatedData.push({ id: Number(i) });
+        setReceiptIds((prev: any) => [...prev, { id: Number(i) }]);
       }
-      setReceiptIds(updatedData);
     };
+
     return (
       <>
         <Checkboxes

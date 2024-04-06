@@ -13,6 +13,9 @@ model bank_masters {
 
   micr_code           String?
   ifsc_code           String
+  primary_acc_code_id  Int
+  primary_acc_code    account_codes   @relation(fields: [primary_acc_code_id], references: [id])
+  bank_acc_no         String
   branch              String
   branch_address      String
   branch_city         String

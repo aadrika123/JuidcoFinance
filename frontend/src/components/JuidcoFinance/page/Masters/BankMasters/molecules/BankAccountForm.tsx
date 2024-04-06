@@ -7,6 +7,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
 import Input from "@/components/global/atoms/Input";
 import DropDownList from "@/components/global/atoms/DropDownList";
+import DropDownListBox from "@/components/global/atoms/DropDownListBox";
 
 interface BankAccountFormProps {
   initialBankDetailsValues: AddBankDetailsData;
@@ -108,6 +109,31 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
                 name="bank_id"
                 required
                 isReadOnly={readOnly}
+              />
+              <DropDownListBox
+                api={`${FINANCE_URL.ACCOUNTING_CODE_URL.getLedgerCodes}`}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Please Select Bank Associated With"
+                value={values.primary_acc_code_id}
+                error={errors.primary_acc_code_id}
+                touched={touched.primary_acc_code_id}
+                label="Bank Accociated With"
+                name="primary_acc_code_id"
+                required
+                isReadOnly={readOnly}
+              />
+              <Input
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.bank_acc_no}
+                error={errors.bank_acc_no}
+                touched={touched.bank_acc_no}
+                label="Bank Account No"
+                name="bank_acc_no"
+                placeholder="Enter Bank Account No"
+                required
+                readonly={readOnly}
               />
               <Input
                 onChange={handleChange}

@@ -1,6 +1,6 @@
 #!/bin/sh
 SERVER_PORT=5001
-DB_PASSWORD="judico@2024"
+DB_PASSWORD="Secure@2023%3F"
 
 
 installModules () {
@@ -18,6 +18,23 @@ resetDatabases() {
     echo "PORT=$SERVER_PORT\nDATABASE_URL=\"postgresql://postgres:$DB_PASSWORD@localhost:5432/juidco_finance?schema=public\"" > .env
     npx prisma migrate dev --name init
     cd ..
+}
+
+configure(){
+    cd ./jflib
+    npm link
+    cd .. 
+
+    cd ./frontend
+    npm link jflib
+    cd ..
+
+    cd ./backend
+    npm link jflib
+    cd ..
+
+    rm ./frontend/next.config.js
+    cp ./staging/next.config.js ./frontend/next.config.js
 }
 
 buildThem(){
@@ -46,6 +63,7 @@ startServices(){
 
 installModules
 resetDatabases
+configure
 buildThem
 startServices
 
