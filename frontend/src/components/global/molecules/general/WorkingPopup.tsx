@@ -17,12 +17,11 @@ const WorkingPopup: React.FC = () => {
     return () => clearTimeout(delayInputTimeoutId);
   });
 
-
+  
 
   return (
-
-    <Popup title="" zindex={50} width={30}>
-      <div className="flex flex-col justify-center items-center w-auto">
+    <Popup title="" zindex={50} width={80}>
+      <div className="flex flex-col justify-center items-center w-40">
         <DNA
           visible={true}
           height="80"
