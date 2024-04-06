@@ -3,6 +3,8 @@ export interface ReceiptRegisterDetailsData {
   receipt_no?: string;
   ulb_id_name?: string;
   ulb_id: number | string;
+  revenue_accounted_type_id: number | string;
+  revenue_accounted_type_id_name?: string;
   primary_acc_code_id_name?: string;
   primary_acc_code_id: number | string;
   revenue_module_id_name?: string;
@@ -14,7 +16,7 @@ export interface ReceiptRegisterDetailsData {
   cheque_or_draft_no?: string;
   bank_amount: number | string;
   cash_amount: number | string;
-  bank_acc_no?: string;
+  bank_acc_no: string;
   deposit_date?: string;
   realisation_date?: string;
   wheather_returned?: boolean | string;
@@ -36,6 +38,7 @@ export interface ResponseData {
       ulb: { id: number };
       primary_acc_code: { id: number };
       revenue_module: { id: number };
+      revenue_accounted_type: {id: number};
       paid_by: string;
       receipt_mode: { id: number };
       receipt_date: string;

@@ -16,6 +16,7 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = (props) => {
   const [printName, setPrintName] = useState("");
   const { user, balances, isThereData } = props;
+
   const [openingBal, setOpeningBal] = useState(
     balances?.opening_balance?.opening_balance
   );
@@ -26,7 +27,7 @@ const Footer: React.FC<FooterProps> = (props) => {
   const tempUser = user?.role.includes("Accounts Department – Accountant")
     ? {
         name: "Sanjiv Kumar",
-        designation: { name: "Accounts Department – Manager" },
+        role:  "Accounts Department – Manager" ,
         print_name: "Sanjiv Kumar",
       }
     : user;
@@ -137,7 +138,7 @@ const Footer: React.FC<FooterProps> = (props) => {
             <Input
               readonly={true}
               label=""
-              value={tempUser?.designation?.name}
+              value={tempUser?.role}
               name="designation"
               placeholder="Enter Designation"
             />

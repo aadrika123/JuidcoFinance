@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 interface PopupProps {
     title?: string | "",
     children: React.ReactNode;
-    zindex: number;
+    zindex?: number;
     width?: number;
 }
 

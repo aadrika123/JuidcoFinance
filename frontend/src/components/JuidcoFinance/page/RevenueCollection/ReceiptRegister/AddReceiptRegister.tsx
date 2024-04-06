@@ -17,6 +17,7 @@ import { ReceiptRegisterDetailsData } from "./receipt_register_types";
 import { receiptRegisterDetailsSchema } from "./receipt_register.validation";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import ErrorConfirmPopup from "@/components/global/molecules/general/ErrorConfirmPopup";
 
 interface UpdatedModeType {
   id: number | string;
@@ -28,6 +29,7 @@ const Hoc = PopupFormikHOC(FormikW);
 export const AddReceiptRegister = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.user?.userDetails);
+  const [errorMsg, setErrorMsg] = useState("");
   /////////////// For Transforming in JSON
 
   const queryClient = new QueryClient();
@@ -39,6 +41,7 @@ export const AddReceiptRegister = () => {
     receipt_no: "",
     ulb_id: "",
     primary_acc_code_id: "",
+    revenue_accounted_type_id: "",
     revenue_module_id: "",
     paid_by: "",
     receipt_mode_id: "",
@@ -97,6 +100,10 @@ export const AddReceiptRegister = () => {
               revenue_module_id: values.revenue_module_id,
               revenue_module_id_name:
                 values.revenue_module_id_name || item.revenue_module_id_name,
+              revenue_accounted_type_id: values.revenue_accounted_type_id,
+              revenue_accounted_type_id_name:
+                values.revenue_accounted_type_id ||
+                item.revenue_accounted_type_id_name,
               paid_by: values.paid_by,
               receipt_mode_id: values.receipt_mode_id,
               receipt_mode_id_name:
@@ -137,11 +144,13 @@ export const AddReceiptRegister = () => {
           data: filterValBefStoring(values),
         },
       });
-      if (!res.data.status) throw new Error("Something Went Wrong!!");
+      if (!res.data.status) throw res.data;
 
       return res.data;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.message.statusCode === 409) {
+        setErrorMsg(error.message.message);
+      }
       throw error;
     }
   };
@@ -190,7 +199,7 @@ export const AddReceiptRegister = () => {
       }));
     });
   };
-
+console.log("first", errorMsg)
   ///////////////// Handling Edit Functionality ///////////////
   const onEditButton = (id: string) => {
     const Id: number = Number(id);
@@ -208,6 +217,7 @@ export const AddReceiptRegister = () => {
       bank_amount: data[Id - 1]?.bank_amount,
       cash_amount: data[Id - 1]?.cash_amount,
       bank_acc_no: data[Id - 1]?.bank_acc_no,
+      revenue_accounted_type_id: data[Id - 1]?.revenue_accounted_type_id,
       deposit_date: data[Id - 1]?.deposit_date,
       realisation_date: data[Id - 1]?.realisation_date,
       wheather_returned: data[Id - 1]?.wheather_returned,
@@ -268,6 +278,13 @@ export const AddReceiptRegister = () => {
 
   return (
     <>
+      {errorMsg !== "" && (
+        <ErrorConfirmPopup
+          message={errorMsg}
+          handleContinueButton={() => setErrorMsg("")}
+        />
+      )}
+
       {isSuccess && <SuccesfullConfirmPopup message="Recorded Successfully" />}
 
       <RandomWorkingPopup show={isLoading} />
@@ -276,6 +293,7 @@ export const AddReceiptRegister = () => {
         validationSchema={receiptRegisterDetailsSchema}
         onSubmit={onSubmit}
         resetInitialValue={resetInitialValue}
+        enableReinitialize={true}
         title="Add Receipt Register"
       />
       <TableWithCount

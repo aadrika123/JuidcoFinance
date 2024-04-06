@@ -48,7 +48,8 @@ type FinanceUrlKeys =
   | "RECEIPT_REGISTER"
   | "REVENUE_MODULE"
   | "RECEIPT_MODE"
-  | "OPENING_BALANCE";
+  | "OPENING_BALANCE"
+  | "REVENUE_ACCOUNTED_TYPE";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -68,6 +69,8 @@ type Urls = {
     getUDHD?: string;
     getDesig?: string;
     approve?: string;
+    getLedgerCodes?: string;
+    getByAccCodeAndUlbId?: string;
   };
 };
 
@@ -83,6 +86,7 @@ export const FINANCE_URL: Urls = {
     create: "/bank-master/create",
     update: "/bank-master/update",
     getById: "/bank-master/get-by-id",
+    getByAccCodeAndUlbId: "/bank-master/get-by-acc-ulb",
   },
 
   VENDOR_MASTER_URL: {
@@ -231,7 +235,11 @@ export const FINANCE_URL: Urls = {
     getMainCodes: "/get-main-account-codes",
     getChildCodes: "/get-child-account-codes",
     getParentCodes: "/get-codes-with-parent-detail",
-    create: "/request-new-acc-code"
+    create: "/request-new-acc-code",
+    getLedgerCodes: "get-ledger-codes"
+  },
+  REVENUE_ACCOUNTED_TYPE:{
+    get: "/revenue-accounted-types/get"
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",

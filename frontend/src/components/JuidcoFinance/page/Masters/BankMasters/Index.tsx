@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { Toaster } from "react-hot-toast";
 
 import { initialBankDetailsValues } from "jflib/src/validations/BankMasterValidation";
-import type {AddBankDetailsData} from "jflib/src/validations/BankMasterValidation";
+import type { AddBankDetailsData } from "jflib/src/validations/BankMasterValidation";
 
 import { FINANCE_URL } from "@/utils/api/urls";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
@@ -20,6 +20,7 @@ import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import ErrorConfirmPopup from "@/components/global/molecules/general/ErrorConfirmPopup";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -32,6 +33,7 @@ export const HeroBankMasters = () => {
   const [isSuccessNotificationOpen, setSuccessNotificationOpen] =
     useState<boolean>(false);
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  const [errorMessage, setErrorMessage] = useState<boolean>(false);
 
   let isDirty = false;
   const onDirty = (arg: boolean): boolean => {
@@ -60,9 +62,7 @@ export const HeroBankMasters = () => {
   const queryClient = useQueryClient();
 
   // Add Bank Details
-  const createBankDetails = async (
-    values: AddBankDetailsData
-  ) => {
+  const createBankDetails = async (values: AddBankDetailsData) => {
     try {
       const res = await axios({
         url: `${FINANCE_URL.BANK_MASTER_URL.create}`,
@@ -72,9 +72,12 @@ export const HeroBankMasters = () => {
         },
       });
       if (res.data.status) return res.data;
-      throw Error("Something went wrong");
-    } catch (e) {
-      console.log(e);
+
+      throw "exit";
+    } catch (error) {
+      if (error === "exit") setErrorMessage(true);
+      console.log(error);
+      throw error;
     }
   };
 
@@ -93,8 +96,8 @@ export const HeroBankMasters = () => {
         setSuccessNotificationOpen(false);
       }, 1000);
     },
-    onError: () => {
-      alert("there was an error");
+    onError: (e: any) => {
+      console.log("first", e);
     },
     onSettled: () => {
       queryClient.invalidateQueries();
@@ -150,6 +153,13 @@ export const HeroBankMasters = () => {
           cancel={() => setDataLossPopupOpen(false)}
           continue={() => closePopups()}
         />
+      )}
+
+      {errorMessage && (
+          <ErrorConfirmPopup
+            message="You Can't Create Duplicate Bank Details!!"
+            handleContinueButton={() => setErrorMessage(false)}
+          />
       )}
 
       {isSuccessNotificationOpen && (
