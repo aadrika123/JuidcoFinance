@@ -1,0 +1,8 @@
+////bank_types: Managed by: Sanjiv Kumar
+model revenue_accounted_types {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  receipt_registers receipt_registers[]
+  created_at        DateTime            @default(now()) @map("created_at")
+  updated_at        DateTime            @updatedAt @map("updated_at")
+}

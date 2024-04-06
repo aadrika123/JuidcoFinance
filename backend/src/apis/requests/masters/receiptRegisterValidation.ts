@@ -8,6 +8,7 @@ export interface ReceiptRegisterRequestData {
   revenue_module_id: number;
   paid_by: string;
   receipt_mode_id: number;
+  revenue_accounted_type_id: number;
   receipt_date: Date;
   cheque_or_draft_no: string;
   bank_amount: number;
@@ -30,11 +31,12 @@ const receiptRegisterSchema = Joi.object({
   revenue_module_id: Joi.number().required(),
   paid_by: Joi.string().required(),
   receipt_mode_id: Joi.number().required(),
+  revenue_accounted_type_id: Joi.number().required(),
   receipt_date: Joi.date().required(),
   cheque_or_draft_no: Joi.string(),
   bank_amount: Joi.number(),
   cash_amount: Joi.number(),
-  bank_acc_no: Joi.string(),
+  bank_acc_no: Joi.string().required(),
   deposit_date: Joi.date(),
   realisation_date: Joi.date(),
   wheather_returned: Joi.boolean(),
@@ -59,6 +61,7 @@ export const requestData = (req: Request): ReceiptRegisterRequestData => {
     revenue_module_id: req.body.data.revenue_module_id,
     paid_by: req.body.data.paid_by,
     receipt_mode_id: req.body.data.receipt_mode_id,
+    revenue_accounted_type_id: req.body.data.revenue_accounted_type_id,
     receipt_date: req.body.data.receipt_date,
     cheque_or_draft_no: req.body.data.cheque_or_draft_no,
     bank_amount: req.body.data.bank_amount,
@@ -86,6 +89,7 @@ export const multiRequestData = (
       revenue_module_id: item.revenue_module_id,
       paid_by: item.paid_by,
       receipt_mode_id: item.receipt_mode_id,
+      revenue_accounted_type_id:item.revenue_accounted_type_id,
       receipt_date: item.receipt_date,
       cheque_or_draft_no: item.cheque_or_draft_no,
       bank_amount: item.bank_amount,

@@ -32,6 +32,8 @@ model account_codes {
 
   receipt_registers receipt_registers[]
 
+  bank_masters        bank_masters[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }

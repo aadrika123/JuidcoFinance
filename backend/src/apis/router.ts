@@ -48,6 +48,7 @@ import ReceiptModesRoute from "./route/masters/ReceiptModesRoute";
 import ReceiptRegisterRoute from "./route/masters/ReceiptRegisterRoute";
 import BankTypesRoute from "./route/masters/BankTypesRoute";
 import AuditTrailRoute from "./route/auditTrail/auditTrailRoute";
+import RevenueAccountedTypesRoute from "./route/masters/RevenueAccountedTypesRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -211,6 +212,8 @@ class FinanceRoute {
     (new BankTypesRoute().configure(app, "45")); 
 
     (new AuditTrailRoute().configure(app, "48"));
+
+    (new RevenueAccountedTypesRoute().configure(app, "49"));
   }
 }
 

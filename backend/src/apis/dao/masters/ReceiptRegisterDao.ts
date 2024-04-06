@@ -26,6 +26,21 @@ class ReceiptRegisterDao {
 
   // store
   store = async (req: Request) => {
+    const r_nos = req.body.data.map((item: any) => item.receipt_no);
+    const data = await prisma.receipt_registers.findFirst({
+      where: {
+        receipt_no: {
+          in: r_nos,
+        },
+      },
+      select: {
+        id: true,
+        receipt_no: true,
+      },
+    });
+
+    if (data) throw { message: {statusCode: 409, message:`Receipt No: ${data.receipt_no} already exist.`}};
+
     return await prisma.receipt_registers.createMany({
       data: multiRequestData(req),
     });
@@ -62,7 +77,7 @@ class ReceiptRegisterDao {
     const searchCondition = `'%${search}%'`;
 
     let a = "";
-    if(search){
+    if (search) {
       a += ` AND(
         mc.ulbs ILIKE ${searchCondition} OR
         ac.code ILIKE ${searchCondition} OR
@@ -71,19 +86,17 @@ class ReceiptRegisterDao {
       )`;
     }
 
-    if(ulbId){
-      a += ` AND mc.id = ${ulbId}`
+    if (ulbId) {
+      a += ` AND mc.id = ${ulbId}`;
     }
 
-    if(moduleId){
-      a += ` AND rmodule.id = ${moduleId}`
+    if (moduleId) {
+      a += ` AND rmodule.id = ${moduleId}`;
     }
 
-    if(date){
+    if (date) {
       a += ` AND DATE(rr.receipt_date) = '${date}'`;
     }
-
-    
 
     const opDate: string = date ? `AND DATE (drb.created_at) = '${date}'` : "";
 
@@ -103,6 +116,8 @@ class ReceiptRegisterDao {
     rr.remarks,
     rr.created_at,
     rr.updated_at,
+    racctype.id as revenue_accounted_type_id,
+    racctype.name as revenue_accounted_type_name,
     mc.id as ulb_id,
     mc.ulbs,
     ac.id as primary_acc_code_id,
@@ -122,6 +137,8 @@ class ReceiptRegisterDao {
     rr.cash_amount + rr.bank_amount as total_amount   
     FROM
     receipt_registers as rr
+    LEFT JOIN 
+    revenue_accounted_types as racctype ON rr.revenue_accounted_type_id = racctype.id
     LEFT JOIN
     municipality_codes as mc ON rr.ulb_id = mc.id
     LEFT JOIN
@@ -148,6 +165,8 @@ class ReceiptRegisterDao {
   SUM (rr.cash_amount + rr.bank_amount) as total_amount
   FROM
   receipt_registers as rr
+    LEFT JOIN 
+    revenue_accounted_types as racctype ON rr.revenue_accounted_type_id = racctype.id
     LEFT JOIN
     municipality_codes as mc ON rr.ulb_id = mc.id
     LEFT JOIN
@@ -257,7 +276,13 @@ class ReceiptRegisterDao {
         id: data.ulb_id,
         name: data.ulbs,
       };
+      items.revenue_accounted_type = {
+        id: data.revenue_accounted_type_id,
+        name: data.revenue_accounted_type_name,
+      };
 
+      delete items.revenue_accounted_type_id;
+      delete items.revenue_accounted_type_name;
       delete items.ulb_id;
       delete items.ulbs;
       delete items.primary_acc_code_id;
@@ -319,6 +344,12 @@ class ReceiptRegisterDao {
             name: true,
           },
         },
+        revenue_accounted_type: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         receipt_date: true,
         cheque_or_draft_no: true,
         bank_amount: true,
@@ -338,16 +369,16 @@ class ReceiptRegisterDao {
             //     name: true,
             //   },
             // },
-            wf_roleusermaps:{
-              select:{
-                wf_role:{
-                  select:{
+            wf_roleusermaps: {
+              select: {
+                wf_role: {
+                  select: {
                     id: true,
                     role_name: true,
-                  }
-                }
-              }
-            }
+                  },
+                },
+              },
+            },
           },
         },
         isChecked: true,
@@ -362,16 +393,16 @@ class ReceiptRegisterDao {
             //     name: true,
             //   },
             // },
-            wf_roleusermaps:{
-              select:{
-                wf_role:{
-                  select:{
+            wf_roleusermaps: {
+              select: {
+                wf_role: {
+                  select: {
                     id: true,
                     role_name: true,
-                  }
-                }
-              }
-            }
+                  },
+                },
+              },
+            },
           },
         },
         checked_by_print_name: true,
@@ -414,22 +445,22 @@ class ReceiptRegisterDao {
   createOpeningBal = async (req: Request) => {
     return await prisma.daily_receipt_balances.create({
       data: {
-        opening_balance: req.body.data.opening_balance
-      }
-    })
-  }
+        opening_balance: req.body.data.opening_balance,
+      },
+    });
+  };
 
   /////////// Update Opening Balance
   updateOpeningBal = async (req: Request) => {
     return await prisma.daily_receipt_balances.update({
       where: {
-        id: req.body.data.id
+        id: req.body.data.id,
       },
       data: {
-        opening_balance: req.body.data.opening_balance
-      }
-    })
-  }
+        opening_balance: req.body.data.opening_balance,
+      },
+    });
+  };
 }
 
 export default ReceiptRegisterDao;

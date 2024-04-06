@@ -149,13 +149,24 @@ class AccountingCodeDao {
    * | Created for- Requesting New Accounting Code
    */
 
-  requestNewCode = async (reqDetails: any) =>{
+  requestNewCode = async (reqDetails: any) => {
     const data = await prisma.request_account_codes.create({
-      data: reqDetails
-    })
+      data: reqDetails,
+    });
 
     return generateRes(data);
-  }
+  };
+
+  getLedgerCodes = async () => {
+    const data = await prisma.$queryRaw<
+      account_codes[]
+    >`SELECT id, code, description FROM account_codes where code_type_id = 3`;
+    if (!data) {
+      return generateRes(null);
+    }
+
+    return generateRes(data);
+  };
 }
 
 export default AccountingCodeDao;

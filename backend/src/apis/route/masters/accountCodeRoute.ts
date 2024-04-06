@@ -74,6 +74,15 @@ class AccountCodeRoute {
       .post((req: Request, res: Response) =>
         this.accountingCodeController.requestingNewCode(req, res, apiId + "08")
       );
+      app
+      .route(`${baseUrl}/get-ledger-codes`)
+      .get((req: Request, res: Response) =>
+        this.accountingCodeController.getLedgerCodes(
+          req,
+          res,
+          apiId + "09"
+        )
+      );
   }
 }
 
