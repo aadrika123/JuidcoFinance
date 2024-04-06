@@ -69,7 +69,7 @@ const TableWithScrollPagination = <T,>({
     }
 
     // data = data.data.sort(sortByCreatedAtDesc);
-    if (state.data.length === 0) {
+    if (page === 1) {
       setState((prev) => ({
         ...prev,
         count: data.count,
@@ -192,7 +192,7 @@ const TableWithScrollPagination = <T,>({
             scrollable={scrollable}
           />
         )}
-          {tempFetch && data.length != 0  &&<Loader />}
+          {tempFetch && data.length != 0  && <Loader className="h-[20px]" />}
         {footer}
         {/* <aside className="flex items-center justify-end py-5 gap-5">
           <Button onClick={rest.handleApprove} buttontype="button" variant="primary">
