@@ -1,6 +1,6 @@
 /// BankMaster (has history)
 model bank_masters {
-  id                  Int      @id @default(autoincrement())
+  id                  BigInt      @id @default(autoincrement())
 
   bank_id             Int
   bank                banks   @relation(fields: [bank_id], references: [id])
@@ -27,5 +27,5 @@ model bank_masters {
   created_at          DateTime @default(now()) @map("created_at")
   updated_at          DateTime @updatedAt @map("updated_at")
 
-  @@unique([primary_acc_code, ulb_id])
+  @@unique([primary_acc_code_id, ulb_id])
 }

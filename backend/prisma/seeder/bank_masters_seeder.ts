@@ -1,15 +1,15 @@
 //   ///////////////// Bank Master ////////////////////////
 //   function createRandomUser(): bank_masters {
 //     return {
-//       id: faker.datatype.number(),
+//       id: faker.number.int(),
 //       bank_name: faker.company.name(),
 //       ifsc_code: faker.finance.routingNumber(),
 //       branch: faker.company.companySuffix(),
-//       micr_code: faker.finance.account(),
-//       branch_address: faker.address.streetAddress(),
-//       branch_city: faker.address.city(),
-//       branch_state: faker.address.state(),
-//       branch_district: faker.address.county(),
+//       micr_code: faker.finance.accountNumber(),
+//       branch_address: faker.location.streetAddress(),
+//       branch_city: faker.location.city(),
+//       branch_state: faker.location.state(),
+//       branch_district: faker.location.county(),
 //       email: faker.internet.email(),
 //       contact_no: faker.phone.number(),
 //       contact_person_name: faker.internet.userName(),

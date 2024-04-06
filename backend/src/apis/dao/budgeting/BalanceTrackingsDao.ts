@@ -119,14 +119,16 @@ class BalanceTrackingsDao {
 
   getLatestBalances = async (req: Request) => {
     const search: string = String(req.query.search);
+    const ulb_id: number = Number(req.query.ulb);
+    const finYear: number = 2023; //Number(req.query.fin_year);
 
     if (search !== "undefined" && search !== "") {
       const searchCriteria = `%${search}%`;
-      const data = await prisma.$queryRaw`select a.id, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance as balance from account_codes a left join (select id, primary_acc_code_id, total_balance from balance_trackings where id in (select max(id) from balance_trackings group by primary_acc_code_id)) b on a.id = b.primary_acc_code_id where a.description like ${searchCriteria}`;
+      const data = await prisma.$queryRaw`select a.id, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance as balance from account_codes a left join (select id, primary_acc_code_id, total_balance from balance_trackings where id in (select max(id) from balance_trackings where ulb_id=${ulb_id} and extract (year from CAST(created_at AS DATE)) = ${finYear} group by primary_acc_code_id)) b on a.id = b.primary_acc_code_id where a.description like ${searchCriteria}`;
       return generateRes(data);
 
     } else {
-      const data = await prisma.$queryRaw`select a.id, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance as balance from account_codes a left join (select id, primary_acc_code_id, total_balance from balance_trackings where id in (select max(id) from balance_trackings group by primary_acc_code_id)) b on a.id = b.primary_acc_code_id`;
+      const data = await prisma.$queryRaw`select a.id, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance as balance from account_codes a left join (select id, primary_acc_code_id, total_balance from balance_trackings where id in (select max(id) from balance_trackings where ulb_id=${ulb_id} and extract (year from CAST(created_at AS DATE)) = ${finYear} group by primary_acc_code_id)) b on a.id = b.primary_acc_code_id`;
       return generateRes(data);
     }
   }

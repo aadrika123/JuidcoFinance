@@ -76,14 +76,18 @@ model audit_trails {
 model balance_trackings{
 	id                  Int                 @id @default(autoincrement())
 	
-  primary_acc_code_id Int
-  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+	primary_acc_code_id Int
+	primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
 
 
 	debit_balance		Float
 	credit_balance		Float
 	total_balance		Float
 	
+
+	ulb_id              Int
+  	ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
+
 	grant_entries grant_entries[]
 
 
@@ -446,6 +450,8 @@ model account_codes {
 
   bank_masters        bank_masters[]
 
+  ulbs                municipality_codes[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }
@@ -478,7 +484,7 @@ model adminis_wards {
 
 /// BankMaster (has history)
 model bank_masters {
-  id                  Int      @id @default(autoincrement())
+  id                  BigInt      @id @default(autoincrement())
 
   bank_id             Int
   bank                banks   @relation(fields: [bank_id], references: [id])
@@ -493,7 +499,7 @@ model bank_masters {
   ifsc_code           String
   primary_acc_code_id  Int
   primary_acc_code    account_codes   @relation(fields: [primary_acc_code_id], references: [id])
-  bank_acc_no         String
+  bank_acc_no         String @unique
   branch              String
   branch_address      String
   branch_city         String
@@ -504,6 +510,8 @@ model bank_masters {
 
   created_at          DateTime @default(now()) @map("created_at")
   updated_at          DateTime @updatedAt @map("updated_at")
+
+  @@unique([primary_acc_code_id, ulb_id])
 }
 
 model bank_masters_history {
@@ -518,7 +526,7 @@ ulb_id              Int
 micr_code           String?
 ifsc_code           String
 primary_acc_code_id  Int
-bank_acc_no         String
+bank_acc_no         String @unique
 branch              String
 branch_address      String
 branch_city         String
@@ -530,8 +538,10 @@ contact_no          String?
 created_at						DateTime?
 updated_at						DateTime?
 
+@@unique([primary_acc_code_id, ulb_id])
 
-record_id                  Int      @id @default(autoincrement())
+
+record_id                  BigInt      @id @default(autoincrement())
 record_created_at          DateTime @default(now()) @map("record_created_at")
 }
 
@@ -612,7 +622,7 @@ model bill_types {
 }
 
 model cheque_book_entries {
-  id   Int      @id @default(autoincrement())
+  id   BigInt      @id @default(autoincrement())
   date DateTime
 
   bank_id Int
@@ -778,10 +788,15 @@ model municipality_codes {
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
   bank_masters        bank_masters[]
+  balance_trackings   balance_trackings[]
 
   request_account_codes request_account_codes[]
 
   receipt_registers receipt_registers[]
+
+
+  account_codes     account_codes[]
+
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")

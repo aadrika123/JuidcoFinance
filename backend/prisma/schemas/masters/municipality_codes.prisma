@@ -15,10 +15,15 @@ model municipality_codes {
   advance_managements advance_managements[]
   loan_managements    loan_managements[]
   bank_masters        bank_masters[]
+  balance_trackings   balance_trackings[]
 
   request_account_codes request_account_codes[]
 
   receipt_registers receipt_registers[]
+
+
+  account_codes     account_codes[]
+
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")

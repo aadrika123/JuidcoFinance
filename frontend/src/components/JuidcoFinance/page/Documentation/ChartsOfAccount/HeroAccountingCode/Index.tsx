@@ -9,6 +9,8 @@ import { escapeRegExp } from "jflib";
 import AccountingTable from "../molecules/AccountingTable";
 import Loader from "@/components/global/atoms/Loader";
 import { AccountingTableData } from "../types";
+import Select from "@/components/global/atoms/nonFormik/Select";
+import { FINANCE_URL } from "@/utils/api/urls";
 
 type PrimaryAccountingProps = {
   data: AccountingTableData[];
@@ -90,7 +92,21 @@ const PrimaryAccountingCode: React.FC<PrimaryAccountingProps> = (props) => {
 
       <section className="border bg-white shadow-2xl p-6 px-10">
         <div className="flex items-center justify-between">
-          <SubHeading>Primary Accounting Codes</SubHeading>
+        <div className="text-primary_green rounded-md px-2 pb-1 bg-primary_green text-sub_head font-semibold flex items-center">
+            <Select
+              label=""
+              name="ulb_id"
+              placeholder="ULB Name"
+              className="w-48 text-primary_green bg-white outline-none"
+              api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+              onChange={() => {}}
+            />
+
+           
+            
+          </div>
+
+          
           <DebouncedSearch onChange={setSearchText} debounceDuration={500} onSearching={setSearching} />
         </div>
 

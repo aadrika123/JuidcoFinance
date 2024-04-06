@@ -1,9 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, account_codes } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 
 
 const prisma = new PrismaClient();
 const municipality_codes_seeder = async () => {
+    console.log("Seeding municipality codes ...");
+
+    const acc_codes = await prisma.$queryRaw<account_codes[]>`SELECT id FROM account_codes`;
+    if (!acc_codes){
+      return;
+    }
 
     const file_path = "./prisma/data/municipality-codes.xlsx";
 
@@ -20,10 +26,18 @@ const municipality_codes_seeder = async () => {
                 district_code: row[4].toString(),
                 category: row[5].toString(),
                 code: row[6].toString(),
+                account_codes:{
+                  connect: acc_codes
+                }
             },
           });
+
         }
       });
+
+
+
+    
 
 };
 export default municipality_codes_seeder;

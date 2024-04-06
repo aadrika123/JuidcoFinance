@@ -6,6 +6,7 @@ export interface BalanceTrackingsRequestData {
     debit_balance: number,
     credit_balance: number,
     total_balance: number,
+    ulb_id: number,
 }
 
 const balanceTrackingsSchema = Joi.object({
@@ -26,7 +27,8 @@ export const requestData = (req: Request): BalanceTrackingsRequestData => {
         primary_acc_code_id: req.body.data.primary_acc_code_id,
         total_balance: req.body.data.balance_amount,
         debit_balance: req.body.data.debit_balance,
-        credit_balance: req.body.data.credit_balance
+        credit_balance: req.body.data.credit_balance,
+        ulb_id: req.body.data.ulb_id
     };
 };
 export const multiRequestData = (req: Request): BalanceTrackingsRequestData[] => {
@@ -36,7 +38,8 @@ export const multiRequestData = (req: Request): BalanceTrackingsRequestData[] =>
             primary_acc_code_id: item.primary_acc_code_id,
             total_balance: item.balance_amount,
             debit_balance: item.debit_balance,
-            credit_balance: item.credit_balance
+            credit_balance: item.credit_balance,
+            ulb_id: req.body.data.ulb_id
         });
     }
     return data;

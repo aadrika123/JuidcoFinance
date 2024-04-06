@@ -34,6 +34,8 @@ model account_codes {
 
   bank_masters        bank_masters[]
 
+  ulbs                municipality_codes[]
+
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
 }

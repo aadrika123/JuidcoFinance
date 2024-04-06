@@ -54,6 +54,7 @@ import daily_receipt_balance_seeder from "./seeder/revenueCollection/daily_recei
 import accounting_code_types_seeder from "./seeder/masters/accounting_code_types_seeder";
 import foreign_wrapper from "./seeder/foreign_wrappter";
 import revenue_accounted_types_seeder from "./seeder/masters/revenue_accounted_types_seeder";
+import { chequebook_entries_seeder } from "./seeder/chequebook_entries_seeder";
 
 const prisma = new PrismaClient();
 
@@ -150,53 +151,8 @@ async function main() {
   
   
     ///////////////// cheque_book_entry ////////////////////////
-    function createRandomChequeBook(): cheque_book_entries {
-      return {
-        id: faker.datatype.number(),
-        date: faker.date.recent(),
-        bank_id: 1,
-        bank_account_no: faker.finance.account(),
-        cheque_no_from: faker.finance.creditCardNumber(),
-        user_id: faker.datatype.number(),
-        bank_branch: faker.address.city(),
-        page_count: faker.datatype.number(), // assuming page_count is a string
-        cheque_no_to: faker.finance.creditCardNumber(),
-        issuer_name: faker.person.fullName(),
-        cheque_book_return: faker.datatype.boolean(),
-        cheque_book_return_date: faker.date.future(),
-        remarks: faker.lorem.sentence(),
-        created_at: faker.date.past(),
-        updated_at: faker.date.recent(),
-      };
-    }
-  
-    const chequeBooks = faker.helpers.multiple(createRandomChequeBook, {
-      count: 20,
-    });
-  
-    for (const item of chequeBooks) {
-      await prisma.cheque_book_entries.create({
-        data: {
-          id: item.id,
-          date: item.date,
-          
-          bank_id: item.bank_id,
-  
-          bank_account_no: item.bank_account_no,
-          cheque_no_from: item.cheque_no_from,
-          user_id: 1, //item.employee_id,
-          bank_branch: item.bank_branch,
-          page_count: item.page_count,
-          cheque_no_to: item.cheque_no_to,
-          issuer_name: item.issuer_name,
-          cheque_book_return: item.cheque_book_return,
-          cheque_book_return_date: item.cheque_book_return_date,
-          remarks: item.remarks,
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-        },
-      });
-    }
+
+    await chequebook_entries_seeder();
   
   }, 2000);
 
@@ -205,35 +161,32 @@ async function main() {
 
   setTimeout(async () => {
 
-    ///////////////// Direct Payment Entry ////////////////////////
-    function createRandomDirPaymentEntry(): dir_payment_entries {
-      return {
-        id: faker.datatype.number(),
-        payment_no: `pn${faker.datatype.number(6)}`,
-        payment_date: faker.date.recent(),
-        payment_type_id: 1,
-        payee_name_id: 1,
-        narration: faker.lorem.sentence(),
-        grant_id: 1,
-        user_common_budget: faker.datatype.boolean(),
-        adminis_ward_id: 2,
-        address: faker.address.streetAddress(),
-        department_id: 1,
-        payment_mode: faker.internet.email(),
-        subledger_id: 1,
-        amount: faker.datatype.number(),
-        created_at: faker.date.past(),
-        updated_at: faker.date.recent(),
-      };
+
+    const recordCount = 20;
+    
+    for(let i=0;i<recordCount;i++){
+      await prisma.dir_payment_entries.createMany({
+        data: {
+          payment_no: `pn${faker.number.int(6)}`,
+          payment_date: faker.date.recent(),
+          payment_type_id: 1,
+          payee_name_id: 1,
+          narration: faker.lorem.sentence(),
+          grant_id: 1,
+          user_common_budget: faker.datatype.boolean(),
+          adminis_ward_id: 2,
+          address: faker.location.streetAddress(),
+          department_id: 1,
+          payment_mode: faker.internet.email(),
+          subledger_id: 1,
+          amount: faker.number.float(),
+          created_at: faker.date.past(),
+          updated_at: faker.date.recent(),
+  
+        }
+      });
+  
     }
-
-    const paymentEntries = faker.helpers.multiple(createRandomDirPaymentEntry, {
-      count: 20,
-    });
-
-    await prisma.dir_payment_entries.createMany({
-      data: paymentEntries,
-    });
 
 
     await vendors_seeder();

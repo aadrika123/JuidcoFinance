@@ -1,5 +1,5 @@
 model cheque_book_entries {
-  id   Int      @id @default(autoincrement())
+  id   BigInt      @id @default(autoincrement())
   date DateTime
 
   bank_id Int

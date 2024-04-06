@@ -2,14 +2,18 @@
 model balance_trackings{
 	id                  Int                 @id @default(autoincrement())
 	
-  primary_acc_code_id Int
-  primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
+	primary_acc_code_id Int
+	primary_acc_code            account_codes       @relation(fields: [primary_acc_code_id], references: [id])
 
 
 	debit_balance		Float
 	credit_balance		Float
 	total_balance		Float
 	
+
+	ulb_id              Int
+  	ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
+
 	grant_entries grant_entries[]
 
 

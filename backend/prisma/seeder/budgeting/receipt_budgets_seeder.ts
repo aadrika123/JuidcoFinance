@@ -7,7 +7,7 @@ const receipt_budgets_seeder = async () => {
         const record = {
             fin_year_id: 1,
             primary_acc_code_id: 1,
-            amount: faker.datatype.number(),
+            amount: faker.number.int(),
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),
         };
