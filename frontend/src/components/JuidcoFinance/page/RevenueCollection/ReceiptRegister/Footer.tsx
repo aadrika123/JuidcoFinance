@@ -20,17 +20,9 @@ const Footer: React.FC<FooterProps> = (props) => {
   const [openingBal, setOpeningBal] = useState(
     balances?.opening_balance?.opening_balance
   );
-  const isEditable = user?.role.includes("Accounts Department – Manager")
-    ? false
-    : true;
 
-  const tempUser = user?.role.includes("Accounts Department – Accountant")
-    ? {
-        name: "Sanjiv Kumar",
-        role:  "Accounts Department – Manager" ,
-        print_name: "Sanjiv Kumar",
-      }
-    : user;
+  const tempUser =
+    user?.role.includes("Accounts Department – Manager") && user;
 
   const footerData = [
     {
@@ -103,28 +95,7 @@ const Footer: React.FC<FooterProps> = (props) => {
       <Toaster />
       <TotalCountTable footerData={footerData} />
       <div className="grid grid-cols-2 gap-4 mt-4">
-        {/* <div className="flex flex-col">
-            <h2 className="mt-6 text-secondary">Entered By</h2>
-            <Input
-              readonly={true}
-              label=""
-              name="entered_by"
-              placeholder="Enter Name"
-            />
-            <Input
-              readonly={true}
-              label=""
-              name="designation"
-              placeholder="Enter Designation"
-            />
-            <Input
-              readonly={true}
-              label=""
-              name="entered_by_print_name"
-              placeholder="Enter Print Name"
-            />
-          </div> */}
-        {isThereData && (
+        {isThereData && tempUser && (
           <div className="flex flex-col">
             <h2 className="mt-6 text-secondary">Checked By</h2>
             <Input
@@ -142,7 +113,7 @@ const Footer: React.FC<FooterProps> = (props) => {
               placeholder="Enter Designation"
             />
             <Input
-              readonly={isEditable}
+              readonly={tempUser ? false : true}
               value={tempUser?.print_name || printName}
               label=""
               onChange={handleChange}
@@ -153,7 +124,7 @@ const Footer: React.FC<FooterProps> = (props) => {
         )}
       </div>
       <aside className="flex items-center justify-end py-5 gap-5">
-        {!isEditable ? (
+        {tempUser ? (
           <Button
             onClick={() => props.handleApprove(printName)}
             disabled={!printName || printName === ""}

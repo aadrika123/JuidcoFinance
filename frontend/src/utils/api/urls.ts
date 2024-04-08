@@ -49,7 +49,8 @@ type FinanceUrlKeys =
   | "REVENUE_MODULE"
   | "RECEIPT_MODE"
   | "OPENING_BALANCE"
-  | "REVENUE_ACCOUNTED_TYPE";
+  | "REVENUE_ACCOUNTED_TYPE"
+  | "COLLECTION_REGISTER";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -75,10 +76,10 @@ type Urls = {
 };
 
 export const FINANCE_URL: Urls = {
-  AUTH_URL:{
+  AUTH_URL: {
     login: "/auth/login",
     getUDHD: "/udhd/get-all",
-    getDesig: "/udhd/designations/get-all"
+    getDesig: "/udhd/designations/get-all",
   },
 
   BANK_MASTER_URL: {
@@ -136,7 +137,7 @@ export const FINANCE_URL: Urls = {
 
   GRANT_URL: {
     get: "/grant/get",
-    getNatures: "/grant-natures/get"
+    getNatures: "/grant-natures/get",
   },
 
   BILL_TYPE: {
@@ -236,10 +237,10 @@ export const FINANCE_URL: Urls = {
     getChildCodes: "/get-child-account-codes",
     getParentCodes: "/get-codes-with-parent-detail",
     create: "/request-new-acc-code",
-    getLedgerCodes: "get-ledger-codes"
+    getLedgerCodes: "get-ledger-codes",
   },
-  REVENUE_ACCOUNTED_TYPE:{
-    get: "/revenue-accounted-types/get"
+  REVENUE_ACCOUNTED_TYPE: {
+    get: "/revenue-accounted-types/get",
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",
@@ -253,17 +254,17 @@ export const FINANCE_URL: Urls = {
   DR_CR_URL: {
     get: "/drcr/get",
   },
-  EXPENDITURE_NATURE_URL:{
-    get: "/expenditure-natures/get"
+  EXPENDITURE_NATURE_URL: {
+    get: "/expenditure-natures/get",
   },
-  BANK_URL:{
-    get: "/banks/get"
+  BANK_URL: {
+    get: "/banks/get",
   },
   MODULE_URL: {
-    get: "/modules/get"
+    get: "/modules/get",
   },
   BALANCE_TRACKING_URL: {
-    get: "/balance-trackings/get-balance"
+    get: "/balance-trackings/get-balance",
   },
   LOAN_MANAGEMENT_URL: {
     create: "/loan-management/create",
@@ -283,6 +284,11 @@ export const FINANCE_URL: Urls = {
     update: "/receipt-register/update",
     getById: "/receipt-register/get-by-id",
     approve: "/receipt-register/approve",
+  },
+  COLLECTION_REGISTER: {
+    get: "/collection-register/get-all",
+    approve: "/collection-register/approve",
+    getById: "/collection-register/get-by-id"
   },
   REVENUE_MODULE: {
     get: "/revenue-modules/get-all",

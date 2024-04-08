@@ -10,7 +10,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "@/components/global/atoms/nonFormik/Select";
-import Table, {ColumnProps} from "@/components/global/molecules/Table";
+import Table, { ColumnProps } from "@/components/global/molecules/Table";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import Loader from "@/components/global/atoms/Loader";
 
@@ -22,7 +22,7 @@ interface TableWithScrollPaginProp {
   value?: () => void;
   center?: boolean;
   scrollable?: boolean;
-  handleGet?:(data: any)=> void;
+  handleGet?: (data: any) => void;
   handleApprove?: () => void;
 }
 
@@ -55,18 +55,18 @@ const CollectionsTable = <T,>({
     moduleId: "",
     date: new Date(),
   });
-  const { page, count, searchText, data, ulbId, date, moduleId} = state;
+  const { page, count, searchText, data, ulbId, date, moduleId } = state;
   const [tempFetch, setTempFetch] = useState(false);
   const [filtered, setFiltered] = useState([]);
 
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&module=${moduleId}&date=${date.toISOString().split('T')[0]}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&module=${moduleId}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
-    if(!res.data.status)  throw new Error("Something Went Wrong!!");
+    // if (!res.data.status) throw new Error("Something Went Wrong!!");
 
     let data = res.data?.data;
     if (data == null) {
@@ -74,14 +74,27 @@ const CollectionsTable = <T,>({
     }
 
     // data = data.data.sort(sortByCreatedAtDesc);
-    setState((prev) => ({
-      ...prev,
-      count: data.count,
-      data: [...prev.data, ...data.data],
-    }));
-      const filteredData = data.data.map((item: any) => ({id: item.id}))
-      setFiltered(filteredData)
-      rest.handleGet && rest.handleGet({balance: data?.others, data :[...filtered, ...filteredData]})
+    if (page === 1) {
+      setState((prev) => ({
+        ...prev,
+        count: data.count,
+        data: data.data,
+      }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        count: data.count,
+        data: [...prev.data, ...data.data],
+      }));
+    }
+    
+    const filteredData = data.data.map((item: any) => ({ id: item.id }));
+    setFiltered(filteredData);
+    rest.handleGet &&
+      rest.handleGet({
+        balance: data?.others,
+        data: [...filtered, ...filteredData],
+      });
     setTempFetch(false);
     setIsSearching(false);
     return data.data;
@@ -91,7 +104,7 @@ const CollectionsTable = <T,>({
     isError: fetchingError,
     isLoading: isFetching,
     refetch: refetchData,
-  } = useQuery([], fetchData);
+  } = useQuery([page, searchText, ulbId, date, moduleId], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
@@ -120,7 +133,7 @@ const CollectionsTable = <T,>({
       }
     }
   };
-  
+
   ///////////// Listening Scroll /////////////////
   useEffect(() => {
     const element = document.getElementById("table-with-pegination");
@@ -156,7 +169,7 @@ const CollectionsTable = <T,>({
               label=""
               name="ulb_id"
               placeholder="ULB Name"
-              className="w-48 text-primary_green bg-white outline-none"
+              className="w-40 text-primary_green bg-white outline-none"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
             />
@@ -165,14 +178,14 @@ const CollectionsTable = <T,>({
               label=""
               name="module_id"
               placeholder="Module Name"
-              className="w-72 text-primary_green bg-white outline-none mx-2"
+              className="w-48 text-primary_green bg-white outline-none mx-2"
               api={`${FINANCE_URL.REVENUE_MODULE.get}`}
               onChange={handleModule}
             />
 
             <label
               htmlFor="date-pick"
-              className="border border-zinc-400 bg-white rounded-md h-[38px] px-2 flex justify-center items-center ml-2 mt-1"
+              className="border border-zinc-400 bg-white rounded-md h-[38px] px-2 flex justify-center items-center mt-1"
             >
               {date ? date.toDateString() : "Date"}
             </label>
@@ -187,7 +200,7 @@ const CollectionsTable = <T,>({
           <DebouncedSearch onChange={onSearchTextChange} />
         </div>
 
-        {!tempFetch && (isFetching || isSearching) ? (
+        {tempFetch && (isFetching || isSearching || data.length === 0) ? (
           <LoaderSkeleton />
         ) : (
           <Table
@@ -199,13 +212,8 @@ const CollectionsTable = <T,>({
           />
         )}
 
-        {tempFetch && <Loader />}
+        {tempFetch && data.length != 0 && <Loader className="h-[20px]" />}
         {footer}
-        {/* <aside className="flex items-center justify-end py-5 gap-5">
-          <Button onClick={rest.handleApprove} buttontype="button" variant="primary">
-            Approved
-          </Button>
-        </aside> */}
       </section>
     </>
   );
