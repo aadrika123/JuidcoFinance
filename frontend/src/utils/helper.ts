@@ -62,8 +62,8 @@ export const filterValBefStoring = (values: any) => {
 
   // format currency: Bijoy Paitandi
   export const fc = (n: number) => {
-
-    return ""+n;
+    // if(n == undefined || n == null)
+    //   return  "";
     return n.toLocaleString("en-IN", {
       maximumFractionDigits: 2,
       style: 'currency',

@@ -9,6 +9,8 @@ import { AccountingTableData } from "../types";
 
 interface ScheduleDetailsComponentProps {
   scheduleId: number;
+  ulbId: number;
+  year: number;
   onClose: () => void;
 }
 
@@ -29,6 +31,8 @@ interface ScheduleReport {
 
 const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
   scheduleId,
+  ulbId, 
+  year,
   onClose,
 }: ScheduleDetailsComponentProps) => {
   const componentRef = useRef(null);
@@ -38,9 +42,11 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
 
   const fetchData = async (): Promise<ScheduleReport> => {
     const res = await axios({
-      url: `/balance-trackings/get-schedule-report/${scheduleId}`,
+      url: `/balance-trackings/get-schedule-report/${scheduleId}?year=${year}&ulb=${ulbId}`,
       method: "GET",
     });
+
+    console.log(res.data?.data);
 
     if (res.data.status) {
       return res.data?.data;
@@ -52,7 +58,9 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
     data: data,
     isError: dataError,
     isLoading: isLoading,
-  } = useQuery(["schedule-report", scheduleId], fetchData);
+  } = useQuery(["schedule-report", scheduleId], fetchData, {
+    cacheTime: 0
+  });
 
   if (dataError) {
     throw new Error("Fatal Error!");
@@ -109,7 +117,8 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
                       {fc(d.balance)}
                     </td>
                     <td className="border border-slate-300 px-4 text-right">
-                      {fc(data.prev_year.general_ledgers[i].balance)}
+                      {fc(data?.prev_year?.general_ledgers[i]?.balance)}
+                      {/* {typeof data.prev_year.general_ledgers[i]} */}
                     </td>
                   </tr>
                 ))}

@@ -17,15 +17,23 @@ const balance_trackings_seeder = async () => {
     }
 
 
-    const finYears = [2020, 2021, 2022, 2023];
+    const finYears = [2020, 2021, 2022, 2023, 2024];
+
+    
+    const dummyBalances = [0, 100000.50, -10000.34];
 
     finYears.forEach(async (year) => {
         for(let u=0;u<ulbs.length;u++){
+
+            const records: any = [];
+
             for (let i = 0; i < acc_codes.length; i++) {
-                const date1 = faker.date.between({ from: `${year}-04-01T00:00:00.000Z`, to: `${year+1}-03-30T00:00:00.000Z` });
+                const date1 = faker.date.between({ from: `${year}-04-05T00:00:00.000Z`, to: `${year+1}-03-20T00:00:00.000Z` });
                 const balance = i%10 == 0 ? 0 : faker.number.float({ min: -100000000, max: 100000000 });
-        
-                const record1 = {
+                // const balance = dummyBalances[i%dummyBalances.length];
+                // const balance = 0;
+                
+                const record = {
                     primary_acc_code_id: acc_codes[i].id,
                     total_balance: balance,
                     debit_balance: faker.number.int(),
@@ -34,11 +42,17 @@ const balance_trackings_seeder = async () => {
                     created_at: date1,
                     updated_at: date1
                 };
-                await prisma.balance_trackings.create({ data: record1 });
+
+                records.push(record);
             }
+
+            await prisma.balance_trackings.createMany({ data: records });
         }
     
     });
+
+    
+
 
 };
 

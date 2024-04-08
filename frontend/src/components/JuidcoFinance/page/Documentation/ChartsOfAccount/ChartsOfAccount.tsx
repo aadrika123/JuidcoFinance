@@ -35,6 +35,7 @@ export const ChartsOfAccount = () => {
   const [tabIndex, setTabIndex] = useState<number>(1);
   const dispatch = useDispatch();
 
+
   const changeTab = (index: number) => {
     setTabIndex(index);
   };
@@ -42,15 +43,19 @@ export const ChartsOfAccount = () => {
   const fetchAllData = async <T extends TableData>(
     endpoint: string
   ): Promise<T> => {
-    const res = await axios({
-      url:
-        `/${endpoint}`,
-      method: "GET",
-    });
-    if (res.data.status) {
-      return res.data?.data as T;
-    }
-    throw "Something Went Wrong!!";
+
+      const res = await axios({
+        url:
+          `/${endpoint}`,
+        method: "GET",
+      });
+  
+  
+      if (res.data.status) {
+        return res.data?.data as T;
+      }
+      throw "Something Went Wrong!!";
+    
   };
 
   const useCodeQuery = <T extends TableData>(endpoint: string) => {
@@ -59,13 +64,6 @@ export const ChartsOfAccount = () => {
 
   //// ------------- Query Functions ----------------//
   // QUERYING ACCOUNTING CODE
-  const {
-    data: accountingCode,
-    isError: accountingError,
-    isLoading: accountingLoading,
-  } = useCodeQuery<ChartsOfAccountsProps<AccountingTableData>>(
-    "balance-trackings/get-balances"
-  );
 
   // QUERYING FUNCTION CODE
   const {
@@ -86,8 +84,7 @@ export const ChartsOfAccount = () => {
   );
   //// ------------- Query Functions ----------------//
 
-  if (accountingError || muncipalityError || functionError) {
-    console.log(accountingError);
+  if (muncipalityError || functionError) {
     throw new Error("something went wrong");
   }
 
@@ -205,13 +202,8 @@ export const ChartsOfAccount = () => {
 
       <section className="mt-8">
         {tabIndex === 1 ? (
-          accountingLoading ? (
-            <Loader />
-          ) : (
-            <PrimaryAccountingCode
-              data={Array.isArray(accountingCode) ? accountingCode : []}
-            />
-          )
+            <PrimaryAccountingCode />
+
         ) : tabIndex === 2 ? (
           functionLoading ? (
             <Loader />

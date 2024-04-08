@@ -18,6 +18,7 @@ interface SelectProps {
   readonly?: boolean;
   className?: string;
   visibility?: boolean;
+  selectFirstItem?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
@@ -63,12 +64,13 @@ const Select: React.FC<SelectProps> = (props) => {
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
         >
-          <option selected value="">
+          {props.placeholder && (<option selected value="">
             {props.placeholder}
-          </option>
+          </option>)}
           {dataList.length > 0 &&
-            dataList.map((d: Select) => (
+            dataList.map((d: Select, i) => (
               <option
+                selected={props.selectFirstItem?i==0?true:false:false}
                 key={d?.id}
                 value={d?.id}
                 data-name={
@@ -79,6 +81,7 @@ const Select: React.FC<SelectProps> = (props) => {
                     : d?.code) ||
                   d?.ulbs
                 }
+
               >
                 {d?.name ||
                   d?.type ||

@@ -10,6 +10,8 @@ import { AccountingTableData } from "../types";
 
 interface GeneralLedgerDetailsComponentProps {
   generalLedgerId: number;
+  ulbId: number;
+  year: number;
   onClose: () => void;
 }
 
@@ -22,7 +24,7 @@ interface GeneralLedgerReport {
   remissions?: AccountingTableData
 }
 
-const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps> = ({ generalLedgerId, onClose }: GeneralLedgerDetailsComponentProps) => {
+const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps> = ({ generalLedgerId, onClose, ulbId, year}: GeneralLedgerDetailsComponentProps) => {
 
   const componentRef = useRef(null);
   const printIt = useReactToPrint({
@@ -31,7 +33,7 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
 
   const fetchData = async (): Promise<GeneralLedgerReport> => {
     const res = await axios({
-      url: `/balance-trackings/get-general-ledger-report/${generalLedgerId}`,
+      url: `/balance-trackings/get-general-ledger-report/${generalLedgerId}?year=${year}&ulb=${ulbId}`,
       method: "GET",
     });
 
@@ -46,7 +48,9 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
     data: data,
     isError: dataError,
     isLoading: isLoading
-  } = useQuery(["schedule-report", generalLedgerId], fetchData);
+  } = useQuery(["schedule-report", generalLedgerId], fetchData, {
+    cacheTime: 0
+  });
 
   if (dataError) {
     throw new Error("Fatal Error!");
@@ -170,8 +174,8 @@ const GeneralLedgerDetailsComponent: React.FC<GeneralLedgerDetailsComponentProps
                     <td className="border border-zinc-300 ">{d?.description}</td>
                     {/* DESCRIPTION */}
 
-                    <td className="border border-zinc-300 ">{fc(d?.balance >= 0 ? d.balance : 0)}</td>
                     <td className="border border-zinc-300 ">{fc(d?.balance < 0 ? -d.balance : 0)}</td>
+                    <td className="border border-zinc-300 ">{fc(d?.balance >= 0 ? d.balance : 0)}</td>
                     
                   </tr>
                 ))}

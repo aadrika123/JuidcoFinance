@@ -199,6 +199,10 @@ class BalanceTrackingsController {
     try {
 
       const id: number = Number(req.params.id);
+      const ulbID: number = Number(req.query.ulb);
+      const year: number= Number(req.query.year);
+
+      console.log(year);
 
       // validate id
       const { error } = Joi.object({
@@ -208,7 +212,7 @@ class BalanceTrackingsController {
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
 
-      const data = await this.balanceTrackingsDao.getScheduleReport(id);
+      const data = await this.balanceTrackingsDao.getScheduleReport(id, ulbID, year);
 
       if (!data)
         return CommonRes.NOT_FOUND(
@@ -239,6 +243,9 @@ class BalanceTrackingsController {
     try {
 
       const id: number = Number(req.params.id);
+      const ulbID: number = Number(req.query.ulb);
+      const year: number= Number(req.query.year);
+
 
       // validate id
       const { error } = Joi.object({
@@ -248,7 +255,7 @@ class BalanceTrackingsController {
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
 
-      const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id);
+      const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id, ulbID, year);
 
       if (!data)
         return CommonRes.NOT_FOUND(
@@ -264,6 +271,35 @@ class BalanceTrackingsController {
       return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
+
+
+  getFinYears = async (req: Request, res: Response, apiId: string): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    
+    try {
+      
+      const data = await this.balanceTrackingsDao.getFinYears();
+
+      if (!data)
+        return CommonRes.NOT_FOUND(
+          resMessage(this.initMsg).NOT_FOUND,
+          data,
+          resObj,
+          req,
+          res
+        );
+
+        return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+    }
+  };
+
+
 
 }
 

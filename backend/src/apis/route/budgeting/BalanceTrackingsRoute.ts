@@ -26,6 +26,8 @@ class BalanceTrackingsRoute {
 
         app.route(`${this.baseUrl}/get-general-ledger-report/:id`).get((req: Request, res: Response) =>this.controller.getGeneralLedgerReport(req, res, apiId + "07"));
 
+        app.route(`${this.baseUrl}/get-fin-years`).get((req: Request, res: Response) => this.controller.getFinYears(req, res, apiId + "08"));
+        
 
     }
 }

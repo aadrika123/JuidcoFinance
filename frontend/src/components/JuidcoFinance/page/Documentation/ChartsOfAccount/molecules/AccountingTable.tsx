@@ -11,7 +11,6 @@ interface AccoutingTableProps {
   onViewButtonClick: (d: AccountingTableData) => void;
   searchCondition: RegExp | null;
   hideZeroBalances: boolean;
-  handleHideZeroBalancesCheckbox: (checked: boolean) => void;
 }
 
 const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
@@ -93,11 +92,7 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
     setRows(rows);
   }, [props.searchCondition, props.data]);
 
-  const handleHideZeroBalancesCheckbox = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    props.handleHideZeroBalancesCheckbox(e.target.checked);
-  };
+  
 
   return (
     <>
@@ -108,29 +103,6 @@ const AccountingTable: React.FC<AccoutingTableProps> = (props) => {
           <div className="hide-scrollbar overflow-x-auto h-[550px] overflow-y-auto">
             <table className="table table-md">
               <thead className=" text-white text-[1rem] sticky top-0">
-                <tr className="bg-white text-center">
-                  <th
-                    colSpan={11}
-                    className=" text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray "
-                  >
-                    <div className="flex items-center pl-4 bg-primary_bg_gray">
-                      <input
-                        id="default-checkbox"
-                        type="checkbox"
-                        value=""
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        onChange={handleHideZeroBalancesCheckbox}
-                        checked={props.hideZeroBalances}
-                      />
-                      <label
-                        htmlFor="default-checkbox"
-                        className="ms-2 text-lg font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Hide zero balances
-                      </label>
-                    </div>
-                  </th>
-                </tr>
                 <tr className="bg-white text-center">
                   <th
                     className="border text-secondary_black border-zinc-400 font-medium p-0 bg-primary_bg_gray"
