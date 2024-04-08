@@ -1,0 +1,14 @@
+/// daily_coll_summaries: Managed by: Sanjiv Kumar
+model daily_coll_summaries {
+  id                    Int               @id @default(autoincrement())
+  receipt_register_id   Int
+  receipt_register      receipt_registers @relation(fields: [receipt_register_id], references: [id])
+  collection_register_id Int
+  collection_register   collection_registers @relation(fields: [collection_register_id], references: [id])
+  checked_by_id         Int?
+  checked_by            users?            @relation(fields: [checked_by_id], references: [id])
+  checked_by_print_name String?
+  is_checked            Boolean           @default(false)
+  created_at            DateTime          @default(now()) @map("created_at")
+  updated_at            DateTime          @default(now()) @updatedAt @map("updated_at")
+}

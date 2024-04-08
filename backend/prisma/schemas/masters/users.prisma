@@ -1,6 +1,6 @@
 /////// users Managed by: Sanjiv Kumar //////////////
 model users {
-  id                   Int      @id @default(autoincrement())
+  id                   Int                    @id @default(autoincrement())
   user_name            String?
   mobile               String?
   email                String
@@ -39,9 +39,11 @@ model users {
   loan_designation loan_managements[] @relation("designation")
 
   request_account_codes request_account_codes[]
+  collection_registers  collection_registers[]
+  daily_coll_summary    daily_coll_summaries[]
 
   receipt_entered_by receipt_registers[] @relation("entered_by")
   receipt_checked_by receipt_registers[] @relation("checked_by")
-  created_at           DateTime? @default(now()) @map("created_at")
-  updated_at           DateTime @updatedAt @map("updated_at")
+  created_at         DateTime?           @default(now()) @map("created_at")
+  updated_at         DateTime            @updatedAt @map("updated_at")
 }

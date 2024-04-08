@@ -843,6 +843,35 @@ model receipt_modes {
   updated_at        DateTime            @updatedAt @map("updated_at")
 }
 
+/// collection_registers: Managed by: Sanjiv Kumar
+model collection_registers {
+  id                    Int               @id @default(autoincrement())
+  receipt_register_id   Int
+  receipt_register      receipt_registers @relation(fields: [receipt_register_id], references: [id])
+  checked_by_id         Int?
+  checked_by            users?            @relation(fields: [checked_by_id], references: [id])
+  checked_by_print_name String?
+  is_checked            Boolean           @default(false)
+  daily_coll_summary  daily_coll_summaries[]
+  created_at            DateTime          @default(now()) @map("created_at")
+  updated_at            DateTime          @default(now()) @updatedAt @map("updated_at")
+}
+
+/// daily_coll_summaries: Managed by: Sanjiv Kumar
+model daily_coll_summaries {
+  id                    Int               @id @default(autoincrement())
+  receipt_register_id   Int
+  receipt_register      receipt_registers @relation(fields: [receipt_register_id], references: [id])
+  collection_register_id Int
+  collection_register   collection_registers @relation(fields: [collection_register_id], references: [id])
+  checked_by_id         Int?
+  checked_by            users?            @relation(fields: [checked_by_id], references: [id])
+  checked_by_print_name String?
+  is_checked            Boolean           @default(false)
+  created_at            DateTime          @default(now()) @map("created_at")
+  updated_at            DateTime          @default(now()) @updatedAt @map("updated_at")
+}
+
 ////receipt_register: Managed by: Sanjiv Kumar
 model receipt_registers {
   id                        Int                     @id @default(autoincrement())
@@ -857,7 +886,7 @@ model receipt_registers {
   receipt_mode_id           Int
   receipt_mode              receipt_modes           @relation(fields: [receipt_mode_id], references: [id])
   revenue_accounted_type_id Int
-  revenue_accounted_type   revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
+  revenue_accounted_type    revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
   receipt_date              DateTime
   cheque_or_draft_no        String?
   bank_amount               Float?
@@ -875,9 +904,11 @@ model receipt_registers {
   checked_by            users? @relation("checked_by", fields: [checked_by_id], references: [id])
 
   checked_by_print_name String?
-  isChecked             Boolean  @default(false)
-  created_at            DateTime @default(now()) @map("created_at")
-  updated_at            DateTime @updatedAt @map("updated_at")
+  is_checked            Boolean                @default(false)
+  collection_register   collection_registers[]
+  daily_coll_summary  daily_coll_summaries[]
+  created_at            DateTime               @default(now()) @map("created_at")
+  updated_at            DateTime               @updatedAt @map("updated_at")
 }
 
 //// Receipt Type
@@ -981,6 +1012,8 @@ model users {
   loan_designation loan_managements[] @relation("designation")
 
   request_account_codes request_account_codes[]
+  collection_registers  collection_registers[]
+  daily_coll_summary  daily_coll_summaries[]
 
   receipt_entered_by receipt_registers[] @relation("entered_by")
   receipt_checked_by receipt_registers[] @relation("checked_by")

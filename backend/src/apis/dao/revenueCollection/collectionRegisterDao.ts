@@ -2,18 +2,14 @@ import { Request } from "express";
 import {
   Prisma,
   PrismaClient,
-  receipt_registers,
   daily_receipt_balances,
+  collection_registers,
 } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
-import {
-  multiRequestData,
-  requestData,
-} from "../../requests/masters/receiptRegisterValidation";
 
 /**
  * | Author- Sanjiv Kumar
- * | Created for- receipt_register Dao
+ * | Created for- collection register Dao
  * | Status: open
  */
 
@@ -23,40 +19,12 @@ interface IdItem {
   id: number;
 }
 
-class ReceiptRegisterDao {
+class CollectionRegisterDao {
   constructor() {
     //////
   }
 
-  // store
-  store = async (req: Request) => {
-    const r_nos = req.body.data.map((item: any) => item.receipt_no);
-    const data = await prisma.receipt_registers.findFirst({
-      where: {
-        receipt_no: {
-          in: r_nos,
-        },
-      },
-      select: {
-        id: true,
-        receipt_no: true,
-      },
-    });
-
-    if (data)
-      throw {
-        message: {
-          statusCode: 409,
-          message: `Receipt No: ${data.receipt_no} already exist.`,
-        },
-      };
-
-    return await prisma.receipt_registers.createMany({
-      data: multiRequestData(req),
-    });
-  };
-
-  // Get limited receipt_register
+  // Get limited collection_register
   get = async (req: Request) => {
     const page: number = Number(req.query.page);
     const limit: number = Number(req.query.limit);
@@ -111,8 +79,8 @@ class ReceiptRegisterDao {
     const opDate: string = date ? `AND DATE (drb.created_at) = '${date}'` : "";
 
     const [result, count, opening_balance] = await prisma.$transaction([
-      prisma.$queryRawUnsafe<receipt_registers[]>(`SELECT
-    rr.id,
+      prisma.$queryRawUnsafe<collection_registers[]>(`SELECT
+      cr.id,
     rr.receipt_no,
     rr.paid_by,
     rr.receipt_date,
@@ -124,8 +92,8 @@ class ReceiptRegisterDao {
     rr.realisation_date,
     rr.wheather_returned,
     rr.remarks,
-    rr.created_at,
-    rr.updated_at,
+    cr.created_at,
+    cr.updated_at,
     racctype.id as revenue_accounted_type_id,
     racctype.name as revenue_accounted_type_name,
     mc.id as ulb_id,
@@ -146,7 +114,9 @@ class ReceiptRegisterDao {
     checkedesi.name as checked_by_designation_name,
     rr.cash_amount + rr.bank_amount as total_amount   
     FROM
-    receipt_registers as rr
+    collection_registers as cr
+    LEFT JOIN
+    receipt_registers as rr ON rr.id = cr.receipt_register_id
     LEFT JOIN 
     revenue_accounted_types as racctype ON rr.revenue_accounted_type_id = racctype.id
     LEFT JOIN
@@ -160,7 +130,7 @@ class ReceiptRegisterDao {
     LEFT JOIN
     employees as emp ON rr.entered_by_id = emp.id
     LEFT JOIN 
-    employees as checkedemp ON rr.checked_by_id = checkedemp.id
+    employees as checkedemp ON cr.checked_by_id = checkedemp.id
     LEFT JOIN 
     designations as checkedesi ON checkedemp.designation_id = checkedesi.id
     LEFT JOIN 
@@ -170,11 +140,13 @@ class ReceiptRegisterDao {
     rr.updated_at desc
     LIMIT ${limit} OFFSET ${(page - 1) * limit}
     `),
-      prisma.$queryRawUnsafe<receipt_registers[]>(`SELECT
+      prisma.$queryRawUnsafe<collection_registers[]>(`SELECT
   COUNT(*) as total,
   SUM (rr.cash_amount + rr.bank_amount) as total_amount
   FROM
-  receipt_registers as rr
+  collection_registers as cr
+  LEFT JOIN
+  receipt_registers as rr ON rr.id = cr.receipt_register_id
     LEFT JOIN 
     revenue_accounted_types as racctype ON rr.revenue_accounted_type_id = racctype.id
     LEFT JOIN
@@ -203,52 +175,6 @@ class ReceiptRegisterDao {
     ]);
 
     count[0].opening_balance = opening_balance[0];
-
-    // const response = {
-    //   entered_by : {
-    //     id: 'entered_by_id',
-    //     name: 'entered_by_name',
-    //     designation: {
-    //       id: 'entered_by_designation_id',
-    //       name: 'entered_by_designation_name',
-    //     },
-    //   },
-    //   checked_by : {
-    //     id: 'checked_by_id',
-    //     name: 'checked_by_name',
-    //     designation: {
-    //       id: 'checked_by_designation_id',
-    //       name: 'checked_by_designation_name',
-    //     },
-    //   },
-    //   revenue_module : {
-    //     id: 'revenue_module_id',
-    //     name: 'revenue_module_name',
-    //   },
-    //   receipt_mode : {
-    //     id: 'receipt_mode_id',
-    //     name: 'receipt_mode_name',
-    //   },
-    //   primary_acc_code : {
-    //     id: 'primary_acc_code_id',
-    //     name: 'primary_acc_code_name',
-    //   },
-    //   ulb : {
-    //     id: 'ulb_id',
-    //     name: 'ulbs',
-    //   }
-    // }
-
-    // function generate(){
-    //   const resp = [];
-
-    //   for (const data of result as any) {
-    //     const elements: any = {...data}
-    //   for(const item in response){
-    //     elements[item] =
-    //   }
-    // }
-    // }
 
     const allData = [];
 
@@ -324,85 +250,76 @@ class ReceiptRegisterDao {
 
   // Get single payment entry details
   getById = async (id: number) => {
-    const query: Prisma.receipt_registersFindManyArgs = {
+    const query: Prisma.collection_registersFindManyArgs = {
       where: { id },
       select: {
         id: true,
-        receipt_no: true,
-        ulb: {
+        receipt_register: {
           select: {
-            id: true,
-            ulbs: true,
-          },
-        },
-        primary_acc_code: {
-          select: {
-            id: true,
-            code: true,
-          },
-        },
-        revenue_module: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        paid_by: true,
-        receipt_mode: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        revenue_accounted_type: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        receipt_date: true,
-        cheque_or_draft_no: true,
-        bank_amount: true,
-        cash_amount: true,
-        bank_acc_no: true,
-        deposit_date: true,
-        realisation_date: true,
-        wheather_returned: true,
-        remarks: true,
-        entered_by: {
-          select: {
-            id: true,
-            name: true,
-            // designation: {
-            //   select: {
-            //     id: true,
-            //     name: true,
-            //   },
-            // },
-            wf_roleusermaps: {
+            receipt_no: true,
+            ulb: {
               select: {
-                wf_role: {
+                id: true,
+                ulbs: true,
+              },
+            },
+            primary_acc_code: {
+              select: {
+                id: true,
+                code: true,
+              },
+            },
+            revenue_module: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            paid_by: true,
+            receipt_mode: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            revenue_accounted_type: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            receipt_date: true,
+            cheque_or_draft_no: true,
+            bank_amount: true,
+            cash_amount: true,
+            bank_acc_no: true,
+            deposit_date: true,
+            realisation_date: true,
+            wheather_returned: true,
+            remarks: true,
+            entered_by: {
+              select: {
+                id: true,
+                name: true,
+                wf_roleusermaps: {
                   select: {
-                    id: true,
-                    role_name: true,
+                    wf_role: {
+                      select: {
+                        id: true,
+                        role_name: true,
+                      },
+                    },
                   },
                 },
               },
             },
+            entered_by_print_name: true,
           },
         },
-        is_checked: true,
-        entered_by_print_name: true,
         checked_by: {
           select: {
             id: true,
             name: true,
-            // designation: {
-            //   select: {
-            //     id: true,
-            //     name: true,
-            //   },
-            // },
             wf_roleusermaps: {
               select: {
                 wf_role: {
@@ -416,23 +333,17 @@ class ReceiptRegisterDao {
           },
         },
         checked_by_print_name: true,
+        is_checked: true,
         created_at: true,
         updated_at: true,
       },
     };
-    const data = await prisma.receipt_registers.findFirst(query);
-    return generateRes(data);
-  };
+    const data: any = await prisma.collection_registers.findFirst(query);
 
-  // Update receipt_registers details
-  update = async (req: Request) => {
-    const id: number = req.body.data.id;
-    return await prisma.receipt_registers.update({
-      where: {
-        id: id,
-      },
-      data: requestData(req),
-    });
+    const data1 = { ...data, ...data.receipt_register };
+    delete data1.receipt_register;
+
+    return generateRes(data1);
   };
 
   //Appropve or Check the receipt register
@@ -442,14 +353,14 @@ class ReceiptRegisterDao {
 
     const [, rR] = await prisma.$transaction([
       prisma.$queryRaw`
-        INSERT INTO collection_registers (receipt_register_id)
-        SELECT id
-        FROM receipt_registers
+        INSERT INTO daily_coll_summaries (collection_register_id, receipt_register_id)
+        SELECT id, receipt_register_id
+        FROM collection_registers
         WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
         ON CONFLICT DO NOTHING;
       `,
 
-      prisma.receipt_registers.updateMany({
+      prisma.collection_registers.updateMany({
         where: {
           OR: ids,
           is_checked: false,
@@ -464,27 +375,6 @@ class ReceiptRegisterDao {
 
     return rR;
   };
-
-  /////////// Create Opening Balance
-  createOpeningBal = async (req: Request) => {
-    return await prisma.daily_receipt_balances.create({
-      data: {
-        opening_balance: req.body.data.opening_balance,
-      },
-    });
-  };
-
-  /////////// Update Opening Balance
-  updateOpeningBal = async (req: Request) => {
-    return await prisma.daily_receipt_balances.update({
-      where: {
-        id: req.body.data.id,
-      },
-      data: {
-        opening_balance: req.body.data.opening_balance,
-      },
-    });
-  };
 }
 
-export default ReceiptRegisterDao;
+export default CollectionRegisterDao;
