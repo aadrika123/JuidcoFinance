@@ -1,7 +1,5 @@
 import {
   PrismaClient,
-  cheque_book_entries,
-  dir_payment_entries,
 } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
@@ -84,7 +82,6 @@ const seed_level1_dependent_tables = async () => {
 }
 
 async function main() {
-
   // await udhd_sub_departments_seeder();
 
   // setTimeout(async () => {

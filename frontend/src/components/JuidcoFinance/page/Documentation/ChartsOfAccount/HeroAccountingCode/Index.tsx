@@ -23,8 +23,9 @@ const PrimaryAccountingCode: React.FC = () => {
   const [tableData, setTableData] = useState<AccountingTableData[]>([]);
   const [searchCondition, setSearchCondition] = useState<RegExp | null>(null);
   const [hideZeroBalances, setHideZeroBalances] = useState<boolean>(false);
-  const [ulbID, setUlbID] = useState<number>(1);
-  const [finYear, setFinYear] = useState<number>(2023);
+  const [ulbID, setUlbID] = useState<number>(0);
+  const [finYear, setFinYear] = useState<number>(0);
+  const [ulbName, setUlbName] = useState<string>("");
 
 
   const onViewButtonClick = (d: AccountingTableData) => {
@@ -39,6 +40,10 @@ const PrimaryAccountingCode: React.FC = () => {
 
 
   const fetchData = async (): Promise<AccountingTableData[]> => {
+
+    if(ulbID == 0 || finYear == 0){
+      return [];
+    }
     setLoading(true);
     setHideZeroBalances(false);
 
@@ -106,13 +111,29 @@ const PrimaryAccountingCode: React.FC = () => {
     setLoading(false);
   }, [tableData]);
 
+
+  const setUlb = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const ele = event.target;
+    setUlbID(parseInt(ele.value));
+    setUlbName(ele.options[ele.selectedIndex].text);
+  }
+
+  const finYearInitHandler = (value: number, text: string) => {
+    setFinYear(value);
+  }
+
+  const ulbInitHandler = (value: number, text: string) => {
+    setUlbID(value);
+    setUlbName(text);
+  }
+  
   return (
     <>
 
       {account != null && account.code_type == CodeType.Ledger && (
         <>
           <Popup zindex={50} width={90}>
-            <LedgerDetailsComponent data={account} onClose={closePopup} />
+            <LedgerDetailsComponent data={account} onClose={closePopup} ulbName={ulbName}/>
           </Popup>
         </>
       )}
@@ -162,6 +183,7 @@ const PrimaryAccountingCode: React.FC = () => {
                 api={`/balance-trackings/get-fin-years`}
                 onChange={(event) => setFinYear(parseInt(event.target.value))}
                 value={finYear}
+                initHandler={finYearInitHandler}
               />
             </div>
 
@@ -171,9 +193,9 @@ const PrimaryAccountingCode: React.FC = () => {
                 name="ulb_id"
                 className="w-48 text-primary_green bg-white outline-none"
                 api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
-                onChange={(event) => setUlbID(parseInt(event.target.value))}
+                onChange={setUlb}
                 value={ulbID}
-                selectFirstItem={true}
+                initHandler={ulbInitHandler}
               />
             </div>
 

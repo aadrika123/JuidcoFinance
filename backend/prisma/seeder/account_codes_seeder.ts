@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
+import { AccountingCodeType } from "jflib/build";
 
 
 const prisma = new PrismaClient();
@@ -53,7 +54,7 @@ const account_codes_seeder = async () => {
                         const x = await prisma.account_codes.create({
                             data: {
                                 code: code,
-                                code_type_id: 1,
+                                code_type_id: AccountingCodeType.Schedule,
                                 major_head: majorHead,
                                 minor_head: minorHead,
                                 detail_code: detailCode,
@@ -78,7 +79,7 @@ const account_codes_seeder = async () => {
                             const x = await prisma.account_codes.create({
                                 data: {
                                     code: code,
-                                    code_type_id: 2,
+                                    code_type_id: AccountingCodeType.GeneralLedger,
                                     major_head: majorHead,
                                     minor_head: minorHead,
                                     detail_code: detailCode,
@@ -104,7 +105,7 @@ const account_codes_seeder = async () => {
                             await prisma.account_codes.create({
                                 data: {
                                     code: code,
-                                    code_type_id: 3,
+                                    code_type_id: AccountingCodeType.Ledger,
                                     major_head: majorHead,
                                     minor_head: minorHead,
                                     detail_code: detailCode,

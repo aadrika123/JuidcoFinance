@@ -1,0 +1,43 @@
+model pet_registration_receipt{
+      id                            Int    @id @default(autoincrement())
+      
+      acc_code_id                   Int
+      acc_code_no                     String     
+      acc_code_description          String
+      acc_code                      account_codes   @relation(fields: [acc_code_id], references: [id])
+      
+      receipt_no                    String
+
+      ulb_id                        Int
+      ulb_name                      String
+      ulb                           municipality_codes @relation(fields: [ulb_id], references: [id])
+      
+      old_ward_no                   String
+      new_ward_no                   String
+
+      revenue_module_id             Int
+      revenue_module_name           String
+      revenue_module                revenue_modules         @relation(fields: [revenue_module_id], references: [id])
+
+      receipt_date                  DateTime    @db.Date
+      
+      receipt_mode_id               Int
+      receipt_mode_name             String
+      receipt_mode                  receipt_modes @relation(fields: [receipt_mode_id], references: [id])
+
+      paid_by               String
+      cheque_draft_no       String
+      bank_amount           Float
+      cash_amount           Float   
+      deposited_to          String
+      deposit_date          DateTime    @db.Date
+      realization_date      DateTime    @db.Date
+      whether_returned      Boolean
+      remarks               String
+      cash_basis            Boolean @default(true)
+      accrual_basis         Boolean @default(false)
+
+      created_at          DateTime @default(now()) @map("created_at")
+      updated_at          DateTime @default(now()) @updatedAt @map("updated_at")
+
+}

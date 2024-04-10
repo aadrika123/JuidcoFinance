@@ -6,10 +6,11 @@ import { AccountingTableData } from "../types";
 
 interface LedgerDetailsComponentProps {
   data: AccountingTableData;
+  ulbName: string;
   onClose: () => void;
 }
 
-const LedgerDetailsComponent: React.FC<LedgerDetailsComponentProps> = ({ data, onClose }: LedgerDetailsComponentProps) => {
+const LedgerDetailsComponent: React.FC<LedgerDetailsComponentProps> = ({ data, onClose, ulbName }: LedgerDetailsComponentProps) => {
 
   const componentRef = useRef(null);
   const printIt = useReactToPrint({
@@ -27,10 +28,10 @@ const LedgerDetailsComponent: React.FC<LedgerDetailsComponentProps> = ({ data, o
             @page { size: landscape;}\
           "}</style>
 
-          <div className="m-2 w-[100%] text-center text-2xl" >Ledger</div>
+          <div className="m-2 w-[100%] text-center text-2xl">Ledger</div>
 
           <div className="w-[100%] text-center m-2"><span className="underline">{data?.description}</span> Account</div>
-
+          <div className="text-center">(ULB: {ulbName})</div>
           <div className="flex justify-evenly"><div>Dr.</div><div>Cr.</div></div>
 
           <table className="border-collapse w-[100%]" >

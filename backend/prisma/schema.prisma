@@ -414,6 +414,49 @@ model revised_budgets{
 	updated_at          DateTime            @updatedAt @map("updated_at")
 }
 
+model pet_registration_receipt{
+      id                            Int    @id @default(autoincrement())
+      
+      acc_code_id                   Int
+      acc_code_no                     String     
+      acc_code_description          String
+      acc_code                      account_codes   @relation(fields: [acc_code_id], references: [id])
+      
+      receipt_no                    String
+
+      ulb_id                        Int
+      ulb_name                      String
+      ulb                           municipality_codes @relation(fields: [ulb_id], references: [id])
+      
+      old_ward_no                   String
+      new_ward_no                   String
+
+      revenue_module_id             Int
+      revenue_module_name           String
+      revenue_module                revenue_modules         @relation(fields: [revenue_module_id], references: [id])
+
+      receipt_date                  DateTime    @db.Date
+      
+      receipt_mode_id               Int
+      receipt_mode_name             String
+      receipt_mode                  receipt_modes @relation(fields: [receipt_mode_id], references: [id])
+
+      paid_by               String
+      cheque_draft_no       String
+      bank_amount           Float
+      cash_amount           Float   
+      deposited_to          String
+      deposit_date          DateTime    @db.Date
+      realization_date      DateTime    @db.Date
+      whether_returned      Boolean
+      remarks               String
+      cash_basis            Boolean @default(true)
+      accrual_basis         Boolean @default(false)
+
+      created_at          DateTime @default(now()) @map("created_at")
+      updated_at          DateTime @default(now()) @updatedAt @map("updated_at")
+
+}
 //// Primary Accounting Code
 model account_codes {
   id          Int    @id @default(autoincrement())
@@ -451,6 +494,7 @@ model account_codes {
   bank_masters        bank_masters[]
 
   ulbs                municipality_codes[]
+  pet_registration_receipts     pet_registration_receipt[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -796,7 +840,7 @@ model municipality_codes {
 
 
   account_codes     account_codes[]
-
+  pet_registration_receipts     pet_registration_receipt[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -853,7 +897,9 @@ model receipt_entries {
 model receipt_modes {
     id                Int                 @id @default(autoincrement())
     name              String
+
     receipt_registers receipt_registers[]
+    pet_registration_receipts  pet_registration_receipt[]
     created_at        DateTime            @default(now()) @map("created_at")
     updated_at        DateTime            @updatedAt @map("updated_at")
 }
@@ -882,10 +928,10 @@ model receipt_registers {
   realisation_date          DateTime?
   wheather_returned         Boolean?                @default(false)
   remarks                   String
-  entered_by_id             Int
-  entered_by                users                   @relation("entered_by", fields: [entered_by_id], references: [id])
+  entered_by_id             Int?
+  entered_by                users?                   @relation("entered_by", fields: [entered_by_id], references: [id])
 
-  entered_by_print_name String
+  entered_by_print_name String?
   checked_by_id         Int?
   checked_by            users? @relation("checked_by", fields: [checked_by_id], references: [id])
 
@@ -934,7 +980,11 @@ model revenue_accounted_types {
 model revenue_modules {
     id                Int                 @id @default(autoincrement())
     name              String
+
+    
     receipt_registers receipt_registers[]
+    pet_registration_receipts       pet_registration_receipt[]
+    
     created_at        DateTime            @default(now()) @map("created_at")
     updated_at        DateTime            @updatedAt @map("updated_at")
 }

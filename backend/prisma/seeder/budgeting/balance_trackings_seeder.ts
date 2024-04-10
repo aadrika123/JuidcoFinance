@@ -29,15 +29,15 @@ const balance_trackings_seeder = async () => {
 
             for (let i = 0; i < acc_codes.length; i++) {
                 const date1 = faker.date.between({ from: `${year}-04-05T00:00:00.000Z`, to: `${year+1}-03-20T00:00:00.000Z` });
-                const balance = i%10 == 0 ? 0 : faker.number.float({ min: -100000000, max: 100000000 });
+                // const balance = i%10 == 0 ? 0 : faker.number.float({ min: -100000000, max: 100000000 });
                 // const balance = dummyBalances[i%dummyBalances.length];
                 // const balance = 0;
                 
                 const record = {
                     primary_acc_code_id: acc_codes[i].id,
-                    total_balance: balance,
-                    debit_balance: faker.number.int(),
-                    credit_balance: faker.number.int(),
+                    total_balance: 0,
+                    debit_balance: 0,
+                    credit_balance: 0,
                     ulb_id: ulbs[u].id,
                     created_at: date1,
                     updated_at: date1

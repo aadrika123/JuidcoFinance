@@ -14,9 +14,9 @@ model balance_trackings{
 	ulb_id              Int
   	ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
 
-	grant_entries grant_entries[]
+	grant_entries 		grant_entries[]
 
 
 	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
+	updated_at          DateTime            @default(now()) @updatedAt @map("updated_at")
 }

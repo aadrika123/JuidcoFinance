@@ -20,6 +20,7 @@ interface SelectProps {
   visibility?: boolean;
   selectFirstItem?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  initHandler?: (value: number, text: string) => void;
 }
 
 interface Select {
@@ -39,7 +40,11 @@ const Select: React.FC<SelectProps> = (props) => {
       method: "GET",
     });
     
-    return res.data?.data;
+    const data = res.data?.data;
+    if(props.initHandler){
+      props.initHandler(data[0].id, data[0].name);
+    }
+    return data;
   };
 
   const { data: dataList = [], isError: dataError } = useQuery({
@@ -50,6 +55,8 @@ const Select: React.FC<SelectProps> = (props) => {
   if (dataError) {
     throw new Error("Fatal Error!");
   }
+
+
 
   return (
     <>

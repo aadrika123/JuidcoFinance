@@ -1,7 +1,8 @@
 import { Request } from "express";
-import { Prisma, PrismaClient, account_codes } from "@prisma/client";
+import { Prisma, PrismaClient, account_codes, balance_trackings } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
 import { multiRequestData } from "../../requests/budgeting/balanceTrackingsValidation";
+import { AccountingCodeType } from "jflib";
 
 
 
@@ -155,7 +156,7 @@ class BalanceTrackingsDao {
   }
 
 
-  getScheduleDetails = async (scheduleID: number, ulbID: number, startDate: Date, endDate: Date) => {
+  getScheduleDetails = async (scheduleID: number, ulbID: number, year: number, startDate: Date, endDate: Date) => {
 
     const general_ledgers =  await prisma.$queryRaw<GeneralLedgerData[]>`
     select a.id, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance as balance, b.created_at from account_codes a left join
@@ -171,12 +172,14 @@ class BalanceTrackingsDao {
       const remission = await this.extractRemissions(general_ledgers);
       if (remission) {
         data = {
+          year: year,
           general_ledgers: general_ledgers,
           remissions: remission
         };
 
       } else {
         data = {
+          year: year,
           general_ledgers: general_ledgers
         };
       }
@@ -234,12 +237,25 @@ class BalanceTrackingsDao {
 
 
 
-    const currentYearData = await this.getScheduleDetails(scheduleID, ulbID, current_year_start, current_year_end);
-    const  prevYearData = await this.getScheduleDetails(scheduleID, ulbID, prev_year_start, prev_year_end);
+    const currentYearData = await this.getScheduleDetails(scheduleID, ulbID, current_year,  current_year_start, current_year_end);
+    const  prevYearData = await this.getScheduleDetails(scheduleID, ulbID, current_year-1, prev_year_start, prev_year_end);
 
-    const data = { ...scheduleRecord, ...scheduleRecordPrevYear, current_year: currentYearData, prev_year: prevYearData};
+
+    const ulbInfos: any [] = await prisma.$queryRaw`select * from municipality_codes where id=${ulbID}`;
+    const ulbInfo = ulbInfos[0];
+
+    const data = {
+      ulb: ulbInfo.ulbs,
+      ...scheduleRecord, 
+      ...scheduleRecordPrevYear, 
+      current_year: currentYearData, 
+      prev_year: prevYearData
+    };
 
     console.log(data);
+
+    
+    console.log(ulbInfo);
 
     return generateRes(data);
   }
@@ -281,6 +297,111 @@ class BalanceTrackingsDao {
     ]
 
     return generateRes(data);
+  }
+
+  updateBalances = async (ulbId: number, accountingCodeId: number, amount: number) => {
+    const ledgerRecords = await prisma.$queryRaw<account_codes[]>`select * from account_codes where id=${accountingCodeId}`;
+    if(ledgerRecords.length>0){
+      const ledgerRecord = ledgerRecords[0];
+      console.log(ledgerRecord);
+      
+      if(ledgerRecord.code_type_id == AccountingCodeType.Schedule){
+        console.log("It is a schedule");
+      }else if(ledgerRecord.code_type_id == AccountingCodeType.GeneralLedger){
+        console.log("it is a general ledger");
+      }else if(ledgerRecord.code_type_id == AccountingCodeType.Ledger){
+        console.log("It is a ledger");
+
+        // know the general ledger it belongs to
+        const generalLedgerRecords = await prisma.$queryRaw<account_codes[]>`select * from account_codes where id=${ledgerRecord.parent_id}`;
+
+        const generalLedgerRecord = generalLedgerRecords[0];
+
+        console.log("Parent general ledger: ", generalLedgerRecord);
+
+
+
+        // know the schedule it belongs to
+
+        const scheduleRecords = await prisma.$queryRaw<account_codes[]>`select * from account_codes where id=${generalLedgerRecord.parent_id}`;
+
+        const scheduleRecord = scheduleRecords[0];
+
+        console.log("Schedule record: ", scheduleRecord);
+
+
+        // get the balances
+        const ledgerLatestBalances = await prisma.$queryRaw<balance_trackings[]>`select * from balance_trackings 
+        where ulb_id=${ulbId} and primary_acc_code_id = ${accountingCodeId} order by id desc limit 1;`;
+
+        const ledgerLatestBalance = ledgerLatestBalances[0];
+        console.log("ledger latest balance: ", ledgerLatestBalance);
+
+
+        const generalLedgerLatestBalances = await prisma.$queryRaw<balance_trackings[]>`select * from balance_trackings
+        where ulb_id=${ulbId} and primary_acc_code_id = ${generalLedgerRecord.id} order by id desc limit 1;`;
+
+        const generalLedgerLatestBalance = generalLedgerLatestBalances[0];
+        console.log("general ledger latest balance: ", generalLedgerLatestBalance);
+
+
+        const scheduleBalances = await prisma.$queryRaw<balance_trackings[]>`select * from balance_trackings
+        where ulb_id=${ulbId} and primary_acc_code_id = ${scheduleRecord.id} order by id desc limit 1;`;
+
+      const scheduleBalance = scheduleBalances[0];
+        console.log("schedule balance: ", scheduleBalance);
+
+
+        // update balances
+        
+        // update ledger balance
+        const amountWithoutSign = Math.abs(amount);
+
+        const record1 = await prisma.balance_trackings.create({
+          data: {
+            primary_acc_code_id: accountingCodeId,
+            debit_balance: amount<0?ledgerLatestBalance.debit_balance + amountWithoutSign: ledgerLatestBalance.debit_balance,
+            credit_balance: amount>0?ledgerLatestBalance.credit_balance + amountWithoutSign: ledgerLatestBalance.credit_balance, 
+            total_balance: ledgerLatestBalance.total_balance + amount ,
+            ulb_id: ulbId, 
+          }
+        });
+
+        console.log("updated ledger record: ", record1);
+
+        // update general ledger balance
+        const record2 = await prisma.balance_trackings.create({
+          data: {
+            primary_acc_code_id: generalLedgerRecord.id,
+            debit_balance: amount<0?generalLedgerLatestBalance.debit_balance + amountWithoutSign: generalLedgerLatestBalance.debit_balance,
+            credit_balance: amount>0?generalLedgerLatestBalance.credit_balance + amountWithoutSign: generalLedgerLatestBalance.credit_balance,
+            total_balance: generalLedgerLatestBalance.total_balance + amount,
+            ulb_id: ulbId, 
+          }
+        });
+        console.log("updated general ledger record: " , record2);
+
+        // update schedule balance
+        const record3 = await prisma.balance_trackings.create({
+          data: {
+            primary_acc_code_id: scheduleRecord.id,
+            debit_balance: amount<0?scheduleBalance.debit_balance + amountWithoutSign: scheduleBalance.debit_balance,
+            credit_balance: amount>0?scheduleBalance.credit_balance + amountWithoutSign: scheduleBalance.credit_balance,
+            total_balance: scheduleBalance.total_balance + amount,
+            ulb_id: ulbId, 
+          }
+        });
+        console.log("updated schedule record: " , record3);
+
+
+      }
+
+    
+
+
+    }else{
+      console.log("No matching records");
+    }
   }
 }
 

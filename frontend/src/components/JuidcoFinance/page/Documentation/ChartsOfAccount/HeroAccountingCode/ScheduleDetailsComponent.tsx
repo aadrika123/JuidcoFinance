@@ -15,12 +15,14 @@ interface ScheduleDetailsComponentProps {
 }
 
 interface YearlyData {
+  year: string;
   general_ledgers: AccountingTableData[];
   remissions?: AccountingTableData;
 }
 
 interface ScheduleReport {
   id: number;
+  ulb: string;
   code: string;
   description: string;
   balance: number;
@@ -79,6 +81,8 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
               <span className="underline font-bold">
                 {data?.description} [Code No {data?.code.substring(0, 3)}]
               </span>
+              <br/>
+              <span>({data?.ulb})</span>
             </div>
 
             <table
@@ -90,10 +94,10 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
                   <th className="border border-slate-300">Minor Code No</th>
                   <th className="border border-slate-300">Particulars</th>
                   <th className="border border-slate-300">
-                    Current Year (Rs.)
+                    Current Year ({data?.current_year?.year})
                   </th>
                   <th className="border border-slate-300">
-                    Previous Year (Rs. )
+                    Prev Year ({data?.prev_year?.year})
                   </th>
                 </tr>
                 <tr>

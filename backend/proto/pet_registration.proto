@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package pet_registration;
+
+service PetRegistration {
+    rpc RecordPetRegistration(PetRegistrationRequest) returns (PetRegistrationReply) {}
+
+}
+
+message PetRegistrationRequest {
+
+    int32 acc_code_id = 1;
+    string acc_code_no = 2;
+    string acc_code_description = 3;
+
+    string receipt_no = 4;
+
+    int32  ulb_id = 5;
+    string ulb_name = 6;
+
+    string old_ward_no = 7;
+    string new_ward_no = 8;
+    
+    int32  revenue_module_id = 9;
+    string revenue_module_name = 10;
+
+
+    string receipt_date = 11;
+
+    int32  receipt_mode_id = 12;
+    string receipt_mode_name = 13;
+
+    string paid_by = 14;
+    string cheque_draft_no = 15;
+    double bank_amount = 16;
+    double cash_amount = 17;
+    string deposited_to = 18;
+    string deposit_date = 19;
+    string realization_date = 20;
+    bool whether_returned = 21;
+    string remarks = 22;
+    bool cash_basis = 23;
+    bool accrual_basis = 24;
+}
+
+message PetRegistrationReply {
+    int32 code = 1;
+    string message = 2;
+}
