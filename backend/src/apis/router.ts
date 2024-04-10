@@ -50,6 +50,7 @@ import BankTypesRoute from "./route/masters/BankTypesRoute";
 import AuditTrailRoute from "./route/auditTrail/auditTrailRoute";
 import RevenueAccountedTypesRoute from "./route/masters/RevenueAccountedTypesRoute";
 import CollectionRegisterRoute from "./route/revenueCollection/collectionRegister";
+import DailyCollSummaryRoute from "./route/revenueCollection/dailyCollSummary";
 
 /*
 |--------------------------------------------------------------------------
@@ -217,6 +218,8 @@ class FinanceRoute {
     (new RevenueAccountedTypesRoute().configure(app, "49"));
     
     (new CollectionRegisterRoute().configure(app, "50"));
+
+    (new DailyCollSummaryRoute().configure(app, "51"));
   }
 }
 

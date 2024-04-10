@@ -15,12 +15,12 @@ import TableWithScrollPagination from "@/components/global/organisms/TableWithSc
 import Checkboxes from "@/components/global/atoms/Checkbox";
 import Button from "@/components/global/atoms/Button";
 import { useSelector } from "react-redux";
-import Footer from "./Footer";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import Footer from "./Footer";
 
-const ReceiptRegister = () => {
+const HeroDailyCollSummary = () => {
   const pathName = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<any>();
@@ -87,7 +87,7 @@ const ReceiptRegister = () => {
   const handleApprove = async (name: string) => {
     try {
       const res = await axios({
-        url: FINANCE_URL.RECEIPT_REGISTER.approve,
+        url: FINANCE_URL.DAILY_COLL_SUMMARY.approve,
         method: "POST",
         data: {
           data: {
@@ -113,36 +113,24 @@ const ReceiptRegister = () => {
     },
     { name: "id", caption: "Sr. No." },
     {
-      name: "receipt_no",
-      caption: "Receipt Number",
+      name: "gledger",
+      caption: "Department Name",
     },
     {
-      name: "receipt_date",
-      caption: "Receipt Date",
+      name: "descri",
+      caption: "Revenue Head Name",
     },
     {
-      name: "receipt_mode",
-      caption: "Mode of Receipt",
+      name: "revenue_accounted_type_name",
+      caption: "Revenue Accounted Type",
     },
     {
-      name: "paid_by",
-      caption: "Paid By",
+      name: "amount",
+      caption: "Amount"
     },
     {
-      name: "cheque_or_draft_no",
-      caption: "Cheque / Draft No",
-    },
-    {
-      name: "deposit_date",
-      caption: "Date of Deposit",
-    },
-    {
-      name: "realisation_date",
-      caption: "Date of Realisation",
-    },
-    {
-      name: "wheather_returned",
-      caption: "Wheather Re-turned",
+      name: "bank_acc_no",
+      caption: "Deposited With",
     },
     {
       name: "view",
@@ -150,6 +138,7 @@ const ReceiptRegister = () => {
       value: tButton,
     },
   ];
+
 
   const [newColumns, setNewColumns] = useState(columns);
 
@@ -163,22 +152,16 @@ const ReceiptRegister = () => {
       }
     })();
   },[user])
-
-
+  
   return (
     <>
       <Toaster />
       {workingAnimation}
-      <HeaderWidget
-        variant={
-          user?.role.includes("Accounts Department – Accountant") ? "add" : ""
-        }
-        title={"Receipt Register Entry"}
-      />
+      <HeaderWidget variant="" title="Daily Collection Summary" />
       <TableWithScrollPagination
         center
         columns={newColumns}
-        api={FINANCE_URL.RECEIPT_REGISTER.get || ""}
+        api={FINANCE_URL.DAILY_COLL_SUMMARY.get || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer
@@ -194,4 +177,4 @@ const ReceiptRegister = () => {
   );
 };
 
-export default ReceiptRegister;
+export default HeroDailyCollSummary;

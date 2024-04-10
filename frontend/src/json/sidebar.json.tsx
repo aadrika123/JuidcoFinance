@@ -68,7 +68,7 @@ export const sidebarLinks: SidebarLinksProps = {
             },
             {
               moduleName: "Summary of Daily Collection",
-              path: "/revenue-collection/daily-collection",
+              path: "/revenue-collection/daily-collection-summary",
             },
           ],
         },
@@ -106,7 +106,7 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/documentation",
           subModules: [
-            { moduleName: "Voucher Entry", path: "/documentation/voucher-entry" },
+            { moduleName: "Cash/Bank Receipt Voucher", path: "/documentation/cash-bank-receipt-voucher" },
             {
               moduleName: "Cash Book",
               path: "/documentation/cash-book",

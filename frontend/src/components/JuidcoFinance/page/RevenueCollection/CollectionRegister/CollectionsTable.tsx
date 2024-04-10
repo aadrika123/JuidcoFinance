@@ -51,8 +51,8 @@ const CollectionsTable = <T,>({
     count: 0,
     searchText: "",
     data: [],
-    ulbId: "",
-    moduleId: "",
+    ulbId: 1,
+    moduleId: 1,
     date: new Date(),
   });
   const { page, count, searchText, data, ulbId, date, moduleId } = state;
@@ -164,12 +164,11 @@ const CollectionsTable = <T,>({
     <>
       <section className="border shadow-xl bg-white p-6 px-10">
         <div className="flex justify-between items-center mb-6">
-          <div className="text-primary_green rounded-md px-2 pb-1 bg-primary_green text-sub_head font-semibold flex items-center">
+          <div className="text-primary_green rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
             <Select
               label=""
               name="ulb_id"
-              placeholder="ULB Name"
-              className="w-40 text-primary_green bg-white outline-none"
+              className="w-40 text-primary_green border-primary_green bg-white outline-none"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
             />
@@ -177,15 +176,14 @@ const CollectionsTable = <T,>({
             <Select
               label=""
               name="module_id"
-              placeholder="Module Name"
-              className="w-48 text-primary_green bg-white outline-none mx-2"
+              className="w-48 text-primary_green border-primary_green bg-white outline-none mx-2"
               api={`${FINANCE_URL.REVENUE_MODULE.get}`}
               onChange={handleModule}
             />
 
             <label
               htmlFor="date-pick"
-              className="border border-zinc-400 bg-white rounded-md h-[38px] px-2 flex justify-center items-center mt-1"
+              className="border border-primary_green bg-white rounded-md h-[38px] px-2 flex justify-center items-center mt-1 cursor-pointer"
             >
               {date ? date.toDateString() : "Date"}
             </label>

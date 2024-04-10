@@ -1,23 +1,23 @@
 import { Request, Response } from "express";
 import Joi from "joi";
-import { collectionRegisterApproveSchema } from "../../requests/revenueCollection/collectionRegisterValidation";
 import CommonRes from "../../../util/helper/commonResponse";
 import { resMessage } from "../../responseMessage/commonMessage";
 import { resObj } from "../../../util/types";
-import CollectionRegisterDao from "../../dao/revenueCollection/collectionRegisterDao";
+import dailyCollSummaryDao from "../../dao/revenueCollection/dailyCollSummaryDao";
+import { dailyCollSummaryApproveSchema } from "../../requests/revenueCollection/dailyCollSummaryValidation";
 
 /**
  * | Author- Sanjiv Kumar
- * | Created for- collectionRegister Controller
+ * | Created for- daily collection summary Controller
  * | Status: open
  */
 
-class CollectionRegisterController {
-  private collectionRegisterDao: CollectionRegisterDao;
+class DailyCollSummaryController {
+  private dailyCollSummaryDao: dailyCollSummaryDao;
   private initMsg: string;
   constructor() {
-    this.collectionRegisterDao = new CollectionRegisterDao();
-    this.initMsg = "CollectionRegister Entry";
+    this.dailyCollSummaryDao = new dailyCollSummaryDao();
+    this.initMsg = "Daily Collection Summary";
   }
 
   // Get limited bill invoices list
@@ -32,7 +32,7 @@ class CollectionRegisterController {
       version: "1.0",
     };
     try {
-      const data = await this.collectionRegisterDao.get(req);
+      const data = await this.dailyCollSummaryDao.get(req);
 
       if (!data)
         return CommonRes.NOT_FOUND(
@@ -68,9 +68,9 @@ class CollectionRegisterController {
         id: Joi.number().required().greater(0)
       }).validate({'id': id});
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res);
 
-      const data = await this.collectionRegisterDao.getById(id);
+      const data = await this.dailyCollSummaryDao.getById(id);
 
       if (!data)
         return CommonRes.NOT_FOUND(
@@ -99,11 +99,11 @@ class CollectionRegisterController {
       version: "1.0",
     };
     try {
-      const { error } = collectionRegisterApproveSchema.validate(req.body.data);
+      const { error } = dailyCollSummaryApproveSchema.validate(req.body.data);
 
       if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
-      const data = await this.collectionRegisterDao.approve(req);
+      const data = await this.dailyCollSummaryDao.approve(req);
       return CommonRes.CREATED(
         resMessage(this.initMsg).UPDATED,
         data,
@@ -112,10 +112,11 @@ class CollectionRegisterController {
         res
       );
     } catch (error: any) {
+      console.log("first", error)
       return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
 }
 
-export default CollectionRegisterController;
+export default DailyCollSummaryController;
 

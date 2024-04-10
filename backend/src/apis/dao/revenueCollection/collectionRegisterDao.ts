@@ -338,12 +338,14 @@ class CollectionRegisterDao {
         updated_at: true,
       },
     };
-    const data: any = await prisma.collection_registers.findFirst(query);
+    let data: any = await prisma.collection_registers.findFirst(query);
 
-    const data1 = { ...data, ...data.receipt_register };
-    delete data1.receipt_register;
+    if (data) {
+      data = { ...data, ...data?.receipt_register };
+      delete data.receipt_register;
+    }
 
-    return generateRes(data1);
+    return generateRes(data);
   };
 
   //Appropve or Check the receipt register

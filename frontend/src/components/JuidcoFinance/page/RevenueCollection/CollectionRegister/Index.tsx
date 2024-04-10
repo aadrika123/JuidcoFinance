@@ -58,7 +58,6 @@ export const HeroCollectionRegister = () => {
     );
   };
 
-
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
     const handleCheckbox = (i: string) => {
@@ -163,7 +162,18 @@ export const HeroCollectionRegister = () => {
     },
   ];
 
+  const [newColumns, setNewColumns] = useState(columns);
 
+  ////////////////// Filtering the column on behalf of User roles
+  useEffect(()=> {
+    (function(){
+      if(user && !user?.role.includes("Accounts Department – Manager")){
+        setNewColumns((prev) => {
+          return prev.filter((item) => item.name !== "All")
+        })
+      }
+    })();
+  },[user])
 
   return (
     <>
@@ -176,7 +186,7 @@ export const HeroCollectionRegister = () => {
 
       <CollectionsTable
         center
-        columns={columns}
+        columns={newColumns}
         api={FINANCE_URL.COLLECTION_REGISTER.get || ""}
         numberOfRowsPerPage={10}
         footer={

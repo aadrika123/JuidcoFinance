@@ -50,7 +50,8 @@ type FinanceUrlKeys =
   | "RECEIPT_MODE"
   | "OPENING_BALANCE"
   | "REVENUE_ACCOUNTED_TYPE"
-  | "COLLECTION_REGISTER";
+  | "COLLECTION_REGISTER"
+  | "DAILY_COLL_SUMMARY";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -289,6 +290,11 @@ export const FINANCE_URL: Urls = {
     get: "/collection-register/get-all",
     approve: "/collection-register/approve",
     getById: "/collection-register/get-by-id"
+  },
+  DAILY_COLL_SUMMARY: {
+    get: "/daily-coll-summary/get-all",
+    approve: "/daily-coll-summary/approve",
+    getById: "/daily-coll-summary/get-by-id"
   },
   REVENUE_MODULE: {
     get: "/revenue-modules/get-all",

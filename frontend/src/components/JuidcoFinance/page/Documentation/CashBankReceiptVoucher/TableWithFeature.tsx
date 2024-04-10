@@ -1,20 +1,25 @@
 "use client";
 
 import React, { ChangeEvent, useEffect, useState } from "react";
-// import Button from "../atoms/Button";
-import Table, { ColumnProps } from "../molecules/Table";
-import DebouncedSearch from "../atoms/DebouncedSearch";
-import { useQuery } from "react-query";
 import axios from "@/lib/axiosConfig";
-import LoaderSkeleton from "../atoms/LoaderSkeleton";
-import { FINANCE_URL } from "@/utils/api/urls";
+import { useQuery } from "react-query";
+import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
+import LoaderSkeleton from "@/components/global/atoms/LoaderSkeleton";
+import Table, { ColumnProps } from "@/components/global/molecules/Table";
+import NextPrevPagination from "@/components/global/molecules/NextPrevPagination";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Select from "../atoms/nonFormik/Select";
-import Loader from "../atoms/Loader";
+import { FINANCE_URL } from "@/utils/api/urls";
+import Select from "@/components/global/atoms/nonFormik/Select";
 
-interface TableWithScrollPaginProp {
-  footer?: React.ReactNode;
+/**
+ * | Author- Sanjiv Kumar
+ * | Created On- 10-04-2024
+ * | Created for- Reusable Record List With Search
+ * | Status: open
+ */
+
+interface TableWithFeaturesProps {
+  footer: React.ReactNode;
   columns: Array<ColumnProps>;
   api: string;
   numberOfRowsPerPage: number;
@@ -27,37 +32,33 @@ interface TableWithScrollPaginProp {
 
 interface stateTypes<T> {
   page: number;
-  count: number;
+  pageCount: number;
   searchText: string;
   data: T[];
   ulbId: number | string;
   date: Date;
 }
 
-const TableWithScrollPagination = <T,>({
+const TableWithFeatures = <T,>({
   footer,
   columns,
   api,
   numberOfRowsPerPage,
   center = false,
-  scrollable = true,
   ...rest
-}: TableWithScrollPaginProp) => {
+}: TableWithFeaturesProps) => {
   const [isSearching, setIsSearching] = useState(false);
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
-    count: 0,
+    pageCount: 0,
     searchText: "",
     data: [],
     ulbId: 1,
     date: new Date(),
   });
-  const { page, count, searchText, data, ulbId, date } = state;
-  const [tempFetch, setTempFetch] = useState(false);
-  const [filtered, setFiltered] = useState([]);
+  const { page, pageCount, searchText, data, ulbId, date } = state;
 
   const fetchData = async (): Promise<T[]> => {
-    setTempFetch(true);
     const res = await axios({
       url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
@@ -68,29 +69,16 @@ const TableWithScrollPagination = <T,>({
       data = { totalPage: 0, data: [] };
     }
 
-    // data = data.data.sort(sortByCreatedAtDesc);
-    if (page === 1) {
-      setState((prev) => ({
-        ...prev,
-        count: data.count,
-        data: data.data,
-      }));
-    } else {
-      setState((prev) => ({
-        ...prev,
-        count: data.count,
-        data: [...prev.data, ...data.data],
-      }));
-    }
+    setState((prev) => ({
+      ...prev,
+      pageCount: data.totalPage,
+      data: data.data,
+    }));
 
     const filteredData = data.data.map((item: any) => ({ id: item.id }));
-    setFiltered(filteredData);
     rest.handleGet &&
-      rest.handleGet({
-        balance: data?.others,
-        data: [...filtered, ...filteredData],
-      });
-    setTempFetch(false);
+      rest.handleGet(filteredData);
+
     setIsSearching(false);
     return data.data;
   };
@@ -114,32 +102,12 @@ const TableWithScrollPagination = <T,>({
     setState((prev) => ({ ...prev, searchText: text, page: 1 }));
   };
 
-  ////////////// Handle Scroll ///////////
-  const handleScroll = () => {
-    const element = document.getElementById("table-with-pegination");
-    if (element) {
-      if (
-        element.clientHeight + element.scrollTop + 2 >=
-        element.scrollHeight
-      ) {
-        if (data.length < count) {
-          setState((prev) => ({ ...prev, page: prev.page + 1 }));
-        }
-      }
+  const handlePageChange = (direction: "prev" | "next") => {
+    const newPageNumber = direction === "prev" ? page - 1 : page + 1;
+    if (newPageNumber > 0 && newPageNumber <= pageCount) {
+      setState((prev) => ({ ...prev, page: newPageNumber }));
     }
   };
-
-  ///////////// Listening Scroll /////////////////
-  useEffect(() => {
-    const element = document.getElementById("table-with-pegination");
-    if (element) {
-      element?.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      element?.removeEventListener("scroll", handleScroll);
-    };
-  }, [isFetching, isSearching]);
 
   ////// Handl Selecting ULBs ///////////
   const handleUlb = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -153,13 +121,13 @@ const TableWithScrollPagination = <T,>({
 
   return (
     <>
-      <section className="border shadow-xl bg-white p-6 px-10">
-        <div className="flex justify-between items-center mb-6">
+      <section className="border bg-white shadow-xl p-6 px-10">
+        <div className="flex justify-between items-center">
           <div className="text-primary_bg_indigo rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
             <Select
               label=""
               name="ulb_id"
-              className="w-48 border-[#4338ca] text-primary_bg_indigo"
+              className="w-48 text-primary_bg_indigo border-[#4338ca]"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
             />
@@ -176,31 +144,39 @@ const TableWithScrollPagination = <T,>({
               onChange={handleDate}
             />
           </div>
-
           <DebouncedSearch onChange={onSearchTextChange} />
         </div>
 
-        {tempFetch && (isFetching || isSearching || data.length === 0) ? (
-          <LoaderSkeleton />
-        ) : (
-          <Table
-            columns={columns}
-            data={data}
-            center={center}
-            limit={numberOfRowsPerPage}
-            scrollable={scrollable}
-          />
-        )}
-          {tempFetch && data.length != 0  && <Loader className="h-[20px]" />}
-        {footer}
-        {/* <aside className="flex items-center justify-end py-5 gap-5">
-          <Button onClick={rest.handleApprove} buttontype="button" variant="primary">
-            Approved
-          </Button>
-        </aside> */}
+        <div className="mt-8">
+          {isFetching || isSearching ? (
+            <LoaderSkeleton />
+          ) : (
+            <>
+              {isFetching || isSearching || data.length === 0 ? (
+                <LoaderSkeleton />
+              ) : (
+                <Table
+                  columns={columns}
+                  data={data}
+                  center={center}
+                  limit={numberOfRowsPerPage}
+                  pageNo={page}
+                  // scrollable={scrollable}
+                />
+              )}
+              <NextPrevPagination
+                page={page}
+                pageCount={pageCount}
+                handlePageChange={handlePageChange}
+              />
+            </>
+          )}
+
+          {footer}
+        </div>
       </section>
     </>
   );
 };
 
-export default TableWithScrollPagination;
+export default TableWithFeatures;

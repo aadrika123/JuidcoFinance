@@ -63,9 +63,9 @@ const Select: React.FC<SelectProps> = (props) => {
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
         >
-          <option selected value="">
+          {props.placeholder && <option selected value="">
             {props.placeholder}
-          </option>
+          </option>}
           {dataList.length > 0 &&
             dataList.map((d: Select) => (
               <option
