@@ -92,7 +92,10 @@ const CollectionsTable = <T,>({
     setFiltered(filteredData);
     rest.handleGet &&
       rest.handleGet({
+        isApproved: data.data?.some((i: any) => i.is_checked ) || state.data?.some((i: any) => i.is_checked ),
         balance: data?.others,
+        ulbId,
+        date: date.toISOString().split("T")[0],
         data: [...filtered, ...filteredData],
       });
     setTempFetch(false);
@@ -210,7 +213,7 @@ const CollectionsTable = <T,>({
           />
         )}
 
-        {tempFetch && data.length != 0 && <Loader className="h-[20px]" />}
+        {tempFetch && data.length != 0 && <Loader  height="h-8"/>}
         {footer}
       </section>
     </>

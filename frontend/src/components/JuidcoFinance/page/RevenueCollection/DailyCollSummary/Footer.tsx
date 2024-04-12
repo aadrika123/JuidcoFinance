@@ -5,29 +5,31 @@ import React, { ChangeEvent, useState } from "react";
 
 interface FooterProps {
   user: any;
-  balances: any;
+  receiptData: any;
   handleApprove: (name: string) => void;
   isThereData: boolean;
 }
 
 const Footer: React.FC<FooterProps> = (props) => {
   const [printName, setPrintName] = useState("");
-  const { user, balances, isThereData } = props;
+  const { user, receiptData, isThereData } = props;
   const tempUser = user?.role.includes("Accounts Department – Manager") && user;
 
   const footerData = [
     {
       key: "Cash",
-      value: balances?.cash_amount || 0
+      value: receiptData?.balance?.cash_amount || 0,
     },
     {
       key: "Cheque",
-      value: balances?.cheque_amount || 0,
+      value: receiptData?.balance?.cheque_amount || 0,
     },
     {
       key: "Total",
-      value: (balances?.cheque_amount + balances?.cash_amount) || 0,
-    }
+      value:
+        receiptData?.balance?.cheque_amount +
+          receiptData?.balance?.cash_amount || 0,
+    },
   ];
 
   //////// Handle Change
@@ -38,48 +40,54 @@ const Footer: React.FC<FooterProps> = (props) => {
   return (
     <div>
       <TotalCountTable footerData={footerData} />
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        {isThereData && tempUser && (
-          <div className="flex flex-col">
-            <h2 className="mt-6 text-secondary">Checked By</h2>
-            <Input
-              readonly={true}
-              value={tempUser?.name}
-              label=""
-              name="checked_by"
-              placeholder="Enter Name"
-            />
-            <Input
-              readonly={true}
-              label=""
-              value={tempUser?.role}
-              name="designation"
-              placeholder="Enter Designation"
-            />
-            <Input
-              readonly={tempUser ? false : true}
-              value={tempUser?.print_name || printName}
-              label=""
-              onChange={handleChange}
-              name="checked_by_print_name"
-              placeholder="Enter Print Name"
-            />
+      {!receiptData?.isApproved ? (
+        <>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            {isThereData && tempUser && (
+              <div className="flex flex-col">
+                <h2 className="mt-6 text-secondary">Checked By</h2>
+                <Input
+                  readonly={true}
+                  value={tempUser?.name}
+                  label=""
+                  name="checked_by"
+                  placeholder="Enter Name"
+                />
+                <Input
+                  readonly={true}
+                  label=""
+                  value={tempUser?.role}
+                  name="designation"
+                  placeholder="Enter Designation"
+                />
+                <Input
+                  readonly={tempUser ? false : true}
+                  value={tempUser?.print_name || printName}
+                  label=""
+                  onChange={handleChange}
+                  name="checked_by_print_name"
+                  placeholder="Enter Print Name"
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <aside className="flex items-center justify-end py-5 gap-5">
-        {tempUser && isThereData && (
-          <Button
-            onClick={() => props.handleApprove(printName)}
-            disabled={!printName || printName === ""}
-            className={`${(!printName || printName === "") && "cursor-not-allowed"}`}
-            buttontype="button"
-            variant="primary"
-          >
-            Approved
-          </Button>
-        )}
-      </aside>
+          <aside className="flex items-center justify-end py-5 gap-5">
+            {tempUser && isThereData && (
+              <Button
+                onClick={() => props.handleApprove(printName)}
+                disabled={!printName || printName === ""}
+                className={`${(!printName || printName === "") && "cursor-not-allowed"}`}
+                buttontype="button"
+                variant="primary"
+              >
+                Approved
+              </Button>
+            )}
+          </aside>
+        </>
+      ) : (
+        <span>You Already Approved it. Now You can not approve it again.</span>
+      )}
     </div>
   );
 };

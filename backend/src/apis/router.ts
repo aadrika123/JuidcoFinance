@@ -51,6 +51,7 @@ import AuditTrailRoute from "./route/auditTrail/auditTrailRoute";
 import RevenueAccountedTypesRoute from "./route/masters/RevenueAccountedTypesRoute";
 import CollectionRegisterRoute from "./route/revenueCollection/collectionRegister";
 import DailyCollSummaryRoute from "./route/revenueCollection/dailyCollSummary";
+import CashBankRVoucherRoute from "./route/documentation/cashBankRVoucherRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -220,6 +221,8 @@ class FinanceRoute {
     (new CollectionRegisterRoute().configure(app, "50"));
 
     (new DailyCollSummaryRoute().configure(app, "51"));
+
+    (new CashBankRVoucherRoute().configure(app, "52"));
   }
 }
 

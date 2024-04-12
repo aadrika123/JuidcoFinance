@@ -82,11 +82,12 @@ const TableWithScrollPagination = <T,>({
         data: [...prev.data, ...data.data],
       }));
     }
-
+  
     const filteredData = data.data.map((item: any) => ({ id: item.id }));
     setFiltered(filteredData);
     rest.handleGet &&
       rest.handleGet({
+        isApproved: data.data?.some((i: any) => i.is_checked ) || state.data?.some((i: any) => i.is_checked),
         balance: data?.others,
         data: [...filtered, ...filteredData],
       });
@@ -191,7 +192,7 @@ const TableWithScrollPagination = <T,>({
             scrollable={scrollable}
           />
         )}
-          {tempFetch && data.length != 0  && <Loader className="h-[20px]" />}
+        {tempFetch && data.length != 0 && <Loader height="h-8" />}
         {footer}
         {/* <aside className="flex items-center justify-end py-5 gap-5">
           <Button onClick={rest.handleApprove} buttontype="button" variant="primary">

@@ -434,7 +434,10 @@ model account_codes {
 
   receipt_registers receipt_registers[]
 
-  bank_masters bank_masters[]
+  bank_masters               bank_masters[]
+  cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
+
+  calc_daily_coll_summaries calc_daily_coll_summaries[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -455,6 +458,7 @@ model revenue_accounted_types {
   id                Int                 @id @default(autoincrement())
   name              String
   receipt_registers receipt_registers[]
+  calc_daily_coll_summaries calc_daily_coll_summaries[]
   created_at        DateTime            @default(now()) @map("created_at")
   updated_at        DateTime            @updatedAt @map("updated_at")
 }
@@ -501,8 +505,10 @@ model bank_masters {
   email               String?
   contact_no          String?
 
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt @map("updated_at")
+  cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
+  calc_daily_coll_summaries  calc_daily_coll_summaries[]
+  created_at                 DateTime                     @default(now()) @map("created_at")
+  updated_at                 DateTime                     @updatedAt @map("updated_at")
 }
 
 model bank_masters_history {
@@ -779,7 +785,9 @@ model municipality_codes {
 
   request_account_codes request_account_codes[]
 
-  receipt_registers receipt_registers[]
+  receipt_registers          receipt_registers[]
+  cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
+  calc_daily_coll_summaries  calc_daily_coll_summaries[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -839,37 +847,61 @@ model receipt_modes {
   id                Int                 @id @default(autoincrement())
   name              String
   receipt_registers receipt_registers[]
+  calc_daily_coll_summaries  calc_daily_coll_summaries[]
   created_at        DateTime            @default(now()) @map("created_at")
   updated_at        DateTime            @updatedAt @map("updated_at")
 }
 
 /// collection_registers: Managed by: Sanjiv Kumar
 model collection_registers {
-  id                    Int               @id @default(autoincrement())
+  id                    Int                    @id @default(autoincrement())
   receipt_register_id   Int
-  receipt_register      receipt_registers @relation(fields: [receipt_register_id], references: [id])
+  receipt_register      receipt_registers      @relation(fields: [receipt_register_id], references: [id])
   checked_by_id         Int?
-  checked_by            users?            @relation(fields: [checked_by_id], references: [id])
+  checked_by            users?                 @relation(fields: [checked_by_id], references: [id])
   checked_by_print_name String?
-  is_checked            Boolean           @default(false)
-  daily_coll_summary  daily_coll_summaries[]
-  created_at            DateTime          @default(now()) @map("created_at")
-  updated_at            DateTime          @default(now()) @updatedAt @map("updated_at")
+  is_checked            Boolean                @default(false)
+  daily_coll_summary    daily_coll_summaries[]
+  created_at            DateTime               @default(now()) @map("created_at")
+  updated_at            DateTime               @default(now()) @updatedAt @map("updated_at")
 }
 
 /// daily_coll_summaries: Managed by: Sanjiv Kumar
 model daily_coll_summaries {
-  id                    Int               @id @default(autoincrement())
-  receipt_register_id   Int
-  receipt_register      receipt_registers @relation(fields: [receipt_register_id], references: [id])
+  id                     Int                  @id @default(autoincrement())
+  receipt_register_id    Int
+  receipt_register       receipt_registers    @relation(fields: [receipt_register_id], references: [id])
   collection_register_id Int
-  collection_register   collection_registers @relation(fields: [collection_register_id], references: [id])
-  checked_by_id         Int?
-  checked_by            users?            @relation(fields: [checked_by_id], references: [id])
-  checked_by_print_name String?
-  is_checked            Boolean           @default(false)
-  created_at            DateTime          @default(now()) @map("created_at")
-  updated_at            DateTime          @default(now()) @updatedAt @map("updated_at")
+  collection_register    collection_registers @relation(fields: [collection_register_id], references: [id])
+  checked_by_id          Int?
+  checked_by             users?               @relation(fields: [checked_by_id], references: [id])
+  checked_by_print_name  String?
+  is_checked             Boolean              @default(false)
+  created_at             DateTime             @default(now()) @map("created_at")
+  updated_at             DateTime             @default(now()) @updatedAt @map("updated_at")
+}
+
+/// calc_daily_coll_summaries: Managed by: Sanjiv Kumar
+model calc_daily_coll_summaries {
+  id                        Int                     @id @default(autoincrement())
+  ulb_id                    Int
+  ulb                       municipality_codes      @relation(fields: [ulb_id], references: [id])
+  bank_id                   Int
+  bank                      bank_masters            @relation(fields: [bank_id], references: [id])
+  primary_acc_code_id       Int
+  primary_acc_code          account_codes           @relation(fields: [primary_acc_code_id], references: [id])
+  amount                    Float
+  revenue_accounted_type_id Int
+  revenue_accounted_type    revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
+  checked_by_id             Int?
+  checked_by                users?                  @relation(fields: [checked_by_id], references: [id])
+  checked_by_print_name     String?
+  receipt_mode_id           Int
+  receipt_mode              receipt_modes           @relation(fields: [receipt_mode_id], references: [id])
+  receipt_date              DateTime
+  is_checked                Boolean                 @default(false)
+  created_at                DateTime                @default(now()) @map("created_at")
+  updated_at                DateTime                @default(now()) @updatedAt @map("updated_at")
 }
 
 ////receipt_register: Managed by: Sanjiv Kumar
@@ -889,9 +921,9 @@ model receipt_registers {
   revenue_accounted_type    revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
   receipt_date              DateTime
   cheque_or_draft_no        String?
-  bank_amount               Float?
-  cash_amount               Float?
-  bank_acc_no               String
+  bank_amount               Float?                  @default(0)
+  cash_amount               Float?                  @default(0)
+  bank_acc_no               String                  
   deposit_date              DateTime?
   realisation_date          DateTime?
   wheather_returned         Boolean?                @default(false)
@@ -906,7 +938,7 @@ model receipt_registers {
   checked_by_print_name String?
   is_checked            Boolean                @default(false)
   collection_register   collection_registers[]
-  daily_coll_summary  daily_coll_summaries[]
+  daily_coll_summary    daily_coll_summaries[]
   created_at            DateTime               @default(now()) @map("created_at")
   updated_at            DateTime               @updatedAt @map("updated_at")
 }
@@ -1013,12 +1045,17 @@ model users {
 
   request_account_codes request_account_codes[]
   collection_registers  collection_registers[]
-  daily_coll_summary  daily_coll_summaries[]
+  daily_coll_summary    daily_coll_summaries[]
 
   receipt_entered_by receipt_registers[] @relation("entered_by")
   receipt_checked_by receipt_registers[] @relation("checked_by")
-  created_at         DateTime?           @default(now()) @map("created_at")
-  updated_at         DateTime            @updatedAt @map("updated_at")
+
+  cash_bank_r_v_checked_by  cash_bank_receipt_vouchers[] @relation("cbrv_checked_by")
+  cash_bank_r_v_approved_by cash_bank_receipt_vouchers[] @relation("cbrv_approved_by")
+
+  calc_daily_coll_summaries  calc_daily_coll_summaries[]
+  created_at                DateTime?                    @default(now()) @map("created_at")
+  updated_at                DateTime                     @updatedAt @map("updated_at")
 }
 
 ///// Vendor Master
@@ -1063,6 +1100,30 @@ model vendor_types {
   vendors    vendor_masters[]
   created_at DateTime         @default(now()) @map("created_at")
   updated_at DateTime         @updatedAt @map("updated_at")
+}
+
+model cash_bank_receipt_vouchers {
+  id                     Int                @id @default(autoincrement())
+  ulb_id                 Int
+  ulb                    municipality_codes @relation(fields: [ulb_id], references: [id])
+  bank_id                Int
+  bank                   bank_masters       @relation(fields: [bank_id], references: [id])
+  primary_acc_code_id    Int
+  primary_acc_code       account_codes      @relation(fields: [primary_acc_code_id], references: [id])
+  pay_in_slip_ref_no     String?
+  pay_in_slip_date       DateTime?
+  voucher_date           DateTime           @default(now())
+  crv_brv_no             String
+  amount                 Float
+  is_approved            Boolean            @default(false)
+  checked_by_id          Int
+  checked_by             users              @relation("cbrv_checked_by", fields: [checked_by_id], references: [id])
+  checked_by_print_name  String
+  approved_by_id         Int?
+  approved_by            users?              @relation("cbrv_approved_by", fields: [approved_by_id], references: [id])
+  approved_by_print_name String?
+  created_at             DateTime           @default(now()) @map("created_at")
+  updated_at             DateTime           @default(now()) @updatedAt @map("updated_at")
 }
 
 model voucher_entries {

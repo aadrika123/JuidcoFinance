@@ -19,6 +19,7 @@ import Footer from "./Footer";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
 
 const ReceiptRegister = () => {
   const pathName = usePathname();
@@ -28,6 +29,10 @@ const ReceiptRegister = () => {
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState<any>([]);
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  const [showPopup, setShowPopup] = useState({
+    name:"",
+    isOpen: false,
+  });
 
   useEffect(() => {
     setUser(userData);
@@ -56,14 +61,14 @@ const ReceiptRegister = () => {
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
     const handleCheckbox = (i: string) => {
-      setReceiptIds((prev: any)=> {
+      setReceiptIds((prev: any) => {
         const updatedData: any = [...prev];
         if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
           return updatedData.filter((item: any) => item.id !== i);
         } else {
           return [...prev, { id: Number(i) }];
         }
-      })
+      });
     };
 
     return (
@@ -84,7 +89,7 @@ const ReceiptRegister = () => {
   };
 
   /////// Handle Approve Receipt
-  const handleApprove = async (name: string) => {
+  const handleApprove = async () => {
     try {
       const res = await axios({
         url: FINANCE_URL.RECEIPT_REGISTER.approve,
@@ -92,7 +97,7 @@ const ReceiptRegister = () => {
         data: {
           data: {
             checked_by_id: user.id,
-            checked_by_print_name: name,
+            checked_by_print_name: showPopup.name,
             ids: receiptIds,
           },
         },
@@ -104,6 +109,11 @@ const ReceiptRegister = () => {
       toast.error("Something Went Wrong!!");
     }
   };
+
+  ////// Handle Approve Confirmation
+  const handleApproveConfirm = (name: string) => {
+    setShowPopup((prev)=> ({...prev, name, isOpen: !showPopup.isOpen}))
+  }
 
   const columns = [
     {
@@ -154,20 +164,24 @@ const ReceiptRegister = () => {
   const [newColumns, setNewColumns] = useState(columns);
 
   ////////////////// Filtering the column on behalf of User roles
-  useEffect(()=> {
-    (function(){
-      if(user && !user?.role.includes("Accounts Department – Manager")){
+  useEffect(() => {
+    (function () {
+      if (user && !user?.role.includes("Accounts Department – Manager")) {
         setNewColumns((prev) => {
-          return prev.filter((item) => item.name !== "All")
-        })
+          return prev.filter((item) => item.name !== "All");
+        });
       }
     })();
-  },[user])
-
+  }, [user]);
 
   return (
     <>
       <Toaster />
+      {showPopup?.isOpen && <ConfirmationPopup
+        cancel={() => setShowPopup((prev)=> ({...prev, isOpen: !showPopup.isOpen}))}
+        continue={handleApprove}
+        message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
+      />}
       {workingAnimation}
       <HeaderWidget
         variant={
@@ -183,8 +197,8 @@ const ReceiptRegister = () => {
         footer={
           <Footer
             user={user}
-            balances={receiptData?.balance}
-            handleApprove={handleApprove}
+            receiptData={receiptData}
+            handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />
         }

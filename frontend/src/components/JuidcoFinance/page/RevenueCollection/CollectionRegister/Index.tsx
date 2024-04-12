@@ -18,8 +18,7 @@ import CollectionsTable from "./CollectionsTable";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "@/components/global/atoms/Button";
-
-
+import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
 
 export const HeroCollectionRegister = () => {
   const pathName = usePathname();
@@ -27,12 +26,13 @@ export const HeroCollectionRegister = () => {
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
   const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [user, setUser] = useState<any>();
-
+  const [showPopup, setShowPopup] = useState({
+    name: "",
+    isOpen: false,
+  });
 
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState<any>([]);
-
-
 
   useEffect(() => {
     setUser(userData);
@@ -80,35 +80,39 @@ export const HeroCollectionRegister = () => {
     );
   };
 
-
-    ///// Getting Selected Data and Balances From Table Component
-    const handleGetBalance = (data: any) => {
-      setReceiptData(data);
-      setReceiptIds(data.data);
-    };
-
+  ///// Getting Selected Data and Balances From Table Component
+  const handleGetBalance = (data: any) => {
+    setReceiptData(data);
+    setReceiptIds(data.data);
+  };
 
   /////// Handle Approve Receipt
-  const handleApprove = async (name: string) => {
+  const handleApprove = async () => {
     try {
       const res = await axios({
         url: FINANCE_URL.COLLECTION_REGISTER.approve,
         method: "POST",
         data: {
-          data:{
+          data: {
             checked_by_id: user.id,
-            checked_by_print_name: name,
+            checked_by_print_name: showPopup.name,
+            ulb_id: receiptData.ulbId,
+            date: receiptData.date,
             ids: receiptIds,
-          }
+          },
         },
       });
-      if(!res.data.status)  throw new Error("Something Went Wrong!!");
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
       res && toast.success("Approved Sucessfully!!");
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
   };
 
+  ////// Handle Approve Confirmation
+  const handleApproveConfirm = (name: string) => {
+    setShowPopup((prev) => ({ ...prev, name, isOpen: !showPopup.isOpen }));
+  };
 
   const columns = [
     {
@@ -165,24 +169,30 @@ export const HeroCollectionRegister = () => {
   const [newColumns, setNewColumns] = useState(columns);
 
   ////////////////// Filtering the column on behalf of User roles
-  useEffect(()=> {
-    (function(){
-      if(user && !user?.role.includes("Accounts Department – Manager")){
+  useEffect(() => {
+    (function () {
+      if (user && !user?.role.includes("Accounts Department – Manager")) {
         setNewColumns((prev) => {
-          return prev.filter((item) => item.name !== "All")
-        })
+          return prev.filter((item) => item.name !== "All");
+        });
       }
     })();
-  },[user])
+  }, [user]);
 
   return (
     <>
       <Toaster />
+      {showPopup?.isOpen && (
+        <ConfirmationPopup
+          cancel={() =>
+            setShowPopup((prev) => ({ ...prev, isOpen: !showPopup.isOpen }))
+          }
+          continue={handleApprove}
+          message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
+        />
+      )}
       {workingAnimation}
-      <HeaderWidget
-        variant={""}
-        title={"Collection Register"}
-      />
+      <HeaderWidget variant={""} title={"Collection Register"} />
 
       <CollectionsTable
         center
@@ -192,8 +202,8 @@ export const HeroCollectionRegister = () => {
         footer={
           <Footer
             user={user}
-            balances={receiptData?.balance}
-            handleApprove={handleApprove}
+            receiptData={receiptData}
+            handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />
         }

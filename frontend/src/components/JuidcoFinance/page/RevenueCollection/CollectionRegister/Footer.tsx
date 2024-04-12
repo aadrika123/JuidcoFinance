@@ -5,29 +5,30 @@ import React, { ChangeEvent, useState } from "react";
 
 interface FooterProps {
   user: any;
-  balances: any;
+  receiptData: any;
   handleApprove: (name: string) => void;
   isThereData: boolean;
 }
 
 const Footer: React.FC<FooterProps> = (props) => {
   const [printName, setPrintName] = useState("");
-  const { user, balances, isThereData } = props;
+  const { user, receiptData, isThereData } = props;
+  
   const tempUser = user?.role.includes("Accounts Department – Manager") && user;
 
   const footerData = [
     {
       key: "Opening Balance",
-      value: balances?.opening_balance?.opening_balance || 0
+      value: receiptData?.balance?.opening_balance?.opening_balance || 0
     },
     {
       key: "Days Total",
-      value: balances?.total_amount || 0,
+      value: receiptData?.balance?.total_amount || 0,
     },
     {
       key: "Closing Total",
       value:
-        balances?.total_amount + balances?.opening_balance?.opening_balance || 0,
+        receiptData?.balance?.total_amount + receiptData?.balance?.opening_balance?.opening_balance || 0,
     },
   ];
 
@@ -39,6 +40,8 @@ const Footer: React.FC<FooterProps> = (props) => {
   return (
     <div>
       <TotalCountTable footerData={footerData} />
+      {!receiptData?.isApproved ? <>
+      
       <div className="grid grid-cols-2 gap-4 mt-4">
         {isThereData && tempUser && (
           <div className="flex flex-col">
@@ -81,6 +84,7 @@ const Footer: React.FC<FooterProps> = (props) => {
           </Button>
         )}
       </aside>
+      </> : <span>You Already Approved it. Now You can not approve it again.</span>}
     </div>
   );
 };

@@ -15,8 +15,8 @@ model receipt_registers {
   revenue_accounted_type    revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
   receipt_date              DateTime
   cheque_or_draft_no        String?
-  bank_amount               Float?
-  cash_amount               Float?
+  bank_amount               Float?                  @default(0)
+  cash_amount               Float?                  @default(0)
   bank_acc_no               String
   deposit_date              DateTime?
   realisation_date          DateTime?

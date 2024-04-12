@@ -1,4 +1,5 @@
 /////// users Managed by: Sanjiv Kumar //////////////
+
 model users {
   id                   Int                    @id @default(autoincrement())
   user_name            String?
@@ -44,6 +45,11 @@ model users {
 
   receipt_entered_by receipt_registers[] @relation("entered_by")
   receipt_checked_by receipt_registers[] @relation("checked_by")
-  created_at         DateTime?           @default(now()) @map("created_at")
-  updated_at         DateTime            @updatedAt @map("updated_at")
+
+  cash_bank_r_v_checked_by  cash_bank_receipt_vouchers[] @relation("cbrv_checked_by")
+  cash_bank_r_v_approved_by cash_bank_receipt_vouchers[] @relation("cbrv_approved_by")
+
+  calc_daily_coll_summaries  calc_daily_coll_summaries[]
+  created_at                DateTime?                    @default(now()) @map("created_at")
+  updated_at                DateTime                     @updatedAt @map("updated_at")
 }

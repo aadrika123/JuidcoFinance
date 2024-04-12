@@ -1,0 +1,23 @@
+/// calc_daily_coll_summaries: Managed by: Sanjiv Kumar
+
+model calc_daily_coll_summaries {
+  id                        Int                     @id @default(autoincrement())
+  ulb_id                    Int
+  ulb                       municipality_codes      @relation(fields: [ulb_id], references: [id])
+  bank_id                   Int
+  bank                      bank_masters            @relation(fields: [bank_id], references: [id])
+  primary_acc_code_id       Int
+  primary_acc_code          account_codes           @relation(fields: [primary_acc_code_id], references: [id])
+  amount                    Float
+  revenue_accounted_type_id Int
+  revenue_accounted_type    revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
+  checked_by_id             Int?
+  checked_by                users?                  @relation(fields: [checked_by_id], references: [id])
+  checked_by_print_name     String?
+  receipt_mode_id           Int
+  receipt_mode              receipt_modes           @relation(fields: [receipt_mode_id], references: [id])
+  receipt_date              DateTime
+  is_checked                Boolean                 @default(false)
+  created_at                DateTime                @default(now()) @map("created_at")
+  updated_at                DateTime                @default(now()) @updatedAt @map("updated_at")
+}

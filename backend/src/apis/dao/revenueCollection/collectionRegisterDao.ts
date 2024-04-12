@@ -92,6 +92,7 @@ class CollectionRegisterDao {
     rr.realisation_date,
     rr.wheather_returned,
     rr.remarks,
+    cr.is_checked,
     cr.created_at,
     cr.updated_at,
     racctype.id as revenue_accounted_type_id,
@@ -104,14 +105,6 @@ class CollectionRegisterDao {
     rmodule.name as revenue_module_name,
     rmode.id as receipt_mode_id,
     rmode.name as receipt_mode_name,
-    emp.id as entered_by_id,
-    emp.name as entered_by_name,
-    checkedemp.name as checked_by_name,
-    checkedemp.id as checked_by_id,
-    desi.id as entered_by_designation_id,
-    desi.name as entered_by_designation_name,
-    checkedesi.id as checked_by_designation_id,
-    checkedesi.name as checked_by_designation_name,
     rr.cash_amount + rr.bank_amount as total_amount   
     FROM
     collection_registers as cr
@@ -127,14 +120,6 @@ class CollectionRegisterDao {
     revenue_modules as rmodule ON rr.revenue_module_id = rmodule.id
     LEFT JOIN
     receipt_modes as rmode ON rr.receipt_mode_id = rmode.id
-    LEFT JOIN
-    employees as emp ON rr.entered_by_id = emp.id
-    LEFT JOIN 
-    employees as checkedemp ON cr.checked_by_id = checkedemp.id
-    LEFT JOIN 
-    designations as checkedesi ON checkedemp.designation_id = checkedesi.id
-    LEFT JOIN 
-    designations as desi ON emp.designation_id = desi.id
     WHERE (true ${a})
     ORDER BY
     rr.updated_at desc
@@ -157,14 +142,6 @@ class CollectionRegisterDao {
     revenue_modules as rmodule ON rr.revenue_module_id = rmodule.id
     LEFT JOIN
     receipt_modes as rmode ON rr.receipt_mode_id = rmode.id
-    LEFT JOIN
-    employees as emp ON rr.entered_by_id = emp.id
-    LEFT JOIN 
-    employees as checkedemp ON rr.checked_by_id = checkedemp.id
-    LEFT JOIN 
-    designations as checkedesi ON checkedemp.designation_id = checkedesi.id
-    LEFT JOIN 
-    designations as desi ON emp.designation_id = desi.id
   WHERE (true ${a})`) as any,
       prisma.$queryRawUnsafe<daily_receipt_balances[]>(`SELECT
   drb.id,
@@ -180,22 +157,6 @@ class CollectionRegisterDao {
 
     for (const data of result as any) {
       const items: any = { ...data };
-      items.entered_by = {
-        id: data.entered_by_id,
-        name: data.entered_by_name,
-        designation: {
-          id: data.entered_by_designation_id,
-          name: data.entered_by_designation_name,
-        },
-      };
-      items.checked_by = {
-        id: data.checked_by_id,
-        name: data.checked_by_name,
-        designation: {
-          id: data.checked_by_designation_id,
-          name: data.checked_by_designation_name,
-        },
-      };
       items.revenue_module = {
         id: data.revenue_module_id,
         name: data.revenue_module_name,
@@ -227,14 +188,6 @@ class CollectionRegisterDao {
       delete items.receipt_mode_name;
       delete items.revenue_module_id;
       delete items.revenue_module_name;
-      delete items.checked_by_id;
-      delete items.checked_by_name;
-      delete items.entered_by_id;
-      delete items.entered_by_name;
-      delete items.checked_by_designation_name;
-      delete items.checked_by_designation_id;
-      delete items.entered_by_designation_name;
-      delete items.entered_by_designation_id;
 
       allData.push(items);
     }
@@ -352,14 +305,46 @@ class CollectionRegisterDao {
   approve = async (req: Request) => {
     const ids: IdItem[] = req.body.data.ids;
     const idItems = ids.map((item: { id: number }) => item.id);
+    const ulbId = Number(req.body.data.ulb_id);
+    const date = req.body.data.date;
 
     const [, rR] = await prisma.$transaction([
+      // prisma.$queryRaw`
+      //   INSERT INTO daily_coll_summaries (collection_register_id, receipt_register_id)
+      //   SELECT id, receipt_register_id
+      //   FROM collection_registers
+      //   WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
+      //   ON CONFLICT DO NOTHING;
+      // `,
+
       prisma.$queryRaw`
-        INSERT INTO daily_coll_summaries (collection_register_id, receipt_register_id)
-        SELECT id, receipt_register_id
-        FROM collection_registers
-        WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
-        ON CONFLICT DO NOTHING;
+        INSERT INTO calc_daily_coll_summaries (ulb_id, bank_id, primary_acc_code_id, amount, revenue_accounted_type_id, receipt_date, receipt_mode_id)
+        SELECT ${ulbId}, calc_summ.bank_id, calc_summ.ledger_id, calc_summ.amount, calc_summ.revenue_accounted_type_id, receipt_date, receipt_mode_id
+        FROM (SELECT
+        SUM(rr.bank_amount + rr.cash_amount) as amount,
+        ac.description as descri,
+        ac.id as ledger_id,
+        acg.description as gledger,
+        rat.id as revenue_accounted_type_id,
+        bm.id as bank_id,
+        rr.receipt_date,
+        rr.receipt_mode_id
+        FROM 
+        collection_registers as dcs
+        LEFT JOIN
+        receipt_registers as rr ON rr.id = dcs.receipt_register_id
+        LEFT JOIN
+        account_codes as ac ON rr.primary_acc_code_id = ac.id
+        LEFT JOIN
+        account_codes as acg ON ac.parent_id = acg.id
+        LEFT JOIN 
+        revenue_accounted_types as rat ON rat.id = rr.revenue_accounted_type_id
+        LEFT JOIN 
+        municipality_codes as mc ON rr.ulb_id = mc.id
+        LEFT JOIN 
+        bank_masters as bm ON (bm.ulb_id = ${ulbId} AND bm.primary_acc_code_id = ac.id)
+        WHERE (mc.id = ${ulbId} AND rr.receipt_date::date = ${date}::date AND dcs.id IN (${Prisma.join(idItems)}) AND dcs.is_checked = false)
+        GROUP BY descri, gledger, rat.id, ledger_id, bm.id, receipt_date, receipt_mode_id) AS calc_summ
       `,
 
       prisma.collection_registers.updateMany({

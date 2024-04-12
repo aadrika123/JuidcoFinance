@@ -19,6 +19,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import Footer from "./Footer";
+import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
 
 const HeroDailyCollSummary = () => {
   const pathName = usePathname();
@@ -28,6 +29,10 @@ const HeroDailyCollSummary = () => {
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState<any>([]);
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  const [showPopup, setShowPopup] = useState({
+    name: "",
+    isOpen: false,
+  });
 
   useEffect(() => {
     setUser(userData);
@@ -79,12 +84,13 @@ const HeroDailyCollSummary = () => {
 
   ///// Getting Selected Data and Balances From Table Component
   const handleGetBalance = (data: any) => {
+    console.log("first", data)
     setReceiptData(data);
     setReceiptIds(data.data);
   };
 
   /////// Handle Approve Receipt
-  const handleApprove = async (name: string) => {
+  const handleApprove = async () => {
     try {
       const res = await axios({
         url: FINANCE_URL.DAILY_COLL_SUMMARY.approve,
@@ -92,7 +98,7 @@ const HeroDailyCollSummary = () => {
         data: {
           data: {
             checked_by_id: user.id,
-            checked_by_print_name: name,
+            checked_by_print_name: showPopup?.name,
             ids: receiptIds,
           },
         },
@@ -103,6 +109,11 @@ const HeroDailyCollSummary = () => {
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
+  };
+
+   ////// Handle Approve Confirmation
+   const handleApproveConfirm = (name: string) => {
+    setShowPopup((prev) => ({ ...prev, name, isOpen: !showPopup.isOpen }));
   };
 
   const columns = [
@@ -117,12 +128,16 @@ const HeroDailyCollSummary = () => {
       caption: "Department Name",
     },
     {
-      name: "descri",
+      name: "primary_acc_code",
       caption: "Revenue Head Name",
     },
     {
-      name: "revenue_accounted_type_name",
+      name: "revenue_accounted_type",
       caption: "Revenue Accounted Type",
+    },
+    {
+      name: "receipt_mode",
+      caption: "Receipt Mode",
     },
     {
       name: "amount",
@@ -156,6 +171,15 @@ const HeroDailyCollSummary = () => {
   return (
     <>
       <Toaster />
+      {showPopup?.isOpen && (
+        <ConfirmationPopup
+          cancel={() =>
+            setShowPopup((prev) => ({ ...prev, isOpen: !showPopup.isOpen }))
+          }
+          continue={handleApprove}
+          message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
+        />
+      )}
       {workingAnimation}
       <HeaderWidget variant="" title="Daily Collection Summary" />
       <TableWithScrollPagination
@@ -166,8 +190,8 @@ const HeroDailyCollSummary = () => {
         footer={
           <Footer
             user={user}
-            balances={receiptData?.balance}
-            handleApprove={handleApprove}
+            receiptData={receiptData}
+            handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />
         }

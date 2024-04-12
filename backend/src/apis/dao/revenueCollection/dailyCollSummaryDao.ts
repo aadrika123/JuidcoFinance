@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
+import { generateUniquePaymentNo } from "../../../util/helper/generateUniqueNo";
 
 /**
  * | Author- Sanjiv Kumar
@@ -56,97 +57,143 @@ class DailyCollSummaryDao {
     }
 
     if (date) {
-      a += ` AND DATE(rr.receipt_date) = '${date}'`;
+      a += ` AND DATE(dcs.receipt_date) = '${date}'`;
     }
 
     // const opDate: string = date ? `AND DATE (drb.created_at) = '${date}'` : "";
     const b = a + ` AND rm.id = 1`;
     const c = a + ` AND rm.id = 2`;
 
+    const d = ` (bm.ulb_id = ${ulbId} AND bm.primary_acc_code_id = ac.id)`;
+
     const [result, count, cash_amount, cheque_amount] =
       await prisma.$transaction([
         prisma.$queryRawUnsafe(`
     SELECT
-    SUM(rr.bank_amount + rr.cash_amount) as amount,
-    ac.description as descri,
+    dcs.id,
+    dcs.amount,
+    dcs.is_checked,
+    dcs.receipt_date,
+    ac.id as primary_acc_code_id,
+    ac.description as primary_acc_code_name,
     acg.description as gledger,
     rat.name as revenue_accounted_type_name,
-    rr.bank_acc_no
+    rat.id as revenue_accounted_type_id,
+    bm.id as bank_id,
+    bm.bank_acc_no,
+    rm.id as receipt_mode_id,
+    rm.name as receipt_mode_name,
+    mc.id as ulb_id,
+    mc.ulbs as ulb_name
     FROM 
-    daily_coll_summaries as dcs
+    calc_daily_coll_summaries as dcs
     LEFT JOIN
-    receipt_registers as rr ON rr.id = dcs.receipt_register_id
-    LEFT JOIN
-    account_codes as ac ON rr.primary_acc_code_id = ac.id
+    account_codes as ac ON dcs.primary_acc_code_id = ac.id
     LEFT JOIN
     account_codes as acg ON ac.parent_id = acg.id
     LEFT JOIN 
-    revenue_accounted_types as rat ON rat.id = rr.revenue_accounted_type_id
+    revenue_accounted_types as rat ON rat.id = dcs.revenue_accounted_type_id
     LEFT JOIN 
-    municipality_codes as mc ON rr.ulb_id = mc.id
+    municipality_codes as mc ON dcs.ulb_id = mc.id
+    LEFT JOIN 
+    bank_masters as bm ON ${d}
+    LEFT JOIN 
+    receipt_modes as rm ON rm.id = dcs.receipt_mode_id
   WHERE (true ${a})
-  GROUP BY descri, gledger, revenue_accounted_type_name, bank_acc_no
       LIMIT ${limit} OFFSET ${(page - 1) * limit}
 `),
+
         prisma.$queryRawUnsafe(`
 SELECT
 COUNT(*) as total
 FROM 
-(SELECT
-  SUM(rr.bank_amount + rr.cash_amount) as amount,
-  ac.description as descri,
-  acg.description as gledger,
-  rat.name as revenue_accounted_type_name,
-  rr.bank_acc_no
-  FROM 
-  daily_coll_summaries as dcs
-  LEFT JOIN
-  receipt_registers as rr ON rr.id = dcs.receipt_register_id
-  LEFT JOIN
-  account_codes as ac ON rr.primary_acc_code_id = ac.id
-  LEFT JOIN
-  account_codes as acg ON ac.parent_id = acg.id
-  LEFT JOIN 
-  revenue_accounted_types as rat ON rat.id = rr.revenue_accounted_type_id
-  LEFT JOIN 
-  municipality_codes as mc ON rr.ulb_id = mc.id
+calc_daily_coll_summaries as dcs
+LEFT JOIN
+    account_codes as ac ON dcs.primary_acc_code_id = ac.id
+    LEFT JOIN
+    account_codes as acg ON ac.parent_id = acg.id
+    LEFT JOIN 
+    revenue_accounted_types as rat ON rat.id = dcs.revenue_accounted_type_id
+    LEFT JOIN 
+    municipality_codes as mc ON dcs.ulb_id = mc.id
 WHERE (true ${a})
-GROUP BY descri, gledger, revenue_accounted_type_name, bank_acc_no) as tcount
 `) as any,
 
         prisma.$queryRawUnsafe(`
-SELECT
-SUM(rr.bank_amount + rr.cash_amount) as cash_amount
-FROM 
-daily_coll_summaries as dcs
-LEFT JOIN
-receipt_registers as rr ON rr.id = dcs.receipt_register_id
-LEFT JOIN
-municipality_codes as mc ON rr.ulb_id = mc.id
-LEFT JOIN
-receipt_modes as rm ON rr.receipt_mode_id = rm.id
+    SELECT
+    SUM(amount) as cash_amount
+    FROM
+    calc_daily_coll_summaries as dcs
+    LEFT JOIN
+    account_codes as ac ON dcs.primary_acc_code_id = ac.id
+    LEFT JOIN
+    account_codes as acg ON ac.parent_id = acg.id
+    LEFT JOIN 
+    revenue_accounted_types as rat ON rat.id = dcs.revenue_accounted_type_id
+    LEFT JOIN 
+    municipality_codes as mc ON dcs.ulb_id = mc.id
+    LEFT JOIN 
+    receipt_modes as rm ON rm.id = dcs.receipt_mode_id
 WHERE (true ${b})
-`) as any,
+    `) as any,
+
         prisma.$queryRawUnsafe(`
-SELECT
-SUM(rr.bank_amount + rr.cash_amount) as cheque_amount
-FROM 
-daily_coll_summaries as dcs
-LEFT JOIN
-receipt_registers as rr ON rr.id = dcs.receipt_register_id
-LEFT JOIN
-municipality_codes as mc ON rr.ulb_id = mc.id
-LEFT JOIN
-receipt_modes as rm ON rr.receipt_mode_id = rm.id
+    SELECT
+    SUM(amount) as cheque_amount
+    FROM
+    calc_daily_coll_summaries as dcs
+    LEFT JOIN
+    account_codes as ac ON dcs.primary_acc_code_id = ac.id
+    LEFT JOIN
+    account_codes as acg ON ac.parent_id = acg.id
+    LEFT JOIN 
+    revenue_accounted_types as rat ON rat.id = dcs.revenue_accounted_type_id
+    LEFT JOIN 
+    municipality_codes as mc ON dcs.ulb_id = mc.id
+    LEFT JOIN 
+    receipt_modes as rm ON rm.id = dcs.receipt_mode_id
 WHERE (true ${c})
-`) as any,
+    `) as any,
       ]);
 
     count[0].cash_amount = cash_amount[0]?.cash_amount;
     count[0].cheque_amount = cheque_amount[0]?.cheque_amount;
 
+    const allData = [];
+
+    for (const data of result as any) {
+      const items: any = { ...data };
+      items.receipt_mode = {
+        id: data.receipt_mode_id,
+        name: data.receipt_mode_name,
+      };
+      items.primary_acc_code = {
+        id: data.primary_acc_code_id,
+        name: data.primary_acc_code_name,
+      };
+      items.revenue_accounted_type = {
+        id: data.revenue_accounted_type_id,
+        name: data.revenue_accounted_type_name,
+      };
+      items.ulb = {
+        id: data.ulb_id,
+        name: data.ulb_name,
+      };
+
+      delete items.revenue_accounted_type_id;
+      delete items.revenue_accounted_type_name;
+      delete items.primary_acc_code_id;
+      delete items.primary_acc_code_name;
+      delete items.receipt_mode_id;
+      delete items.receipt_mode_name;
+      delete items.ulb_id;
+      delete items.ulb_name;
+
+      allData.push(items);
+    }
+
     return generateRes(
-      result,
+      allData,
       Number(BigInt(count[0].total)),
       page,
       limit,
@@ -258,25 +305,28 @@ WHERE (true ${c})
   approve = async (req: Request) => {
     const ids: IdItem[] = req.body.data.ids;
     const idItems = ids.map((item: { id: number }) => item.id);
+    const checked_by_id = Number(req.body.data.checked_by_id);
+    const checked_by_print_name = req.body.data.checked_by_print_name;
+    
 
     const [, rR] = await prisma.$transaction([
       prisma.$queryRaw`
-        INSERT INTO daily_coll_summariesnext (collection_register_id, receipt_register_id)
-        SELECT id, receipt_register_id
-        FROM collection_registers
+        INSERT INTO cash_bank_receipt_vouchers (crv_brv_no, ulb_id, bank_id, primary_acc_code_id, amount, checked_by_id, checked_by_print_name, is_approved)
+        SELECT  ${generateUniquePaymentNo("crv-brv")}, ulb_id, bank_id, primary_acc_code_id, amount, ${checked_by_id}, ${checked_by_print_name}
+        FROM calc_daily_coll_summaries
         WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
         ON CONFLICT DO NOTHING;
       `,
 
-      prisma.daily_coll_summaries.updateMany({
+      prisma.calc_daily_coll_summaries.updateMany({
         where: {
           OR: ids,
           is_checked: false,
         },
         data: {
           is_checked: true,
-          checked_by_id: req.body.data.checked_by_id,
-          checked_by_print_name: req.body.data.checked_by_print_name,
+          checked_by_id,
+          checked_by_print_name,
         },
       }),
     ]);
