@@ -61,12 +61,14 @@ export const HeroCollectionRegister = () => {
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
     const handleCheckbox = (i: string) => {
-      const updatedData: any = [...receiptIds];
-      if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
-        setReceiptIds(updatedData.filter((item: any) => item.id !== i));
-      } else {
-        setReceiptIds((prev: any) => [...prev, { id: Number(i) }]);
-      }
+      setReceiptIds((prev: any) => {
+        const updatedData: any = [...prev];
+        if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
+          return updatedData.filter((item: any) => item.id !== i);
+        } else {
+          return [...prev, { id: Number(i) }];
+        }
+      });
     };
 
     return (
@@ -79,6 +81,7 @@ export const HeroCollectionRegister = () => {
       </>
     );
   };
+
 
   ///// Getting Selected Data and Balances From Table Component
   const handleGetBalance = (data: any) => {

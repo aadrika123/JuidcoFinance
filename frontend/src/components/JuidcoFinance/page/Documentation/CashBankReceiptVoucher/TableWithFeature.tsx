@@ -48,6 +48,7 @@ const TableWithFeatures = <T,>({
   ...rest
 }: TableWithFeaturesProps) => {
   const [isSearching, setIsSearching] = useState(false);
+  const [filtered, setFiltered] = useState([]);
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
     pageCount: 0,
@@ -76,8 +77,8 @@ const TableWithFeatures = <T,>({
     }));
 
     const filteredData = data.data.map((item: any) => ({ id: item.id }));
-    rest.handleGet &&
-      rest.handleGet(filteredData);
+    setFiltered(filteredData);
+    rest.handleGet && rest.handleGet([...filtered, ...filteredData]);
 
     setIsSearching(false);
     return data.data;

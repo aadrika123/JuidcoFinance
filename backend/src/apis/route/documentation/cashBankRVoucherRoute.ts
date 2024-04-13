@@ -11,7 +11,7 @@ import CashBankRVoucherController from "../../controller/documentation/cashBankR
 
 class CashBankRVoucherRoute {
   private controller: CashBankRVoucherController;
-  private baseUrl: string = `${baseUrl}/collection-register`;
+  private baseUrl: string = `${baseUrl}/cash-bank-receipt-voucher`;
   constructor() {
     this.controller = new CashBankRVoucherController();
   }

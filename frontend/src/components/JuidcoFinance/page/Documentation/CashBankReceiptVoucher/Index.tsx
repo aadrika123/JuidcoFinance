@@ -36,14 +36,14 @@ export const HeroCashBankRVoucher= () => {
     ////////////////// CheckBox Button
     const sButton = (id: string) => {
       const handleCheckbox = (i: string) => {
-        setReceiptIds((prev: any)=> {
+        setReceiptIds((prev: any) => {
           const updatedData: any = [...prev];
           if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
             return updatedData.filter((item: any) => item.id !== i);
           } else {
             return [...prev, { id: Number(i) }];
           }
-        })
+        });
       };
   
       return (
@@ -76,8 +76,6 @@ export const HeroCashBankRVoucher= () => {
   const handleGetData = (data: []) => {
     setReceiptIds([...data]);
   };
-
-  console.log("hhiiii", receiptIds)
   
 
   /////// Handle Approve Receipt
