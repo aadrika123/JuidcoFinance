@@ -1,5 +1,14 @@
 import express, { Request, Response } from "express";
 
+
+/**
+ * | Author: Bijoy Paitandi
+ * | Description: Acts as a API wrapper, calls the controller function and formats the output, provides extra API metadata,
+ * |              logs the errors if any. 
+ * | Status: Close
+ */
+
+
 export interface APIv1Response {
   status: boolean;
   code: number;
@@ -38,26 +47,50 @@ export class APIv1 {
   }
 
   protected apiWrapper = async (req: Request, res: Response, apiId: string, handler: (req: Request) => Promise<APIv1Response>): Promise<Response> => {
+    try{
 
-    console.log(`api call (${req.path})`);
-    const result: APIv1Response = await handler(req);
-    console.log("api finished");
+        console.log(`api call (${req.path})`);
 
-    if (result.code == 500) {
-      console.log(result);
+        // invoke the before-middlewares if any
+
+        const result: APIv1Response = await handler(req);
+
+        // invoke the after-middlewares if any
+
+        console.log("api finished");
+
+
+        if (result.code == 500) {
+          console.log(result);
+        }
+
+        const finalResponse = {
+          ...result,
+          "meta-data": {
+            apiId: apiId,
+            version: this.apiVersion,
+            action: req.method,
+          },
+        };
+        return res.status(result.code).json(finalResponse);
+  
+    } catch (err: any) {
+      
+      // log the err object and other information
+
+      // extract the error message and send to frontend
+      const error = err as Error;
+      const finalResponse = {
+        status: false,
+        data: error.message,
+        "meta-data": {
+          apiId: apiId,
+          version: this.apiVersion,
+          action: req.method,
+        },
+      };
+      return res.status(500).json(finalResponse);  
     }
-
-    const finalResponse = {
-      ...result,
-      "meta-data": {
-        apiId: apiId,
-        version: this.apiVersion,
-        action: req.method,
-      },
-    };
-
-
-    return res.status(result.code).json(finalResponse);
   }
 
 

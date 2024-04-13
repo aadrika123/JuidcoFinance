@@ -1,7 +1,6 @@
 import { Request } from "express";
 import { Prisma, PrismaClient, account_codes, balance_trackings } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
-import { multiRequestData } from "../../requests/budgeting/balanceTrackingsValidation";
 import { AccountingCodeType } from "jflib";
 
 
@@ -27,20 +26,14 @@ class BalanceTrackingsDao {
     //////
   }
 
-  // store
-  store = async (req: Request) => {
-    return await prisma.balance_trackings.createMany({
-      data: multiRequestData(req),
-    });
-  };
-
   // Get limited balance_trackings
-  get = async (req: Request) => {
-    const page: number = Number(req.query.page);
-    const limit: number = Number(req.query.limit);
-    const search: string = String(req.query.search);
+  get = async (page: number, limit: number, search: string, order: number) => {
 
     const query: Prisma.balance_trackingsFindManyArgs = {
+      orderBy: [
+        { updated_at: order == -1 ? "desc" : "asc" }
+      ],
+
       skip: (page - 1) * limit,
       take: limit,
       select: {
@@ -403,6 +396,31 @@ class BalanceTrackingsDao {
       console.log("No matching records");
     }
   }
+
+  getYearBound = (year: number): [Date, Date] => {
+    return [new Date(`${year}-04-01`), new Date(`${year + 1}-03-31`)];
+}
+
+
+  getTrialBalance = async (ulbId: number, finYear: number): Promise<[]> => {
+
+    const [year_start, year_end] = this.getYearBound(finYear);
+
+    const data = await prisma.$queryRaw<[]>`
+    
+    select a.id, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance,
+    b.debit_balance, b.credit_balance from account_codes a
+    
+    left join (
+      select id, primary_acc_code_id, total_balance, debit_balance, credit_balance, x.created_at from balance_trackings x where id in (
+        select max(id) from balance_trackings  where ulb_id=${ulbId} and created_at between ${year_start} and ${year_end} group by primary_acc_code_id
+      )
+    ) b 
+    on a.id = b.primary_acc_code_id where a.code_type_id = ${CodeType.Schedule} order by a.code`;
+
+    return data;
+  }
+
 }
 
 export default BalanceTrackingsDao;

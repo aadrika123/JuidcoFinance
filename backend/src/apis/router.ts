@@ -183,7 +183,8 @@ class FinanceRoute {
 
     (new InvestmentsRoute()).configure(app, "34");
 
-    (new BalanceTrackingsRoute()).configure(app, "35");
+    (new BalanceTrackingsRoute("35", app)).configure();
+
 
     (new GrantEntriesRoute()).configure(app, "36");
 

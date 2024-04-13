@@ -227,7 +227,7 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/financial-statements",
           subModules: [
-            { moduleName: "Trail Balance", path: "/financial-statements/trail-balance" },
+            { moduleName: "Trial Balance", path: "/financial-statements/trial-balance" },
             {
               moduleName: "Income Statement",
               path: "/financial-statements/income-statement",

@@ -108,7 +108,8 @@ const PrimaryAccountingCode: React.FC = () => {
   }, [searchText, hideZeroBalances]);
 
   useEffect(() => {
-    setLoading(false);
+    if(tableData.length>0)
+      setLoading(false);
   }, [tableData]);
 
 

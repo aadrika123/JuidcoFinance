@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import React from "react";
 import axios from "@/lib/axiosConfig";
+import Loader from "../Loader";
 
 /**
  * | Author- Sanjiv Kumar
@@ -47,7 +48,9 @@ const Select: React.FC<SelectProps> = (props) => {
     return data;
   };
 
-  const { data: dataList = [], isError: dataError } = useQuery({
+  const { data: dataList = [],
+    isError: dataError,
+  } = useQuery({
     queryKey: [props.name],
     queryFn: fetchData,
   });
