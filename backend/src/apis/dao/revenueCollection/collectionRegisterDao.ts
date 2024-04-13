@@ -343,7 +343,9 @@ class CollectionRegisterDao {
         municipality_codes as mc ON rr.ulb_id = mc.id
         LEFT JOIN 
         bank_masters as bm ON (bm.ulb_id = ${ulbId} AND bm.primary_acc_code_id = ac.id)
-        WHERE (mc.id = ${ulbId} AND rr.receipt_date::date = ${date}::date AND dcs.id IN (${Prisma.join(idItems)}) AND dcs.is_checked = false)
+        WHERE (mc.id = ${ulbId} AND rr.receipt_date::date = ${date}::date AND dcs.id IN (${Prisma.join(
+        idItems
+      )}) AND dcs.is_checked = false)
         GROUP BY descri, gledger, rat.id, ledger_id, bm.id, receipt_date, receipt_mode_id) AS calc_summ
       `,
 
@@ -361,6 +363,33 @@ class CollectionRegisterDao {
     ]);
 
     return rR;
+  };
+
+  ///// Get One Checked Data
+  getCheckedData = async (req: Request) => {
+    const date: string = req.params.date;
+    const ulbId: number = Number(req.params.ulbId);
+    const moduleId: number = Number(req.params.moduleId)
+
+    const query: Prisma.collection_registersFindManyArgs = {
+      where: {
+        receipt_register: {
+          receipt_date: {
+            gte: date,
+            lte: date,
+          },
+          ulb_id: ulbId,
+          revenue_module_id: moduleId
+        },
+        is_checked: true,
+      },
+      select: {
+        id: true,
+      },
+    };
+    const data: any = await prisma.collection_registers.findFirst(query);
+
+    return generateRes(data);
   };
 }
 
