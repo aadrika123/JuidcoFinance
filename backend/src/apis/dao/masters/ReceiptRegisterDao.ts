@@ -392,6 +392,29 @@ class ReceiptRegisterDao {
       },
     });
   };
+
+  ///// Get One Checked Data
+  getCheckedData = async (req: Request) => {
+    const date: string = req.params.date;
+    const ulbId: number = Number(req.params.ulbId);
+
+    const query: Prisma.receipt_registersFindManyArgs = {
+      where: {
+        receipt_date: {
+          gte: date,
+          lte: date,
+        },
+        is_checked: true,
+        ulb_id: ulbId,
+      },
+      select: {
+        id: true,
+      },
+    };
+    const data: any = await prisma.receipt_registers.findFirst(query);
+
+    return generateRes(data);
+  };
 }
 
 export default ReceiptRegisterDao;
