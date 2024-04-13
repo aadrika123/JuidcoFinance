@@ -1,9 +1,5 @@
 import { Request } from "express";
-import {
-  Prisma,
-  PrismaClient,
-  collection_registers,
-} from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
 
 /**
@@ -65,7 +61,7 @@ class CashBankReceiptVoucherDao {
     }
 
     const [result, count] = await prisma.$transaction([
-      prisma.$queryRawUnsafe<collection_registers[]>(`SELECT
+      prisma.$queryRawUnsafe<[]>(`SELECT
       cbrv.id,
       cbrv.crv_brv_no,
       cbrv.voucher_date,
@@ -92,7 +88,7 @@ class CashBankReceiptVoucherDao {
     LIMIT ${limit} OFFSET ${(page - 1) * limit}
     `),
 
-      prisma.$queryRawUnsafe<collection_registers[]>(`SELECT
+      prisma.$queryRawUnsafe<[]>(`SELECT
       COUNT(*) as total
       FROM
       cash_bank_receipt_vouchers as cbrv
@@ -143,72 +139,51 @@ class CashBankReceiptVoucherDao {
 
   // Get single cash bank receipt voucher details
   getById = async (id: number) => {
-    const query: Prisma.collection_registersFindManyArgs = {
+
+    const query: Prisma.cash_bank_receipt_vouchersFindManyArgs = {
       where: { id },
       select: {
         id: true,
-        receipt_register: {
+        crv_brv_no: true,
+        ulb: {
           select: {
-            receipt_no: true,
-            ulb: {
-              select: {
-                id: true,
-                ulbs: true,
-              },
-            },
-            primary_acc_code: {
-              select: {
-                id: true,
-                code: true,
-              },
-            },
-            revenue_module: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            paid_by: true,
-            receipt_mode: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            revenue_accounted_type: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            receipt_date: true,
-            cheque_or_draft_no: true,
-            bank_amount: true,
-            cash_amount: true,
+            id: true,
+            ulbs: true,
+          },
+        },
+        primary_acc_code: {
+          select: {
+            id: true,
+            code: true,
+          },
+        },
+        bank: {
+          select: {
+            id: true,
             bank_acc_no: true,
-            deposit_date: true,
-            realisation_date: true,
-            wheather_returned: true,
-            remarks: true,
-            entered_by: {
+          },
+        },
+        pay_in_slip_ref_no: true,
+        pay_in_slip_date: true,
+        voucher_date: true,
+        amount: true,
+        approved_by: {
+          select: {
+            id: true,
+            name: true,
+            wf_roleusermaps: {
               select: {
-                id: true,
-                name: true,
-                wf_roleusermaps: {
+                wf_role: {
                   select: {
-                    wf_role: {
-                      select: {
-                        id: true,
-                        role_name: true,
-                      },
-                    },
+                    id: true,
+                    role_name: true,
                   },
                 },
               },
             },
-            entered_by_print_name: true,
           },
         },
+        approved_by_print_name: true,
         checked_by: {
           select: {
             id: true,
@@ -226,17 +201,13 @@ class CashBankReceiptVoucherDao {
           },
         },
         checked_by_print_name: true,
-        is_checked: true,
+        is_approved: true,
         created_at: true,
         updated_at: true,
       },
     };
-    let data: any = await prisma.collection_registers.findFirst(query);
 
-    if (data) {
-      data = { ...data, ...data?.receipt_register };
-      delete data.receipt_register;
-    }
+    const data: any = await prisma.cash_bank_receipt_vouchers.findFirst(query);
 
     return generateRes(data);
   };
@@ -295,6 +266,29 @@ class CashBankReceiptVoucherDao {
     ]);
 
     return rR;
+  };
+
+  ///// Get One Checked Data
+  getCheckedData = async (req: Request) => {
+    const date: string = req.params.date;
+    const ulbId: number = Number(req.params.ulbId);
+
+    const query: Prisma.cash_bank_receipt_vouchersFindManyArgs = {
+      where: {
+        voucher_date: {
+          gte: date,
+          lte: date,
+        },
+        is_approved: true,
+        ulb_id: ulbId,
+      },
+      select: {
+        id: true,
+      },
+    };
+    const data: any = await prisma.cash_bank_receipt_vouchers.findFirst(query);
+
+    return generateRes(data);
   };
 }
 

@@ -32,6 +32,11 @@ class CashBankRVoucherRoute {
       .post((req: Request, res: Response) =>
         this.controller.approve(req, res, apiId + "03")
       );
+      app
+      .route(`${this.baseUrl}/get-checked-data`)
+      .get((req: Request, res: Response) =>
+        this.controller.getCheckedData(req, res, apiId + "04")
+      );
   }
 }
 

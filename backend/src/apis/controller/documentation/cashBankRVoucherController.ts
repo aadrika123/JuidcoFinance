@@ -116,6 +116,41 @@ class CashBankRVoucherController {
       return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
+
+  ///// Get One Checked Data
+  getCheckedData = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = {
+      apiId,
+      action: "GET",
+      version: "1.0",
+    };
+    try {
+      const date: string = req.params.date;
+      const ulbId: number = Number(req.params.ulbId)
+      // validate id
+      const { error } = Joi.object({
+        date: Joi.string().required(),
+        ulbId: Joi.number().required()
+      }).validate({'date': date, 'ulbId': ulbId});
+
+      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
+
+      const data = await this.cashBankReceiptVoucherDao.getCheckedData(req);
+      return CommonRes.SUCCESS(
+        resMessage(this.initMsg).FOUND,
+        data,
+        resObj,
+        req,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+    }
+  };
 }
 
 export default CashBankRVoucherController;
