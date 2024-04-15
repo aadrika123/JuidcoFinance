@@ -22,6 +22,7 @@ interface TableWithFeaturesProps {
   footer: React.ReactNode;
   columns: Array<ColumnProps>;
   api: string;
+  depApi: string;
   numberOfRowsPerPage: number;
   value?: () => void;
   center?: boolean;
@@ -37,18 +38,19 @@ interface stateTypes<T> {
   data: T[];
   ulbId: number | string;
   date: Date;
+  filtered: T[];
 }
 
 const TableWithFeatures = <T,>({
   footer,
   columns,
   api,
+  depApi,
   numberOfRowsPerPage,
   center = false,
   ...rest
 }: TableWithFeaturesProps) => {
   const [isSearching, setIsSearching] = useState(false);
-  const [filtered, setFiltered] = useState([]);
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
     pageCount: 0,
@@ -56,6 +58,7 @@ const TableWithFeatures = <T,>({
     data: [],
     ulbId: 1,
     date: new Date(),
+    filtered: [],
   });
   const { page, pageCount, searchText, data, ulbId, date } = state;
 
@@ -65,20 +68,29 @@ const TableWithFeatures = <T,>({
       method: "GET",
     });
 
+    const res1 = await axios({
+      url: `${depApi}/${ulbId}/${date.toISOString().split("T")[0]}`,
+      method: "GET",
+    });
+
     let data = res.data?.data;
     if (data == null) {
       data = { totalPage: 0, data: [] };
     }
 
+    const filteredData = data.data.map((item: any) => ({ id: item.id }));
     setState((prev) => ({
       ...prev,
       pageCount: data.totalPage,
       data: data.data,
+      filtered: filteredData,
     }));
 
-    const filteredData = data.data.map((item: any) => ({ id: item.id }));
-    setFiltered(filteredData);
-    rest.handleGet && rest.handleGet([...filtered, ...filteredData]);
+    rest.handleGet &&
+      rest.handleGet({
+        isApproved: res1.data.data ? true : false,
+        data: [...state.filtered, ...filteredData],
+      });
 
     setIsSearching(false);
     return data.data;
@@ -86,7 +98,7 @@ const TableWithFeatures = <T,>({
 
   const {
     isError: fetchingError,
-    isLoading: isFetching,
+    isFetching: isFetching,
     refetch: refetchData,
   } = useQuery([page, searchText, ulbId, date], fetchData);
 
@@ -112,13 +124,23 @@ const TableWithFeatures = <T,>({
 
   ////// Handl Selecting ULBs ///////////
   const handleUlb = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState((prev) => ({ ...prev, ulbId: e.target.value, data: [] }));
+    setState((prev) => ({
+      ...prev,
+      ulbId: e.target.value,
+      data: [],
+      filtered: [],
+    }));
   };
 
   ////// Handl Selecting Date ///////////
   const handleDate = (date: Date) => {
-    setState((prev) => ({ ...prev, date: date, data: [] }));
+    setState((prev) => ({ ...prev, date: date, data: [], filtered: [] }));
   };
+
+   ///// Getting the first selected value
+   const initUlbHandler = (value: number) =>{
+    setState({...state, ulbId: value})
+  }
 
   return (
     <>
@@ -131,6 +153,7 @@ const TableWithFeatures = <T,>({
               className="w-48 text-primary_bg_indigo border-[#4338ca]"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
+              initHandler={initUlbHandler}
             />
             <label
               htmlFor="date-pick"
@@ -149,29 +172,23 @@ const TableWithFeatures = <T,>({
         </div>
 
         <div className="mt-8">
-          {isFetching || isSearching ? (
+          {(isFetching || isSearching) && data.length === 0 ? (
             <LoaderSkeleton />
           ) : (
-            <>
-              {isFetching || isSearching || data.length === 0 ? (
-                <LoaderSkeleton />
-              ) : (
-                <Table
-                  columns={columns}
-                  data={data}
-                  center={center}
-                  limit={numberOfRowsPerPage}
-                  pageNo={page}
-                  // scrollable={scrollable}
-                />
-              )}
-              <NextPrevPagination
-                page={page}
-                pageCount={pageCount}
-                handlePageChange={handlePageChange}
-              />
-            </>
+            <Table
+              columns={columns}
+              data={data}
+              center={center}
+              limit={numberOfRowsPerPage}
+              pageNo={page}
+              // scrollable={scrollable}
+            />
           )}
+          <NextPrevPagination
+            page={page}
+            pageCount={pageCount}
+            handlePageChange={handlePageChange}
+          />
 
           {footer}
         </div>

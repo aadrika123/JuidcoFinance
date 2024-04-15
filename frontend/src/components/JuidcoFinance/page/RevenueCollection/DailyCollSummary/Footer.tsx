@@ -1,6 +1,7 @@
 import TotalCountTable from "@/components/JuidcoFinance/Partials/molecules/TotalCountTable";
 import Button from "@/components/global/atoms/Button";
 import Input from "@/components/global/atoms/Input";
+import { ROLES } from "@/json/roles";
 import React, { ChangeEvent, useState } from "react";
 
 interface FooterProps {
@@ -13,7 +14,7 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = (props) => {
   const [printName, setPrintName] = useState("");
   const { user, receiptData, isThereData } = props;
-  const tempUser = user?.role.includes("Accounts Department – Manager") && user;
+  const tempUser = user?.role.includes(ROLES.ACC_DEP_MANAGER) && user;
 
   const footerData = [
     {

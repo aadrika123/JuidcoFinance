@@ -31,7 +31,7 @@ export const HeroCollectionRegister = () => {
     isOpen: false,
   });
 
-  const [receiptData, setReceiptData] = useState<any>();
+  const [receiptData, setReceiptData] = useState<any>({});
   const [receiptIds, setReceiptIds] = useState<any>([]);
 
   useEffect(() => {
@@ -82,7 +82,6 @@ export const HeroCollectionRegister = () => {
     );
   };
 
-
   ///// Getting Selected Data and Balances From Table Component
   const handleGetBalance = (data: any) => {
     setReceiptData(data);
@@ -107,6 +106,7 @@ export const HeroCollectionRegister = () => {
       });
       if (!res.data.status) throw new Error("Something Went Wrong!!");
       res && toast.success("Approved Sucessfully!!");
+      setReceiptData((prev: any) => ({...prev, isApproved: true}))
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
@@ -201,6 +201,7 @@ export const HeroCollectionRegister = () => {
         center
         columns={newColumns}
         api={FINANCE_URL.COLLECTION_REGISTER.get || ""}
+        depApi={FINANCE_URL.COLLECTION_REGISTER.getCheckedData || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer

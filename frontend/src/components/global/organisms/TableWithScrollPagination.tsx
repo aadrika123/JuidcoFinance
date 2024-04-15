@@ -17,6 +17,7 @@ interface TableWithScrollPaginProp {
   footer?: React.ReactNode;
   columns: Array<ColumnProps>;
   api: string;
+  depApi: string;
   numberOfRowsPerPage: number;
   value?: () => void;
   center?: boolean;
@@ -32,12 +33,14 @@ interface stateTypes<T> {
   data: T[];
   ulbId: number | string;
   date: Date;
+  filtered: T[];
 }
 
 const TableWithScrollPagination = <T,>({
   footer,
   columns,
   api,
+  depApi,
   numberOfRowsPerPage,
   center = false,
   scrollable = true,
@@ -51,15 +54,22 @@ const TableWithScrollPagination = <T,>({
     data: [],
     ulbId: 1,
     date: new Date(),
+    filtered: [],
   });
   const { page, count, searchText, data, ulbId, date } = state;
   const [tempFetch, setTempFetch] = useState(false);
-  const [filtered, setFiltered] = useState([]);
+
+  ////// Checking is checked data available or not
 
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
       url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
+      method: "GET",
+    });
+
+    const res1 = await axios({
+      url: `${depApi}/${ulbId}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -69,27 +79,28 @@ const TableWithScrollPagination = <T,>({
     }
 
     // data = data.data.sort(sortByCreatedAtDesc);
+    const filteredData = data.data.map((item: any) => ({ id: item.id }));
     if (page === 1) {
       setState((prev) => ({
         ...prev,
         count: data.count,
         data: data.data,
+        filtered: filteredData,
       }));
     } else {
       setState((prev) => ({
         ...prev,
         count: data.count,
         data: [...prev.data, ...data.data],
+        filtered: filteredData,
       }));
     }
-  
-    const filteredData = data.data.map((item: any) => ({ id: item.id }));
-    setFiltered(filteredData);
+
     rest.handleGet &&
       rest.handleGet({
-        isApproved: data.data?.some((i: any) => i.is_checked ) || state.data?.some((i: any) => i.is_checked),
+        isApproved: res1.data.data ? true : false,
         balance: data?.others,
-        data: [...filtered, ...filteredData],
+        data: [...state.filtered, ...filteredData],
       });
     setTempFetch(false);
     setIsSearching(false);
@@ -98,7 +109,7 @@ const TableWithScrollPagination = <T,>({
 
   const {
     isError: fetchingError,
-    isLoading: isFetching,
+    isFetching: isFetching,
     refetch: refetchData,
   } = useQuery([page, searchText, ulbId, date], fetchData);
 
@@ -142,15 +153,25 @@ const TableWithScrollPagination = <T,>({
     };
   }, [isFetching, isSearching]);
 
-  ////// Handl Selecting ULBs ///////////
+  ////// Handle Selecting ULBs ///////////
   const handleUlb = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState((prev) => ({ ...prev, ulbId: e.target.value, data: [] }));
+    setState((prev) => ({
+      ...prev,
+      ulbId: e.target.value,
+      data: [],
+      filtered: [],
+    }));
   };
 
-  ////// Handl Selecting Date ///////////
+  ////// Handle Selecting Date ///////////
   const handleDate = (date: Date) => {
-    setState((prev) => ({ ...prev, date: date, data: [] }));
+    setState((prev) => ({ ...prev, date: date, data: [], filtered: [] }));
   };
+
+  ///// Getting the first selected value
+  const initHandler = (value: number) =>{
+    setState({...state, ulbId: value})
+  }
 
   return (
     <>
@@ -163,6 +184,7 @@ const TableWithScrollPagination = <T,>({
               className="w-48 border-[#4338ca] text-primary_bg_indigo"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
+              initHandler={initHandler}
             />
             <label
               htmlFor="date-pick"

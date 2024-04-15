@@ -51,7 +51,8 @@ type FinanceUrlKeys =
   | "OPENING_BALANCE"
   | "REVENUE_ACCOUNTED_TYPE"
   | "COLLECTION_REGISTER"
-  | "DAILY_COLL_SUMMARY";
+  | "DAILY_COLL_SUMMARY"
+  | "CASH_BANK_R_VOUCHER";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -73,6 +74,7 @@ type Urls = {
     approve?: string;
     getLedgerCodes?: string;
     getByAccCodeAndUlbId?: string;
+    getCheckedData?: string;
   };
 };
 
@@ -285,16 +287,19 @@ export const FINANCE_URL: Urls = {
     update: "/receipt-register/update",
     getById: "/receipt-register/get-by-id",
     approve: "/receipt-register/approve",
+    getCheckedData: "/receipt-register/get-checked-data"
   },
   COLLECTION_REGISTER: {
     get: "/collection-register/get-all",
     approve: "/collection-register/approve",
-    getById: "/collection-register/get-by-id"
+    getById: "/collection-register/get-by-id",
+    getCheckedData: "/collection-register/get-checked-data"
   },
   DAILY_COLL_SUMMARY: {
     get: "/daily-coll-summary/get-all",
     approve: "/daily-coll-summary/approve",
-    getById: "/daily-coll-summary/get-by-id"
+    getById: "/daily-coll-summary/get-by-id",
+    getCheckedData: "/daily-coll-summary/get-checked-data"
   },
   REVENUE_MODULE: {
     get: "/revenue-modules/get-all",
@@ -306,4 +311,10 @@ export const FINANCE_URL: Urls = {
     create: "/receipt-register/opening-balance/create",
     update: "/receipt-register/opening-balance/update",
   },
+  CASH_BANK_R_VOUCHER: {
+    get: "/cash-bank-receipt-voucher/get-all",
+    approve: "/cash-bank-receipt-voucher/approve",
+    getById: "/cash-bank-receipt-voucher/get-by-id",
+    getCheckedData: "/cash-bank-receipt-voucher/get-checked-data"
+  }
 };

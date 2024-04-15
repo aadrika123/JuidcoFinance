@@ -309,16 +309,8 @@ class CollectionRegisterDao {
     const date = req.body.data.date;
 
     const [, rR] = await prisma.$transaction([
-      // prisma.$queryRaw`
-      //   INSERT INTO daily_coll_summaries (collection_register_id, receipt_register_id)
-      //   SELECT id, receipt_register_id
-      //   FROM collection_registers
-      //   WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
-      //   ON CONFLICT DO NOTHING;
-      // `,
-
       prisma.$queryRaw`
-        INSERT INTO calc_daily_coll_summaries (ulb_id, bank_id, primary_acc_code_id, amount, revenue_accounted_type_id, receipt_date, receipt_mode_id)
+        INSERT INTO daily_coll_summaries (ulb_id, bank_id, primary_acc_code_id, amount, revenue_accounted_type_id, receipt_date, receipt_mode_id)
         SELECT ${ulbId}, calc_summ.bank_id, calc_summ.ledger_id, calc_summ.amount, calc_summ.revenue_accounted_type_id, receipt_date, receipt_mode_id
         FROM (SELECT
         SUM(rr.bank_amount + rr.cash_amount) as amount,
@@ -369,27 +361,19 @@ class CollectionRegisterDao {
   getCheckedData = async (req: Request) => {
     const date: string = req.params.date;
     const ulbId: number = Number(req.params.ulbId);
-    const moduleId: number = Number(req.params.moduleId)
+    const moduleId: number = Number(req.params.moduleId);
 
-    const query: Prisma.collection_registersFindManyArgs = {
-      where: {
-        receipt_register: {
-          receipt_date: {
-            gte: date,
-            lte: date,
-          },
-          ulb_id: ulbId,
-          revenue_module_id: moduleId
-        },
-        is_checked: true,
-      },
-      select: {
-        id: true,
-      },
-    };
-    const data: any = await prisma.collection_registers.findFirst(query);
+    const data: any = await prisma.$queryRaw`
+    SELECT cr.id
+    FROM
+    collection_registers as cr
+    LEFT JOIN
+    receipt_registers as rr ON rr.id = cr.receipt_register_id
+    WHERE rr.receipt_date::date = ${date}::date AND rr.ulb_id = ${ulbId} AND cr.is_checked = true AND rr.revenue_module_id = ${moduleId}
+    LIMIT 1
+    `;
 
-    return generateRes(data);
+    return generateRes(data[0]);
   };
 }
 

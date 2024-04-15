@@ -19,6 +19,7 @@ interface SelectProps {
   className?: string;
   visibility?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  initHandler?: (value: number, text: string) => void;
 }
 
 interface Select {
@@ -38,7 +39,11 @@ const Select: React.FC<SelectProps> = (props) => {
       method: "GET",
     });
     
-    return res.data?.data;
+    const data = res.data?.data;
+    if(props.initHandler){
+      props.initHandler(data[0].id, data[0].name);
+    }
+    return data;
   };
 
   const { data: dataList = [], isError: dataError } = useQuery({

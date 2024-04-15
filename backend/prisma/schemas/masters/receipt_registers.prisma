@@ -32,7 +32,6 @@ model receipt_registers {
   checked_by_print_name String?
   is_checked            Boolean                @default(false)
   collection_register   collection_registers[]
-  daily_coll_summary  daily_coll_summaries[]
   created_at            DateTime               @default(now()) @map("created_at")
   updated_at            DateTime               @updatedAt @map("updated_at")
 }

@@ -20,6 +20,7 @@ import axios from "@/lib/axiosConfig";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import Footer from "./Footer";
 import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
+import { ROLES } from "@/json/roles";
 
 const HeroDailyCollSummary = () => {
   const pathName = usePathname();
@@ -84,7 +85,6 @@ const HeroDailyCollSummary = () => {
 
   ///// Getting Selected Data and Balances From Table Component
   const handleGetBalance = (data: any) => {
-    console.log("first", data)
     setReceiptData(data);
     setReceiptIds(data.data);
   };
@@ -106,6 +106,7 @@ const HeroDailyCollSummary = () => {
       if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       res && toast.success("Approved Sucessfully!!");
+      setReceiptData((prev: any) => ({...prev, isApproved: true}))
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
@@ -160,7 +161,7 @@ const HeroDailyCollSummary = () => {
   ////////////////// Filtering the column on behalf of User roles
   useEffect(()=> {
     (function(){
-      if(user && !user?.role.includes("Accounts Department – Manager")){
+      if(user && !user?.role.includes(ROLES.ACC_DEP_MANAGER)){
         setNewColumns((prev) => {
           return prev.filter((item) => item.name !== "All")
         })
@@ -186,6 +187,7 @@ const HeroDailyCollSummary = () => {
         center
         columns={newColumns}
         api={FINANCE_URL.DAILY_COLL_SUMMARY.get || ""}
+        depApi={FINANCE_URL.DAILY_COLL_SUMMARY.getCheckedData || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer

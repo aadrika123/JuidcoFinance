@@ -5,6 +5,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import React, { ChangeEvent, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import toast, { Toaster } from "react-hot-toast";
+import { ROLES } from "@/json/roles";
 
 interface FooterProps {
   user: any;
@@ -21,12 +22,12 @@ const Footer: React.FC<FooterProps> = (props) => {
     receiptData?.balance?.opening_balance?.opening_balance
   );
 
-  const tempUser = user?.role.includes("Accounts Department – Manager") && user;
+  const tempUser = user?.role.includes(ROLES.ACC_DEP_MANAGER) && user;
 
   const footerData = [
     {
       key: "Opening Balance",
-      value: user?.role.includes("Accounts Department – Accountant") ? (
+      value: user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? (
         <Input
           label=""
           value={

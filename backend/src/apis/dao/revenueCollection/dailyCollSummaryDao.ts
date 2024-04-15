@@ -86,7 +86,7 @@ class DailyCollSummaryDao {
     mc.id as ulb_id,
     mc.ulbs as ulb_name
     FROM 
-    calc_daily_coll_summaries as dcs
+    daily_coll_summaries as dcs
     LEFT JOIN
     account_codes as ac ON dcs.primary_acc_code_id = ac.id
     LEFT JOIN
@@ -107,7 +107,7 @@ class DailyCollSummaryDao {
 SELECT
 COUNT(*) as total
 FROM 
-calc_daily_coll_summaries as dcs
+daily_coll_summaries as dcs
 LEFT JOIN
     account_codes as ac ON dcs.primary_acc_code_id = ac.id
     LEFT JOIN
@@ -123,7 +123,7 @@ WHERE (true ${a})
     SELECT
     SUM(amount) as cash_amount
     FROM
-    calc_daily_coll_summaries as dcs
+    daily_coll_summaries as dcs
     LEFT JOIN
     account_codes as ac ON dcs.primary_acc_code_id = ac.id
     LEFT JOIN
@@ -141,7 +141,7 @@ WHERE (true ${b})
     SELECT
     SUM(amount) as cheque_amount
     FROM
-    calc_daily_coll_summaries as dcs
+    daily_coll_summaries as dcs
     LEFT JOIN
     account_codes as ac ON dcs.primary_acc_code_id = ac.id
     LEFT JOIN
@@ -207,66 +207,36 @@ WHERE (true ${c})
       where: { id },
       select: {
         id: true,
-        receipt_register: {
+        ulb: {
           select: {
-            receipt_no: true,
-            ulb: {
-              select: {
-                id: true,
-                ulbs: true,
-              },
-            },
-            primary_acc_code: {
-              select: {
-                id: true,
-                code: true,
-              },
-            },
-            revenue_module: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            paid_by: true,
-            receipt_mode: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            revenue_accounted_type: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            receipt_date: true,
-            cheque_or_draft_no: true,
-            bank_amount: true,
-            cash_amount: true,
+            id: true,
+            ulbs: true,
+          },
+        },
+        primary_acc_code: {
+          select: {
+            id: true,
+            code: true,
+          },
+        },
+        bank: {
+          select: {
+            id: true,
             bank_acc_no: true,
-            deposit_date: true,
-            realisation_date: true,
-            wheather_returned: true,
-            remarks: true,
-            entered_by: {
-              select: {
-                id: true,
-                name: true,
-                wf_roleusermaps: {
-                  select: {
-                    wf_role: {
-                      select: {
-                        id: true,
-                        role_name: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            entered_by_print_name: true,
+          },
+        },
+        amount: true,
+        receipt_mode: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        receipt_date: true,
+        revenue_accounted_type: {
+          select: {
+            id: true,
+            name: true,
           },
         },
         checked_by: {
@@ -291,12 +261,7 @@ WHERE (true ${c})
         updated_at: true,
       },
     };
-    let data: any = await prisma.daily_coll_summaries.findFirst(query);
-
-    if (data) {
-      data = { ...data, ...data?.receipt_register };
-      delete data.receipt_register;
-    }
+    const data: any = await prisma.daily_coll_summaries.findFirst(query);
 
     return generateRes(data);
   };
@@ -307,18 +272,19 @@ WHERE (true ${c})
     const idItems = ids.map((item: { id: number }) => item.id);
     const checked_by_id = Number(req.body.data.checked_by_id);
     const checked_by_print_name = req.body.data.checked_by_print_name;
-    
 
     const [, rR] = await prisma.$transaction([
       prisma.$queryRaw`
-        INSERT INTO cash_bank_receipt_vouchers (crv_brv_no, ulb_id, bank_id, primary_acc_code_id, amount, checked_by_id, checked_by_print_name, is_approved)
-        SELECT  ${generateUniquePaymentNo("crv-brv")}, ulb_id, bank_id, primary_acc_code_id, amount, ${checked_by_id}, ${checked_by_print_name}
-        FROM calc_daily_coll_summaries
+        INSERT INTO cash_bank_receipt_vouchers (crv_brv_no, ulb_id, bank_id, primary_acc_code_id, amount, checked_by_id, checked_by_print_name)
+        SELECT  ${generateUniquePaymentNo(
+          "crv-brv"
+        )}, ulb_id, bank_id, primary_acc_code_id, amount, ${checked_by_id}, ${checked_by_print_name}
+        FROM daily_coll_summaries
         WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
         ON CONFLICT DO NOTHING;
       `,
 
-      prisma.calc_daily_coll_summaries.updateMany({
+      prisma.daily_coll_summaries.updateMany({
         where: {
           OR: ids,
           is_checked: false,
@@ -332,6 +298,22 @@ WHERE (true ${c})
     ]);
 
     return rR;
+  };
+
+  ///// Get One Checked Data
+  getCheckedData = async (req: Request) => {
+    const date: string = req.params.date;
+    const ulbId: number = Number(req.params.ulbId);
+
+    const data:any = await prisma.$queryRaw`
+    SELECT id
+    FROM
+    daily_coll_summaries
+    WHERE receipt_date::date = ${date}::date AND ulb_id = ${ulbId} AND is_checked = true
+    LIMIT 1
+    `
+
+    return generateRes(data[0]);
   };
 }
 

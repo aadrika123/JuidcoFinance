@@ -32,7 +32,7 @@ class CollectionRegisterRoute {
         this.controller.approve(req, res, apiId + "03")
       );
     app
-      .route(`${this.baseUrl}/get-checked-data`)
+      .route(`${this.baseUrl}/get-checked-data/:ulbId/:moduleId/:date`)
       .get((req: Request, res: Response) =>
         this.controller.getCheckedData(req, res, apiId + "04")
       );

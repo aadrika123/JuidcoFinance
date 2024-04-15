@@ -398,22 +398,15 @@ class ReceiptRegisterDao {
     const date: string = req.params.date;
     const ulbId: number = Number(req.params.ulbId);
 
-    const query: Prisma.receipt_registersFindManyArgs = {
-      where: {
-        receipt_date: {
-          gte: date,
-          lte: date,
-        },
-        is_checked: true,
-        ulb_id: ulbId,
-      },
-      select: {
-        id: true,
-      },
-    };
-    const data: any = await prisma.receipt_registers.findFirst(query);
+    const data:any = await prisma.$queryRaw`
+    SELECT id
+    FROM
+    receipt_registers
+    WHERE receipt_date::date = ${date}::date AND ulb_id = ${ulbId} AND is_checked = true
+    LIMIT 1
+    `
 
-    return generateRes(data);
+    return generateRes(data[0]);
   };
 }
 

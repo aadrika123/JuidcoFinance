@@ -20,6 +20,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
+import { ROLES } from "@/json/roles";
 
 const ReceiptRegister = () => {
   const pathName = usePathname();
@@ -105,6 +106,7 @@ const ReceiptRegister = () => {
       if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       res && toast.success("Approved Sucessfully!!");
+      setReceiptData((prev: any) => ({...prev, isApproved: true}))
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
@@ -166,7 +168,7 @@ const ReceiptRegister = () => {
   ////////////////// Filtering the column on behalf of User roles
   useEffect(() => {
     (function () {
-      if (user && !user?.role.includes("Accounts Department – Manager")) {
+      if (user && !user?.role.includes(ROLES.ACC_DEP_MANAGER)) {
         setNewColumns((prev) => {
           return prev.filter((item) => item.name !== "All");
         });
@@ -185,7 +187,7 @@ const ReceiptRegister = () => {
       {workingAnimation}
       <HeaderWidget
         variant={
-          user?.role.includes("Accounts Department – Accountant") ? "add" : ""
+          user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? "add" : ""
         }
         title={"Receipt Register Entry"}
       />
@@ -193,6 +195,7 @@ const ReceiptRegister = () => {
         center
         columns={newColumns}
         api={FINANCE_URL.RECEIPT_REGISTER.get || ""}
+        depApi={FINANCE_URL.RECEIPT_REGISTER.getCheckedData || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer

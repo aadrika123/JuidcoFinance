@@ -22,6 +22,7 @@ interface TableWithScrollPaginProp {
   value?: () => void;
   center?: boolean;
   scrollable?: boolean;
+  depApi: string;
   handleGet?: (data: any) => void;
   handleApprove?: () => void;
 }
@@ -34,12 +35,14 @@ interface stateTypes<T> {
   ulbId: number | string;
   moduleId: number | string;
   date: Date;
+  filtered: T[];
 }
 
 const CollectionsTable = <T,>({
   footer,
   columns,
   api,
+  depApi,
   numberOfRowsPerPage,
   center = false,
   scrollable = true,
@@ -54,15 +57,20 @@ const CollectionsTable = <T,>({
     ulbId: 1,
     moduleId: 1,
     date: new Date(),
+    filtered: [],
   });
   const { page, count, searchText, data, ulbId, date, moduleId } = state;
   const [tempFetch, setTempFetch] = useState(false);
-  const [filtered, setFiltered] = useState([]);
 
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
       url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&module=${moduleId}&date=${date.toISOString().split("T")[0]}`,
+      method: "GET",
+    });
+
+    const res1 = await axios({
+      url: `${depApi}/${ulbId}/${moduleId}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -74,29 +82,30 @@ const CollectionsTable = <T,>({
     }
 
     // data = data.data.sort(sortByCreatedAtDesc);
+    const filteredData = data.data.map((item: any) => ({ id: item.id }));
     if (page === 1) {
       setState((prev) => ({
         ...prev,
         count: data.count,
         data: data.data,
+        filtered: filteredData,
       }));
     } else {
       setState((prev) => ({
         ...prev,
         count: data.count,
         data: [...prev.data, ...data.data],
+        filtered: filteredData,
       }));
     }
-    
-    const filteredData = data.data.map((item: any) => ({ id: item.id }));
-    setFiltered(filteredData);
+
     rest.handleGet &&
       rest.handleGet({
-        isApproved: data.data?.some((i: any) => i.is_checked ) || state.data?.some((i: any) => i.is_checked ),
+        isApproved: res1.data.data ? true : false,
         balance: data?.others,
         ulbId,
         date: date.toISOString().split("T")[0],
-        data: [...filtered, ...filteredData],
+        data: [...state.filtered, ...filteredData],
       });
     setTempFetch(false);
     setIsSearching(false);
@@ -151,17 +160,37 @@ const CollectionsTable = <T,>({
 
   ////// Handl Selecting ULBs ///////////
   const handleUlb = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState((prev) => ({ ...prev, ulbId: e.target.value, data: [] }));
+    setState((prev) => ({
+      ...prev,
+      ulbId: e.target.value,
+      data: [],
+      filtered: [],
+    }));
   };
 
   const handleModule = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState((prev) => ({ ...prev, moduleId: e.target.value, data: [] }));
+    setState((prev) => ({
+      ...prev,
+      moduleId: e.target.value,
+      data: [],
+      filtered: [],
+    }));
   };
 
   ////// Handle Selecting Date ///////////
   const handleDate = (date: Date) => {
-    setState((prev) => ({ ...prev, date: date, data: [] }));
+    setState((prev) => ({ ...prev, date: date, data: [], filtered: [] }));
   };
+
+   ///// Getting the first selected value
+   const initUlbHandler = (value: number) =>{
+    setState({...state, ulbId: value})
+  }
+
+  ///// Getting the first selected value
+  const initModuleHandler = (value: number) =>{
+    setState({...state, moduleId: value})
+  }
 
   return (
     <>
@@ -174,6 +203,7 @@ const CollectionsTable = <T,>({
               className="w-40 text-primary_green border-primary_green bg-white outline-none"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
+              initHandler={initUlbHandler}
             />
 
             <Select
@@ -182,6 +212,7 @@ const CollectionsTable = <T,>({
               className="w-48 text-primary_green border-primary_green bg-white outline-none mx-2"
               api={`${FINANCE_URL.REVENUE_MODULE.get}`}
               onChange={handleModule}
+              initHandler={initModuleHandler}
             />
 
             <label
@@ -213,7 +244,7 @@ const CollectionsTable = <T,>({
           />
         )}
 
-        {tempFetch && data.length != 0 && <Loader  height="h-8"/>}
+        {tempFetch && data.length != 0 && <Loader height="h-8" />}
         {footer}
       </section>
     </>

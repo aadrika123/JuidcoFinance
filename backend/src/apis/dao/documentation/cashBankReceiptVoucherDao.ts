@@ -68,12 +68,13 @@ class CashBankReceiptVoucherDao {
       cbrv.pay_in_slip_ref_no,
       cbrv.pay_in_slip_date,
       cbrv.amount,
-      mc.ulb_id,
+      mc.id as ulb_id,
       mc.ulbs,
       bm.id as bank_id,
       bm.bank_acc_no,
       ac.id as primary_acc_code_id,
-      ac.description as primary_acc_code_name
+      CONCAT(ac.code, '-', ac.description) as primary_acc_code_name,
+      cbrv.is_approved
     FROM
     cash_bank_receipt_vouchers as cbrv
     LEFT JOIN
@@ -81,7 +82,7 @@ class CashBankReceiptVoucherDao {
     LEFT JOIN
     account_codes as ac ON cbrv.primary_acc_code_id = ac.id
     LEFT JOIN
-    bank_master as bm ON cbrv.bank_id = bm.id
+    bank_masters as bm ON cbrv.bank_id = bm.id
     WHERE (true ${a})
     ORDER BY
     cbrv.updated_at desc
@@ -97,7 +98,7 @@ class CashBankReceiptVoucherDao {
     LEFT JOIN
     account_codes as ac ON cbrv.primary_acc_code_id = ac.id
     LEFT JOIN
-    bank_master as bm ON cbrv.bank_id = bm.id
+    bank_masters as bm ON cbrv.bank_id = bm.id
     WHERE (true ${a})`) as any,
     ]);
 
@@ -139,7 +140,6 @@ class CashBankReceiptVoucherDao {
 
   // Get single cash bank receipt voucher details
   getById = async (id: number) => {
-
     const query: Prisma.cash_bank_receipt_vouchersFindManyArgs = {
       where: { id },
       select: {
@@ -155,12 +155,20 @@ class CashBankReceiptVoucherDao {
           select: {
             id: true,
             code: true,
+            description: true,
           },
         },
         bank: {
           select: {
             id: true,
             bank_acc_no: true,
+            bank: true,
+            bank_type: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         pay_in_slip_ref_no: true,
@@ -273,22 +281,15 @@ class CashBankReceiptVoucherDao {
     const date: string = req.params.date;
     const ulbId: number = Number(req.params.ulbId);
 
-    const query: Prisma.cash_bank_receipt_vouchersFindManyArgs = {
-      where: {
-        voucher_date: {
-          gte: date,
-          lte: date,
-        },
-        is_approved: true,
-        ulb_id: ulbId,
-      },
-      select: {
-        id: true,
-      },
-    };
-    const data: any = await prisma.cash_bank_receipt_vouchers.findFirst(query);
+    const data: any = await prisma.$queryRaw`
+    SELECT id
+    FROM
+    cash_bank_receipt_vouchers
+    WHERE voucher_date::date = ${date}::date AND ulb_id = ${ulbId} AND is_approved = true
+    LIMIT 1
+    `;
 
-    return generateRes(data);
+    return generateRes(data[0]);
   };
 }
 

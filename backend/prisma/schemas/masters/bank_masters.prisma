@@ -25,7 +25,7 @@ model bank_masters {
   contact_no          String?
 
   cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
-  calc_daily_coll_summaries  calc_daily_coll_summaries[]
+  daily_coll_summaries  daily_coll_summaries[]
   created_at                 DateTime                     @default(now()) @map("created_at")
   updated_at                 DateTime                     @updatedAt @map("updated_at")
 }

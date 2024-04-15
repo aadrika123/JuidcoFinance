@@ -1,65 +1,30 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
-import { DateFormatter } from "@/utils/helper";
 import { useQuery } from "react-query";
-import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
+import { DateFormatter } from "@/utils/helper";
+import { useReactToPrint } from "react-to-print";
+import { HeaderWidgetForPrintTemp } from "@/components/Helpers/Widgets/HeaderWidgetForPrintTemp";
+import Loader from "@/components/global/atoms/Loader";
 
 export const ViewCashBankRVoucher = ({
   ReceiptVoucherID,
 }: {
   ReceiptVoucherID: string;
 }) => {
-
-  const [, setInitialData] = useState<any>();
-
+  const cashBankRef = useRef(null);
   // Get voucher entry bv ID
   const fetchData = async () => {
     try {
       const res = await axios({
         method: "GET",
-        url: `${FINANCE_URL.BILL_INVOICE_ENTRY_URL.getById}/${ReceiptVoucherID}`,
+        url: `${FINANCE_URL.CASH_BANK_R_VOUCHER.getById}/${ReceiptVoucherID}`,
       });
 
       if (res.data.status) {
-        setInitialData((prev: any) => {
-          return {
-            ...prev,
-            voucher_type_id: res.data.data.voucher_type.id,
-            ulb_id: res.data.data.ulb.id,
-            date: DateFormatter(res.data.data.date),
-            fund_id: res.data.data.fund.id,
-            journal_voucher_no: res.data.data.journal_voucher_no,
-            bank_id: res.data.data.bank.id,
-            payment_date: DateFormatter(res.data.data.payment_date),
-            department_id: res.data.data.department.id,
-            pay_slip_ref_no: res.data.data.pay_slip_ref_no,
-            pay_slip_date: DateFormatter(res.data.data.pay_slip_date),
-            crv_bpv_no: res.data.data.crv_bpv_no,
-            receipt_date: DateFormatter(res.data.data.receipt_date),
-            primary_acc_code_id: res.data.data.primary_acc_code.id,
-            payment_order_no: res.data.data.payment_order_no,
-            acc_description: res.data.data.acc_description,
-            debit_amount: res.data.data.debit_amount,
-            credit_amount: res.data.data.credit_amount,
-            remittance_money_no: res.data.data.remittance_money_no,
-            amount: res.data.data.amount,
-            cheque_no: res.data.data.cheque_no,
-            total_amount: res.data.data.total_amount,
-            amount_in_words: res.data.data.amount_in_words,
-            prepared_by: res.data.data.prepared_by,
-            prepared_by_date: DateFormatter(res.data.data.prepared_by_date),
-            verified_by_id: res.data.data.verified_by.id,
-            verified_by_date: DateFormatter(res.data.data.verified_by_date),
-            approved_by_id: res.data.data.approved_by.id,
-            approved_by_date: DateFormatter(res.data.data.approved_by_date),
-            posted_by_id: res.data.data.posted_by.id,
-            posted_by_date: DateFormatter(res.data.data.posted_by_date),
-            receiver_name: res.data.data.receiver_name,
-          };
-        });
+        return res.data.data;
       } else {
         throw "Something Went Wrong!!";
       }
@@ -68,7 +33,12 @@ export const ViewCashBankRVoucher = ({
     }
   };
 
-  const {refetch: reloadData } = useQuery(
+  ///////////// React print
+  const handlePrint = useReactToPrint({
+    content: () => cashBankRef.current,
+  });
+
+  const { refetch: reloadData, data: initialData , isFetching} = useQuery(
     ["cash-bank-r-v-get-single", ReceiptVoucherID],
     fetchData
   );
@@ -79,7 +49,79 @@ export const ViewCashBankRVoucher = ({
 
   return (
     <>
-      <HeaderWidget title="View Cash/Bank Receipt Voucher" variant="view" />
+      <HeaderWidgetForPrintTemp
+        title="View Cash/Bank Receipt Voucher"
+        variant="view"
+        handlePrint={handlePrint}
+      />
+      <div className="shadow-lg border">
+        {isFetching ? <Loader/> : <div ref={cashBankRef} className="text-secondary text-lg p-4">
+          <div className="flex items-center">
+            <span className="w-1/3 flex items-center">
+              <b>Date:</b>&nbsp;
+              <p className="underline">
+                {DateFormatter(initialData?.voucher_date)}
+              </p>{" "}
+            </span>
+            <div>
+              <span className="flex items-center">
+                <p className="underline">{initialData?.ulb?.ulbs}</p> &nbsp;
+                <b>Name of the ULB</b>
+              </span>
+              <b>CASH/BANK RECEIPT VOUCHER</b>
+            </div>
+          </div>
+          <div className="flex items-center justify-between my-6">
+            <div className="flex flex-col">
+              <span className="flex items-center">
+                <b>Name of the Bank:</b> &nbsp;
+                <p className="underline">
+                  {initialData?.bank?.bank_acc_no}
+                </p>{" "}
+              </span>
+              <span>
+                <b>Pay-in-slip Ref. No./Date:</b>&nbsp;__________
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="flex items-center">
+                <b>NAME OF THE FUND:</b> &nbsp;
+                <p className="underline">
+                  {initialData?.bank?.bank_type?.name}
+                </p>
+              </span>
+              <span className="flex items-center">
+                <b>CRV/BRV No:</b>&nbsp;{" "}
+                <p className="underline">{initialData?.crv_brv_no}</p>{" "}
+              </span>
+            </div>
+          </div>
+          <div>
+            <table className="table">
+              <thead className="text-secondary text-base">
+                <tr>
+                  <th className="border">Code of Account</th>
+                  <th className="border">Account Description</th>
+                  <th className="border">Challan for Remittance of Money No</th>
+                  <th className="border">Amount (Rs.)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border">
+                    {initialData?.primary_acc_code?.code}
+                  </td>
+                  <td className="border">
+                    {initialData?.primary_acc_code?.description}
+                  </td>
+                  <td className="border">3</td>
+                  <td className="border">{initialData?.amount}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>}
+      </div>
     </>
   );
 };

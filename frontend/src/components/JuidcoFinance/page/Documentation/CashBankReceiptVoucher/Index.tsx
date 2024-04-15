@@ -13,11 +13,14 @@ import { useRouter } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import TableWithFeatures from "./TableWithFeature";
 import Button from "@/components/global/atoms/Button";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Checkboxes from "@/components/global/atoms/Checkbox";
 import { useSelector } from "react-redux";
 import axios from "@/lib/axiosConfig"
 import Footer from "./Footer";
+import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import { ROLES } from "@/json/roles";
 
 export const HeroCashBankRVoucher= () => {
   const pathName = usePathname();
@@ -25,11 +28,19 @@ export const HeroCashBankRVoucher= () => {
   const [user, setUser] = useState<any>();
   const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [receiptIds, setReceiptIds] = useState<any>([]);
+  const [isApproved, setIsApproved] = useState<boolean>(true);
+  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  const [showPopup, setShowPopup] = useState({
+    name: "",
+    isOpen: false,
+  });
+
   useEffect(() => {
     setUser(userData);
   }, []);
 
   const onViewButtonClick = (id: string) => {
+    activateWorkingAnimation();
     router.push(`${pathName}/view/${id}?mode=view`);
   };
 
@@ -73,21 +84,22 @@ export const HeroCashBankRVoucher= () => {
     };
 
     ///// Getting Selected Data and Balances From Table Component
-  const handleGetData = (data: []) => {
-    setReceiptIds([...data]);
+  const handleGetData = (data: any) => {
+    setIsApproved(data.isApproved)
+    setReceiptIds(data.data);
   };
   
 
   /////// Handle Approve Receipt
-  const handleApprove = async (name: string) => {
+  const handleApprove = async () => {
     try {
       const res = await axios({
-        url: FINANCE_URL.RECEIPT_REGISTER.approve,
+        url: FINANCE_URL.CASH_BANK_R_VOUCHER.approve,
         method: "POST",
         data: {
           data: {
             checked_by_id: user.id,
-            checked_by_print_name: name,
+            checked_by_print_name: showPopup?.name,
             ids: receiptIds,
           },
         },
@@ -95,9 +107,15 @@ export const HeroCashBankRVoucher= () => {
       if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       res && toast.success("Approved Sucessfully!!");
+      setIsApproved(true)
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
+  };
+
+  ////// Handle Approve Confirmation
+  const handleApproveConfirm = (name: string) => {
+    setShowPopup((prev) => ({ ...prev, name, isOpen: !showPopup.isOpen }));
   };
 
 
@@ -108,10 +126,10 @@ export const HeroCashBankRVoucher= () => {
       value: sButton,
     },
     { name: "id", caption: "Sr. No."},
-    { name: "vendor", caption: "Vendor Name"},
-    { name: "bill_no", caption: "Bill Number"},
-    { name: "department", caption: "Department"},
-    { name: "is_authorized", caption: "Is Authorized "},
+    { name: "voucher_date", caption: "Voucher Date"},
+    { name: "amount", caption: "Amount"},
+    { name: "bank", caption: "Bank Account"},
+    { name: "is_approved", caption: "Is Approved"},
     {
       name: "View",
       caption: "View",
@@ -124,7 +142,7 @@ export const HeroCashBankRVoucher= () => {
   ////////////////// Filtering the column on behalf of User roles
   useEffect(()=> {
     (function(){
-      if(user && !user?.role.includes("Accounts Department – Manager")){
+      if(user && !user?.role.includes(ROLES.ACC_DEP_MANAGER)){
         setNewColumns((prev) => {
           return prev.filter((item) => item.name !== "All")
         })
@@ -134,16 +152,29 @@ export const HeroCashBankRVoucher= () => {
 
   return (
     <>
+     <Toaster />
+      {showPopup?.isOpen && (
+        <ConfirmationPopup
+          cancel={() =>
+            setShowPopup((prev) => ({ ...prev, isOpen: !showPopup.isOpen }))
+          }
+          continue={handleApprove}
+          message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
+        />
+      )}
+      {workingAnimation}
       <HeaderWidget variant="" title="Cash/Bank Receipt Voucher" />
       <TableWithFeatures
         center
         columns={newColumns}
-        api={FINANCE_URL.BILL_PAYMENT_ENTRY_URL.get || ""}
+        api={FINANCE_URL.CASH_BANK_R_VOUCHER.get || ""}
+        depApi={FINANCE_URL.CASH_BANK_R_VOUCHER.getCheckedData || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer
             user={user}
-            handleApprove={handleApprove}
+            isApproved={isApproved}
+            handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />
         }
