@@ -24,6 +24,7 @@ model municipality_codes {
 
   account_codes     account_codes[]
   pet_registration_receipts     pet_registration_receipt[]
+  bills     bills[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")

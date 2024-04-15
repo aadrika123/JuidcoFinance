@@ -131,6 +131,8 @@ export const sidebarLinks: SidebarLinksProps = {
           path: "/transaction",
           subModules: [
             { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
+            { moduleName: "Bills", path: "/transaction/bills" },
+            
             {
               moduleName: "Direct Payment Entry",
               path: "/transaction/direct-payment-entry",

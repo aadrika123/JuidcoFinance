@@ -88,11 +88,11 @@ model balance_trackings{
 	ulb_id              Int
   	ulb                 municipality_codes @relation(fields: [ulb_id], references: [id])
 
-	grant_entries grant_entries[]
+	grant_entries 		grant_entries[]
 
 
 	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
+	updated_at          DateTime            @default(now()) @updatedAt @map("updated_at")
 }
 
 
@@ -841,6 +841,7 @@ model municipality_codes {
 
   account_codes     account_codes[]
   pet_registration_receipts     pet_registration_receipt[]
+  bills     bills[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -1184,6 +1185,26 @@ model wf_roleusermaps {
     created_at   DateTime? @default(now()) @map("created_at")
     updated_at   DateTime? @updatedAt @map("updated_at")
 }
+model bills {
+id                  Int               @id @default(autoincrement())
+
+ulb_id              Int
+ulb                 municipality_codes     @relation(fields: [ulb_id], references: [id])
+
+bill_no             String
+bill_date           DateTime @db.Date
+
+party_name          String
+
+particulars         String
+amount              Float
+
+remarks             String
+
+created_at       DateTime          @default(now()) @map("created_at")
+updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
+}
+
 ////receipt_register: Managed by: Sanjiv Kumar
 
 model daily_receipt_balances{

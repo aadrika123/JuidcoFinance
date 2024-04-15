@@ -53,6 +53,7 @@ import accounting_code_types_seeder from "./seeder/masters/accounting_code_types
 import foreign_wrapper from "./seeder/foreign_wrappter";
 import revenue_accounted_types_seeder from "./seeder/masters/revenue_accounted_types_seeder";
 import { chequebook_entries_seeder } from "./seeder/chequebook_entries_seeder";
+import bills_seeder from "./seeder/payments/bills_seeder";
 
 const prisma = new PrismaClient();
 
@@ -234,6 +235,8 @@ async function main() {
     await receipt_register_seeder();
 
     await daily_receipt_balance_seeder();
+
+    await bills_seeder();
   }, 8000);
 
   setTimeout(async() => {

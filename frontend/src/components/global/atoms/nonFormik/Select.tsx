@@ -71,7 +71,7 @@ const Select: React.FC<SelectProps> = (props) => {
           disabled={props.readonly}
           onChange={props.onChange}
           value={props.value}
-          className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
+          className={`text-primary h-[50px] w-[100%] p-2 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
         >
           {props.placeholder && (<option selected value="">

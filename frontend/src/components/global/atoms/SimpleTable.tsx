@@ -7,6 +7,7 @@ export interface ColumnProps {
   caption: string | ReactElement;
   nested?: boolean;
   member?: string;
+  type?: string;
 }
 
 interface SimpleTableProps<T>{
@@ -46,7 +47,10 @@ const SimpleTable = <T, >({columns, data, onViewButtonClick}: SimpleTableProps<T
               if(column.member){
                 value = ob[column.member as keyof typeof ob];
               }
-            }else{
+            }else if(column.type && column.type == "date"){
+              value = new Date(row[column.name as keyof typeof row] as string);
+            }
+            else{
               value = row[column.name as keyof typeof row];
             }
 
