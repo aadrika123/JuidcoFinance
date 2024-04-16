@@ -1,10 +1,8 @@
-import { Request, Response } from "express";
-import CommonRes from "../../../util/helper/commonResponse";
-import { resObj } from "../../../util/types";
-import { resMessage } from "../../responseMessage/commonMessage";
-import Joi from "joi";
-import { balanceTrackingsValidation } from "../../requests/budgeting/balanceTrackingsValidation";
+import { Request } from "express";
 import BalanceTrackingsDao from "../../dao/budgeting/BalanceTrackingsDao";
+import { APIv1Response } from "../../APIv1";
+import * as Yup from "yup";
+
 
 /**
  * | Author- Bijoy Paitandi
@@ -20,250 +18,210 @@ class BalanceTrackingsController {
     this.initMsg = "BalanceTrackings Entry";
   }
 
-  // Create
-  create = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "POST",
-      version: "1.0",
-    };
-    try {
-      const { error } = balanceTrackingsValidation.validate(req.body.data);
-
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
-
-      const data = await this.balanceTrackingsDao.store(req);
-      return CommonRes.CREATED(
-        resMessage(this.initMsg).CREATED,
-        data,
-        resObj,
-        req,
-        res
-      );
-    } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
-    }
-  };
-
   // Get limited bill invoices list
-  get = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "GET",
-      version: "1.0",
-    };
+  get = async ( req: Request): Promise<APIv1Response> => {
     try {
-      const data = await this.balanceTrackingsDao.get(req);
+      // collect input
+      const page: number = Number(req.query.page);
+      const limit: number = Number(req.query.limit);
+      const search: string = String(req.query.search);
+      let order: number = Number(req.query.order);
 
-      if (!data)
-        return CommonRes.NOT_FOUND(
-          resMessage(this.initMsg).NOT_FOUND,
-          data,
-          resObj,
-          req,
-          res
-        );
+      if (order != -1 && order != 1) {
+        order = -1;
+      }
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+      // validate
+
+
+      // call dao
+      const data = await this.balanceTrackingsDao.get(page, limit, search, order);
+
+      // generate response
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+      return {status: true, code: 200, message: "Found", data: data};
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+      return { status: false, code: 500, message: "Error", data: error};  
     }
   };
 
   // Get single biull invoice details by Id
-  getById = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "GET",
-      version: "1.0",
-    };
+  getById = async ( req: Request): Promise<APIv1Response> => {
     try {
       const id: number = Number(req.params.id);
 
       // validate id
-      const { error } = Joi.object({
-        id: Joi.number().required().greater(0)
+      await Yup.object({
+        id: Yup.number().required("Id is required")
       }).validate({ 'id': id });
-
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.balanceTrackingsDao.getById(id);
 
-      if (!data)
-        return CommonRes.NOT_FOUND(
-          resMessage(this.initMsg).NOT_FOUND,
-          data,
-          resObj,
-          req,
-          res
-        );
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+      return {status: true, code: 200, message: "Found", data: data};
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+      return { status: false, code: 500, message: "Error", data: error};  
     }
   };
 
 
 
   // Get single biull invoice details by Id
-  getBalance = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "GET",
-      version: "1.0",
-    };
+  getBalance = async (req: Request ): Promise<APIv1Response> => {
     try {
       const id: number = Number(req.params.id);
 
       // validate id
-      const { error } = Joi.object({
-        id: Joi.number().required().greater(0)
+      await Yup.object({
+        id: Yup.number().required("Id is required.")
       }).validate({ 'id': id });
-
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
       const data = await this.balanceTrackingsDao.getBalance(id);
 
-      if (!data)
-        return CommonRes.NOT_FOUND(
-          resMessage(this.initMsg).NOT_FOUND,
-          data,
-          resObj,
-          req,
-          res
-        );
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+      return {status: true, code: 200, message: "Found", data: data};
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+      return { status: false, code: 500, message: "Error", data: error};  
     }
   };
 
 
   // Get limited bill invoices list
-  getLatestBalances = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "GET",
-      version: "1.0",
-    };
+  getLatestBalances = async (req: Request): Promise<APIv1Response> => {
     try {
       const data = await this.balanceTrackingsDao.getLatestBalances(req);
 
-      if (!data)
-        return CommonRes.NOT_FOUND(
-          resMessage(this.initMsg).NOT_FOUND,
-          data,
-          resObj,
-          req,
-          res
-        );
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+      return {status: true, code: 200, message: "Found", data: data};
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+      return { status: false, code: 500, message: "Error", data: error};  
     }
   };
 
-  getScheduleReport = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "GET",
-      version: "1.0",
-    };
+  getScheduleReport = async (req: Request): Promise<APIv1Response> => {
     try {
 
       const id: number = Number(req.params.id);
+      const ulbID: number = Number(req.query.ulb);
+      const year: number= Number(req.query.year);
+
+      console.log(year);
 
       // validate id
-      const { error } = Joi.object({
-        id: Joi.number().required().greater(0)
+      await Yup.object({
+        id: Yup.number().required("Id is required.")
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
+      const data = await this.balanceTrackingsDao.getScheduleReport(id, ulbID, year);
 
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
 
-      const data = await this.balanceTrackingsDao.getScheduleReport(id);
-
-      if (!data)
-        return CommonRes.NOT_FOUND(
-          resMessage(this.initMsg).NOT_FOUND,
-          data,
-          resObj,
-          req,
-          res
-        );
-
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+      return {status: true, code: 200, message: "Found", data: data};
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+      return { status: false, code: 500, message: "Error", data: error};  
     }
   };
 
 
-  getGeneralLedgerReport = async (
-    req: Request,
-    res: Response,
-    apiId: string
-  ): Promise<Response> => {
-    const resObj: resObj = {
-      apiId,
-      action: "GET",
-      version: "1.0",
-    };
+  getGeneralLedgerReport = async (req: Request): Promise<APIv1Response> => {
     try {
 
       const id: number = Number(req.params.id);
+      const ulbID: number = Number(req.query.ulb);
+      const year: number= Number(req.query.year);
+
 
       // validate id
-      const { error } = Joi.object({
-        id: Joi.number().required().greater(0)
+      await Yup.object({
+        id: Yup.number().required("Id is required.")
       }).validate({ 'id': id });
 
-      if (error) return CommonRes.VALIDATION_ERROR(error, resObj,  req, res,);
 
 
-      const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id);
+      const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id, ulbID, year);
 
-      if (!data)
-        return CommonRes.NOT_FOUND(
-          resMessage(this.initMsg).NOT_FOUND,
-          data,
-          resObj,
-          req,
-          res
-        );
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
 
-      return CommonRes.SUCCESS(resMessage(this.initMsg).FOUND, data, resObj, req, res);
+      return {status: true, code: 200, message: "Found", data: data};
     } catch (error: any) {
-      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+      return { status: false, code: 500, message: "Error", data: error};  
     }
   };
+
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getFinYears = async (req: Request): Promise<APIv1Response> => {
+    try {
+      
+      const data = await this.balanceTrackingsDao.getFinYears();
+      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+
+      return {status: true, code: 200, message: "Found", data: data};
+    } catch (error: any) {
+      return { status: false, code: 500, message: "Error", data: error};  
+    }
+  };
+
+  getTrialBalance = async (req: Request): Promise<APIv1Response> => {
+    
+    
+    // validate
+    await Yup.object({
+      ulb: Yup.number().required("ulb is required."),
+      year: Yup.number().required("Year is required.")
+    }).validate(req.query);
+
+    // get data
+    const ulb = Number(req.query.ulb);
+    const year = Number(req.query.year);
+
+
+    // call dao
+    const data = await this.balanceTrackingsDao.getTrialBalance(Number(ulb), Number(year));
+
+    // return the result
+    return {status: true, code: 200, message: "Found", data: data};
+  }
+
+
+  getIncomeStatement = async(req: Request): Promise<APIv1Response> => {
+
+    //validate
+    await Yup.object({
+      ulb: Yup.number().required("ulb is required."),
+      year: Yup.number().required("year is required.")
+    }).validate(req.query);
+
+    // get data
+    const ulb = Number(req.query.ulb);
+    const year = Number(req.query.year);
+
+    // call dao
+    const data: any[] = await this.balanceTrackingsDao.getTrialBalance(Number(ulb), Number(year));
+
+
+    // business logic
+    const income: any[] = [];
+    const expenditure: any[] = [];
+
+    data.forEach((item) => {
+      const majorHead = parseInt(item.code.substring(0,2));
+      if(11 <= majorHead && majorHead <= 18) income.push(item);
+      else if(21 <= majorHead && majorHead <= 27) expenditure.push(item);
+    });
+
+    const new_data = {
+      income: income,
+      expenditure: expenditure
+    };
+
+    // return the result
+    return {status: true, code: 200, message: "Found", data: new_data};
+  }
+
 
 }
 

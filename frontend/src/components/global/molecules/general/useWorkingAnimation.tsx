@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import RandomWorkingPopup from './RandomWorkingPopup';
+import WorkingPopup from './WorkingPopup';
 
 
 export function useWorkingAnimation(): [ReactNode, () => void, ()=> void] {
@@ -9,7 +9,7 @@ export function useWorkingAnimation(): [ReactNode, () => void, ()=> void] {
 
   const hideWorkingAnimation = () => {setShow(false);}
 
-  const workingAnimation = (<RandomWorkingPopup show={show}/>);
+  const workingAnimation = show? <WorkingPopup/> : <></>;
 
   return [workingAnimation, activateWorkingAnimation, hideWorkingAnimation];
 }

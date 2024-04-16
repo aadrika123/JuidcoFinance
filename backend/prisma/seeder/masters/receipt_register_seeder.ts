@@ -6,17 +6,17 @@ const receipt_register_seeder = async () => {
   const number_of_records = 20;
   for (let i = 0; i < number_of_records; i++) {
     const record = {
-      receipt_no: faker.random.alphaNumeric(6),
+      receipt_no: faker.string.alphanumeric(6),
       ulb_id: 1,
       primary_acc_code_id: 1,
       revenue_module_id: 1,
       paid_by: faker.person.fullName(),
       receipt_mode_id: 1,
       receipt_date: faker.date.past(),
-      cheque_or_draft_no: faker.random.numeric(8),
-      bank_amount: faker.datatype.number(),
-      cash_amount: faker.datatype.number(),
-      bank_acc_no: String(faker.datatype.number(8)),
+      cheque_or_draft_no: faker.string.numeric(8),
+      bank_amount: faker.number.int(),
+      cash_amount: faker.number.int(),
+      bank_acc_no: String(faker.number.int(8)),
       deposit_date: faker.date.past(),
       realisation_date: faker.date.past(),
       revenue_accounted_type_id: 1,

@@ -21,7 +21,6 @@ message PropertyDetails {
     string assessment_code = 1;
     repeated AccountingEntry accounting_entries = 2;
 }   
-
 message DemandsOnExistingAssessments {
     string ulb = 1;
     string bill_no = 2;

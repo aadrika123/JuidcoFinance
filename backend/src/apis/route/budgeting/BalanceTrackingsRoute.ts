@@ -1,6 +1,6 @@
-import express, { Request, Response } from "express";
-import { baseUrl } from "../../../util/common";
+import express from "express";
 import BalanceTrackingsController from "../../controller/budgeting/BalanceTrackingsController";
+import { APIv1 } from "../../APIv1";
 
 /**
  * | Author- Bijoy Paitandi
@@ -9,24 +9,24 @@ import BalanceTrackingsController from "../../controller/budgeting/BalanceTracki
  */
 
 
-class BalanceTrackingsRoute {
+class BalanceTrackingsRoute extends APIv1 {
     private controller: BalanceTrackingsController;
-    private baseUrl: string = `${baseUrl}/balance-trackings`;
-    constructor(){
+    constructor(routeId: string, app: express.Application){
+        super(routeId, app, "balance-trackings");
         this.controller = new BalanceTrackingsController();
     }
 
-    configure(app: express.Application, apiId: string) : void {
-        app.route(`${this.baseUrl}/create`).post((req: Request, res: Response) => this.controller.create(req, res, apiId + "01"));
-        app.route(`${this.baseUrl}/get-all`).get((req: Request, res: Response) => this.controller.get(req, res, apiId + "02"));
-        app.route(`${this.baseUrl}/get-by-id/:id`).get((req: Request, res: Response) =>this.controller.getById(req, res, apiId + "03"));
-        app.route(`${this.baseUrl}/get-balance/:id`).get((req: Request, res: Response) =>this.controller.getBalance(req, res, apiId + "04"));
-        app.route(`${this.baseUrl}/get-balances`).get((req: Request, res: Response) =>this.controller.getLatestBalances(req, res, apiId + "05"));
-        app.route(`${this.baseUrl}/get-schedule-report/:id`).get((req: Request, res: Response) =>this.controller.getScheduleReport(req, res, apiId + "06"));
-
-        app.route(`${this.baseUrl}/get-general-ledger-report/:id`).get((req: Request, res: Response) =>this.controller.getGeneralLedgerReport(req, res, apiId + "07"));
-
-
+    configure() : void {
+        this.addGetRoute("get-all", this.controller.get);
+        this.addGetRoute(`get-by-id/:id`, this.controller.getById);
+        this.addGetRoute('get-balance/:id', this.controller.getBalance);
+        this.addGetRoute('get-balances',this.controller.getLatestBalances);
+        this.addGetRoute('get-schedule-report/:id', this.controller.getScheduleReport);
+        this.addGetRoute('get-general-ledger-report/:id', this.controller.getGeneralLedgerReport);
+        this.addGetRoute('get-fin-years', this.controller.getFinYears);
+        
+        this.addGetRoute('get-trial-balance', this.controller.getTrialBalance);
+        this.addGetRoute('get-income-statement', this.controller.getIncomeStatement);
     }
 }
 

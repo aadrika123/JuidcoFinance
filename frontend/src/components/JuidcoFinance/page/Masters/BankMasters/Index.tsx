@@ -18,7 +18,6 @@ import LosingDataConfirmPopup from "@/components/global/molecules/general/Losing
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
-import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import ErrorConfirmPopup from "@/components/global/molecules/general/ErrorConfirmPopup";
 // Imports //----------------------------------------------------------------
@@ -166,7 +165,7 @@ export const HeroBankMasters = () => {
         <SuccesfullConfirmPopup message="Recorded Successfully" />
       )}
 
-      <RandomWorkingPopup show={isSaving} />
+      {isSaving? <WorkingPopup/> : <></>}
 
       {isAddBankAccountOpen && (
         <Popup title="Add New Bank Account" zindex={10} width={80}>

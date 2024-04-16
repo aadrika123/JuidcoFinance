@@ -2,7 +2,11 @@
 model revenue_modules {
     id                Int                 @id @default(autoincrement())
     name              String
+
+    
     receipt_registers receipt_registers[]
+    pet_registration_receipts       pet_registration_receipt[]
+    
     created_at        DateTime            @default(now()) @map("created_at")
     updated_at        DateTime            @updatedAt @map("updated_at")
 }

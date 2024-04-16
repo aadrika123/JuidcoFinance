@@ -2,18 +2,25 @@
   "name": "jflib",
   "version": "1.0.0",
   "description": "Juidco Finance Library",
-  "main": "index.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "typescript": {
+    "definition": "build/index.d.ts"
+  },
   "files": [
-    "index.ts",
-    "src/"
+    "/build"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
   },
   "author": "Aadrika Enterprises",
   "license": "ISC",
   "dependencies": {
     "joi": "^17.12.2",
     "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.3"
   }
 }

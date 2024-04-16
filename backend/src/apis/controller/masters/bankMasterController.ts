@@ -5,9 +5,8 @@ import { BankMasterValidation } from "jflib";
 import { APIv1Response } from "../../APIv1";
 
 /**
- * | Author- Bijoy Kumar
+ * | Author- Bijoy Paitandi
  * | Created On- 20-01-2024
- * | Created for- BankMaster Controller
  */
 
 class BankMasterController {
@@ -16,36 +15,41 @@ class BankMasterController {
     this.bankMasterDao = new BankMasterDao();
   }
 
-  // Create
   create = async (req: Request): Promise<APIv1Response> => {
     try {
       await BankMasterValidation.bankMasterValidation.validate(req.body.data);
 
       const data = await this.bankMasterDao.store(req);
 
-      return { status: true, code: 200, msg: ResMessage.CREATED, data: data };
+      return { status: true, code: 200, message: ResMessage.CREATED, data: data };
     } catch (error: any) {
-      return { status: false, code: 200, msg: error.message, data: error };
+      return { status: false, code: 200, message: error.message, data: error };
     }
   };
 
   // Get limited bank list
   get = async (req: Request): Promise<APIv1Response> => {
     try {
-      const data = await this.bankMasterDao.get(req);
-
-      if (!data)
-        return {
-          status: true,
-          code: 200,
-          msg: ResMessage.NOT_FOUND,
-          data: data,
-        };
-
-      return { status: true, code: 200, msg: ResMessage.FOUND, data: data };
-    } catch (error: any) {
-      return { status: false, code: 200, msg: "Error", data: error };
-    }
+       // collect input
+       const page: number = Number(req.query.page);
+       const limit: number = Number(req.query.limit);
+       const search: string = String(req.query.search);
+       let order: number = Number(req.query.order);
+ 
+       if (order != -1 && order != 1) {
+         order = -1;
+       }
+ 
+       // validate
+ 
+ 
+       // call dao
+       const data = await this.bankMasterDao.get(page, limit, search, order);
+       if (!data) return {status: true, code: 201, message: ResMessage. NOT_FOUND, data: data};
+       return {status: true, code: 200, message: ResMessage.FOUND, data: data};
+     } catch (error: any) {
+       return { status: false, code: 500, message: "Error", data: error};  
+     }
   };
 
   // Get single bank details by Id
@@ -58,13 +62,13 @@ class BankMasterController {
         return {
           status: true,
           code: 200,
-          msg: ResMessage.NOT_FOUND,
+          message: ResMessage.NOT_FOUND,
           data: data,
         };
 
-      return { status: true, code: 200, msg: ResMessage.FOUND, data: data };
+      return { status: true, code: 200, message: ResMessage.FOUND, data: data };
     } catch (error: any) {
-      return { status: false, code: 200, msg: "Error", data: error };
+      return { status: false, code: 200, message: "Error", data: error };
     }
   };
 
@@ -75,25 +79,28 @@ class BankMasterController {
         req.body.data
       );
 
-      const data = await this.bankMasterDao.update(req);
+      const data = await this.bankMasterDao.update(req.body.data);
 
-      return { status: true, code: 200, msg: ResMessage.UPDATED, data: data };
+      return { status: true, code: 200, message: ResMessage.UPDATED, data: data };
     } catch (error: any) {
-      return { status: false, code: 200, msg: "Error", data: error };
+      return { status: false, code: 200, message: "Error", data: error };
     }
   };
 
   // Get By AccountingCode and Ulb
   getByAccCodeAndUlb = async (req: Request): Promise<APIv1Response> => {
     try {
-      const data = await this.bankMasterDao.getByAccCodeAndUlb(req);
+
+      const { accCodeId, ulbId } = req.params;
+
+      const data = await this.bankMasterDao.getByAccCodeAndUlb(Number(accCodeId), Number(ulbId));
 
       if(!data)
-       return { status: true, code: 200, msg: ResMessage.NOT_FOUND, data: null };
+       return { status: true, code: 200, message: ResMessage.NOT_FOUND, data: null };
 
-      return { status: true, code: 200, msg: ResMessage.FOUND, data: data };
+      return { status: true, code: 200, message: ResMessage.FOUND, data: data };
     } catch (error: any) {
-      return { status: false, code: 200, msg: "Error", data: error };
+      return { status: false, code: 200, message: "Error", data: error };
     }
   };
 }

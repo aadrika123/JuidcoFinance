@@ -9,8 +9,8 @@ const budget_appropriations_seeder = async () => {
             primary_acc_code_id: 1,
             remark: faker.lorem.sentence(),
             from_primary_acc_code_id: 1,
-            approved_amount: faker.datatype.number(),
-            transfer_amount: faker.datatype.number(),
+            approved_amount: faker.number.float(),
+            transfer_amount: faker.number.float(),
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),
         };

@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import React from "react";
 import axios from "@/lib/axiosConfig";
+import Loader from "../Loader";
 
 /**
  * | Author- Sanjiv Kumar
@@ -18,6 +19,7 @@ interface SelectProps {
   readonly?: boolean;
   className?: string;
   visibility?: boolean;
+  selectFirstItem?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   initHandler?: (value: number, text: string) => void;
 }
@@ -46,7 +48,9 @@ const Select: React.FC<SelectProps> = (props) => {
     return data;
   };
 
-  const { data: dataList = [], isError: dataError } = useQuery({
+  const { data: dataList = [],
+    isError: dataError,
+  } = useQuery({
     queryKey: [props.name],
     queryFn: fetchData,
   });
@@ -54,6 +58,8 @@ const Select: React.FC<SelectProps> = (props) => {
   if (dataError) {
     throw new Error("Fatal Error!");
   }
+
+
 
   return (
     <>
@@ -65,15 +71,16 @@ const Select: React.FC<SelectProps> = (props) => {
           disabled={props.readonly}
           onChange={props.onChange}
           value={props.value}
-          className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
+          className={`text-primary h-[50px] w-[100%] p-2 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
         >
-          {props.placeholder && <option selected value="">
+          {props.placeholder && (<option selected value="">
             {props.placeholder}
-          </option>}
+          </option>)}
           {dataList.length > 0 &&
-            dataList.map((d: Select) => (
+            dataList.map((d: Select, i) => (
               <option
+                selected={props.selectFirstItem?i==0?true:false:false}
                 key={d?.id}
                 value={d?.id}
                 data-name={
@@ -84,6 +91,7 @@ const Select: React.FC<SelectProps> = (props) => {
                     : d?.code) ||
                   d?.ulbs
                 }
+
               >
                 {d?.name ||
                   d?.type ||

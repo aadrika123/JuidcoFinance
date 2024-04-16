@@ -8,6 +8,8 @@ import {HoldingAndTaxService } from "./grpc/proto/holding_and_tax_grpc_pb";
 import { HoldingAndTaxServer } from "./grpc/services/holding_and_tax_services";
 import { RecordNewAssesDemandService } from "./grpc/proto/record_new_assess_demand_grpc_pb";
 import { RecordDemandsOnNewAsses } from "./grpc/services/holding_and_tax/record_new_assess_demand_services";
+import { PetRegistrationService } from "./grpc/proto/pet_registration_grpc_pb";
+import { PetRegistrationServer } from "./grpc/services/PetRegistrationServer";
 
 const startGRPC = (port: number | string) => {
   const server = new Server();
@@ -16,6 +18,7 @@ const startGRPC = (port: number | string) => {
   server.addService(DatabaseTesterService, DatabaseTestServer);
   server.addService(HoldingAndTaxService, HoldingAndTaxServer);
   server.addService(RecordNewAssesDemandService, RecordDemandsOnNewAsses)
+  server.addService(PetRegistrationService, PetRegistrationServer);
 
   const uri = `0.0.0.0:${port}`;
   console.log(`Listening on ${uri}`);

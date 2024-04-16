@@ -6,8 +6,8 @@ const revised_budgets_seeder = async () => {
     for (let i = 0; i < number_of_records; i++) {
         const record = {
             primary_acc_code_id: 1,
-            approved_amount: faker.datatype.number(),
-            revised_amount: faker.datatype.number(),
+            approved_amount: faker.number.float(),
+            revised_amount: faker.number.float(),
             remarks: faker.lorem.sentence(),
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),

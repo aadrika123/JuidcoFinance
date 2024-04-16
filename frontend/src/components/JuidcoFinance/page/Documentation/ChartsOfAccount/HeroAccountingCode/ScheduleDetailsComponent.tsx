@@ -9,16 +9,20 @@ import { AccountingTableData } from "../types";
 
 interface ScheduleDetailsComponentProps {
   scheduleId: number;
+  ulbId: number;
+  year: number;
   onClose: () => void;
 }
 
 interface YearlyData {
+  year: string;
   general_ledgers: AccountingTableData[];
   remissions?: AccountingTableData;
 }
 
 interface ScheduleReport {
   id: number;
+  ulb: string;
   code: string;
   description: string;
   balance: number;
@@ -29,6 +33,8 @@ interface ScheduleReport {
 
 const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
   scheduleId,
+  ulbId, 
+  year,
   onClose,
 }: ScheduleDetailsComponentProps) => {
   const componentRef = useRef(null);
@@ -38,9 +44,11 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
 
   const fetchData = async (): Promise<ScheduleReport> => {
     const res = await axios({
-      url: `/balance-trackings/get-schedule-report/${scheduleId}`,
+      url: `/balance-trackings/get-schedule-report/${scheduleId}?year=${year}&ulb=${ulbId}`,
       method: "GET",
     });
+
+    console.log(res.data?.data);
 
     if (res.data.status) {
       return res.data?.data;
@@ -52,7 +60,9 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
     data: data,
     isError: dataError,
     isLoading: isLoading,
-  } = useQuery(["schedule-report", scheduleId], fetchData);
+  } = useQuery(["schedule-report", scheduleId], fetchData, {
+    cacheTime: 0
+  });
 
   if (dataError) {
     throw new Error("Fatal Error!");
@@ -71,6 +81,8 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
               <span className="underline font-bold">
                 {data?.description} [Code No {data?.code.substring(0, 3)}]
               </span>
+              <br/>
+              <span>({data?.ulb})</span>
             </div>
 
             <table
@@ -82,10 +94,10 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
                   <th className="border border-slate-300">Minor Code No</th>
                   <th className="border border-slate-300">Particulars</th>
                   <th className="border border-slate-300">
-                    Current Year (Rs.)
+                    Current Year ({data?.current_year?.year})
                   </th>
                   <th className="border border-slate-300">
-                    Previous Year (Rs. )
+                    Prev Year ({data?.prev_year?.year})
                   </th>
                 </tr>
                 <tr>
@@ -109,7 +121,8 @@ const ScheduleDetailsComponent: React.FC<ScheduleDetailsComponentProps> = ({
                       {fc(d.balance)}
                     </td>
                     <td className="border border-slate-300 px-4 text-right">
-                      {fc(data.prev_year.general_ledgers[i].balance)}
+                      {fc(data?.prev_year?.general_ledgers[i]?.balance)}
+                      {/* {typeof data.prev_year.general_ledgers[i]} */}
                     </td>
                   </tr>
                 ))}

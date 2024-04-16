@@ -24,7 +24,7 @@ const voucher_entries_seed = async () => {
               adminis_ward_id: 1,
               voucher_sub_id: 1,
               sub_ledger_id: 1,
-              amount: faker.datatype.number(),
+              amount: faker.number.int(),
               dr_cr_id: 1,
             },
           });

@@ -49,6 +49,7 @@ import ReceiptRegisterRoute from "./route/masters/ReceiptRegisterRoute";
 import BankTypesRoute from "./route/masters/BankTypesRoute";
 import AuditTrailRoute from "./route/auditTrail/auditTrailRoute";
 import RevenueAccountedTypesRoute from "./route/masters/RevenueAccountedTypesRoute";
+import BillsRoute from "./route/payments/BillsRoute";
 import CollectionRegisterRoute from "./route/revenueCollection/collectionRegister";
 import DailyCollSummaryRoute from "./route/revenueCollection/dailyCollSummary";
 import CashBankRVoucherRoute from "./route/documentation/cashBankRVoucherRoute";
@@ -96,7 +97,7 @@ class FinanceRoute {
     (new MuncipalityCodeRoute()).configure(app, "03");
 
   
-    (new BankMasterRoute("04", app)).configure();
+    (new BankMasterRoute("4", app)).configure();
 
     /// VENDOR_TYPE_ROUTE ///
     this.vendorTypeRoute = new VendorTypeRoute();
@@ -186,7 +187,8 @@ class FinanceRoute {
 
     (new InvestmentsRoute()).configure(app, "34");
 
-    (new BalanceTrackingsRoute()).configure(app, "35");
+    (new BalanceTrackingsRoute("35", app)).configure();
+
 
     (new GrantEntriesRoute()).configure(app, "36");
 
@@ -217,6 +219,10 @@ class FinanceRoute {
     (new AuditTrailRoute().configure(app, "48"));
 
     (new RevenueAccountedTypesRoute().configure(app, "49"));
+
+
+    (new BillsRoute("50", app)).configure();
+
     
     (new CollectionRegisterRoute().configure(app, "50"));
 

@@ -102,10 +102,9 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/transaction",
           subModules: [
-            {
-              moduleName: "Receipt Entry ",
-              path: "/transaction/receipt-entry",
-            },
+            { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
+            { moduleName: "Bills", path: "/transaction/bills" },
+            
             {
               moduleName: "Direct Payment Entry",
               path: "/transaction/direct-payment-entry",
@@ -192,10 +191,7 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/financial-statements",
           subModules: [
-            {
-              moduleName: "Trail Balance",
-              path: "/financial-statements/trail-balance",
-            },
+            { moduleName: "Trial Balance", path: "/financial-statements/trial-balance" },
             {
               moduleName: "Income Statement",
               path: "/financial-statements/income-statement",
