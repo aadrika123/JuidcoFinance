@@ -8,28 +8,28 @@
 
 import React, { useEffect, useState } from "react";
 import { FINANCE_URL } from "@/utils/api/urls";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+// import { usePathname } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import TableWithScrollPagination from "@/components/global/organisms/TableWithScrollPagination";
 import Checkboxes from "@/components/global/atoms/Checkbox";
-import Button from "@/components/global/atoms/Button";
+// import Button from "@/components/global/atoms/Button";
 import { useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
-import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+// import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import Footer from "./Footer";
 import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
 import { ROLES } from "@/json/roles";
 
 const HeroDailyCollSummary = () => {
-  const pathName = usePathname();
-  const router = useRouter();
+  // const pathName = usePathname();
+  // const router = useRouter();
   const [user, setUser] = useState<any>();
   const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState<any>([]);
-  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  // const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
   const [showPopup, setShowPopup] = useState({
     name: "",
     isOpen: false,
@@ -40,24 +40,24 @@ const HeroDailyCollSummary = () => {
   }, []);
 
   //////// Handling Viw Button
-  const onViewButtonClick1 = (id: string) => {
-    activateWorkingAnimation();
-    router.push(`${pathName}/view/${id}?mode=view`);
-  };
+  // const onViewButtonClick1 = (id: string) => {
+  //   activateWorkingAnimation();
+  //   router.push(`${pathName}/view/${id}?mode=view`);
+  // };
 
-  const tButton = (id: string) => {
-    return (
-      <>
-        <Button
-          variant="primary"
-          className="py-2 px-4"
-          onClick={() => onViewButtonClick1(id)}
-        >
-          View
-        </Button>
-      </>
-    );
-  };
+  // const tButton = (id: string) => {
+  //   return (
+  //     <>
+  //       <Button
+  //         variant="primary"
+  //         className="py-2 px-4"
+  //         onClick={() => onViewButtonClick1(id)}
+  //       >
+  //         View
+  //       </Button>
+  //     </>
+  //   );
+  // };
 
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
@@ -148,11 +148,11 @@ const HeroDailyCollSummary = () => {
       name: "bank_acc_no",
       caption: "Deposited With",
     },
-    {
-      name: "view",
-      caption: "View",
-      value: tButton,
-    },
+    // {
+    //   name: "view",
+    //   caption: "View",
+    //   value: tButton,
+    // },
   ];
 
 
@@ -181,7 +181,7 @@ const HeroDailyCollSummary = () => {
           message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
         />
       )}
-      {workingAnimation}
+      {/* {workingAnimation} */}
       <HeaderWidget variant="" title="Daily Collection Summary" />
       <TableWithScrollPagination
         center
