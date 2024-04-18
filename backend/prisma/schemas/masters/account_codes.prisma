@@ -8,8 +8,8 @@ model account_codes {
   description String
 
   code_type_id Int
-  code_type accounting_code_types @relation(fields: [code_type_id], references: [id])
-  
+  code_type    accounting_code_types @relation(fields: [code_type_id], references: [id])
+
   parent_id Int? @default(0)
 
   remark String?
@@ -32,7 +32,10 @@ model account_codes {
 
   receipt_registers receipt_registers[]
 
-  bank_masters        bank_masters[]
+  bank_masters               bank_masters[]
+  cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
+
+  daily_coll_summaries daily_coll_summaries[]
 
   ulbs                municipality_codes[]
   pet_registration_receipts     pet_registration_receipt[]

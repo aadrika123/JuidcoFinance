@@ -1,0 +1,25 @@
+/// cash_bank_receipt_vouchers: Managed by: Sanjiv Kumar
+
+model cash_bank_receipt_vouchers {
+  id                     Int                @id @default(autoincrement())
+  ulb_id                 Int
+  ulb                    municipality_codes @relation(fields: [ulb_id], references: [id])
+  bank_id                Int
+  bank                   bank_masters       @relation(fields: [bank_id], references: [id])
+  primary_acc_code_id    Int
+  primary_acc_code       account_codes      @relation(fields: [primary_acc_code_id], references: [id])
+  pay_in_slip_ref_no     String?
+  pay_in_slip_date       DateTime?
+  voucher_date           DateTime           @default(now())
+  crv_brv_no             String
+  amount                 Float
+  is_approved            Boolean            @default(false)
+  checked_by_id          Int
+  checked_by             users              @relation("cbrv_checked_by", fields: [checked_by_id], references: [id])
+  checked_by_print_name  String
+  approved_by_id         Int?
+  approved_by            users?              @relation("cbrv_approved_by", fields: [approved_by_id], references: [id])
+  approved_by_print_name String?
+  created_at             DateTime           @default(now()) @map("created_at")
+  updated_at             DateTime           @default(now()) @updatedAt @map("updated_at")
+}

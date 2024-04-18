@@ -251,21 +251,21 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     value={values.bank_amount}
                     error={errors.bank_amount}
                     touched={touched.bank_amount}
-                    readonly={readonly}
-                    label="Bank Amount"
+                    readonly={readonly || (values.cheque_or_draft_no === "")}
+                    label="Bank Amount (amounts received through cheque / draft)"
                     name="bank_amount"
                     type="number"
                     placeholder="Enter Bank Amount"
                   />
 
-                  <Input
+                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.cash_amount}
                     error={errors.cash_amount}
                     touched={touched.cash_amount}
-                    readonly={readonly}
-                    label="Cash"
+                    readonly={readonly || (values.cheque_or_draft_no !== "")}
+                    label="Cash Amount (amounts received by cash)"
                     name="cash_amount"
                     type="number"
                     placeholder="Enter Cash Amount"

@@ -1,4 +1,4 @@
-import { EditVoucherEntry } from "@/components/JuidcoFinance/page/Documentation/VoucherEntry/EditVoucherEntry";
+import { ViewCashBankRVoucher } from "@/components/JuidcoFinance/page/Documentation/CashBankReceiptVoucher/ViewCashBankRVoucher";
 import PageLayout from "@/components/Layouts/PageLayout";
 import React from "react";
 
@@ -7,7 +7,7 @@ const page = ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <PageLayout>
-        <EditVoucherEntry VoucherEntryID={id} />
+        <ViewCashBankRVoucher ReceiptVoucherID={id} />
       </PageLayout>
     </div>
   );

@@ -24,6 +24,7 @@ class ReceiptRegisterRoute {
         app.route(`${this.baseUrl}/approve`).post((req: Request, res: Response) =>this.controller.approve(req, res, apiId + "05"));
         app.route(`${this.baseUrl}/opening-balance/create`).post((req: Request, res: Response) =>this.controller.createOpeningBal(req, res, apiId + "06"));
         app.route(`${this.baseUrl}/opening-balance/update`).post((req: Request, res: Response) =>this.controller.updateOpeningBal(req, res, apiId + "07"));
+        app.route(`${this.baseUrl}/get-checked-data/:ulbId/:date`).get((req: Request, res: Response) =>this.controller.getCheckedData(req, res, apiId + "08"));
     }
 }
 

@@ -19,6 +19,8 @@ import Footer from "./Footer";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "@/lib/axiosConfig";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
+import { ROLES } from "@/json/roles";
 
 const ReceiptRegister = () => {
   const pathName = usePathname();
@@ -28,6 +30,10 @@ const ReceiptRegister = () => {
   const [receiptData, setReceiptData] = useState<any>();
   const [receiptIds, setReceiptIds] = useState<any>([]);
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  const [showPopup, setShowPopup] = useState({
+    name:"",
+    isOpen: false,
+  });
 
   useEffect(() => {
     setUser(userData);
@@ -56,12 +62,14 @@ const ReceiptRegister = () => {
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
     const handleCheckbox = (i: string) => {
-      const updatedData: any = [...receiptIds];
-      if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
-        setReceiptIds(updatedData.filter((item: any) => item.id !== i));
-      } else {
-        setReceiptIds((prev: any) => [...prev, { id: Number(i) }]);
-      }
+      setReceiptIds((prev: any) => {
+        const updatedData: any = [...prev];
+        if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
+          return updatedData.filter((item: any) => item.id !== i);
+        } else {
+          return [...prev, { id: Number(i) }];
+        }
+      });
     };
 
     return (
@@ -82,7 +90,7 @@ const ReceiptRegister = () => {
   };
 
   /////// Handle Approve Receipt
-  const handleApprove = async (name: string) => {
+  const handleApprove = async () => {
     try {
       const res = await axios({
         url: FINANCE_URL.RECEIPT_REGISTER.approve,
@@ -90,7 +98,7 @@ const ReceiptRegister = () => {
         data: {
           data: {
             checked_by_id: user.id,
-            checked_by_print_name: name,
+            checked_by_print_name: showPopup.name,
             ids: receiptIds,
           },
         },
@@ -98,87 +106,102 @@ const ReceiptRegister = () => {
       if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       res && toast.success("Approved Sucessfully!!");
+      setReceiptData((prev: any) => ({...prev, isApproved: true}))
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
   };
 
+  ////// Handle Approve Confirmation
+  const handleApproveConfirm = (name: string) => {
+    setShowPopup((prev)=> ({...prev, name, isOpen: !showPopup.isOpen}))
+  }
+
   const columns = [
     {
       name: "All",
       caption: "All",
-      width: "w-[10%]",
       value: sButton,
     },
-    { name: "id", caption: "Sr. No.", width: "w-[10%]" },
+    { name: "id", caption: "Sr. No." },
     {
       name: "receipt_no",
       caption: "Receipt Number",
-      width: "w-[25%]",
     },
     {
       name: "receipt_date",
       caption: "Receipt Date",
-      width: "w-[25%]",
     },
     {
       name: "receipt_mode",
       caption: "Mode of Receipt",
-      width: "w-[25%]",
     },
     {
       name: "paid_by",
       caption: "Paid By",
-      width: "w-[25%]",
     },
     {
       name: "cheque_or_draft_no",
       caption: "Cheque / Draft No",
-      width: "w-[25%]",
     },
     {
       name: "deposit_date",
       caption: "Date of Deposit",
-      width: "w-[25%]",
     },
     {
       name: "realisation_date",
       caption: "Date of Realisation",
-      width: "w-[25%]",
     },
     {
       name: "wheather_returned",
       caption: "Wheather Re-turned",
-      width: "w-[25%]",
     },
     {
       name: "view",
       caption: "View",
-      width: "w-[10%]",
       value: tButton,
     },
   ];
 
+  const [newColumns, setNewColumns] = useState(columns);
+
+  ////////////////// Filtering the column on behalf of User roles
+  useEffect(() => {
+    (function () {
+      if (user && !user?.role.includes(ROLES.ACC_DEP_MANAGER)) {
+        setNewColumns((prev) => {
+          return prev.filter((item) => item.name !== "All");
+        });
+      }
+    })();
+  }, [user]);
+
   return (
     <>
       <Toaster />
+      {showPopup?.isOpen && <ConfirmationPopup
+        cancel={() => setShowPopup((prev)=> ({...prev, isOpen: !showPopup.isOpen}))}
+        continue={handleApprove}
+        message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
+      />}
       {workingAnimation}
       <HeaderWidget
         variant={
-          user?.role.includes("Accounts Department – Accountant") ? "add" : ""
+          user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? "add" : ""
         }
         title={"Receipt Register Entry"}
       />
       <TableWithScrollPagination
         center
-        columns={columns}
+        columns={newColumns}
         api={FINANCE_URL.RECEIPT_REGISTER.get || ""}
+        depApi={FINANCE_URL.RECEIPT_REGISTER.getCheckedData || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer
             user={user}
-            balances={receiptData?.balance}
-            handleApprove={handleApprove}
+            receiptData={receiptData}
+            handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />
         }

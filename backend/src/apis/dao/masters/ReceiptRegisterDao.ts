@@ -19,6 +19,10 @@ import {
 
 const prisma = new PrismaClient();
 
+interface IdItem {
+  id: number;
+}
+
 class ReceiptRegisterDao {
   constructor() {
     //////
@@ -39,7 +43,13 @@ class ReceiptRegisterDao {
       },
     });
 
-    if (data) throw { message: {statusCode: 409, message:`Receipt No: ${data.receipt_no} already exist.`}};
+    if (data)
+      throw {
+        message: {
+          statusCode: 409,
+          message: `Receipt No: ${data.receipt_no} already exist.`,
+        },
+      };
 
     return await prisma.receipt_registers.createMany({
       data: multiRequestData(req),
@@ -116,6 +126,7 @@ class ReceiptRegisterDao {
     rr.remarks,
     rr.created_at,
     rr.updated_at,
+    rr.is_checked,
     racctype.id as revenue_accounted_type_id,
     racctype.name as revenue_accounted_type_name,
     mc.id as ulb_id,
@@ -126,14 +137,6 @@ class ReceiptRegisterDao {
     rmodule.name as revenue_module_name,
     rmode.id as receipt_mode_id,
     rmode.name as receipt_mode_name,
-    emp.id as entered_by_id,
-    emp.name as entered_by_name,
-    checkedemp.name as checked_by_name,
-    checkedemp.id as checked_by_id,
-    desi.id as entered_by_designation_id,
-    desi.name as entered_by_designation_name,
-    checkedesi.id as checked_by_designation_id,
-    checkedesi.name as checked_by_designation_name,
     rr.cash_amount + rr.bank_amount as total_amount   
     FROM
     receipt_registers as rr
@@ -147,14 +150,6 @@ class ReceiptRegisterDao {
     revenue_modules as rmodule ON rr.revenue_module_id = rmodule.id
     LEFT JOIN
     receipt_modes as rmode ON rr.receipt_mode_id = rmode.id
-    LEFT JOIN
-    employees as emp ON rr.entered_by_id = emp.id
-    LEFT JOIN 
-    employees as checkedemp ON rr.checked_by_id = checkedemp.id
-    LEFT JOIN 
-    designations as checkedesi ON checkedemp.designation_id = checkedesi.id
-    LEFT JOIN 
-    designations as desi ON emp.designation_id = desi.id
     WHERE (true ${a})
     ORDER BY
     rr.updated_at desc
@@ -175,14 +170,6 @@ class ReceiptRegisterDao {
     revenue_modules as rmodule ON rr.revenue_module_id = rmodule.id
     LEFT JOIN
     receipt_modes as rmode ON rr.receipt_mode_id = rmode.id
-    LEFT JOIN
-    employees as emp ON rr.entered_by_id = emp.id
-    LEFT JOIN 
-    employees as checkedemp ON rr.checked_by_id = checkedemp.id
-    LEFT JOIN 
-    designations as checkedesi ON checkedemp.designation_id = checkedesi.id
-    LEFT JOIN 
-    designations as desi ON emp.designation_id = desi.id
   WHERE (true ${a})`) as any,
       prisma.$queryRawUnsafe<daily_receipt_balances[]>(`SELECT
   drb.id,
@@ -194,72 +181,10 @@ class ReceiptRegisterDao {
 
     count[0].opening_balance = opening_balance[0];
 
-    // const response = {
-    //   entered_by : {
-    //     id: 'entered_by_id',
-    //     name: 'entered_by_name',
-    //     designation: {
-    //       id: 'entered_by_designation_id',
-    //       name: 'entered_by_designation_name',
-    //     },
-    //   },
-    //   checked_by : {
-    //     id: 'checked_by_id',
-    //     name: 'checked_by_name',
-    //     designation: {
-    //       id: 'checked_by_designation_id',
-    //       name: 'checked_by_designation_name',
-    //     },
-    //   },
-    //   revenue_module : {
-    //     id: 'revenue_module_id',
-    //     name: 'revenue_module_name',
-    //   },
-    //   receipt_mode : {
-    //     id: 'receipt_mode_id',
-    //     name: 'receipt_mode_name',
-    //   },
-    //   primary_acc_code : {
-    //     id: 'primary_acc_code_id',
-    //     name: 'primary_acc_code_name',
-    //   },
-    //   ulb : {
-    //     id: 'ulb_id',
-    //     name: 'ulbs',
-    //   }
-    // }
-
-    // function generate(){
-    //   const resp = [];
-
-    //   for (const data of result as any) {
-    //     const elements: any = {...data}
-    //   for(const item in response){
-    //     elements[item] =
-    //   }
-    // }
-    // }
-
     const allData = [];
 
     for (const data of result as any) {
       const items: any = { ...data };
-      items.entered_by = {
-        id: data.entered_by_id,
-        name: data.entered_by_name,
-        designation: {
-          id: data.entered_by_designation_id,
-          name: data.entered_by_designation_name,
-        },
-      };
-      items.checked_by = {
-        id: data.checked_by_id,
-        name: data.checked_by_name,
-        designation: {
-          id: data.checked_by_designation_id,
-          name: data.checked_by_designation_name,
-        },
-      };
       items.revenue_module = {
         id: data.revenue_module_id,
         name: data.revenue_module_name,
@@ -291,14 +216,6 @@ class ReceiptRegisterDao {
       delete items.receipt_mode_name;
       delete items.revenue_module_id;
       delete items.revenue_module_name;
-      delete items.checked_by_id;
-      delete items.checked_by_name;
-      delete items.entered_by_id;
-      delete items.entered_by_name;
-      delete items.checked_by_designation_name;
-      delete items.checked_by_designation_id;
-      delete items.entered_by_designation_name;
-      delete items.entered_by_designation_id;
 
       allData.push(items);
     }
@@ -381,7 +298,7 @@ class ReceiptRegisterDao {
             },
           },
         },
-        isChecked: true,
+        is_checked: true,
         entered_by_print_name: true,
         checked_by: {
           select: {
@@ -427,18 +344,32 @@ class ReceiptRegisterDao {
 
   //Appropve or Check the receipt register
   approve = async (req: Request) => {
-    const ids: [] = req.body.data.ids;
+    const ids: IdItem[] = req.body.data.ids;
+    const idItems = ids.map((item: { id: number }) => item.id);
 
-    return await prisma.receipt_registers.updateMany({
-      where: {
-        OR: ids,
-      },
-      data: {
-        isChecked: true,
-        checked_by_id: req.body.data.checked_by_id,
-        checked_by_print_name: req.body.data.checked_by_print_name,
-      },
-    });
+    const [, rR] = await prisma.$transaction([
+      prisma.$queryRaw`
+        INSERT INTO collection_registers (receipt_register_id)
+        SELECT id
+        FROM receipt_registers
+        WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
+        ON CONFLICT DO NOTHING;
+      `,
+
+      prisma.receipt_registers.updateMany({
+        where: {
+          OR: ids,
+          is_checked: false,
+        },
+        data: {
+          is_checked: true,
+          checked_by_id: req.body.data.checked_by_id,
+          checked_by_print_name: req.body.data.checked_by_print_name,
+        },
+      }),
+    ]);
+
+    return rR;
   };
 
   /////////// Create Opening Balance
@@ -460,6 +391,22 @@ class ReceiptRegisterDao {
         opening_balance: req.body.data.opening_balance,
       },
     });
+  };
+
+  ///// Get One Checked Data
+  getCheckedData = async (req: Request) => {
+    const date: string = req.params.date;
+    const ulbId: number = Number(req.params.ulbId);
+
+    const data:any = await prisma.$queryRaw`
+    SELECT id
+    FROM
+    receipt_registers
+    WHERE receipt_date::date = ${date}::date AND ulb_id = ${ulbId} AND is_checked = true
+    LIMIT 1
+    `
+
+    return generateRes(data[0]);
   };
 }
 

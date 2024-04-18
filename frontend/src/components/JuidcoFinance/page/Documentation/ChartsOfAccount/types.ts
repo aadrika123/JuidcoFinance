@@ -19,6 +19,7 @@ export type SidebarModule = {
   path: string;
   icon?: React.ReactElement;
   subModules?: SidebarModule[];
+  roles?: string[]
 };
 
 export type SidebarLinksProps = {

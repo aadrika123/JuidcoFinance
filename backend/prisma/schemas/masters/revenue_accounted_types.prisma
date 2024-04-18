@@ -3,6 +3,7 @@ model revenue_accounted_types {
   id                Int                 @id @default(autoincrement())
   name              String
   receipt_registers receipt_registers[]
+  daily_coll_summaries daily_coll_summaries[]
   created_at        DateTime            @default(now()) @map("created_at")
   updated_at        DateTime            @updatedAt @map("updated_at")
 }

@@ -4,47 +4,27 @@ import mastersLogo from "@/assets/icons/sidebar/masters.svg";
 import docLogo from "@/assets/icons/sidebar/doc.svg";
 import transactionsLogo from "@/assets/icons/sidebar/transaction.svg";
 import paymentLogo from "@/assets/icons/sidebar/payment.svg";
-import rupeeIcons from "@/assets/svg/rupee_icons.svg"
-import houseIcons from "@/assets/svg/house_icons.svg"
+import rupeeIcons from "@/assets/svg/rupee_icons.svg";
+import houseIcons from "@/assets/svg/house_icons.svg";
 import { SidebarLinksProps } from "@/components/JuidcoFinance/page/Documentation/ChartsOfAccount/types";
+import { ROLES } from "./roles";
 
 export const sidebarLinks: SidebarLinksProps = {
   modules: [
     {
       moduleName: "Finance Management",
       path: "/",
-      icon: (
-        <Image
-          src={rupeeIcons}
-          alt="finance"
-          width={100}
-          height={100}
-        />
-      ),
+      icon: <Image src={rupeeIcons} alt="finance" width={100} height={100} />,
       subModules: [
         {
           moduleName: "Home",
-          icon: (
-            <Image
-              src={houseIcons}
-              alt="home"
-              width={100}
-              height={100}
-            />
-          ),
+          icon: <Image src={houseIcons} alt="home" width={100} height={100} />,
           path: "/home",
-          // subModules: [
-          //   { moduleName: "Charts of Account", path: "/finance/masters" },
-          //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
-          //   {
-          //     moduleName: "Vendor Masters",
-          //     path: "/finance/masters/vendor-master",
-          //   },
-          //   {
-          //     moduleName: "Cheque Book Entry",
-          //     path: "/finance/masters/chequebook-master",
-          //   },
-          // ],
+        },
+        {
+          moduleName: "Bills - Verify",
+          icon: <Image src={houseIcons} alt="home" width={100} height={100} />,
+          path: "/bills-verify",
         },
         {
           moduleName: "Revenue Collection",
@@ -57,6 +37,7 @@ export const sidebarLinks: SidebarLinksProps = {
             />
           ),
           path: "/revenue-collection",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT],
           subModules: [
             {
               moduleName: "Receipt Register",
@@ -68,7 +49,7 @@ export const sidebarLinks: SidebarLinksProps = {
             },
             {
               moduleName: "Summary of Daily Collection",
-              path: "/revenue-collection/daily-collection",
+              path: "/revenue-collection/daily-collection-summary",
             },
           ],
         },
@@ -96,17 +77,13 @@ export const sidebarLinks: SidebarLinksProps = {
         },
         {
           moduleName: "Documentation & Record Keeping",
-          icon: (
-            <Image
-              src={docLogo}
-              alt="document"
-              width={100}
-              height={100}
-            />
-          ),
+          icon: <Image src={docLogo} alt="document" width={100} height={100} />,
           path: "/documentation",
           subModules: [
-            { moduleName: "Voucher Entry", path: "/documentation/voucher-entry" },
+            {
+              moduleName: "Cash/Bank Receipt Voucher",
+              path: "/documentation/cash-bank-receipt-voucher",
+            },
             {
               moduleName: "Cash Book",
               path: "/documentation/cash-book",
@@ -115,18 +92,13 @@ export const sidebarLinks: SidebarLinksProps = {
               moduleName: "Journal Book",
               path: "/documentation/journal-book",
             },
-            { moduleName: " Charts of Account", path: "/documentation" }
+            { moduleName: " Charts of Account", path: "/documentation" },
           ],
         },
         {
           moduleName: "Transactions",
           icon: (
-            <Image
-              src={paymentLogo}
-              alt="document"
-              width={100}
-              height={100}
-            />
+            <Image src={paymentLogo} alt="document" width={100} height={100} />
           ),
           path: "/transaction",
           subModules: [
@@ -166,12 +138,7 @@ export const sidebarLinks: SidebarLinksProps = {
         {
           moduleName: "Masters",
           icon: (
-            <Image
-              src={mastersLogo}
-              alt="masters"
-              width={100}
-              height={100}
-            />
+            <Image src={mastersLogo} alt="masters" width={100} height={100} />
           ),
           path: "/master",
           subModules: [
@@ -214,18 +181,13 @@ export const sidebarLinks: SidebarLinksProps = {
             {
               moduleName: "Revised Budget",
               path: "/budgeting/revised-budget",
-            }
+            },
           ],
         },
         {
           moduleName: "Financial Statements",
           icon: (
-            <Image
-              src={mastersLogo}
-              alt="payment"
-              width={100}
-              height={100}
-            />
+            <Image src={mastersLogo} alt="payment" width={100} height={100} />
           ),
           path: "/financial-statements",
           subModules: [
@@ -243,40 +205,21 @@ export const sidebarLinks: SidebarLinksProps = {
         {
           moduleName: "Dashboard",
           icon: (
-            <Image
-              src={mastersLogo}
-              alt="dashboard"
-              width={100}
-              height={100}
-            />
+            <Image src={mastersLogo} alt="dashboard" width={100} height={100} />
           ),
           path: "/dashboard",
-          // subModules: [
-          //   { moduleName: "Charts of Account", path: "/finance/masters" },
-          //   { moduleName: "Bank Masters", path: "/finance/masters/bank-master" },
-          //   {
-          //     moduleName: "Vendor Masters",
-          //     path: "/finance/masters/vendor-master",
-          //   },
-          //   {
-          //     moduleName: "Cheque Book Entry",
-          //     path: "/finance/masters/chequebook-master",
-          //   },
-          // ],
         },
         {
           moduleName: "Corrections and Reversals",
           icon: (
-            <Image
-              src={mastersLogo}
-              alt="payment"
-              width={100}
-              height={100}
-            />
+            <Image src={mastersLogo} alt="payment" width={100} height={100} />
           ),
           path: "/corrections-reversals",
           subModules: [
-            { moduleName: "Stop Payment Order", path: "/corrections-reversals/stop-payment-order" },
+            {
+              moduleName: "Stop Payment Order",
+              path: "/corrections-reversals/stop-payment-order",
+            },
             {
               moduleName: "Cancel Cheque",
               path: "/corrections-reversals/Cancel Cheque",

@@ -18,6 +18,7 @@ import { receiptRegisterDetailsSchema } from "./receipt_register.validation";
 import Loader from "@/components/global/atoms/Loader";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
+import { ROLES } from "@/json/roles";
 
 export const EditReceiptRegister = ({
   ReceiptRegisterID,
@@ -186,7 +187,7 @@ export const EditReceiptRegister = ({
         variant={searchParams == "view" ? "view" : "edit"}
         editVisible={
           data?.entered_by?.id === user?.id &&
-          user?.role.includes("Accounts Department – Accountant")
+          user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT)
         }
         handleEditMode={handleEditMode}
       />

@@ -5,58 +5,52 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import React, { ChangeEvent, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import toast, { Toaster } from "react-hot-toast";
+import { ROLES } from "@/json/roles";
 
 interface FooterProps {
   user: any;
-  balances: any;
+  receiptData: any;
   handleApprove: (name: string) => void;
   isThereData: boolean;
 }
 
 const Footer: React.FC<FooterProps> = (props) => {
   const [printName, setPrintName] = useState("");
-  const { user, balances, isThereData } = props;
+  const { user, receiptData, isThereData } = props;
 
   const [openingBal, setOpeningBal] = useState(
-    balances?.opening_balance?.opening_balance
+    receiptData?.balance?.opening_balance?.opening_balance
   );
-  const isEditable = user?.role.includes("Accounts Department – Manager")
-    ? false
-    : true;
 
-  const tempUser = user?.role.includes("Accounts Department – Accountant")
-    ? {
-        name: "Sanjiv Kumar",
-        role:  "Accounts Department – Manager" ,
-        print_name: "Sanjiv Kumar",
-      }
-    : user;
+  const tempUser = user?.role.includes(ROLES.ACC_DEP_MANAGER) && user;
 
   const footerData = [
     {
       key: "Opening Balance",
-      value: user?.role.includes("Accounts Department – Accountant") ? (
+      value: user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? (
         <Input
           label=""
-          value={openingBal || balances?.opening_balance?.opening_balance}
+          value={
+            openingBal || receiptData?.balance?.opening_balance?.opening_balance
+          }
           name="opening_balance"
           type="number"
           className="bg-white"
           onChange={(e) => setOpeningBal(e.target.value)}
         />
       ) : (
-        balances?.opening_balance?.opening_balance
+        receiptData?.balance?.opening_balance?.opening_balance
       ),
     },
     {
       key: "Days Total",
-      value: balances?.total_amount || 0,
+      value: receiptData?.balance?.total_amount || 0,
     },
     {
       key: "Closing Total",
       value:
-        balances?.total_amount + balances?.opening_balance?.opening_balance ||
-        0,
+        receiptData?.balance?.total_amount +
+          receiptData?.balance?.opening_balance?.opening_balance || 0,
     },
   ];
 
@@ -69,7 +63,7 @@ const Footer: React.FC<FooterProps> = (props) => {
   const handleOpeningBal = async () => {
     let res: any = "";
     try {
-      !balances?.opening_balance?.opening_balance
+      !receiptData?.balance?.opening_balance?.opening_balance
         ? (res = await axios({
             url: FINANCE_URL.OPENING_BALANCE.create,
             method: "POST",
@@ -84,7 +78,7 @@ const Footer: React.FC<FooterProps> = (props) => {
             method: "POST",
             data: {
               data: {
-                id: balances?.opening_balance?.id,
+                id: receiptData?.balance?.opening_balance?.id,
                 opening_balance: Number(openingBal),
               },
             },
@@ -102,81 +96,66 @@ const Footer: React.FC<FooterProps> = (props) => {
     <div>
       <Toaster />
       <TotalCountTable footerData={footerData} />
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        {/* <div className="flex flex-col">
-            <h2 className="mt-6 text-secondary">Entered By</h2>
-            <Input
-              readonly={true}
-              label=""
-              name="entered_by"
-              placeholder="Enter Name"
-            />
-            <Input
-              readonly={true}
-              label=""
-              name="designation"
-              placeholder="Enter Designation"
-            />
-            <Input
-              readonly={true}
-              label=""
-              name="entered_by_print_name"
-              placeholder="Enter Print Name"
-            />
-          </div> */}
-        {isThereData && (
-          <div className="flex flex-col">
-            <h2 className="mt-6 text-secondary">Checked By</h2>
-            <Input
-              readonly={true}
-              value={tempUser?.name}
-              label=""
-              name="checked_by"
-              placeholder="Enter Name"
-            />
-            <Input
-              readonly={true}
-              label=""
-              value={tempUser?.role}
-              name="designation"
-              placeholder="Enter Designation"
-            />
-            <Input
-              readonly={isEditable}
-              value={tempUser?.print_name || printName}
-              label=""
-              onChange={handleChange}
-              name="checked_by_print_name"
-              placeholder="Enter Print Name"
-            />
+      {!receiptData?.isApproved ? (
+        <>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            {isThereData && tempUser && (
+              <div className="flex flex-col">
+                <h2 className="mt-6 text-secondary">Checked By</h2>
+                <Input
+                  readonly={true}
+                  value={tempUser?.name}
+                  label=""
+                  name="checked_by"
+                  placeholder="Enter Name"
+                />
+                <Input
+                  readonly={true}
+                  label=""
+                  value={tempUser?.role}
+                  name="designation"
+                  placeholder="Enter Designation"
+                />
+                <Input
+                  readonly={tempUser ? false : true}
+                  value={tempUser?.print_name || printName}
+                  label=""
+                  onChange={handleChange}
+                  name="checked_by_print_name"
+                  placeholder="Enter Print Name"
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <aside className="flex items-center justify-end py-5 gap-5">
-        {!isEditable ? (
-          <Button
-            onClick={() => props.handleApprove(printName)}
-            disabled={!printName || printName === ""}
-            className={`${(!printName || printName === "") && "cursor-not-allowed"}`}
-            buttontype="button"
-            variant="primary"
-          >
-            Approved
-          </Button>
-        ) : (
-          openingBal && (
-            <Button
-              onClick={handleOpeningBal}
-              buttontype="button"
-              variant="primary"
-            >
-              {!balances?.opening_balance?.opening_balance
-                ? "Add Opening Balance"
-                : "Updated Opening Balance"}
-            </Button>
-          )
-        )}
-      </aside>
+          <aside className="flex items-center justify-end py-5 gap-5">
+            {tempUser ? (
+              <Button
+                onClick={() => props.handleApprove(printName)}
+                disabled={!printName || printName === ""}
+                className={`${(!printName || printName === "") && "cursor-not-allowed"}`}
+                buttontype="button"
+                variant="primary"
+              >
+                Approved
+              </Button>
+            ) : (
+              openingBal && (
+                <Button
+                  onClick={handleOpeningBal}
+                  buttontype="button"
+                  variant="primary"
+                >
+                  {!receiptData?.balance?.opening_balance?.opening_balance
+                    ? "Add Opening Balance"
+                    : "Updated Opening Balance"}
+                </Button>
+              )
+            )}
+          </aside>
+        </>
+      ) : (
+        <span>You Already Approved it. Now You can not approve it again.</span>
+      )}
     </div>
   );
 };

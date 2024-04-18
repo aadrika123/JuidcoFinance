@@ -199,7 +199,7 @@ export const AddReceiptRegister = () => {
       }));
     });
   };
-console.log("first", errorMsg)
+
   ///////////////// Handling Edit Functionality ///////////////
   const onEditButton = (id: string) => {
     const Id: number = Number(id);

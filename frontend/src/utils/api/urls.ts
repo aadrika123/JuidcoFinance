@@ -49,7 +49,10 @@ type FinanceUrlKeys =
   | "REVENUE_MODULE"
   | "RECEIPT_MODE"
   | "OPENING_BALANCE"
-  | "REVENUE_ACCOUNTED_TYPE";
+  | "REVENUE_ACCOUNTED_TYPE"
+  | "COLLECTION_REGISTER"
+  | "DAILY_COLL_SUMMARY"
+  | "CASH_BANK_R_VOUCHER";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -71,14 +74,15 @@ type Urls = {
     approve?: string;
     getLedgerCodes?: string;
     getByAccCodeAndUlbId?: string;
+    getCheckedData?: string;
   };
 };
 
 export const FINANCE_URL: Urls = {
-  AUTH_URL:{
+  AUTH_URL: {
     login: "/auth/login",
     getUDHD: "/udhd/get-all",
-    getDesig: "/udhd/designations/get-all"
+    getDesig: "/udhd/designations/get-all",
   },
 
   BANK_MASTER_URL: {
@@ -136,7 +140,7 @@ export const FINANCE_URL: Urls = {
 
   GRANT_URL: {
     get: "/grant/get",
-    getNatures: "/grant-natures/get"
+    getNatures: "/grant-natures/get",
   },
 
   BILL_TYPE: {
@@ -236,10 +240,10 @@ export const FINANCE_URL: Urls = {
     getChildCodes: "/get-child-account-codes",
     getParentCodes: "/get-codes-with-parent-detail",
     create: "/request-new-acc-code",
-    getLedgerCodes: "get-ledger-codes"
+    getLedgerCodes: "get-ledger-codes",
   },
-  REVENUE_ACCOUNTED_TYPE:{
-    get: "/revenue-accounted-types/get"
+  REVENUE_ACCOUNTED_TYPE: {
+    get: "/revenue-accounted-types/get",
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",
@@ -253,17 +257,17 @@ export const FINANCE_URL: Urls = {
   DR_CR_URL: {
     get: "/drcr/get",
   },
-  EXPENDITURE_NATURE_URL:{
-    get: "/expenditure-natures/get"
+  EXPENDITURE_NATURE_URL: {
+    get: "/expenditure-natures/get",
   },
-  BANK_URL:{
-    get: "/banks/get"
+  BANK_URL: {
+    get: "/banks/get",
   },
   MODULE_URL: {
-    get: "/modules/get"
+    get: "/modules/get",
   },
   BALANCE_TRACKING_URL: {
-    get: "/balance-trackings/get-balance"
+    get: "/balance-trackings/get-balance",
   },
   LOAN_MANAGEMENT_URL: {
     create: "/loan-management/create",
@@ -283,6 +287,19 @@ export const FINANCE_URL: Urls = {
     update: "/receipt-register/update",
     getById: "/receipt-register/get-by-id",
     approve: "/receipt-register/approve",
+    getCheckedData: "/receipt-register/get-checked-data"
+  },
+  COLLECTION_REGISTER: {
+    get: "/collection-register/get-all",
+    approve: "/collection-register/approve",
+    getById: "/collection-register/get-by-id",
+    getCheckedData: "/collection-register/get-checked-data"
+  },
+  DAILY_COLL_SUMMARY: {
+    get: "/daily-coll-summary/get-all",
+    approve: "/daily-coll-summary/approve",
+    getById: "/daily-coll-summary/get-by-id",
+    getCheckedData: "/daily-coll-summary/get-checked-data"
   },
   REVENUE_MODULE: {
     get: "/revenue-modules/get-all",
@@ -294,4 +311,10 @@ export const FINANCE_URL: Urls = {
     create: "/receipt-register/opening-balance/create",
     update: "/receipt-register/opening-balance/update",
   },
+  CASH_BANK_R_VOUCHER: {
+    get: "/cash-bank-receipt-voucher/get-all",
+    approve: "/cash-bank-receipt-voucher/approve",
+    getById: "/cash-bank-receipt-voucher/get-by-id",
+    getCheckedData: "/cash-bank-receipt-voucher/get-checked-data"
+  }
 };

@@ -17,6 +17,7 @@ interface TableWithScrollPaginProp {
   footer?: React.ReactNode;
   columns: Array<ColumnProps>;
   api: string;
+  depApi: string;
   numberOfRowsPerPage: number;
   value?: () => void;
   center?: boolean;
@@ -32,12 +33,14 @@ interface stateTypes<T> {
   data: T[];
   ulbId: number | string;
   date: Date;
+  filtered: T[];
 }
 
 const TableWithScrollPagination = <T,>({
   footer,
   columns,
   api,
+  depApi,
   numberOfRowsPerPage,
   center = false,
   scrollable = true,
@@ -49,17 +52,24 @@ const TableWithScrollPagination = <T,>({
     count: 0,
     searchText: "",
     data: [],
-    ulbId: "",
+    ulbId: 1,
     date: new Date(),
+    filtered: [],
   });
   const { page, count, searchText, data, ulbId, date } = state;
   const [tempFetch, setTempFetch] = useState(false);
-  const [filtered, setFiltered] = useState([]);
+
+  ////// Checking is checked data available or not
 
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
       url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
+      method: "GET",
+    });
+
+    const res1 = await axios({
+      url: `${depApi}/${ulbId}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -69,26 +79,28 @@ const TableWithScrollPagination = <T,>({
     }
 
     // data = data.data.sort(sortByCreatedAtDesc);
+    const filteredData = data.data.map((item: any) => ({ id: item.id }));
     if (page === 1) {
       setState((prev) => ({
         ...prev,
         count: data.count,
         data: data.data,
+        filtered: filteredData,
       }));
     } else {
       setState((prev) => ({
         ...prev,
         count: data.count,
         data: [...prev.data, ...data.data],
+        filtered: filteredData,
       }));
     }
 
-    const filteredData = data.data.map((item: any) => ({ id: item.id }));
-    setFiltered(filteredData);
     rest.handleGet &&
       rest.handleGet({
+        isApproved: res1.data.data ? true : false,
         balance: data?.others,
-        data: [...filtered, ...filteredData],
+        data: [...state.filtered, ...filteredData],
       });
     setTempFetch(false);
     setIsSearching(false);
@@ -97,7 +109,7 @@ const TableWithScrollPagination = <T,>({
 
   const {
     isError: fetchingError,
-    isLoading: isFetching,
+    isFetching: isFetching,
     refetch: refetchData,
   } = useQuery([page, searchText, ulbId, date], fetchData);
 
@@ -141,32 +153,42 @@ const TableWithScrollPagination = <T,>({
     };
   }, [isFetching, isSearching]);
 
-  ////// Handl Selecting ULBs ///////////
+  ////// Handle Selecting ULBs ///////////
   const handleUlb = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState((prev) => ({ ...prev, ulbId: e.target.value, data: [] }));
+    setState((prev) => ({
+      ...prev,
+      ulbId: e.target.value,
+      data: [],
+      filtered: [],
+    }));
   };
 
-  ////// Handl Selecting Date ///////////
+  ////// Handle Selecting Date ///////////
   const handleDate = (date: Date) => {
-    setState((prev) => ({ ...prev, date: date, data: [] }));
+    setState((prev) => ({ ...prev, date: date, data: [], filtered: [] }));
   };
+
+  ///// Getting the first selected value
+  const initHandler = (value: number) =>{
+    setState({...state, ulbId: value})
+  }
 
   return (
     <>
       <section className="border shadow-xl bg-white p-6 px-10">
         <div className="flex justify-between items-center mb-6">
-          <div className="text-primary_bg_indigo rounded-md px-2 pb-1 bg-primary_bg_indigo text-sub_head font-semibold flex items-center">
+          <div className="text-primary_bg_indigo rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
             <Select
               label=""
               name="ulb_id"
-              placeholder="ULB Name"
-              className="w-48 text-primary_bg_indigo bg-white outline-none"
+              className="w-48 border-[#4338ca] text-primary_bg_indigo"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               onChange={handleUlb}
+              initHandler={initHandler}
             />
             <label
               htmlFor="date-pick"
-              className="border border-zinc-400 bg-white rounded-md h-[38px] px-2 flex justify-center items-center ml-2 mt-1"
+              className="border border-primary_bg_indigo bg-white rounded-md h-[38px] px-2 flex justify-center items-center ml-2 mt-1 cursor-pointer"
             >
               {date ? date.toDateString() : "Date"}
             </label>
@@ -192,7 +214,7 @@ const TableWithScrollPagination = <T,>({
             scrollable={scrollable}
           />
         )}
-          {tempFetch && data.length != 0  && <Loader className="h-[20px]" />}
+        {tempFetch && data.length != 0 && <Loader height="h-8" />}
         {footer}
         {/* <aside className="flex items-center justify-end py-5 gap-5">
           <Button onClick={rest.handleApprove} buttontype="button" variant="primary">

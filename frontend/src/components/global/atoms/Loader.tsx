@@ -9,13 +9,15 @@ import React from "react";
 
 type LoaderProps = {
   className?: string;
+  height?: string;
 };
 
 const Loader: React.FC<LoaderProps> = (props) => {
+  const {height = 'h-[60vh]'} = props
   return (
     <>
       <div
-        className={`w-full h-[60vh] flex items-center justify-center ${props.className}`}
+        className={`w-full ${height} flex items-center justify-center ${props.className}`}
       >
         <span className="loading loading-dots loading-lg"></span>
       </div>

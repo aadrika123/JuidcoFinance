@@ -15,69 +15,107 @@ import { useSelector } from "react-redux";
 import axios from "@/lib/axiosConfig";
 import toast, { Toaster } from "react-hot-toast";
 import CollectionsTable from "./CollectionsTable";
-
-
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import { usePathname, useRouter } from "next/navigation";
+import Button from "@/components/global/atoms/Button";
+import ConfirmationPopup from "@/components/global/molecules/ConfirmationPopup";
 
 export const HeroCollectionRegister = () => {
-  const userData = useSelector((state: any) => state.user.user);
+  const pathName = usePathname();
+  const router = useRouter();
+  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [user, setUser] = useState<any>();
+  const [showPopup, setShowPopup] = useState({
+    name: "",
+    isOpen: false,
+  });
 
-
-  const [receiptData, setReceiptData] = useState<any>();
-  const [receiptIds, setReceiptIds] = useState([]);
-
-
+  const [receiptData, setReceiptData] = useState<any>({});
+  const [receiptIds, setReceiptIds] = useState<any>([]);
 
   useEffect(() => {
     setUser(userData);
   });
 
+  //////// Handling Viw Button
+  const onViewButtonClick1 = (id: string) => {
+    activateWorkingAnimation();
+    router.push(`${pathName}/view/${id}?mode=view`);
+  };
+
+  const tButton = (id: string) => {
+    return (
+      <>
+        <Button
+          variant="primary"
+          className="py-2 px-4"
+          onClick={() => onViewButtonClick1(id)}
+        >
+          View
+        </Button>
+      </>
+    );
+  };
 
   ////////////////// CheckBox Button
   const sButton = (id: string) => {
     const handleCheckbox = (i: string) => {
-      console.log(i);
+      setReceiptIds((prev: any) => {
+        const updatedData: any = [...prev];
+        if (updatedData.some((item: { id: number }) => item.id === Number(i))) {
+          return updatedData.filter((item: any) => item.id !== i);
+        } else {
+          return [...prev, { id: Number(i) }];
+        }
+      });
     };
+
     return (
       <>
         <Checkboxes
           onChange={() => handleCheckbox(id)}
-          className="checkbox checked:bg-primary_green"
+          className="checkbox checked:bg-primary_bg_indigo"
           name="x"
         />
       </>
     );
   };
 
-
-    ///// Getting Selected Data and Balances From Table Component
-    const handleGetBalance = (data: any) => {
-      setReceiptData(data);
-      setReceiptIds(data.data);
-    };
-  
-  
-
+  ///// Getting Selected Data and Balances From Table Component
+  const handleGetBalance = (data: any) => {
+    setReceiptData(data);
+    setReceiptIds(data.data);
+  };
 
   /////// Handle Approve Receipt
-  const handleApprove = async (name: string) => {
+  const handleApprove = async () => {
     try {
       const res = await axios({
-        url: FINANCE_URL.RECEIPT_REGISTER.approve,
+        url: FINANCE_URL.COLLECTION_REGISTER.approve,
         method: "POST",
         data: {
-          checked_by_id: user.id,
-          checked_by_print_name: name,
-          ids: receiptIds,
+          data: {
+            checked_by_id: user.id,
+            checked_by_print_name: showPopup.name,
+            ulb_id: receiptData.ulbId,
+            date: receiptData.date,
+            ids: receiptIds,
+          },
         },
       });
-      if(!res.data.status)  throw new Error("Something Went Wrong!!");
+      if (!res.data.status) throw new Error("Something Went Wrong!!");
       res && toast.success("Approved Sucessfully!!");
+      setReceiptData((prev: any) => ({...prev, isApproved: true}))
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
   };
 
+  ////// Handle Approve Confirmation
+  const handleApproveConfirm = (name: string) => {
+    setShowPopup((prev) => ({ ...prev, name, isOpen: !showPopup.isOpen }));
+  };
 
   const columns = [
     {
@@ -123,29 +161,53 @@ export const HeroCollectionRegister = () => {
       caption: "Remarks",
       width: "w-[25%]",
     },
+    {
+      name: "view",
+      caption: "View",
+      width: "w-[10%]",
+      value: tButton,
+    },
   ];
 
+  const [newColumns, setNewColumns] = useState(columns);
 
+  ////////////////// Filtering the column on behalf of User roles
+  useEffect(() => {
+    (function () {
+      if (user && !user?.role.includes("Accounts Department – Manager")) {
+        setNewColumns((prev) => {
+          return prev.filter((item) => item.name !== "All");
+        });
+      }
+    })();
+  }, [user]);
 
   return (
     <>
       <Toaster />
-
-      <HeaderWidget
-        variant={""}
-        title={"Collection Register"}
-      />
+      {showPopup?.isOpen && (
+        <ConfirmationPopup
+          cancel={() =>
+            setShowPopup((prev) => ({ ...prev, isOpen: !showPopup.isOpen }))
+          }
+          continue={handleApprove}
+          message="By Clicking Selected Receipt will be approved and you can't able to approve any receipt of this date again."
+        />
+      )}
+      {workingAnimation}
+      <HeaderWidget variant={""} title={"Collection Register"} />
 
       <CollectionsTable
         center
-        columns={columns}
-        api={FINANCE_URL.RECEIPT_REGISTER.get || ""}
+        columns={newColumns}
+        api={FINANCE_URL.COLLECTION_REGISTER.get || ""}
+        depApi={FINANCE_URL.COLLECTION_REGISTER.getCheckedData || ""}
         numberOfRowsPerPage={10}
         footer={
           <Footer
             user={user}
-            balances={receiptData?.balance}
-            handleApprove={handleApprove}
+            receiptData={receiptData}
+            handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />
         }

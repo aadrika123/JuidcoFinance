@@ -19,7 +19,9 @@ model municipality_codes {
 
   request_account_codes request_account_codes[]
 
-  receipt_registers receipt_registers[]
+  receipt_registers          receipt_registers[]
+  cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
+  daily_coll_summaries  daily_coll_summaries[]
 
 
   account_codes     account_codes[]
