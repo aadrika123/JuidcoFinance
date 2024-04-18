@@ -1,6 +1,6 @@
 /// BankMaster (has history)
 model bank_masters {
-  id                  BigInt      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   bank_id Int
   bank    banks @relation(fields: [bank_id], references: [id])
@@ -11,21 +11,22 @@ model bank_masters {
   ulb_id Int
   ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
 
-  micr_code           String?
-  ifsc_code           String
-  primary_acc_code_id  Int
-  primary_acc_code    account_codes   @relation(fields: [primary_acc_code_id], references: [id])
-  bank_acc_no         String @unique
-  branch              String
-  branch_address      String
-  branch_city         String
-  branch_state        String
-  branch_district     String?
-  email               String?
-  contact_no          String?
-
-  created_at          DateTime @default(now()) @map("created_at")
-  updated_at          DateTime @updatedAt @map("updated_at")
+  micr_code                  String?
+  ifsc_code                  String
+  primary_acc_code_id        Int
+  primary_acc_code           account_codes                @relation(fields: [primary_acc_code_id], references: [id])
+  bank_acc_no                String                       @unique
+  branch                     String
+  branch_address             String
+  branch_city                String
+  branch_state               String
+  branch_district            String?
+  email                      String?
+  contact_no                 String?
+  cash_bank_receipt_vouchers cash_bank_receipt_vouchers[]
+  created_at                 DateTime                     @default(now()) @map("created_at")
+  updated_at                 DateTime                     @updatedAt @map("updated_at")
+  daily_coll_summaries       daily_coll_summaries[]
 
   @@unique([primary_acc_code_id, ulb_id])
 }
