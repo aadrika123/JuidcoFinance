@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import React from "react";
 import axios from "@/lib/axiosConfig";
-import Loader from "../Loader";
 
 /**
  * | Author- Sanjiv Kumar
