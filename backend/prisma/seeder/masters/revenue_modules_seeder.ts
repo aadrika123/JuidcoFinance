@@ -13,7 +13,7 @@ const revenue_modules_seeder = async () => {
 
   readXlsxFile(file_path).then(async (rows) => {
     const n = rows.length;
-    for (let i = 1; i < 12; i++) {
+    for (let i = 1; i < n; i++) {
       const row = rows[i];
       const record = {
         data: {

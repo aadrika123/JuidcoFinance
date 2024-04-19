@@ -1,0 +1,12 @@
+////revenue_accounted_type_maps: Managed by: Sanjiv Kumar
+model revenue_accounted_type_maps {
+    id                        Int                     @id @default(autoincrement())
+    primary_acc_code_id       Int
+    primary_acc_code          account_codes           @relation(fields: [primary_acc_code_id], references: [id])
+    revenue_module_id         Int
+    revenue_module            revenue_modules         @relation(fields: [revenue_module_id], references: [id])
+    revenue_accounted_type_id Int
+    revenue_accounted_type    revenue_accounted_types @relation(fields: [revenue_accounted_type_id], references: [id])
+    created_at                DateTime                @default(now()) @map("created_at")
+    updated_at                DateTime                @updatedAt @map("updated_at")
+}

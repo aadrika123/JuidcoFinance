@@ -37,8 +37,10 @@ model account_codes {
 
   daily_coll_summaries daily_coll_summaries[]
 
-  ulbs                municipality_codes[]
-  pet_registration_receipts     pet_registration_receipt[]
+  ulbs                      municipality_codes[]
+  pet_registration_receipts pet_registration_receipt[]
+
+  revenue_accounted_type_maps   revenue_accounted_type_maps[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")

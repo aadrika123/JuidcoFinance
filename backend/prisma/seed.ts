@@ -1,6 +1,4 @@
-import {
-  PrismaClient,
-} from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
 import receipt_types_seeder from "./seeder/receipt_types_seeder";
@@ -19,7 +17,7 @@ import cheque_issuances_seeder from "./seeder/cheque_issuances_seeder";
 import banks_seeder from "./seeder/banks_seeder";
 import budget_names_seeder from "./seeder/budgeting/budget_names_seeder";
 import financial_years_seeder from "./seeder/budgeting/financial_years_seeder";
-import budget_types_seeder from "./seeder/budgeting/budget_types_seeder"
+import budget_types_seeder from "./seeder/budgeting/budget_types_seeder";
 import budget_appropriations_seeder from "./seeder/budgeting/budget_appropriations_seeder";
 import receipt_budgets_seeder from "./seeder/budgeting/receipt_budgets_seeder";
 import budget_reappropriations_seeder from "./seeder/budgeting/budget_reappropriations_seeder";
@@ -54,13 +52,13 @@ import foreign_wrapper from "./seeder/foreign_wrappter";
 import revenue_accounted_types_seeder from "./seeder/masters/revenue_accounted_types_seeder";
 import { chequebook_entries_seeder } from "./seeder/chequebook_entries_seeder";
 import bills_seeder from "./seeder/payments/bills_seeder";
+import revenue_accounted_type_maps_seeder from "./seeder/masters/revenue_accounted_type_maps_seeder";
 
 const prisma = new PrismaClient();
 
-
-const seed_reference_tables = async() => {
+const seed_reference_tables = async () => {
   await bank_types_seeder();
-  
+
   await udhd_sub_departments_seeder();
 
   await function_codes_seeder();
@@ -75,12 +73,11 @@ const seed_reference_tables = async() => {
   await revenue_modules_seeder();
 
   await accounting_code_types_seeder();
-}
-
+};
 
 const seed_level1_dependent_tables = async () => {
   await account_codes_seeder();
-}
+};
 
 async function main() {
   // await udhd_sub_departments_seeder();
@@ -88,13 +85,11 @@ async function main() {
   // setTimeout(async () => {
   //   await designations_seeder();
 
-
   // },1000);
 
   // setTimeout(async () => {
   //   await employees_seeder();
   // }, 2000);
-
 
   // return;
 
@@ -104,17 +99,16 @@ async function main() {
 
   await seed_reference_tables();
 
-  await revenue_accounted_types_seeder();
-
   setTimeout(async () => {
     seed_level1_dependent_tables();
   }, 500);
 
   setTimeout(async () => {
     await designations_seeder();
-  },1000);
+  }, 1000);
 
   setTimeout(async () => {
+    await revenue_accounted_types_seeder();
     await employees_seeder();
     await grants_seeder();
     await payment_types_seeder();
@@ -124,45 +118,31 @@ async function main() {
     await expenditure_natures_seeder();
     await drcr_seeder();
 
-
     await budget_types_seeder();
     await financial_years_seeder();
     await municipality_codes_seeder();
     await investment_types_seeder();
     await grant_natures_seeder();
     await expenditure_natures_seeder();
-  
-  
-  
+
     await admin_wards_seeder();
     await departments_seeder();
     await voucher_types_seed();
     await voucher_sub_types_seed();
-  
-  
-  
-    
-  
+
     ///////////////// Vendor Types ////////////////////////
-  
+
     ///////////////// Employee ////////////////////////
-  
-  
+
     ///////////////// cheque_book_entry ////////////////////////
 
     await chequebook_entries_seeder();
-  
   }, 2000);
 
-
-
-
   setTimeout(async () => {
-
-
     const recordCount = 20;
-    
-    for(let i=0;i<recordCount;i++){
+
+    for (let i = 0; i < recordCount; i++) {
       await prisma.dir_payment_entries.createMany({
         data: {
           payment_no: `pn${faker.number.int(6)}`,
@@ -180,19 +160,15 @@ async function main() {
           amount: faker.number.float(),
           created_at: faker.date.past(),
           updated_at: faker.date.recent(),
-  
-        }
+        },
       });
-  
     }
 
-
     await vendors_seeder();
-
   }, 4000);
 
-
   setTimeout(async () => {
+    await revenue_accounted_type_maps_seeder();
 
     await voucher_entries_seed();
 
@@ -231,19 +207,18 @@ async function main() {
     await loan_management_seeder();
 
     await advance_management_seeder();
+    
+    await daily_receipt_balance_seeder();
+    
+    await bills_seeder();
 
     await receipt_register_seeder();
 
-    await daily_receipt_balance_seeder();
-
-    await bills_seeder();
   }, 8000);
 
-  setTimeout(async() => {
+  setTimeout(async () => {
     await foreign_wrapper();
-  }, 9000)
-
-
+  }, 9000);
 }
 main()
   .then(async () => {

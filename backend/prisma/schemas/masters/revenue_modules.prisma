@@ -1,12 +1,12 @@
 ////revenue_modules: Managed by: Sanjiv Kumar
 model revenue_modules {
-    id                Int                 @id @default(autoincrement())
-    name              String
+  id   Int    @id @default(autoincrement())
+  name String
 
-    
-    receipt_registers receipt_registers[]
-    pet_registration_receipts       pet_registration_receipt[]
-    
-    created_at        DateTime            @default(now()) @map("created_at")
-    updated_at        DateTime            @updatedAt @map("updated_at")
+  receipt_registers         receipt_registers[]
+  pet_registration_receipts pet_registration_receipt[]
+  revenue_accounted_type_maps   revenue_accounted_type_maps[]
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
 }
