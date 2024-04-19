@@ -10,9 +10,6 @@ import NextPrevPagination from "@/components/global/molecules/NextPrevPagination
 import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Input from "@/components/global/atoms/Input";
-import Image from "next/image";
-import list from "@/assets/svg/list.svg";
-import details from  "@/assets/svg/details.svg"
 
 /**
  * | Author- Sanjiv Kumar
@@ -125,58 +122,46 @@ const TableWithFeatures = <T,>({
 
   return (
     <>
-      <section className="border bg-white shadow-xl p-6 px-10">
-        <div className="flex items-center mb-4">
-          <div className="flex items-center border-b-2 mr-3 pb-1 w-20 justify-center border-b-black">
-            <Image src={list} height={20} width={20} alt="pro-1" />
-            <span className="ml-2 text-gray-500">List</span>
-          </div>
-          <div className="flex items-center border-b-2 pb-1 w-28 justify-center border-b-black">
-            <Image src={details} height={20} width={20} alt="pro-1" />
-            <span className="ml-2 text-gray-500">Details</span>
-          </div>
+      <div className="flex justify-between items-end">
+        <div className="text-primary_bg_indigo rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
+          <Select
+            label="ULB"
+            name="ulb_id"
+            className="w-48 text-primary_bg_indigo border-[#4338ca] mr-4"
+            api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+            onChange={handleUlb}
+            initHandler={initUlbHandler}
+          />
+          <Input
+            label="Bill number"
+            name="bill-number"
+            placeholder="Type here..."
+            onChange={handleBill}
+          />
         </div>
-        <div className="flex justify-between items-center">
-          <div className="text-primary_bg_indigo rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
-            <Select
-              label="ULB"
-              name="ulb_id"
-              className="w-48 text-primary_bg_indigo border-[#4338ca] mr-4"
-              api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
-              onChange={handleUlb}
-              initHandler={initUlbHandler}
-            />
-            <Input
-              label="Bill number"
-              name="bill-number"
-              placeholder="Type here..."
-              onChange={handleBill}
-            />
-          </div>
-          <DebouncedSearch onChange={onSearchTextChange} />
-        </div>
+        <DebouncedSearch onChange={onSearchTextChange} />
+      </div>
 
-        <div className="mt-8">
-          {isFetching || isSearching ? (
-            <LoaderSkeleton />
-          ) : (
-            <>
-              <Table
-                columns={columns}
-                data={data}
-                center={center}
-                pageNo={page}
-                limit={numberOfRowsPerPage}
-              />
-              <NextPrevPagination
-                page={page}
-                pageCount={pageCount}
-                handlePageChange={handlePageChange}
-              />
-            </>
-          )}
-        </div>
-      </section>
+      <div className="mt-8">
+        {isFetching || isSearching ? (
+          <LoaderSkeleton />
+        ) : (
+          <>
+            <Table
+              columns={columns}
+              data={data}
+              center={center}
+              pageNo={page}
+              limit={numberOfRowsPerPage}
+            />
+            <NextPrevPagination
+              page={page}
+              pageCount={pageCount}
+              handlePageChange={handlePageChange}
+            />
+          </>
+        )}
+      </div>
     </>
   );
 };

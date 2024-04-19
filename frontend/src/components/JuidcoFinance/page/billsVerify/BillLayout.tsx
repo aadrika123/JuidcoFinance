@@ -1,20 +1,22 @@
+"use client";
 import Button from "@/components/global/atoms/Button";
 import goBack from "@/utils/helper";
-import Image from "next/image";
 import React, { ReactNode } from "react";
-import outbox from "@/assets/svg/Outbox.svg";
-import back from "@/assets/svg/back.svg";
+import { Icons } from "@/assets/svg/icons";
+import { usePathname } from "next/navigation";
+import { LinkWithLoader } from "@/components/global/atoms/LinkWithLoader";
 
 const BillLayout = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname();
   return (
     <>
       <div className="flex items-center justify-between border-b-2 pb-4 mb-4">
         <Button
           variant="cancel"
-          className="border-none text-primary_bg_indigo"
+          className="border-none text-primary_bg_indigo hover:text-primary_bg_indigo hover:bg-inherit"
           onClick={goBack}
         >
-          <Image src={back} height={20} width={20} alt="inbox" />
+          {Icons.back}
           <b>Back</b>
         </Button>
         <h2 className="text-black">
@@ -22,14 +24,24 @@ const BillLayout = ({ children }: { children: ReactNode }) => {
         </h2>
       </div>
       <div className="flex items-center mb-4">
-        <Button variant="primary" className="mr-4">
-          <Image src={outbox} height={20} width={20} alt="inbox" />
+      <LinkWithLoader href={`/bills-verify`}>
+        <Button
+          variant="primary"
+          className={`mr-4 ${pathname.includes("outbox") && "bg-gray-200 text-gray-500"}`}
+        >
+          {Icons.outbox}
           Inbox
         </Button>
-        <Button variant="primary" className="bg-gray-200 text-gray-500">
-          <Image src={outbox} height={20} width={20} alt="inbox" />
-          Outbox
-        </Button>
+        </LinkWithLoader>
+        <LinkWithLoader href={`${pathname}/outbox`}>
+          <Button
+            variant="primary"
+            className={`${!pathname.includes("outbox") && "bg-gray-200 text-gray-500"}`}
+          >
+            {Icons.outbox}
+            Outbox
+          </Button>
+        </LinkWithLoader>
       </div>
       {children}
     </>
