@@ -7,7 +7,11 @@ import { AccountingCodeType } from "jflib/build";
 const prisma = new PrismaClient();
 
 const isSchedule = (majorHead: string, minorHead: string, detailCode: string) => {
-    return majorHead[majorHead.length - 1] == "0" && detailCode == "00" && minorHead == "00";
+
+    if(majorHead == "310" && minorHead =="10" && detailCode == "00") return true; // special case B-1
+
+
+    return detailCode == "00" && minorHead == "00";
 }
 
 const isGeneralLedger = (detailCode: string, minorHead: string) => {
@@ -16,6 +20,8 @@ const isGeneralLedger = (detailCode: string, minorHead: string) => {
 
 
 const account_codes_seeder = async () => {
+    console.log("Seeding accounting codes ...");
+
     const file_path = "./prisma/data/chart_of_accounts.xlsx";
 
     const schedules = new Map();
@@ -24,8 +30,6 @@ const account_codes_seeder = async () => {
 
     readXlsxFile(file_path, { sheet: 'Primary Accouting Code' }).then(async (rows) => {
         const n = rows.length;
-        
-        let scheduleNumber = 1;
 
         for (let i = 1; i < n; i++) {
             const row = rows[i];
@@ -42,6 +46,8 @@ const account_codes_seeder = async () => {
                 const code = majorHead + minorHead + detailCode;
                 const description = row[7].toString();//majorHead + minorHead + detailCode + " " + row[7].toString();
 
+                const scheduleRefNo = row[9]?row[9].toString().trim():'';
+
                 if(detailCode == "XX")
                     continue;
 
@@ -51,6 +57,7 @@ const account_codes_seeder = async () => {
                     // }
                     // else
                     if (isSchedule(majorHead, minorHead, detailCode)) {
+                        console.log(`${majorHead} ${description} (${scheduleRefNo})`);
                         const x = await prisma.account_codes.create({
                             data: {
                                 code: code,
@@ -58,18 +65,18 @@ const account_codes_seeder = async () => {
                                 major_head: majorHead,
                                 minor_head: minorHead,
                                 detail_code: detailCode,
-                                description: `Schedule I-${scheduleNumber}: ${description}`,
+                                description: description,
+                                schedule_ref_no: scheduleRefNo,
                                 created_at: faker.date.past(),
                                 updated_at: faker.date.recent(),
                             },
                         });
 
                         schedules.set(code, x);
-                        scheduleNumber ++;
                     }
                     else if (isGeneralLedger(detailCode, minorHead)) {
 
-                        const parent = schedules.get(majorHead.substring(0, majorHead.length-1) + "0" + "00" + "00");
+                        const parent = schedules.get(majorHead + "00" + "00");
                         if (parent == undefined) {
                             // console.log("No parent found");
                         } else {

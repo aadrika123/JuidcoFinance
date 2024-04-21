@@ -63,10 +63,6 @@ export const TrialBalanceComponent = () => {
   }
 
 
-  useEffect(() => {
-
-  }, []);
-
   return (
     <>
       <TrialBalanceHeaderComponent />

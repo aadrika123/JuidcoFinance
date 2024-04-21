@@ -1,9 +1,3 @@
-/**
- * Author: Bijoy Paitandi
- * date: 15-03-2024
- * status: Done
- */
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -15,14 +9,84 @@ import IncomeStatementHeaderComponent from "./TrialBalanceHeaderComponent";
 import Loader from "@/components/global/atoms/Loader";
 
 
+/**
+ * Author: Bijoy Paitandi
+ * date: 15-03-2024
+ * status: Done
+ */
+
+
+const incomeSchedules = ['I-1', 'I-2', 'I-3', 'I-4', 'I-5', 'I-6', 'I-7', 'I-8', 'I-9'];
+const expenditureSchedules = ['I-10', 'I-11', 'I-12', 'I-13', 'I-14', 'I-15', 'I-16', 'I-17', 'I-19'];
+
+interface AccountData {
+  code: string;
+  description: string;
+  total_balance: number;
+  schedule_ref_no: string;
+}
 
 interface IncomeStatementData {
-  income: any[]
-  expenditure: any[],
+  selectedYear: AccountData[],
+  prevYear: AccountData[],
+}
+
+
+interface ProcessedData {
+  incomes: AccountData[],
+  expenditures: AccountData[],
+  totalIncome: number,
+  totalExpenditure: number,
+  grossBeforePriorItems: number,
+  grossAfterPriorItems: number,
+  netBalance: number,
+  i18Data: AccountData,
+  i20Data: AccountData
+}
+
+
+const processData = (data: AccountData[]) : ProcessedData => {
+  const incomes: any = [];
+  let totalIncome = 0;
+  const expenditures: any = [];
+  let i18Data: any;
+  let i20Data: any;
+  let totalExpenditure = 0;
+
+  data.forEach((item: AccountData) => {
+    if(incomeSchedules.includes(item.schedule_ref_no)){
+      incomes.push(item);
+      totalIncome += item?.total_balance;
+    }
+    else if(expenditureSchedules.includes(item.schedule_ref_no)){
+      expenditures.push(item);
+      totalExpenditure += item?.total_balance;
+    }else if('I-18' == item.schedule_ref_no){
+      i18Data = item;
+    }else if('I-20' == item.schedule_ref_no){
+      i20Data = item;
+    }
+  });
+
+
+  return {
+    incomes: incomes,
+    expenditures: expenditures,
+    totalIncome: totalIncome,
+    totalExpenditure: totalExpenditure,
+    grossBeforePriorItems: totalIncome - totalExpenditure,
+    grossAfterPriorItems: totalIncome - totalExpenditure + i18Data.total_balance,
+    netBalance: totalIncome - totalExpenditure + i18Data.total_balance - i20Data.total_balance,
+    i18Data: i18Data,
+    i20Data: i20Data
+  };
+
 }
 
 
 export const IncomeStatementComponent = () => {
+  const [selectedYearData, setSelectedYearData] = useState<ProcessedData>();
+  const [prevYearData, setPrevYearData] = useState<ProcessedData>();
 
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
@@ -69,28 +133,12 @@ export const IncomeStatementComponent = () => {
     throw new Error("Fatal Error!");
   }
 
+
+
   useEffect(() => {
-
-  }, []);
-
-  let totalIncome = 0;
-  if (ItemData) {
-    if (ItemData.income) {
-      ItemData.income.forEach((item) => {
-        totalIncome += item.total_balance;
-      });
-    }
-  }
-
-  let totalExpenditure = 0;
-  if(ItemData){
-    if(ItemData.expenditure){
-      ItemData.expenditure.forEach((item) => {
-        totalExpenditure += item.total_balance;
-      });
-    }
-  }
-
+    if(ItemData?.selectedYear) setSelectedYearData(processData(ItemData.selectedYear));
+    if(ItemData?.prevYear) setPrevYearData(processData(ItemData.prevYear));
+  }, [ItemData]);
 
   return (
     <>
@@ -150,7 +198,7 @@ export const IncomeStatementComponent = () => {
                   <td className="border border-slate-300 px-4"></td>
                   <td className="border border-slate-300 px-4 font-bold">Income</td>
                 </tr>
-                {ItemData?.income?.map((item, index) => {
+                {selectedYearData?.incomes?.map((item, index) => {
                   return (<tr key={`item${index}`}>
                     <td className="border border-slate-300 px-4">
                       {item.code.substring(0, 3)}
@@ -159,17 +207,20 @@ export const IncomeStatementComponent = () => {
                       {item.description}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {item.schedule_ref_no}
                     </td>
 
                     <td className="border border-slate-300 px-4">
                       {item.total_balance}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.incomes[index].total_balance}
+                      
                     </td>
                   </tr>);
                 })}
-                <tr>
-                    <td className="border border-slate-300 px-4 font-bold">
+                <tr className="font-bold">
+                    <td className="border border-slate-300 px-4">
                       A
                     </td>
                     <td className="border border-slate-300 px-4 font-bold">
@@ -179,9 +230,10 @@ export const IncomeStatementComponent = () => {
                     </td>
 
                     <td className="border border-slate-300 px-4">
-                      {totalIncome}
+                      {selectedYearData?.totalIncome}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.totalIncome}
                     </td>
                   </tr>
 
@@ -190,7 +242,7 @@ export const IncomeStatementComponent = () => {
                   <td className="border border-slate-300 px-4"></td>
                   <td className="border border-slate-300 px-4 font-bold">Expenditure</td>
                 </tr>
-                {ItemData?.expenditure?.map((item, index) => {
+                {selectedYearData?.expenditures?.map((item, index) => {
                   return (<tr key={`item${index}`}>
                     <td className="border border-slate-300 px-4">
                       {item.code.substring(0, 3)}
@@ -199,29 +251,32 @@ export const IncomeStatementComponent = () => {
                       {item.description}
                     </td>
                     <td className="border border-slate-300 px-4">
+                    {item.schedule_ref_no}
                     </td>
 
                     <td className="border border-slate-300 px-4">
                       {item.total_balance}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.expenditures[index].total_balance}
                     </td>
                   </tr>);
                 })}
-                <tr>
-                    <td className="border border-slate-300 px-4 font-bold">
+                <tr className="font-bold">
+                    <td className="border border-slate-300 px-4">
                       B
                     </td>
-                    <td className="border border-slate-300 px-4 font-bold">
+                    <td className="border border-slate-300 px-4">
                       TOTAL EXPENDITURE
                     </td>
                     <td className="border border-slate-300 px-4">
                     </td>
 
                     <td className="border border-slate-300 px-4">
-                      {totalExpenditure}
+                      {selectedYearData?.totalExpenditure}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.totalExpenditure}
                     </td>
                   </tr>
 
@@ -236,27 +291,30 @@ export const IncomeStatementComponent = () => {
                     </td>
 
                     <td className="border border-slate-300 px-4">
-                      {totalExpenditure}
+                    {selectedYearData?.grossBeforePriorItems}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.grossBeforePriorItems}
                     </td>
                   </tr>
 
 
                   <tr>
                     <td className="border border-slate-300 px-4">
-                      2-80
+                    {selectedYearData?.i18Data?.code.substring(0, 3)}
                     </td>
                     <td className="border border-slate-300 px-4 italic">
-                      Add: Prior Period Items (Net)
+                      Add: {selectedYearData?.i18Data?.description} (Net)
                     </td>
                     <td className="border border-slate-300 px-4">
-                    1-18
+                      {selectedYearData?.i18Data?.schedule_ref_no}
                     </td>
                       
                     <td className="border border-slate-300 px-4">
+                      {selectedYearData?.i18Data?.total_balance}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.i18Data?.total_balance}
                     </td>
                   </tr>
 
@@ -272,33 +330,37 @@ export const IncomeStatementComponent = () => {
                     </td>
 
                     <td className="border border-slate-300 px-4">
-                      
+                      {selectedYearData?.grossAfterPriorItems}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.grossAfterPriorItems}
                     </td>
                   </tr>
 
 
                   <tr>
                     <td className="border border-slate-300 px-4">
-                      2-90
+                      {selectedYearData?.i20Data?.code.substring(0,3)}
                     </td>
                     <td className="border border-slate-300 px-4">
-                      Less: Transfer to Reserve Funds
+                      Less: {selectedYearData?.i20Data?.description}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {selectedYearData?.i20Data?.schedule_ref_no}
                     </td>
                       
                     <td className="border border-slate-300 px-4">
+                      {selectedYearData?.i20Data?.total_balance}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.netBalance}
                     </td>
                   </tr>
 
-                  <tr>
+                  <tr className="font-bold">
                     <td className="border border-slate-300 px-4">
                     </td>
-                    <td className="border border-slate-300 px-4 font-bold">
+                    <td className="border border-slate-300 px-4">
                     Net Balance Being Surplus/Deficit carried over to Municipal Fund
 
                     </td>
@@ -306,8 +368,10 @@ export const IncomeStatementComponent = () => {
                     </td>
                       
                     <td className="border border-slate-300 px-4">
+                      {selectedYearData?.netBalance}
                     </td>
                     <td className="border border-slate-300 px-4">
+                      {prevYearData?.netBalance}
                     </td>
                   </tr>
 

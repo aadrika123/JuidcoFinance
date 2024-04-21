@@ -421,6 +421,76 @@ class BalanceTrackingsDao {
     return data;
   }
 
+
+
+
+  getIncomeStatementDataOfAnYear = async (ulbId: number, finYear: number): Promise<[]> => {
+
+    const [year_start, year_end] = this.getYearBound(finYear);
+
+    const scheduleList = [
+      'I-1', 'I-2', 'I-3', 'I-4', 'I-5',
+      'I-6', 'I-7', 'I-8', 'I-9', 'I-10',
+      'I-11', 'I-12', 'I-13', 'I-14', 'I-15', 
+      'I-16', 'I-17', 'I-18', 'I-19', 'I-20'
+    ];
+    const data = await prisma.$queryRaw<[]>`
+    
+    select a.id, a.schedule_ref_no, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance,
+    b.debit_balance, b.credit_balance from account_codes a
+    
+    left join (
+      select id, primary_acc_code_id, total_balance, debit_balance, credit_balance, x.created_at from balance_trackings x where id in (
+        select max(id) from balance_trackings  where ulb_id=${ulbId} and created_at between ${year_start} and ${year_end} group by primary_acc_code_id
+      )
+    ) b 
+    on a.id = b.primary_acc_code_id where a.schedule_ref_no in (${Prisma.join(scheduleList)}) order by a.code`;
+
+    return data;
+  }
+
+  getIncomeStatementData = async (ulbId: number, finYear: number): Promise<any> => {
+    return {
+      selectedYear: await this.getIncomeStatementDataOfAnYear(ulbId, finYear),
+      prevYear: await this.getIncomeStatementDataOfAnYear(ulbId, finYear-1)
+    };
+  }
+
+
+  getBalanceSheetDataOfAnYear = async (ulbId: number, finYear: number): Promise<[]> => {
+
+    const [year_start, year_end] = this.getYearBound(finYear);
+
+    const scheduleList = [
+      'B-1', 'B-2', 'B-3', 'B-4', 'B-7', 'B-8',
+      'B-9', 'B-10', 'B-11', 'B-12', 'B-13', 'B-14',
+      'B-15', 'B-16', 'B-17', 'B-18', 'B-19', 'B-20'
+    ];
+    const data = await prisma.$queryRaw<[]>`
+    
+    select a.id, a.schedule_ref_no, a.code, a.code_type_id as code_type, a.major_head, a.minor_head, a.detail_code, a.description, b.total_balance,
+    b.debit_balance, b.credit_balance from account_codes a
+    
+    left join (
+      select id, primary_acc_code_id, total_balance, debit_balance, credit_balance, x.created_at from balance_trackings x where id in (
+        select max(id) from balance_trackings  where ulb_id=${ulbId} and created_at between ${year_start} and ${year_end} group by primary_acc_code_id
+      )
+    ) b 
+    on a.id = b.primary_acc_code_id where a.schedule_ref_no in (${Prisma.join(scheduleList)}) order by a.code`;
+
+    return data;
+  }
+
+  getBalanceSheetData = async (ulbId: number, finYear: number): Promise<any> => {
+    return {
+      selectedYear: await this.getBalanceSheetDataOfAnYear(ulbId, finYear),
+      prevYear: await this.getBalanceSheetDataOfAnYear(ulbId, finYear-1)
+    };
+  }
+
+
+
+
 }
 
 export default BalanceTrackingsDao;

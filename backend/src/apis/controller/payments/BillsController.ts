@@ -2,8 +2,6 @@ import { Request } from "express";
 import { APIv1Response } from "../../APIv1";
 import BillsDao from "../../dao/payments/BillsDao";
 import * as Yup from "yup";
-import { parse } from "date-fns";
-
 
 /**
  * | Author- Bijoy Paitandi
@@ -48,6 +46,16 @@ class BillsController {
        return {status: true, code: 200, message: "Found", data: data};
   };
 
+
+  create = async (req: Request): Promise<APIv1Response> =>{
+
+    console.log(req.body);
+    console.log(req.files);
+    console.log(req.body.data);
+    console.log(req.headers);
+
+    return {status: true, code: 200, message: "Created", data: {}}
+  }
 
 }
 

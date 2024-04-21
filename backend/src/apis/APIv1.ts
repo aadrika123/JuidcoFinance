@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import multerUpload from "./middleware/_multer";
 
 
 /**
@@ -40,6 +41,18 @@ export class APIv1 {
   addPostRoute(path: string, handler: (req: Request) => Promise<APIv1Response>): void {
     this.app.route(`${this.baseUrl}/${path}`)
       .post((req: Request, res: Response) => this.apiWrapper(req, res, this.generateAPIId(), handler));
+  }
+
+  addFormDataPostRoute(path: string, handler: (req: Request) => Promise<APIv1Response>, fields: any[]): void {
+    this.app.route(`${this.baseUrl}/${path}`)
+      .post(async (req: Request, res: Response) => {
+        
+
+        multerUpload.fields(fields)(req, res, () => {
+          this.apiWrapper(req, res, this.generateAPIId(), handler);
+        });
+        
+      });
   }
 
   private generateAPIId = () => {

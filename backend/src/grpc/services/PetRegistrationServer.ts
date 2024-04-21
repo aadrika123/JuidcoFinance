@@ -91,7 +91,7 @@ export const PetRegistrationServer: IPetRegistrationServer = {
       
       entered_by_id: null,
       entered_by_print_name: null,
-      isChecked: true,
+      is_checked: true,
     }
 
     const result2 = await prisma.receipt_registers.create({

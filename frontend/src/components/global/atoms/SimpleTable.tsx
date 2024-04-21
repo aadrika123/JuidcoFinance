@@ -21,7 +21,7 @@ const SimpleTable = <T, >({columns, data, onViewButtonClick}: SimpleTableProps<T
 
   const headers = columns.map((column, index) => {
     return (
-      <th key={`headCell-${index}`} className="border border-zinc-400">
+      <th key={`headCell-${index}`} className="border border-zinc-400 bg-gray-200 text-black">
         <div className="flex gap-2 font-medium text-center">
           {column.caption}
         </div>
@@ -91,9 +91,9 @@ const SimpleTable = <T, >({columns, data, onViewButtonClick}: SimpleTableProps<T
           
           {headers}
           
-            <th className="border  border-zinc-400  font-medium">
+            <th className="border  border-zinc-400  font-medium bg-gray-200 text-black">
                 <div className="flex gap-2">
-                  <span>View / Edit / Print </span>
+                  <span>Actions</span>
                 </div>
             </th>
 

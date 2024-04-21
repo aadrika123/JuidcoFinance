@@ -23,6 +23,7 @@ interface DropDownListProps {
   className?: string;
   required?: boolean | false;
   onChange: (e?: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChangeText?: (text: string) => void;
   onBlur: (e?: React.FocusEvent<HTMLSelectElement>) => void;
   isReadOnly?: boolean;
 }
@@ -69,7 +70,12 @@ const DropDownList: React.FC<DropDownListProps> = (props) => {
         </label>
         <select
           {...field}
-          onChange={(event)=> setValue(parseInt(event.target.value))}
+          onChange={(event)=> {
+            setValue(parseInt(event.target.value));
+            if(props.onChangeText){
+              props.onChangeText(event.target.selectedOptions[0].text);
+            }
+          }}
           onBlur={props.onBlur}
           value={props.value}
           className={`text-primary h-[40px] pl-3 rounded-lg border bg-transparent border-zinc-400 ${props.className}`}

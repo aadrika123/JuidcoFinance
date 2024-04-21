@@ -4,8 +4,10 @@ model cash_bank_receipt_vouchers {
   id                     Int                @id @default(autoincrement())
   ulb_id                 Int
   ulb                    municipality_codes @relation(fields: [ulb_id], references: [id])
+
   bank_id                Int
   bank                   bank_masters       @relation(fields: [bank_id], references: [id])
+  
   primary_acc_code_id    Int
   primary_acc_code       account_codes      @relation(fields: [primary_acc_code_id], references: [id])
   pay_in_slip_ref_no     String?

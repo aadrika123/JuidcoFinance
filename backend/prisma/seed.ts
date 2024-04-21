@@ -83,6 +83,12 @@ const seed_level1_dependent_tables = async () => {
 }
 
 async function main() {
+
+  // await accounting_code_types_seeder();
+  // await account_codes_seeder();
+
+  // return;
+
   // await udhd_sub_departments_seeder();
 
   // setTimeout(async () => {
