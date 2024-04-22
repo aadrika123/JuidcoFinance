@@ -4,6 +4,9 @@ DB_PASSWORD="Secure@2023%3F"
 
 
 installModules () {
+    echo "Installing jflib node modules ..."
+    npm --prefix ./jflib install
+
     echo "Installing frontend node modules ..."
     npm --prefix ./frontend install
 
@@ -38,6 +41,9 @@ configure(){
 }
 
 buildThem(){
+    echo "building jflib ..."
+    npm --prefix ./jflib run build
+
     echo "building backend ..."
     npm --prefix ./backend run build
 
@@ -62,8 +68,8 @@ startServices(){
 
 
 installModules
-resetDatabases
 configure
+resetDatabases
 buildThem
 startServices
 

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import readXlsxFile from "read-excel-file/node";
 import { faker } from "@faker-js/faker";
-import { AccountingCodeType } from "jflib/build";
+import { AccountingCodeType } from "jflib";
 
 
 const prisma = new PrismaClient();
