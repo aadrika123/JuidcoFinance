@@ -74,6 +74,7 @@ export const EditReceiptRegister = ({
       } else if (!res.data.data) {
         throw "Not Found";
       }
+
       setData(res.data.data);
       setInitialData((prev) => {
         return {

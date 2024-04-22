@@ -17,7 +17,7 @@ class RevenueAccountedTypesRoute {
         this.controller.get(req, res, apiId + "01")
       );
     app
-      .route(`${baseUrl}/revenue-accounted-types/get/:rmId/:accId`)
+      .route(`${baseUrl}/revenue-accounted-types/get/:accId`)
       .get((req: Request, res: Response) =>
         this.controller.getByRevenueAndAccountingId(req, res, apiId + "02")
       );

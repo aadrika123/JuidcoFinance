@@ -256,11 +256,11 @@ export const AddReceiptRegister = () => {
       caption: "Bank Amount",
       width: "w-[25%]",
     },
-    {
-      name: "revenue_module_id_name",
-      caption: "Revenue Module Name",
-      width: "w-[25%]",
-    },
+    // {
+    //   name: "revenue_module_id_name",
+    //   caption: "Revenue Module Name",
+    //   width: "w-[25%]",
+    // },
     {
       name: "edit/remove",
       caption: "Edit/Remove",

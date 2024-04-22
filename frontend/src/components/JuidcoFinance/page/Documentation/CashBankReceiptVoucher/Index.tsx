@@ -28,7 +28,7 @@ export const HeroCashBankRVoucher= () => {
   const [user, setUser] = useState<any>();
   const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [receiptIds, setReceiptIds] = useState<any>([]);
-  const [isApproved, setIsApproved] = useState<boolean>(true);
+  const [receiptData, setReceiptData] = useState<any>({})
   const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
   const [showPopup, setShowPopup] = useState({
     name: "",
@@ -85,7 +85,7 @@ export const HeroCashBankRVoucher= () => {
 
     ///// Getting Selected Data and Balances From Table Component
   const handleGetData = (data: any) => {
-    setIsApproved(data.isApproved)
+    setReceiptData(data)
     setReceiptIds(data.data);
   };
   
@@ -100,6 +100,8 @@ export const HeroCashBankRVoucher= () => {
           data: {
             checked_by_id: user.id,
             checked_by_print_name: showPopup?.name,
+            ulb_id: receiptData.ulbId,
+            date: receiptData.date,
             ids: receiptIds,
           },
         },
@@ -107,7 +109,7 @@ export const HeroCashBankRVoucher= () => {
       if (!res.data.status) throw new Error("Something Went Wrong!!");
 
       res && toast.success("Approved Sucessfully!!");
-      setIsApproved(true)
+      setReceiptData((prev: any) => ({...prev, isApproved: true}))
     } catch (error) {
       toast.error("Something Went Wrong!!");
     }
@@ -173,7 +175,7 @@ export const HeroCashBankRVoucher= () => {
         footer={
           <Footer
             user={user}
-            isApproved={isApproved}
+            isApproved={receiptData?.isApproved}
             handleApprove={handleApproveConfirm}
             isThereData={receiptIds.length > 0}
           />

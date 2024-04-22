@@ -100,6 +100,8 @@ const ReceiptRegister = () => {
             checked_by_id: user.id,
             checked_by_print_name: showPopup.name,
             ids: receiptIds,
+            ulb_id: receiptData.ulbId,
+            date: receiptData.date,
           },
         },
       });

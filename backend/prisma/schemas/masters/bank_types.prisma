@@ -1,10 +1,11 @@
-
 ////bank_types: Managed by: Bijoy Paitandi
-model bank_types{
-	id                  Int                 @id @default(autoincrement())
-	name                String
-	created_at          DateTime            @default(now()) @map("created_at")
-	updated_at          DateTime            @updatedAt @map("updated_at")
+model bank_types {
+    id                  Int           @id @default(autoincrement())
+    primary_acc_code_id Int
+    primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+    name                String
+    created_at          DateTime      @default(now()) @map("created_at")
+    updated_at          DateTime      @updatedAt @map("updated_at")
 
-	bank_masters bank_masters[]
+    bank_masters bank_masters[]
 }

@@ -1,6 +1,8 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
+import BalanceTrackingsDao from "../budgeting/BalanceTrackingsDao";
+import { generateUniquePaymentNo } from "../../../util/helper/generateUniqueNo";
 
 /**
  * | Author- Sanjiv Kumar
@@ -15,8 +17,9 @@ interface IdItem {
 }
 
 class CashBankReceiptVoucherDao {
+  private balanceTrackingDao: BalanceTrackingsDao;
   constructor() {
-    //////
+    this.balanceTrackingDao = new BalanceTrackingsDao();
   }
 
   // Get limited cash bank receipt voucher
@@ -226,54 +229,134 @@ class CashBankReceiptVoucherDao {
     const idItems = ids.map((item: { id: number }) => item.id);
     const ulbId = Number(req.body.data.ulb_id);
     const date = req.body.data.date;
+    const lf_no = generateUniquePaymentNo(`${new Date().getDate()}-${new Date().getMonth()}-`);
 
-    const [, rR] = await prisma.$transaction([
-      prisma.$queryRaw`
-        INSERT INTO calc_daily_coll_summariesxxx (ulb_id, bank_id, primary_acc_code_id, amount, revenue_accounted_type_id, receipt_date, receipt_mode_id)
-        SELECT ${ulbId}, calc_summ.bank_id, calc_summ.ledger_id, calc_summ.amount, calc_summ.revenue_accounted_type_id, receipt_date, receipt_mode_id
-        FROM (SELECT
-        SUM(rr.bank_amount + rr.cash_amount) as amount,
-        ac.description as descri,
-        ac.id as ledger_id,
-        acg.description as gledger,
-        rat.id as revenue_accounted_type_id,
-        bm.id as bank_id,
-        rr.receipt_date,
-        rr.receipt_mode_id
-        FROM 
-        collection_registers as dcs
-        LEFT JOIN
-        receipt_registers as rr ON rr.id = dcs.receipt_register_id
-        LEFT JOIN
-        account_codes as ac ON rr.primary_acc_code_id = ac.id
-        LEFT JOIN
-        account_codes as acg ON ac.parent_id = acg.id
-        LEFT JOIN 
-        revenue_accounted_types as rat ON rat.id = rr.revenue_accounted_type_id
-        LEFT JOIN 
-        municipality_codes as mc ON rr.ulb_id = mc.id
-        LEFT JOIN 
-        bank_masters as bm ON (bm.ulb_id = ${ulbId} AND bm.primary_acc_code_id = ac.id)
-        WHERE (mc.id = ${ulbId} AND rr.receipt_date::date = ${date}::date AND dcs.id IN (${Prisma.join(
+    return await prisma.$transaction(async (tx) => {
+      const dr = (await tx.$queryRaw`
+      SELECT bt.primary_acc_code_id as bank_type_id, cbrv.primary_acc_code_id,  cbrv.amount
+      FROM
+      cash_bank_receipt_vouchers as cbrv
+      LEFT JOIN
+      bank_masters as bm ON cbrv.bank_id = bm.id
+      LEFT JOIN
+      bank_types as bt ON bm.bank_type_id = bt.id
+      LEFT JOIN 
+      municipality_codes as mc ON cbrv.ulb_id = mc.id
+      WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
         idItems
-      )}) AND dcs.is_checked = false)
-        GROUP BY descri, gledger, rat.id, ledger_id, bm.id, receipt_date, receipt_mode_id) AS calc_summ
-      `,
+      )}) AND is_approved = false)
+      `) as any;
 
-      prisma.collection_registers.updateMany({
+      for (const item of dr) {
+        await this.balanceTrackingDao.updateBalances(
+          ulbId,
+          item.bank_type_id,
+          -item.amount
+        );
+        await this.balanceTrackingDao.updateBalances(
+          ulbId,
+          item.primary_acc_code_id,
+          item.amount
+        );
+      }
+
+      await tx.$queryRaw`
+      INSERT INTO cash_books (receipt_voucher_no, lf_no, primary_acc_code_id, amount)
+      SELECT cbrv.crv_brv_no, ${lf_no}, cbrv.primary_acc_code_id, cbrv.amount
+      FROM 
+      cash_bank_receipt_vouchers as cbrv
+      LEFT JOIN 
+      municipality_codes as mc ON cbrv.ulb_id = mc.id
+      WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+        idItems
+      )}) AND is_approved = false)
+      `;
+
+      return await tx.cash_bank_receipt_vouchers.updateMany({
         where: {
           OR: ids,
-          is_checked: false,
+          is_approved: false,
         },
         data: {
-          is_checked: true,
+          is_approved: true,
           checked_by_id: req.body.data.checked_by_id,
           checked_by_print_name: req.body.data.checked_by_print_name,
         },
-      }),
-    ]);
+      });
+    });
 
-    return rR;
+    // const [dr, ,rR] = await prisma.$transaction([
+    //   prisma.$queryRaw`
+    //   SELECT bm.bank_type_id, cbrv.primary_acc_code_id,  cbrv.amount
+    //   FROM
+    //   cash_bank_receipt_vouchers as cbrv
+    //   LEFT JOIN
+    //   bank_masters as bm ON cbrv.bank_id = bm.id
+    //   LEFT JOIN
+    //   municipality_codes as mc ON cbrv.ulb_id = mc.id
+    //   WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+    //     idItems
+    //   )}) AND is_approved = false)
+    //   ` as any,
+
+    //   // prisma.$queryRaw`
+    //   // SELECT cbrv.primary_acc_code_id, cbrv.amount
+    //   // FROM
+    //   // cash_bank_receipt_vouchers as cbrv
+    //   // LEFT JOIN
+    //   // municipality_codes as mc ON cbrv.ulb_id = mc.id
+    //   // WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+    //   //   idItems
+    //   // )}) AND is_approved = false)
+    //   // ` as any,
+
+    //   prisma.$queryRaw`
+    //   INSERT INTO cash_boos (date, receipt_voucher_no, lf_no, primary_acc_code_id, amount)
+    //   SELECT ${currentData}, cbrv.crv_brv_no, ${lf_no}, cbrv.primary_acc_code_id, cbrv.amount
+    //   FROM
+    //   cash_bank_receipt_vouchers as cbrv
+    //   LEFT JOIN
+    //   municipality_codes as mc ON cbrv.ulb_id = mc.id
+    //   WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+    //     idItems
+    //   )}) AND is_approved = false)
+    //   `,
+
+    //   prisma.cash_bank_receipt_vouchers.updateMany({
+    //     where: {
+    //       OR: ids,
+    //       is_approved: false,
+    //     },
+    //     data: {
+    //       is_approved: true,
+    //       checked_by_id: req.body.data.checked_by_id,
+    //       checked_by_print_name: req.body.data.checked_by_print_name,
+    //     },
+    //   }),
+    // ]);
+
+    // for (const item of dr) {
+    //   await this.balanceTrackingDao.updateBalances(
+    //     ulbId,
+    //     item.bank_type_id,
+    //     -item.amount
+    //   );
+    //   await this.balanceTrackingDao.updateBalances(
+    //     ulbId,
+    //     item.primary_acc_code_id,
+    //     item.amount
+    //   );
+    // }
+
+    // for (const item of cr) {
+    //   await this.balanceTrackingDao.updateBalances(
+    //     ulbId,
+    //     item.primary_acc_code_id,
+    //     item.amount
+    //   );
+    // }
+
+    // return rR;
   };
 
   ///// Get One Checked Data

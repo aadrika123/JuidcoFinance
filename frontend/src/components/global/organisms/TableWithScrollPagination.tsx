@@ -73,6 +73,8 @@ const TableWithScrollPagination = <T,>({
       method: "GET",
     });
 
+    console.log("first", res1.data)
+
     let data = res.data?.data;
     if (data == null) {
       data = { totalPage: 0, data: [] };
@@ -100,6 +102,8 @@ const TableWithScrollPagination = <T,>({
       rest.handleGet({
         isApproved: res1.data.data ? true : false,
         balance: data?.others,
+        ulbId,
+        date: date.toISOString().split("T")[0],
         data: [...state.filtered, ...filteredData],
       });
     setTempFetch(false);

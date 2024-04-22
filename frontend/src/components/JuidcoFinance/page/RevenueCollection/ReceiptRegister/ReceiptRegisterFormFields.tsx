@@ -13,7 +13,8 @@ import { ReceiptRegisterDetailsData } from "./receipt_register_types";
 import { useQuery } from "react-query";
 import axios from "@/lib/axiosConfig";
 import InputForUpdateField from "@/components/global/atoms/InputForUpdateValue";
-import { useParams } from 'next/navigation'
+import { useParams } from "next/navigation";
+import SelectForUpdateValue from "@/components/global/atoms/SelectForUpdateValue";
 
 /**
  * | Author- Sanjiv Kumar
@@ -40,14 +41,16 @@ export interface FormikWrapperProps {
 type stateProps = {
   ulbId: number | string | null;
   accCodeId: number | string | null;
+  revModId: number | string | null;
 };
 
 const FormikW: React.FC<FormikWrapperProps> = (props) => {
-  const params = useParams()
+  const params = useParams();
   const user = useSelector((state: any) => state.user.user?.userDetails);
   const [state, setState] = useState<stateProps>({
     ulbId: null,
     accCodeId: null,
+    revModId: null,
   });
   const { ulbId, accCodeId } = state;
   /////////////// For Transforming in JSON
@@ -69,17 +72,16 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     setState((prev) => ({ ...prev, accCodeId: e }));
   };
 
-  useEffect(() => {
-    if (ulbId && accCodeId) {
-      refetch();
-    }
-  }, [state]);
+  const handleRevModule = (e: number | string) => {
+    setState({ ...state, revModId: e });
+  };
 
-  const fetchData = async () => {
+
+  const fetchData = async (endpoint: string) => {
     try {
-      if (ulbId && accCodeId) {
+      if (accCodeId) {
         const res = await axios({
-          url: `${FINANCE_URL.BANK_MASTER_URL.getByAccCodeAndUlbId}/${accCodeId}/${ulbId}`,
+          url: endpoint,
           method: "GET",
         });
 
@@ -92,10 +94,29 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     }
   };
 
-  const { data: dataList, refetch: refetch } = useQuery({
-    queryKey: ["bank_acc_no", ulbId, accCodeId],
-    queryFn: fetchData,
-  });
+  const useForApiCall = (endpoint: string) => {
+    return useQuery([endpoint], () => fetchData(endpoint));
+  };
+
+  //// Get bank_acc_no
+  const { data: dataList, refetch: refetch } = useForApiCall(
+    `${FINANCE_URL.BANK_MASTER_URL.getByAccCodeAndUlbId}/${accCodeId}/${ulbId}`
+  );
+
+  //// Get revenue accounted type
+  const { data: raType, refetch: refetchRaType } = useForApiCall(
+    `${FINANCE_URL.REVENUE_ACCOUNTED_TYPE.getByReveAndAccId}/${accCodeId}`
+  );
+
+  useEffect(() => {
+    if (accCodeId) {
+      refetchRaType();
+    }
+    if (ulbId && accCodeId) {
+      refetch();
+    }
+  }, [ulbId, accCodeId]);
+
 
   return (
     <section
@@ -165,18 +186,20 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     handler={handleLedger}
                   />
 
-                  <Select
+                  <SelectForUpdateValue
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.revenue_module_id}
+                    value={raType?.revenue_module?.id || values.revenue_module_id}
                     error={errors.revenue_module_id}
                     touched={touched.revenue_module_id}
-                    readonly={readonly}
+                    readonly={true}
                     required
                     label="Revenue Module Name"
                     name="revenue_module_id"
                     placeholder="Select Revenue Module Name"
                     api={`${FINANCE_URL.REVENUE_MODULE.get}`}
+                    handler={handleRevModule}
+                    setFieldValue={setFieldValue}
                   />
 
                   <Input
@@ -251,20 +274,20 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     value={values.bank_amount}
                     error={errors.bank_amount}
                     touched={touched.bank_amount}
-                    readonly={readonly || (values.cheque_or_draft_no === "")}
+                    readonly={readonly || values.cheque_or_draft_no === ""}
                     label="Bank Amount (amounts received through cheque / draft)"
                     name="bank_amount"
                     type="number"
                     placeholder="Enter Bank Amount"
                   />
 
-                   <Input
+                  <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.cash_amount}
                     error={errors.cash_amount}
                     touched={touched.cash_amount}
-                    readonly={readonly || (values.cheque_or_draft_no !== "")}
+                    readonly={readonly || values.cheque_or_draft_no !== ""}
                     label="Cash Amount (amounts received by cash)"
                     name="cash_amount"
                     type="number"
@@ -285,18 +308,19 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="Enter Bank Account No"
                   />
 
-                  <Select
+                  <SelectForUpdateValue
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.revenue_accounted_type_id}
+                    value={raType?.revenue_accounted_type?.id || values.revenue_accounted_type_id}
                     error={errors.revenue_accounted_type_id}
                     touched={touched.revenue_accounted_type_id}
-                    readonly={readonly}
+                    readonly={true}
                     required
                     label="Revenue Accounted By"
                     name="revenue_accounted_type_id"
                     placeholder="Select Revenue Accounted By"
                     api={`${FINANCE_URL.REVENUE_ACCOUNTED_TYPE.get}`}
+                    setFieldValue={setFieldValue}
                   />
 
                   <Input

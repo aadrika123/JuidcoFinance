@@ -12,14 +12,20 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import LoaderSkeleton from "@/components/global/atoms/LoaderSkeleton";
 
+type stateProps = {
+  moduleId: number | null;
+}
+
 const Home = () => {
   const router = useRouter();
-
-  const [data, setData] = useState<[]>([]);
+  const [state, setState] = useState<stateProps>({
+    moduleId: null,
+  });
+  const { moduleId } = state;
 
   const fetchData = async (): Promise<[]> => {
     const res = await axios({
-      url: `${FINANCE_URL.RECEIPT_REGISTER.get}?limit=${10}&page=1`,
+      url: `${FINANCE_URL.RECEIPT_REGISTER.get}?limit=${10}&page=1&module=${moduleId}&date=${new Date().toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -29,9 +35,7 @@ const Home = () => {
         data = { totalPage: 0, data: [] };
       }
 
-      // data = data.data.sort(sortByCreatedAtDesc);
-      setData(data.data);
-      return data.data;
+      return data;
     }
     throw "Something Went Wrong!!";
   };
@@ -40,7 +44,8 @@ const Home = () => {
     isError: fetchingError,
     isLoading: isFetching,
     refetch: refetchIt,
-  } = useQuery(["receipts"], fetchData);
+    data: data,
+  }: any = useQuery(["receipts", moduleId], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
@@ -48,11 +53,16 @@ const Home = () => {
 
   useEffect(() => {
     refetchIt();
-  }, []);
+  }, [moduleId]);
 
   //////// Table View Button Feature //////////
   const onViewButtonClick1 = (id: string) => {
     router.push(`/revenue-collection/receipt-register/view/${id}?mode=view`);
+  };
+
+  /////// Handling Module Click
+  const handleClick = (id: number) => {
+    setState({ ...state, moduleId: id });
   };
 
   const tButton = (id: string) => {
@@ -105,17 +115,21 @@ const Home = () => {
       </h1>
       <HomeHeader />
       <div className="flex items-center justify-between flex-wrap my-6 gap-5 max-md:justify-center">
-        <HomeCard color="green" title="Number of Receipts" />
-        <HomeCard color="blue" title="Number of Payments" />
+        <HomeCard
+          color="green"
+          title="Number of Receipts"
+          total={data?.count || 0}
+        />
+        <HomeCard color="blue" title="Number of Payments" total={0} />
         <RactangleCard title="Receipt Register" />
       </div>
       <h1 className="text-sm"># Summary of Revenue</h1>
-      <AllHomeButtons />
+      <AllHomeButtons moduleId={moduleId} handleClick={handleClick} />
       <div className="shadow-lg mb-6 mt-4">
         {isFetching ? (
           <LoaderSkeleton />
         ) : (
-          <Table center columns={columns} data={data} />
+          <Table center columns={columns} data={data?.data} />
         )}
       </div>
     </div>

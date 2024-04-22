@@ -20,6 +20,7 @@ import Popup from "@/components/global/molecules/general/Popup";
 import BankAccountForm from "./molecules/BankAccountForm";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import ErrorConfirmPopup from "@/components/global/molecules/general/ErrorConfirmPopup";
+import WorkingPopup from "@/components/global/molecules/general/WorkingPopup";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -72,10 +73,11 @@ export const HeroBankMasters = () => {
       });
       if (res.data.status) return res.data;
 
-      throw "exit";
+      throw "Something Went Wrong!!";
     } catch (error) {
       if (error === "exit") setErrorMessage(true);
       console.log(error);
+      alert(error)
       throw error;
     }
   };

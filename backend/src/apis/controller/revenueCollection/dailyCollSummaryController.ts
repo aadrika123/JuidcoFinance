@@ -131,6 +131,7 @@ class DailyCollSummaryController {
     try {
       const date: string = req.params.date;
       const ulbId: number = Number(req.params.ulbId)
+  
       // validate id
       const { error } = Joi.object({
         date: Joi.string().required(),

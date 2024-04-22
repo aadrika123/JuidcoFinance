@@ -43,10 +43,10 @@ export const sidebarLinks: SidebarLinksProps = {
               moduleName: "Receipt Register",
               path: "/revenue-collection/receipt-register",
             },
-            {
-              moduleName: "Collection Register",
-              path: "/revenue-collection/collection-register",
-            },
+            // {
+            //   moduleName: "Collection Register",
+            //   path: "/revenue-collection/collection-register",
+            // },
             {
               moduleName: "Summary of Daily Collection",
               path: "/revenue-collection/daily-collection-summary",

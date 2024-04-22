@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
-import { BankMasterValidation } from "jflib";
+// import { BankMasterValidation } from "jflib";
 
 const prisma = new PrismaClient();
 
@@ -8,9 +8,13 @@ class BankMasterDao {
 
   // store bank details in DB
   store = async (data: any) => {
+
     return await prisma.bank_masters.create({
-      data: BankMasterValidation.requestData(data),
+      data: data,
     });
+    // return await prisma.bank_masters.create({
+    //   data: BankMasterValidation.requestData(data),
+    // });
   };
 
   // Get limited bank master

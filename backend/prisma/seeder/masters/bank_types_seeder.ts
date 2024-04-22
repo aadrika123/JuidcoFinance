@@ -9,9 +9,23 @@ const bank_types_seeder = async () => {
         "4502300 - Schedule Co-operative Banks - Municipal Fund"
     ];
 
+    const codeItems = [
+        "4502100",
+        "4502200",
+        "4502300"
+    ]
+
     items.forEach(async (item, i) => {
+
+        const data = await prisma.account_codes.findFirst({
+            where:{
+                code: codeItems[i]
+            }
+        });
+
         const record = {
             id: i+1,
+            primary_acc_code_id: data?.id,
             name: item,
             created_at: faker.date.past(),
             updated_at: faker.date.recent(),

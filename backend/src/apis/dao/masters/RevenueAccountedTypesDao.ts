@@ -18,13 +18,18 @@ class RevenueAccountedTypesDao {
 
   ////////// Get Revenue Accounted Type On revenue_id and accounting id
   getByRevenueAndAccountingId = async (req: Request) => {
-    const { rmId, accId } = req.params;
+    const { accId } = req.params;
     const query: Prisma.revenue_accounted_type_mapsFindManyArgs = {
       where: {
-        revenue_module_id: Number(rmId),
         primary_acc_code_id: Number(accId),
       },
       select: {
+        revenue_module:{
+          select:{
+            id: true,
+            name: true
+          }
+        },
         revenue_accounted_type: {
           select: {
             id: true,
@@ -35,8 +40,7 @@ class RevenueAccountedTypesDao {
     };
     const data: any = await prisma.revenue_accounted_type_maps.findFirst(query);
 
-    const updatedData = { ...data.revenue_accounted_type };
-    return generateRes(updatedData);
+    return generateRes(data);
   };
 }
 

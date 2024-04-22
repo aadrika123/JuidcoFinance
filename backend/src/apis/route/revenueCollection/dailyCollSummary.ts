@@ -32,7 +32,7 @@ class DailyCollSummaryRoute {
         this.controller.approve(req, res, apiId + "03")
       );
     app
-      .route(`${this.baseUrl}/get-checked-data/:ublId/:date`)
+      .route(`${this.baseUrl}/get-checked-data/:ulbId/:date`)
       .get((req: Request, res: Response) =>
         this.controller.getCheckedData(req, res, apiId + "04")
       );

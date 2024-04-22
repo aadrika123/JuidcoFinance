@@ -52,7 +52,8 @@ type FinanceUrlKeys =
   | "REVENUE_ACCOUNTED_TYPE"
   | "COLLECTION_REGISTER"
   | "DAILY_COLL_SUMMARY"
-  | "CASH_BANK_R_VOUCHER";
+  | "CASH_BANK_R_VOUCHER"
+  | "CASH_BOOK";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -75,6 +76,7 @@ type Urls = {
     getLedgerCodes?: string;
     getByAccCodeAndUlbId?: string;
     getCheckedData?: string;
+    getByReveAndAccId?: string;
   };
 };
 
@@ -244,6 +246,7 @@ export const FINANCE_URL: Urls = {
   },
   REVENUE_ACCOUNTED_TYPE: {
     get: "/revenue-accounted-types/get",
+    getByReveAndAccId : "/revenue-accounted-types/get"
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",
@@ -316,5 +319,8 @@ export const FINANCE_URL: Urls = {
     approve: "/cash-bank-receipt-voucher/approve",
     getById: "/cash-bank-receipt-voucher/get-by-id",
     getCheckedData: "/cash-bank-receipt-voucher/get-checked-data"
+  },
+  CASH_BOOK: {
+    get: "/cash-book/get-all",
   }
 };

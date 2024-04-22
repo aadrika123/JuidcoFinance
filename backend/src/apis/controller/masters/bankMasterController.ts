@@ -19,7 +19,7 @@ class BankMasterController {
     try {
       await BankMasterValidation.bankMasterValidation.validate(req.body.data);
 
-      const data = await this.bankMasterDao.store(req);
+      const data = await this.bankMasterDao.store(req.body.data);
 
       return { status: true, code: 200, message: ResMessage.CREATED, data: data };
     } catch (error: any) {

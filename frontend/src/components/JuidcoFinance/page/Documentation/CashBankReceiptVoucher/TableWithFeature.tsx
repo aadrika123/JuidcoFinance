@@ -89,6 +89,8 @@ const TableWithFeatures = <T,>({
     rest.handleGet &&
       rest.handleGet({
         isApproved: res1.data.data ? true : false,
+        ulbId,
+        date: date.toISOString().split("T")[0],
         data: [...state.filtered, ...filteredData],
       });
 

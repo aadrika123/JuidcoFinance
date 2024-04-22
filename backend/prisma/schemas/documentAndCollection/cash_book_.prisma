@@ -1,0 +1,13 @@
+/// cash_book: Managed by: Sanjiv Kumar
+
+model cash_books {
+  id                  Int           @id @default(autoincrement())
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+  date                DateTime      @default(now())
+  receipt_voucher_no  String
+  amount              Float
+  lf_no               String
+  created_at          DateTime      @default(now()) @map("created_at")
+  updated_at          DateTime      @default(now()) @updatedAt @map("updated_at")
+}

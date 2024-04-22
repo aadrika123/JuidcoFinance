@@ -429,6 +429,20 @@ model cash_bank_receipt_vouchers {
   updated_at             DateTime           @default(now()) @updatedAt @map("updated_at")
 }
 
+/// cash_book: Managed by: Sanjiv Kumar
+
+model cash_books {
+  id                  Int           @id @default(autoincrement())
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+  date                DateTime      @default(now())
+  receipt_voucher_no  String
+  amount              Float
+  lf_no               String
+  created_at          DateTime      @default(now()) @map("created_at")
+  updated_at          DateTime      @default(now()) @updatedAt @map("updated_at")
+}
+
 model pet_registration_receipt {
   id Int @id @default(autoincrement())
 
@@ -515,9 +529,11 @@ model account_codes {
   pet_registration_receipts pet_registration_receipt[]
 
   revenue_accounted_type_maps revenue_accounted_type_maps[]
+  cash_books                  cash_books[]
+  bank_types bank_types[]
 
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt @map("updated_at")
+  created_at DateTime     @default(now()) @map("created_at")
+  updated_at DateTime     @updatedAt @map("updated_at")
 }
 
 ////bank_types: Managed by: Bijoy Paitandi
@@ -611,10 +627,12 @@ model bank_masters_history {
 
 ////bank_types: Managed by: Bijoy Paitandi
 model bank_types {
-  id         Int      @id @default(autoincrement())
-  name       String
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt @map("updated_at")
+  id                  Int           @id @default(autoincrement())
+  primary_acc_code_id Int
+  primary_acc_code    account_codes @relation(fields: [primary_acc_code_id], references: [id])
+  name                String
+  created_at          DateTime      @default(now()) @map("created_at")
+  updated_at          DateTime      @updatedAt @map("updated_at")
 
   bank_masters bank_masters[]
 }

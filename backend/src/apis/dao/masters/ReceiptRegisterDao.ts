@@ -342,18 +342,74 @@ class ReceiptRegisterDao {
     });
   };
 
-  //Appropve or Check the receipt register
-  approve = async (req: Request) => {
+  // //Appropve or Check the receipt register
+  // approve = async (req: Request) => {
+  //   const ids: IdItem[] = req.body.data.ids;
+  //   const idItems = ids.map((item: { id: number }) => item.id);
+
+  //   const [, rR] = await prisma.$transaction([
+  //     prisma.$queryRaw`
+  //       INSERT INTO collection_registers (receipt_register_id)
+  //       SELECT id
+  //       FROM receipt_registers
+  //       WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
+  //       ON CONFLICT DO NOTHING;
+  //     `,
+
+  //     prisma.receipt_registers.updateMany({
+  //       where: {
+  //         OR: ids,
+  //         is_checked: false,
+  //       },
+  //       data: {
+  //         is_checked: true,
+  //         checked_by_id: req.body.data.checked_by_id,
+  //         checked_by_print_name: req.body.data.checked_by_print_name,
+  //       },
+  //     }),
+  //   ]);
+
+  //   return rR;
+  // };
+
+
+
+   //Appropve or Check the receipt register direct into daily summary
+   approve = async (req: Request) => {
     const ids: IdItem[] = req.body.data.ids;
     const idItems = ids.map((item: { id: number }) => item.id);
+    const ulbId = Number(req.body.data.ulb_id);
+    const date = req.body.data.date;
 
     const [, rR] = await prisma.$transaction([
       prisma.$queryRaw`
-        INSERT INTO collection_registers (receipt_register_id)
-        SELECT id
-        FROM receipt_registers
-        WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
-        ON CONFLICT DO NOTHING;
+        INSERT INTO daily_coll_summaries (ulb_id, bank_id, primary_acc_code_id, amount, revenue_accounted_type_id, receipt_date, receipt_mode_id)
+        SELECT ${ulbId}, calc_summ.bank_id, calc_summ.ledger_id, calc_summ.amount, calc_summ.revenue_accounted_type_id, receipt_date, receipt_mode_id
+        FROM (SELECT
+        SUM(rr.bank_amount + rr.cash_amount) as amount,
+        ac.description as descri,
+        ac.id as ledger_id,
+        acg.description as gledger,
+        rat.id as revenue_accounted_type_id,
+        bm.id as bank_id,
+        rr.receipt_date,
+        rr.receipt_mode_id
+        FROM 
+        receipt_registers as rr
+        LEFT JOIN
+        account_codes as ac ON rr.primary_acc_code_id = ac.id
+        LEFT JOIN
+        account_codes as acg ON ac.parent_id = acg.id
+        LEFT JOIN 
+        revenue_accounted_types as rat ON rat.id = rr.revenue_accounted_type_id
+        LEFT JOIN 
+        municipality_codes as mc ON rr.ulb_id = mc.id
+        LEFT JOIN 
+        bank_masters as bm ON (bm.ulb_id = ${ulbId} AND bm.primary_acc_code_id = ac.id)
+        WHERE (mc.id = ${ulbId} AND rr.receipt_date::date = ${date}::date AND rr.id IN (${Prisma.join(
+        idItems
+      )}) AND rr.is_checked = false)
+        GROUP BY descri, gledger, rat.id, ledger_id, bm.id, receipt_date, receipt_mode_id) AS calc_summ
       `,
 
       prisma.receipt_registers.updateMany({

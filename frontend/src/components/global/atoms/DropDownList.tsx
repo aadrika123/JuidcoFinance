@@ -59,7 +59,6 @@ const DropDownList: React.FC<DropDownListProps> = (props) => {
     throw new Error("Fatal Error!");
   }
 
-
   return (
     <>
       <div className="flex flex-col gap-1">

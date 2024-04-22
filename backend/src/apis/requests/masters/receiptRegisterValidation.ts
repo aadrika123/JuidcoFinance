@@ -115,6 +115,8 @@ const receiptRegisterIdsSchema = Joi.object({
 export const receiptRegisterApproveSchema = Joi.object({
   checked_by_id: Joi.number().required(),
   checked_by_print_name: Joi.string().required(),
+  ulb_id: Joi.number().required(),
+  date: Joi.string().required(),
   ids: Joi.array().required().items(
     receiptRegisterIdsSchema
   ),

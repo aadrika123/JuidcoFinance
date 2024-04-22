@@ -13,11 +13,11 @@ class BankMasterRoute extends APIv1{
   configure(): void {
 
     this.addPostRoute(`create`, this.controller.create);
-
-    this.addGetRoute(`bank-master/get-all`, this.controller.get);
     
-    this.addGetRoute(`bank-master/get-by-id/:bankId`, this.controller.getById);
-    this.addGetRoute(`bank-master/get-by-acc-ulb/:accCodeId/:ulbId`, this.controller.getByAccCodeAndUlb);
+    this.addGetRoute(`get-all`, this.controller.get);
+    
+    this.addGetRoute(`get-by-id/:bankId`, this.controller.getById);
+    this.addGetRoute(`get-by-acc-ulb/:accCodeId/:ulbId`, this.controller.getByAccCodeAndUlb);
   }
 }
 
