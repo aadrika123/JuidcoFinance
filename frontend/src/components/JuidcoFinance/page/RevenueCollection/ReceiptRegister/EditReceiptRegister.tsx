@@ -91,20 +91,20 @@ export const EditReceiptRegister = ({
           bank_amount: res.data.data.bank_amount,
           cash_amount: res.data.data.cash_amount,
           bank_acc_no: res.data.data.bank_acc_no || "",
-          deposit_date:  DateFormatter(res.data.data.deposit_date) ,
+          deposit_date: DateFormatter(res.data.data.deposit_date),
           realisation_date: DateFormatter(res.data.data.realisation_date),
           wheather_returned: res.data.data.wheather_returned,
           remarks: res.data.data.remarks,
-          entered_by_id: res.data.data.entered_by.id,
-          entered_by_print_name: res.data.data.entered_by_print_name,
+          entered_by_id: res.data.data.entered_by?.id,
+          entered_by_print_name: res.data.data?.entered_by_print_name,
           checked_by_id: res.data.data.checked_by_id?.id,
           checked_by_print_name: res.data.data.checked_by_print_name,
           del_checked_by_name: res.data.data.checked_by?.name,
           del_checked_by_designation:
             res.data.data.checked_by?.wf_roleusermaps[0]?.wf_role?.role_name,
-          del_entered_by_name: res.data.data.entered_by.name,
+          del_entered_by_name: res.data.data.entered_by?.name || res.data.data?.revenue_module?.name,
           del_entered_by_designation:
-            res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name,
+            res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name || "null",
         };
       });
     } catch (error) {
@@ -154,12 +154,12 @@ export const EditReceiptRegister = ({
     Error,
     ReceiptRegisterDetailsData
   >(UpdateReceiptRegisterEntry, {
-    onSuccess:() =>{
+    onSuccess: () => {
       setIsSuccess(true);
-      setTimeout(()=>{
+      setTimeout(() => {
         setIsSuccess(false);
         goBack()
-      },1000)
+      }, 1000)
     },
     onError: () => {
       alert("Something went wrong!!!");

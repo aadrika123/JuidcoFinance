@@ -394,26 +394,27 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       name="entered_by"
                       placeholder="Enter Name"
                     />
+                    {values?.del_entered_by_designation !== "null" && <>
+                      <Input
+                        value={values?.del_entered_by_designation || user?.role}
+                        readonly={true}
+                        label=""
+                        name="designation"
+                        placeholder="Enter Designation"
+                      />
 
-                    <Input
-                      value={values.del_entered_by_designation || user?.role}
-                      readonly={true}
-                      label=""
-                      name="designation"
-                      placeholder="Enter Designation"
-                    />
-
-                    <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.entered_by_print_name}
-                      error={errors.entered_by_print_name}
-                      touched={touched.entered_by_print_name}
-                      readonly={readonly}
-                      label=""
-                      name="entered_by_print_name"
-                      placeholder="Enter Print Name"
-                    />
+                      <Input
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values?.entered_by_print_name}
+                        error={errors.entered_by_print_name}
+                        touched={touched.entered_by_print_name}
+                        readonly={readonly}
+                        label=""
+                        name="entered_by_print_name"
+                        placeholder="Enter Print Name"
+                      />
+                    </>}
                   </div>
                   {readonly && (
                     <div className="flex flex-col">
