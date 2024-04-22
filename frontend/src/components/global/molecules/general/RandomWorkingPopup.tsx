@@ -1,23 +1,23 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import Popup from "./Popup";
-import { BallTriangle, Circles, ColorRing, DNA, ProgressBar, RotatingLines, Watch} from 'react-loader-spinner'
-import { useDailyRandomNumber } from "./useRandomNumber";
+// import { BallTriangle, Circles, ColorRing, DNA, ProgressBar, RotatingLines, Watch} from 'react-loader-spinner'
+// import { useDailyRandomNumber } from "./useRandomNumber";
 
 
 interface RandomWorkingPopupProps {
   show: boolean
 }
 
-const spinnerProps = {
-  visible: true,
-  height: "160",
-  width: "160",
-  ariaLabel: "loading",
-  wrapperStyle: {},
-  wrapperClass: "dna-wrapper",
-  color: "#4338ca"
-};
+// const spinnerProps = {
+//   visible: true,
+//   height: "160",
+//   width: "160",
+//   ariaLabel: "loading",
+//   wrapperStyle: {},
+//   wrapperClass: "dna-wrapper",
+//   color: "#4338ca"
+// };
 
 const RandomWorkingPopup: React.FC<RandomWorkingPopupProps> = ({show}: RandomWorkingPopupProps) => {
   const delay = 500;

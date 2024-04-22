@@ -31,7 +31,11 @@ class BillsDao {
     const count = Number(c[0]?.count);
 
     return generateRes(records, count, page, limit);
-  };
+  }
+
+  create = async (data: any) => {
+    console.log(data);
+  }
 
 }
 

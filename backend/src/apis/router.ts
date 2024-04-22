@@ -53,6 +53,7 @@ import BillsRoute from "./route/payments/BillsRoute";
 import CollectionRegisterRoute from "./route/revenueCollection/collectionRegister";
 import DailyCollSummaryRoute from "./route/revenueCollection/dailyCollSummary";
 import CashBankRVoucherRoute from "./route/documentation/cashBankRVoucherRoute";
+import FileHandlerRoute from "./route/FileHandlerRoute";
 import CashBookRoute from "./route/documentation/cashBookRoute";
 
 /*
@@ -88,6 +89,9 @@ class FinanceRoute {
 
   constructor(app: express.Application) {
     /// ACCOUNTING_CODE_ROUTER ///
+
+    (new FileHandlerRoute("0", app)).configure();
+
     (new AccountCodeRoute()).configure(app, "01");
 
     /// FUNCTION_CODE_ROUTER ///

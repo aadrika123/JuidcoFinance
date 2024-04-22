@@ -6,7 +6,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Select from "@/components/global/atoms/nonFormik/Select";
 import axios from "@/lib/axiosConfig";
 import { FINANCE_URL } from "@/utils/api/urls";
@@ -18,7 +18,6 @@ export const TrialBalanceComponent = () => {
 
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
-  const [ulbName, setUlbName] = useState<string>("");
 
 
 
@@ -37,17 +36,15 @@ export const TrialBalanceComponent = () => {
   const setUlb = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const ele = event.target;
     setUlbID(parseInt(ele.value));
-    setUlbName(ele.options[ele.selectedIndex].text);
   }
 
 
-  const finYearInitHandler = (value: number, text: string) => {
+  const finYearInitHandler = (value: number) => {
     setFinYear(value);
   }
 
-  const ulbInitHandler = (value: number, text: string) => {
+  const ulbInitHandler = (value: number) => {
     setUlbID(value);
-    setUlbName(text);
   }
 
 
@@ -62,10 +59,6 @@ export const TrialBalanceComponent = () => {
     throw new Error("Fatal Error!");
   }
 
-
-  useEffect(() => {
-
-  }, []);
 
   return (
     <>

@@ -15,11 +15,11 @@ class BalanceTrackingsController {
   private initMsg: string;
   constructor() {
     this.balanceTrackingsDao = new BalanceTrackingsDao();
-    this.initMsg = "BalanceTrackings Entry";
+    this.initMsg = "BalanceTrackings";
   }
 
   // Get limited bill invoices list
-  get = async ( req: Request): Promise<APIv1Response> => {
+  get = async (req: Request): Promise<APIv1Response> => {
     try {
       // collect input
       const page: number = Number(req.query.page);
@@ -38,15 +38,15 @@ class BalanceTrackingsController {
       const data = await this.balanceTrackingsDao.get(page, limit, search, order);
 
       // generate response
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
-      return {status: true, code: 200, message: "Found", data: data};
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
   // Get single biull invoice details by Id
-  getById = async ( req: Request): Promise<APIv1Response> => {
+  getById = async (req: Request): Promise<APIv1Response> => {
     try {
       const id: number = Number(req.params.id);
 
@@ -57,18 +57,18 @@ class BalanceTrackingsController {
 
       const data = await this.balanceTrackingsDao.getById(id);
 
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
 
-      return {status: true, code: 200, message: "Found", data: data};
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
 
 
   // Get single biull invoice details by Id
-  getBalance = async (req: Request ): Promise<APIv1Response> => {
+  getBalance = async (req: Request): Promise<APIv1Response> => {
     try {
       const id: number = Number(req.params.id);
 
@@ -79,11 +79,11 @@ class BalanceTrackingsController {
 
       const data = await this.balanceTrackingsDao.getBalance(id);
 
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
 
-      return {status: true, code: 200, message: "Found", data: data};
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
@@ -93,11 +93,11 @@ class BalanceTrackingsController {
     try {
       const data = await this.balanceTrackingsDao.getLatestBalances(req);
 
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
 
-      return {status: true, code: 200, message: "Found", data: data};
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
@@ -106,7 +106,7 @@ class BalanceTrackingsController {
 
       const id: number = Number(req.params.id);
       const ulbID: number = Number(req.query.ulb);
-      const year: number= Number(req.query.year);
+      const year: number = Number(req.query.year);
 
       console.log(year);
 
@@ -117,11 +117,11 @@ class BalanceTrackingsController {
 
       const data = await this.balanceTrackingsDao.getScheduleReport(id, ulbID, year);
 
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
 
-      return {status: true, code: 200, message: "Found", data: data};
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
@@ -131,7 +131,7 @@ class BalanceTrackingsController {
 
       const id: number = Number(req.params.id);
       const ulbID: number = Number(req.query.ulb);
-      const year: number= Number(req.query.year);
+      const year: number = Number(req.query.year);
 
 
       // validate id
@@ -143,11 +143,11 @@ class BalanceTrackingsController {
 
       const data = await this.balanceTrackingsDao.getGeneralLedgerReport(id, ulbID, year);
 
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
 
-      return {status: true, code: 200, message: "Found", data: data};
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
@@ -155,19 +155,19 @@ class BalanceTrackingsController {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getFinYears = async (req: Request): Promise<APIv1Response> => {
     try {
-      
-      const data = await this.balanceTrackingsDao.getFinYears();
-      if (!data) return {status: true, code: 201, message: "Not Found", data: data};
 
-      return {status: true, code: 200, message: "Found", data: data};
+      const data = await this.balanceTrackingsDao.getFinYears();
+      if (!data) return { status: true, code: 201, message: "Not Found", data: data };
+
+      return { status: true, code: 200, message: "Found", data: data };
     } catch (error: any) {
-      return { status: false, code: 500, message: "Error", data: error};  
+      return { status: false, code: 500, message: "Error", data: error };
     }
   };
 
   getTrialBalance = async (req: Request): Promise<APIv1Response> => {
-    
-    
+
+
     // validate
     await Yup.object({
       ulb: Yup.number().required("ulb is required."),
@@ -183,11 +183,11 @@ class BalanceTrackingsController {
     const data = await this.balanceTrackingsDao.getTrialBalance(Number(ulb), Number(year));
 
     // return the result
-    return {status: true, code: 200, message: "Found", data: data};
+    return { status: true, code: 200, message: "Found", data: data };
   }
 
 
-  getIncomeStatement = async(req: Request): Promise<APIv1Response> => {
+  getIncomeStatement = async (req: Request): Promise<APIv1Response> => {
 
     //validate
     await Yup.object({
@@ -200,26 +200,28 @@ class BalanceTrackingsController {
     const year = Number(req.query.year);
 
     // call dao
-    const data: any[] = await this.balanceTrackingsDao.getTrialBalance(Number(ulb), Number(year));
-
-
-    // business logic
-    const income: any[] = [];
-    const expenditure: any[] = [];
-
-    data.forEach((item) => {
-      const majorHead = parseInt(item.code.substring(0,2));
-      if(11 <= majorHead && majorHead <= 18) income.push(item);
-      else if(21 <= majorHead && majorHead <= 27) expenditure.push(item);
-    });
-
-    const new_data = {
-      income: income,
-      expenditure: expenditure
-    };
+    const data: any[] = await this.balanceTrackingsDao.getIncomeStatementData(Number(ulb), Number(year));
 
     // return the result
-    return {status: true, code: 200, message: "Found", data: new_data};
+    return { status: true, code: 200, message: "Found", data: data };
+  }
+
+  getBalanceSheet = async (req: Request): Promise<APIv1Response> => {
+    //validate
+    await Yup.object({
+      ulb: Yup.number().required("ulb is required."),
+      year: Yup.number().required("year is required.")
+    }).validate(req.query);
+
+    // get data
+    const ulb = Number(req.query.ulb);
+    const year = Number(req.query.year);
+
+    // call dao
+    const data: any[] = await this.balanceTrackingsDao.getBalanceSheetData(Number(ulb), Number(year));
+
+    // return the result
+    return { status: true, code: 200, message: "Found", data: data };
   }
 
 

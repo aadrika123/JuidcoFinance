@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { HeaderWidget } from "@/components/Helpers/Widgets/HeaderWidget";
 import DebouncedSearchBox from "@/components/global/atoms/DebouncedSearchBox";
 import Loader from "@/components/global/atoms/Loader";
@@ -13,6 +13,9 @@ import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import DateInputBox from "@/components/global/atoms/nonFormik/DatePicker";
 import dayjs from "dayjs";
+import ViewBill from "./ViewBill";
+import Popup from "@/components/global/molecules/general/Popup";
+
 
 export const BillsHome = () => {
   const numberOfRowsPerPage = 10;
@@ -25,7 +28,9 @@ export const BillsHome = () => {
 
   const [ulbID, setUlbID] = useState<number>(0);
   const [date, setDate] = useState<Date>(new Date());
- 
+
+  const [viewBillID, setViewBillID] = useState<number>(0);
+
 
   const fetchData = async (): Promise<[]> => {
     const res = await axios({
@@ -88,7 +93,7 @@ export const BillsHome = () => {
   }
 
   const onViewButtonClick = (id: number) => {
-
+    setViewBillID(id);
   }
 
 
@@ -98,7 +103,7 @@ export const BillsHome = () => {
   }
 
 
-  const ulbInitHandler = (value: number, text: string) => {
+  const ulbInitHandler = (value: number) => {
     setUlbID(value);
   }
 
@@ -111,6 +116,13 @@ export const BillsHome = () => {
 
   return (
     <>
+
+    {viewBillID && (
+        <Popup title="View Bill" zindex={10} width={60}>
+          <ViewBill billID={viewBillID}/>
+        </Popup>
+      )}
+
       <HeaderWidget variant="add" title={"Bill Register"} />
 
       <section className="border rounded-lg border-zinc-300 p-6 px-10">

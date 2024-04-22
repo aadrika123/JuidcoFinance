@@ -27,6 +27,7 @@ class BalanceTrackingsRoute extends APIv1 {
         
         this.addGetRoute('get-trial-balance', this.controller.getTrialBalance);
         this.addGetRoute('get-income-statement', this.controller.getIncomeStatement);
+        this.addGetRoute('get-balance-sheet', this.controller.getBalanceSheet);
     }
 }
 

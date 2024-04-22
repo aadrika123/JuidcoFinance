@@ -119,7 +119,7 @@ const PrimaryAccountingCode: React.FC = () => {
     setUlbName(ele.options[ele.selectedIndex].text);
   }
 
-  const finYearInitHandler = (value: number, text: string) => {
+  const finYearInitHandler = (value: number) => {
     setFinYear(value);
   }
 

@@ -37,6 +37,7 @@
     "react-apexcharts": "^1.4.1",
     "react-datepicker": "^5.1.0",
     "react-dom": "^18",
+    "react-form-stepper": "^2.0.3",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^14.0.5",
     "react-loader-spinner": "^6.1.6",

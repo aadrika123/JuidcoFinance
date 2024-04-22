@@ -57,8 +57,6 @@ import revenue_accounted_type_maps_seeder from "./seeder/masters/revenue_account
 const prisma = new PrismaClient();
 
 const seed_reference_tables = async () => {
-  await bank_types_seeder();
-
   await udhd_sub_departments_seeder();
 
   await function_codes_seeder();
@@ -80,6 +78,11 @@ const seed_level1_dependent_tables = async () => {
 };
 
 async function main() {
+  // await accounting_code_types_seeder();
+  // await account_codes_seeder();
+
+  // return;
+
   // await udhd_sub_departments_seeder();
 
   // setTimeout(async () => {
@@ -207,13 +210,13 @@ async function main() {
     await loan_management_seeder();
 
     await advance_management_seeder();
-    
+
     await daily_receipt_balance_seeder();
-    
+
     await bills_seeder();
 
     await receipt_register_seeder();
-
+    await bank_types_seeder();
   }, 8000);
 
   setTimeout(async () => {

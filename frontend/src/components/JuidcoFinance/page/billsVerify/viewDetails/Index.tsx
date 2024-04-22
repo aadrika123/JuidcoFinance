@@ -23,7 +23,7 @@ const ViewDetailsHero = ({ BillsId }: { BillsId: string }) => {
             <span className="ml-2 text-gray-500">Details</span>
           </div>
         </div>
-        <BillDetails BillsId={BillsId} />
+        <BillDetails billsId={BillsId} />
       </section>
     </BillLayout>
   );

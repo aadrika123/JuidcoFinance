@@ -177,7 +177,7 @@ const FormikWrapper: React.FC<FormikWrapperProps> = (props) => {
                 handleChange,
                 handleBlur,
                 values,
-                errors,
+                errors, 
                 touched
               )}
               <div className="mt-4 flex items-center justify-end gap-2">

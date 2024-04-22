@@ -12,7 +12,7 @@ import { OpeningBalanceDetailsData } from "../../components/JuidcoFinance/page/B
 import { RevisedBudgetDetailsData } from "../../components/JuidcoFinance/page/Budgeting/RevisedBudget/revised_budget_types";
 import { InvestmentsDetailsData } from "../../components/JuidcoFinance/page/Budgeting/Investments/investments_types";
 import { GrantManagementDetailsData } from "../../components/JuidcoFinance/page/Budgeting/GrantManagement/grant_management_types";
-import { VoucherDataProps } from "@/components/JuidcoFinance/page/Documentation/CashBankReceiptVoucher/voucher_entry_types";
+// import { VoucherDataProps } from "@/components/JuidcoFinance/page/Documentation/CashBankReceiptVoucher/voucher_entry_types";
 
 export interface FormikErrors {
   [key: string]: string | undefined;
@@ -29,7 +29,6 @@ export interface Choice {
 
 // Add Types Of All Form Data's
 export type FormValues =
-  | VoucherDataProps
   | DirPaymentDataProps
   | BillPaymentDetailsData
   | ChequeIssueEntryData
