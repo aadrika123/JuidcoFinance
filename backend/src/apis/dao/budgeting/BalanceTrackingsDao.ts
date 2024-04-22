@@ -221,14 +221,10 @@ class BalanceTrackingsDao {
     }
     const scheduleRecordPrevYear = scheduleRecordsPrevYear[0];
 
-    
-
 
     // const fin_year_records_test = await prisma.$queryRaw<GeneralLedgerData[]>`(select max(id) from balance_trackings where created_at between ${current_year_start} and ${current_year_end} group by primary_acc_code_id)`;
 
     // console.log(fin_year_records_test);
-
-
 
     const currentYearData = await this.getScheduleDetails(scheduleID, ulbID, current_year,  current_year_start, current_year_end);
     const  prevYearData = await this.getScheduleDetails(scheduleID, ulbID, current_year-1, prev_year_start, prev_year_end);
