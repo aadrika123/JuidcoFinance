@@ -253,7 +253,7 @@ class CashBankReceiptVoucherDao {
         await this.balanceTrackingDao.updateBalances(
           ulbId,
           item.bank_type_id,
-          item.amount
+          -item.amount
         );
         await this.balanceTrackingDao.updateBalances(
           ulbId,
