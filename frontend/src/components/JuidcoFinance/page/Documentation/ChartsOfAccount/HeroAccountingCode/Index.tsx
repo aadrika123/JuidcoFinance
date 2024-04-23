@@ -12,6 +12,7 @@ import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
 
 
 const PrimaryAccountingCode: React.FC = () => {
@@ -26,8 +27,12 @@ const PrimaryAccountingCode: React.FC = () => {
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
   const [ulbName, setUlbName] = useState<string>("");
+  const [user, setUser] = useState<any>();
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
 
-
+  useEffect(() => {
+    setUser(userData);
+  }, []);
   const onViewButtonClick = (d: AccountingTableData) => {
     setAccount(d);
   }
@@ -41,7 +46,7 @@ const PrimaryAccountingCode: React.FC = () => {
 
   const fetchData = async (): Promise<AccountingTableData[]> => {
 
-    if(ulbID == 0 || finYear == 0){
+    if (ulbID == 0 || finYear == 0) {
       return [];
     }
     setLoading(true);
@@ -108,7 +113,7 @@ const PrimaryAccountingCode: React.FC = () => {
   }, [searchText, hideZeroBalances]);
 
   useEffect(() => {
-    if(tableData.length>0)
+    if (tableData.length > 0)
       setLoading(false);
   }, [tableData]);
 
@@ -126,15 +131,18 @@ const PrimaryAccountingCode: React.FC = () => {
   const ulbInitHandler = (value: number, text: string) => {
     setUlbID(value);
     setUlbName(text);
+    if (user?.user_type !== "Admin") {
+      setUlbID(2);
+    }
   }
-  
+
   return (
     <>
 
       {account != null && account.code_type == CodeType.Ledger && (
         <>
           <Popup zindex={50} width={90}>
-            <LedgerDetailsComponent data={account} onClose={closePopup} ulbName={ulbName}/>
+            <LedgerDetailsComponent data={account} onClose={closePopup} ulbName={ulbName} />
           </Popup>
         </>
       )}
@@ -142,7 +150,7 @@ const PrimaryAccountingCode: React.FC = () => {
       {account != null && account.code_type == CodeType.GeneralLedger && (
         <>
           <Popup zindex={50} width={80}>
-            <GeneralLedgerDetailsComponent generalLedgerId={account.id} ulbId={ulbID} year={finYear} onClose={closePopup}  />
+            <GeneralLedgerDetailsComponent generalLedgerId={account.id} ulbId={ulbID} year={finYear} onClose={closePopup} />
           </Popup>
         </>
       )}
@@ -197,6 +205,7 @@ const PrimaryAccountingCode: React.FC = () => {
                 onChange={setUlb}
                 value={ulbID}
                 initHandler={ulbInitHandler}
+                readonly={user?.user_type === "Admin" ? false : true}
               />
             </div>
 
