@@ -15,10 +15,6 @@ import Loader from "@/components/global/atoms/Loader";
  * status: Done
  */
 
-const reserveAndSurplusSchedules = ['B-1', 'B-2', 'B-3'];
-const liabilitiesAndProvisionsSchedules = ['B-7', 'B-8', 'B-9', 'B-10'];
-
-
 
 interface AccountData {
     code: string;
@@ -33,35 +29,27 @@ interface BalanceSheetData {
 }
 
 
-interface ProcessedData {
-    reserveAndSurplus: AccountData[],
-    liabilitiesAndProvisions: AccountData[],
-}
 
-
-const processData = (data: AccountData[]): ProcessedData => {
-    const reserveAndSurplus: any = [];
-    const liabilitiesAndProvisions: any = [];
-
-    data.forEach((item: AccountData) => {
-        if (reserveAndSurplusSchedules.includes(item.schedule_ref_no)) {
-            reserveAndSurplus.push(item);
-        } else if (liabilitiesAndProvisionsSchedules.includes(item.schedule_ref_no)) {
-            liabilitiesAndProvisions.push(item);
+const processData = (data: AccountData[]): any => {
+    const processedData: any = {};
+    let b11Count=0;
+    data?.forEach((item)=>{
+        let key = item.schedule_ref_no.replace('-','');
+        if(key == "B11"){
+            key += String.fromCharCode(b11Count+97);
+            b11Count ++;
         }
+        processedData[key] = item;
     });
 
-
-    return {
-        reserveAndSurplus: reserveAndSurplus,
-        liabilitiesAndProvisions: liabilitiesAndProvisions
-    };
-
+    console.log(processedData);
+    return processedData;
 }
 
 
 export const BalanceSheetComponent = () => {
-    const [selectedYearData, setSelectedYearData] = useState<ProcessedData>();
+    const [selectedYearData, setSelectedYearData] = useState<any>();
+    const [prevYearData, setPrevYearData] = useState<any>();
 
 
     const [ulbID, setUlbID] = useState<number>(0);
@@ -109,6 +97,7 @@ export const BalanceSheetComponent = () => {
 
     useEffect(() => {
         if (ItemData?.selectedYear) setSelectedYearData(processData(ItemData.selectedYear));
+        if (ItemData?.prevYear) setPrevYearData(processData(ItemData.prevYear));
     }, [ItemData]);
 
     return (
@@ -161,69 +150,210 @@ export const BalanceSheetComponent = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {isLoading ? <tr><td colSpan={4}><Loader /></td></tr> : (
-                                <>
-                                    <tr>
-                                        <td className="border border-slate-300 px-4"></td>
-                                        <td className="border border-slate-300 px-4 font-bold">Reserve & Surplus</td>
-                                    </tr>
-                                    {selectedYearData?.reserveAndSurplus.map((item, index) => {
-                                        return (
-                                            <tr key={`item${index}`}>
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.code.substring(0, 3)}
-                                                </td>
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.description}
-                                                </td>
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.schedule_ref_no}
-                                                </td>
+                            <tr>
+                                <td></td>
+                                <td className="px-4 border-x border-slate-300">LIABILITIES</td>
+                                <td className="border-x border-slate-300"></td>
+                                <td className="border-x border-slate-300"></td>
 
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.total_balance}
-                                                </td>
-                                                <td className="border border-slate-300 px-4">
+                            </tr>
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B1?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B2?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B3?.total_balance}</td>
+                            </tr>
+                            <tr>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Total reserves & surplus</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B4?.code.substring(0,3)}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B4?.description}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B4?.schedule_ref_no}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B4?.total_balance}</td>
+                                <td className="px-4 border border-slate-300">{prevYearData?.B4?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td className="px-4 border-x border-slate-300">Total Loans</td>
+                                <td className="border-x border-slate-300"></td>
+                                <td className="border-x border-slate-300"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B7?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B8?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B9?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B10?.total_balance}</td>
+                            </tr>
 
 
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
+                            <tr>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Total Current Liabilities and Provisions</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
+
+                            <tr>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Total Liabilities</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
 
 
+                            <tr>
+                                <td></td>
+                                <td className="px-4 border-x border-slate-300">ASSETS</td>
+                                <td className="border-x border-slate-300"></td>
+                                <td className="border-x border-slate-300"></td>
 
-                                    <tr>
-                                        <td className="border border-slate-300 px-4"></td>
-                                        <td className="border border-slate-300 px-4 font-bold">Total Loans, Current Liabilities and Provisions</td>
-                                    </tr>
-                                    {selectedYearData?.liabilitiesAndProvisions.map((item, index) => {
-                                        return (
-                                            <tr key={`item${index}`}>
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.code.substring(0, 3)}
-                                                </td>
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.description}
-                                                </td>
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.schedule_ref_no}
-                                                </td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B11a?.total_balance}</td>
+                            </tr>
 
-                                                <td className="border border-slate-300 px-4">
-                                                    {item.total_balance}
-                                                </td>
-                                                <td className="border border-slate-300 px-4">
+                            <tr>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300">Gross Block</td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                            </tr>
 
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B12?.total_balance}</td>
+                            </tr>
 
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </>
-                            )}
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B13?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B14?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B15?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B16?.total_balance}</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B17?.total_balance}</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B18?.total_balance}</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B19?.total_balance}</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B20?.total_balance}</td>
+                            </tr>
+
+                            <tr className="font-bold">
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Total Assets</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
+
                         </tbody>
-
                     </table>
                 </div>
             </section>
