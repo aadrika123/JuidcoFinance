@@ -109,7 +109,7 @@ const bankMasterValidation = Yup.object({
   bank_id: Yup.number().required(),
   primary_acc_code_id: Yup.number().required(),
   bank_type_id: Yup.number().required(),
-  ulb_id: Yup.number().required(),
+  ulb_id: Yup.number(),
   bank_acc_no: Yup.string().required(),
   ifsc_code: Yup.string().required(),
   branch: Yup.string().required(),

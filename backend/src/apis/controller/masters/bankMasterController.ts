@@ -16,9 +16,11 @@ class BankMasterController {
   }
 
   create = async (req: Request): Promise<APIv1Response> => {
+    
     try {
       await BankMasterValidation.bankMasterValidation.validate(req.body.data);
 
+      console.log(req.body.data);
       const data = await this.bankMasterDao.store(req.body.data);
 
       return { status: true, code: 200, message: ResMessage.CREATED, data: data };
