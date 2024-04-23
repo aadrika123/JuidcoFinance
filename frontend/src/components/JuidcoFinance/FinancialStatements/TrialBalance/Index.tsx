@@ -6,7 +6,7 @@
 
 "use client";
 
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useRef, useState } from "react";
 import Select from "@/components/global/atoms/nonFormik/Select";
 import axios from "@/lib/axiosConfig";
 import { FINANCE_URL } from "@/utils/api/urls";
@@ -14,6 +14,10 @@ import { useQuery } from "react-query";
 import Loader from "@/components/global/atoms/Loader";
 import TrialBalanceHeaderComponent from "./TrialBalanceHeaderComponent";
 import { usePathname } from "next/navigation";
+import { useReactToPrint } from "react-to-print";
+
+
+
 
 
 export const TrialBalanceComponent = () => {
@@ -24,6 +28,12 @@ export const TrialBalanceComponent = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+
+  const printableComponentRef = useRef(null);
+    const printIt = useReactToPrint({
+      content: () => printableComponentRef.current,
+    });
+  
 
   const fetchData = async (): Promise<any[]> => {
 
@@ -79,7 +89,9 @@ export const TrialBalanceComponent = () => {
 
   return (
     <>
-      <TrialBalanceHeaderComponent />
+      <TrialBalanceHeaderComponent onPrintButtonClick={printIt} />
+      <div ref={printableComponentRef}>
+
       <section className="border bg-white shadow-2xl p-6 px-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -157,6 +169,7 @@ export const TrialBalanceComponent = () => {
         </div>
 
       </section>
+      </div>
     </>
   );
 };
