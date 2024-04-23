@@ -585,7 +585,7 @@ model bank_masters {
   bank_type_id Int
   bank_type    bank_types @relation(fields: [bank_type_id], references: [id])
 
-  ulb_id Int
+  ulb_id Int             @default(2)
   ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
 
   micr_code                  String?

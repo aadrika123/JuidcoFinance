@@ -87,7 +87,7 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="Please select ULB name"
-                value={this.user?.ulb_id}
+                value={this.user?.ulb_id || 2}
                 error={errors.ulb_id}
                 touched={touched.ulb_id}
                 label="ULB Name"

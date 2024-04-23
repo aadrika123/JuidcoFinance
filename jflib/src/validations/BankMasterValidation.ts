@@ -28,7 +28,6 @@ export interface AddBankDetailsData {
 
 export const AddBankDetailsSchema = Yup.object().shape({
   bank_type_id: Yup.number()
-    .required("Bank type is required")
     .notOneOf([-1], "Bank type is required"),
   ulb_id: Yup.number()
     .required("ULB name is required.")
@@ -55,7 +54,7 @@ export const AddBankDetailsSchema = Yup.object().shape({
 
 export const initialBankDetailsValues: AddBankDetailsData = {
   bank_type_id: -1,
-  ulb_id: -1,
+  ulb_id: 2,
   bank_id: -1,
   primary_acc_code_id: -1,
   bank_acc_no: "",
