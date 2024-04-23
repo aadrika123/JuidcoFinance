@@ -49,10 +49,7 @@ const Select: React.FC<SelectProps> = (props) => {
 
   const { data: dataList = [],
     isError: dataError,
-  } = useQuery({
-    queryKey: [props.name],
-    queryFn: fetchData,
-  });
+  } = useQuery([props.name], fetchData,{cacheTime: 0});
 
   if (dataError) {
     throw new Error("Fatal Error!");
