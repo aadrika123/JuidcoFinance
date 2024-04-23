@@ -30,8 +30,7 @@ export const AddBankDetailsSchema = Yup.object().shape({
   bank_type_id: Yup.number()
     .required("Bank type is required")
     .notOneOf([-1], "Bank type is required"),
-  ulb_id: Yup.number()
-    .notOneOf([-1], "ULB name is required."),
+  ulb_id: Yup.number(),
     primary_acc_code_id: Yup.number()
     .required("Bank Accociated with name is required.")
     .notOneOf([-1], "Bank Accociated with name is required."),
