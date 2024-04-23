@@ -92,7 +92,6 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
                 touched={touched.ulb_id}
                 label="ULB Name"
                 name="ulb_id"
-                required
                 isReadOnly={true}
               />
 
