@@ -13,6 +13,7 @@ import Select from "@/components/global/atoms/nonFormik/Select";
 import Table, { ColumnProps } from "@/components/global/molecules/Table";
 import DebouncedSearch from "@/components/global/atoms/DebouncedSearch";
 import Loader from "@/components/global/atoms/Loader";
+import { useSelector } from "react-redux";
 
 interface TableWithScrollPaginProp {
   footer?: React.ReactNode;
@@ -49,6 +50,8 @@ const CollectionsTable = <T,>({
   ...rest
 }: TableWithScrollPaginProp) => {
   const [isSearching, setIsSearching] = useState(false);
+  const user = useSelector((state: any) => state.user.user?.userDetails);
+
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
     count: 0,
@@ -65,12 +68,12 @@ const CollectionsTable = <T,>({
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&module=${moduleId}&date=${date.toISOString().split("T")[0]}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${user?.user_type === "Admin" ? ulbId : user?.ulb_id}&module=${moduleId}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
     const res1 = await axios({
-      url: `${depApi}/${ulbId}/${moduleId}/${date.toISOString().split("T")[0]}`,
+      url: `${depApi}/${user?.user_type === "Admin" ? ulbId : user?.ulb_id}/${moduleId}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -182,15 +185,15 @@ const CollectionsTable = <T,>({
     setState((prev) => ({ ...prev, date: date, data: [], filtered: [] }));
   };
 
-   ///// Getting the first selected value
-   const initUlbHandler = (value: number) =>{
-    setState({...state, ulbId: value})
-  }
+  ///// Getting the first selected value
+  const initUlbHandler = (value: number) => {
+    setState({ ...state, ulbId: value });
+  };
 
   ///// Getting the first selected value
-  const initModuleHandler = (value: number) =>{
-    setState({...state, moduleId: value})
-  }
+  const initModuleHandler = (value: number) => {
+    setState({ ...state, moduleId: value });
+  };
 
   return (
     <>

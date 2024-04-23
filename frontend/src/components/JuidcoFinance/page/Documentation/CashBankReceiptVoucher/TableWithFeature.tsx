@@ -63,7 +63,7 @@ const TableWithFeatures = <T,>({
     pageCount: 0,
     searchText: "",
     data: [],
-    ulbId: 1,
+    ulbId: user?.ulb_id,
     date: new Date(),
     filtered: [],
   });
@@ -72,12 +72,12 @@ const TableWithFeatures = <T,>({
   ///////////////// Fetching List of Data //////////////
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
     const res1 = await axios({
-      url: `${depApi}/${ulbId}/${date.toISOString().split("T")[0]}`,
+      url: `${depApi}/${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -97,7 +97,7 @@ const TableWithFeatures = <T,>({
     rest.handleGet &&
       rest.handleGet({
         isApproved: res1.data.data ? true : false,
-        ulbId,
+        ulbId: (user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2,
         date: date.toISOString().split("T")[0],
         data: [...state.filtered, ...filteredData],
       });

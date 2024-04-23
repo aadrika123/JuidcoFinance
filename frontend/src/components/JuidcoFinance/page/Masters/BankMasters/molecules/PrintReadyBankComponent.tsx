@@ -35,8 +35,16 @@ export function PrintReadyBankComponent({ bank }: PrintReadyBankComponentProps) 
             <td className="border border-slate-300 px-2">{bank?.branch}</td>
           </tr>
           <tr>
+            <td className="border border-slate-300 px-2">Bank Account No</td>
+            <td className="border border-slate-300 px-2">{bank?.bank_acc_no}</td>
+          </tr>
+          <tr>
             <td className="border border-slate-300 px-2">IFSC Code</td>
             <td className="border border-slate-300 px-2">{bank?.ifsc_code}</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-300 px-2">Bank Associated With</td>
+            <td className="border border-slate-300 px-2">{bank?.primary_acc_code}</td>
           </tr>
           <tr>
             <td className="border border-slate-300 px-2">MICR Code</td>

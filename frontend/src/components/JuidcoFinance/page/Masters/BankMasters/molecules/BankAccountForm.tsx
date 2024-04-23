@@ -8,6 +8,7 @@ import Button from "@/components/global/atoms/Button";
 import Input from "@/components/global/atoms/Input";
 import DropDownList from "@/components/global/atoms/DropDownList";
 import DropDownListBox from "@/components/global/atoms/DropDownListBox";
+import { useSelector } from "react-redux";
 
 interface BankAccountFormProps {
   initialBankDetailsValues: AddBankDetailsData;
@@ -23,7 +24,7 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
     super(props);
     this.formik = null;
   }
-
+   user:any = useSelector((state: any) => state.user.user?.userDetails);
   resetForm() {
     if (this.formik) {
       this.formik.resetForm();
@@ -40,8 +41,6 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
         initialValues={initialBankDetailsValues}
         validationSchema={AddBankDetailsSchema}
         onSubmit={(values: AddBankDetailsData) => {
-          console.log(values);
-
           Object.keys(values).forEach((key) => {
             const val = values[key as keyof typeof values];
             if (
@@ -88,13 +87,13 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="Please select ULB name"
-                value={values.ulb_id}
+                value={this.user?.ulb_id}
                 error={errors.ulb_id}
                 touched={touched.ulb_id}
                 label="ULB Name"
                 name="ulb_id"
                 required
-                isReadOnly={readOnly}
+                isReadOnly={true}
               />
 
               <DropDownList

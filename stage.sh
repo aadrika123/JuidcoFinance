@@ -69,8 +69,8 @@ startServices(){
 
 installModules
 configure
-resetDatabases
 buildThem
+resetDatabases
 startServices
 
 

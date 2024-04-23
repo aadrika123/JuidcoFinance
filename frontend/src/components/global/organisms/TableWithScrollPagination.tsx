@@ -48,36 +48,37 @@ const TableWithScrollPagination = <T,>({
   ...rest
 }: TableWithScrollPaginProp) => {
   const [isSearching, setIsSearching] = useState(false);
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
+  const [user, setUser] = useState<any>();
+
+  useEffect(() => {
+    setUser(userData);
+  }, [user]);
+
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
     count: 0,
     searchText: "",
     data: [],
-    ulbId: 1,
+    ulbId: user?.ulb_id,
     date: new Date(),
     filtered: [],
   });
   const { page, count, searchText, data, ulbId, date } = state;
   const [tempFetch, setTempFetch] = useState(false);
-  const userData = useSelector((state: any) => state.user.user?.userDetails);
-  const [user, setUser] = useState<any>();
   // const [sidebarLinks, setSidebar] = useState<any>([]);
-
-  useEffect(() => {
-    setUser(userData);
-  }, [user]);
 
   ////// Checking is checked data available or not
 
   const fetchData = async (): Promise<T[]> => {
     setTempFetch(true);
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
     const res1 = await axios({
-      url: `${depApi}/${ulbId}/${date.toISOString().split("T")[0]}`,
+      url: `${depApi}/${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -108,7 +109,7 @@ const TableWithScrollPagination = <T,>({
       rest.handleGet({
         isApproved: res1.data.data ? true : false,
         balance: data?.others,
-        ulbId,
+        ulbId: user?.user_type === "Admin" ? ulbId : user?.ulb_id,
         date: date.toISOString().split("T")[0],
         data: [...state.filtered, ...filteredData],
       });

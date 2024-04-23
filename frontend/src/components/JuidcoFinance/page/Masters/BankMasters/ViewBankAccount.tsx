@@ -18,8 +18,15 @@ import Button from "@/components/global/atoms/Button";
 import { useReactToPrint } from "react-to-print";
 import { PrintReadyBankComponent } from "./molecules/PrintReadyBankComponent";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
+import { useSelector } from "react-redux";
+import { ROLES } from "@/json/roles";
 
 const ViewBankAccount = ({ bankID }: { bankID: string }) => {
+  const [user, setUser] = useState<any>();
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
+  useEffect(() => {
+    setUser(userData);
+  }, []);
   const [bankAccountDetails, setBankAccountDetails] =
     useState<AddBankDetailsData>(initialBankDetailsValues);
 
@@ -70,6 +77,8 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
       ulb: data.ulb.ulbs,
       bank_type_id: data.bank_type.id,
       bank_type: data.bank_type.name,
+      primary_acc_code_id: data.primary_acc_code.id,
+      primary_acc_code: `${data.primary_acc_code.code} - ${data.primary_acc_code.description}`
     };
 
     setBankAccountDetails(new_data);
@@ -159,7 +168,7 @@ const ViewBankAccount = ({ bankID }: { bankID: string }) => {
   const buttons = () => {
     return (
       <>
-        <ToggleButton name="Edit" onToggle={enablEditingMode} />
+        {user?.role?.includes(ROLES.ACC_DEP_MANAGER) && <ToggleButton name="Edit" onToggle={enablEditingMode} />}
         <Button onClick={printIt} variant="primary">
           Print
         </Button>

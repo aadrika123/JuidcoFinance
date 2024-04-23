@@ -49,7 +49,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
   const params = useParams();
   const user = useSelector((state: any) => state.user.user?.userDetails);
   const [state, setState] = useState<stateProps>({
-    ulbId: null,
+    ulbId: user?.ulb_id,
     accCodeId: null,
     revModId: null,
     recMode: "",
