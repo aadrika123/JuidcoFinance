@@ -271,19 +271,19 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
 
                   {(values.receipt_mode_id_name === "online" ||
                     values.receipt_mode_id_name === "cheque") && (
-                    <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.bank_amount}
-                      error={errors.bank_amount}
-                      touched={touched.bank_amount}
-                      readonly={readonly || values.cheque_or_draft_no === ""}
-                      label="Bank Amount (amounts received through cheque / draft)"
-                      name="bank_amount"
-                      type="number"
-                      placeholder="Enter Bank Amount"
-                    />
-                  )}
+                      <Input
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.bank_amount}
+                        error={errors.bank_amount}
+                        touched={touched.bank_amount}
+                        readonly={readonly || values.cheque_or_draft_no === ""}
+                        label="Bank Amount (amounts received through cheque / draft)"
+                        name="bank_amount"
+                        type="number"
+                        placeholder="Enter Bank Amount"
+                      />
+                    )}
 
                   {values.receipt_mode_id_name === "cash" && (
                     <Input
@@ -345,51 +345,55 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     }
                   />
 
-                  <Input
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.deposit_date}
-                    error={errors.deposit_date}
-                    touched={touched.deposit_date}
-                    readonly={readonly}
-                    label="Date of Deposit"
-                    name="deposit_date"
-                    type="date"
-                    placeholder="undefined"
-                  />
+                  {values.receipt_mode_id_name === "cheque" && (
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.deposit_date}
+                      error={errors.deposit_date}
+                      touched={touched.deposit_date}
+                      readonly={readonly}
+                      label="Date of Deposit"
+                      name="deposit_date"
+                      type="date"
+                      placeholder="undefined"
+                    />)}
 
-                  <Input
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.realisation_date}
-                    error={errors.realisation_date}
-                    touched={touched.realisation_date}
-                    readonly={readonly}
-                    label="Date of Realisation"
-                    name="realisation_date"
-                    type="date"
-                    placeholder="undefined"
-                  />
-                  <RadioButtons
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={`${values.wheather_returned}`}
-                    error={errors.wheather_returned}
-                    touched={touched.wheather_returned}
-                    readonly={readonly}
-                    label="Wheather Returned"
-                    name="wheather_returned"
-                    options={[
-                      {
-                        key: "Yes",
-                        value: "true",
-                      },
-                      {
-                        key: "No",
-                        value: "false",
-                      },
-                    ]}
-                  />
+                  {values.receipt_mode_id_name === "cheque" && (
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.realisation_date}
+                      error={errors.realisation_date}
+                      touched={touched.realisation_date}
+                      readonly={readonly}
+                      label="Date of Realisation"
+                      name="realisation_date"
+                      type="date"
+                      placeholder="undefined"
+                    />
+                  )}
+                  {values.receipt_mode_id_name === "cheque" && (
+                    <RadioButtons
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={`${values.wheather_returned}`}
+                      error={errors.wheather_returned}
+                      touched={touched.wheather_returned}
+                      readonly={readonly}
+                      label="Wheather Returned"
+                      name="wheather_returned"
+                      options={[
+                        {
+                          key: "Yes",
+                          value: "true",
+                        },
+                        {
+                          key: "No",
+                          value: "false",
+                        },
+                      ]}
+                    />)}
                   <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
