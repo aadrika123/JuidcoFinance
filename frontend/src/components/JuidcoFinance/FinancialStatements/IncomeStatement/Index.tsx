@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Select from "@/components/global/atoms/nonFormik/Select";
 import axios from "@/lib/axiosConfig";
 import { FINANCE_URL } from "@/utils/api/urls";
@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import IncomeStatementHeaderComponent from "./TrialBalanceHeaderComponent";
 import Loader from "@/components/global/atoms/Loader";
 import { usePathname } from "next/navigation";
+import { useReactToPrint } from "react-to-print";
 
 
 
@@ -97,6 +98,11 @@ export const IncomeStatementComponent = () => {
   const [finYear, setFinYear] = useState<number>(0);
 
 
+  const printableComponentRef = useRef(null);
+  const printIt = useReactToPrint({
+    content: () => printableComponentRef.current,
+  });
+
   const fetchData = async (): Promise<IncomeStatementData> => {
     
     setIsLoading(true);
@@ -154,7 +160,10 @@ export const IncomeStatementComponent = () => {
 
   return (
     <>
-      <IncomeStatementHeaderComponent />
+      <IncomeStatementHeaderComponent onPrintButtonClick={printIt} />
+
+      <div ref={printableComponentRef}>
+
       <section className="border bg-white shadow-2xl p-6 px-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -398,6 +407,7 @@ export const IncomeStatementComponent = () => {
         </div>
 
       </section>
+      </div>
     </>
   );
 };

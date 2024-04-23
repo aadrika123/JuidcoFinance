@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
 import BalanceSheetHeaderComponent from "./BalanceSheetHeaderComponent";
@@ -8,6 +8,7 @@ import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Loader from "@/components/global/atoms/Loader";
 import { usePathname } from "next/navigation";
+import { useReactToPrint } from "react-to-print";
 
 
 /**
@@ -61,6 +62,12 @@ export const BalanceSheetComponent = () => {
     const [ulbID, setUlbID] = useState<number>(0);
     const [finYear, setFinYear] = useState<number>(0);
 
+
+    const printableComponentRef = useRef(null);
+    const printIt = useReactToPrint({
+      content: () => printableComponentRef.current,
+    });
+  
 
     const fetchData = async (): Promise<BalanceSheetData> => {
 
@@ -116,7 +123,8 @@ export const BalanceSheetComponent = () => {
 
     return (
         <>
-            <BalanceSheetHeaderComponent />
+            <BalanceSheetHeaderComponent onPrintButtonClick={printIt}/>
+            <div ref={printableComponentRef}>
             <section className="border bg-white shadow-2xl p-6 px-10">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -466,6 +474,7 @@ export const BalanceSheetComponent = () => {
                     </table>)}
                 </div>
             </section>
+            </div>
 
         </>
     );
