@@ -191,7 +191,7 @@ const ReceiptRegister = () => {
         variant={
           user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? "add" : ""
         }
-        title={"Receipt Register Entry"}
+        title={"Receipt Register"}
       />
       <TableWithScrollPagination
         center

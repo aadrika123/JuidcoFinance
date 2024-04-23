@@ -6,22 +6,32 @@
 
 "use client";
 
-import React, {useState } from "react";
+import React, {useEffect, useState } from "react";
 import Select from "@/components/global/atoms/nonFormik/Select";
 import axios from "@/lib/axiosConfig";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { useQuery } from "react-query";
 import Loader from "@/components/global/atoms/Loader";
 import TrialBalanceHeaderComponent from "./TrialBalanceHeaderComponent";
+import { usePathname } from "next/navigation";
+
 
 export const TrialBalanceComponent = () => {
+  const pathName = usePathname();
 
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
   const fetchData = async (): Promise<any[]> => {
+
+    setIsLoading(true);
+
+    if(ulbID == 0 || finYear == 0)
+      return [];
+
     const res = await axios({
       url: "/balance-trackings/get-trial-balance",
       method: "GET",
@@ -29,21 +39,23 @@ export const TrialBalanceComponent = () => {
     });
 
     console.log(res.data?.data);
-
     return res.data?.data;
   }
 
   const setUlb = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsLoading(true);
     const ele = event.target;
     setUlbID(parseInt(ele.value));
   }
 
 
   const finYearInitHandler = (value: number) => {
+    setIsLoading(true);
     setFinYear(value);
   }
 
   const ulbInitHandler = (value: number) => {
+    setIsLoading(true);
     setUlbID(value);
   }
 
@@ -51,14 +63,19 @@ export const TrialBalanceComponent = () => {
   const {
     data: ItemData = [],
     isError: dataError,
-    isLoading: isLoading,
-  } = useQuery([finYear, ulbID], fetchData);
+  } = useQuery([finYear, ulbID, pathName], fetchData, {cacheTime: 0});
 
   if (dataError) {
     console.log(dataError);
     throw new Error("Fatal Error!");
   }
 
+
+  useEffect(() => {
+    if(ItemData != null && ItemData.length != 0){
+      setIsLoading(false);
+    }
+  }, [ItemData, pathName]);
 
   return (
     <>
@@ -97,7 +114,7 @@ export const TrialBalanceComponent = () => {
 
 
         <div className="text-black mt-4">
-
+        {isLoading ? <Loader /> : (
           <table
             width="100%"
             className="border-collapse border border-slate-400"
@@ -112,9 +129,8 @@ export const TrialBalanceComponent = () => {
             </thead>
 
             <tbody>
-              {isLoading ? <tr><td colSpan={4}><Loader /></td></tr> : (
 
-                ItemData?.map((item, index) => {
+                {ItemData.length && ItemData?.map((item, index) => {
                   return (<tr key={`schedule${index}`}>
                     <td className="border border-slate-300 px-4">
                       {item.code.substring(0,3)}
@@ -129,13 +145,13 @@ export const TrialBalanceComponent = () => {
                     {item.credit_balance}
                     </td>
                     </tr>);
-                })
+                })}
 
-              )}
+              
 
             </tbody>
 
-          </table>
+          </table>)}
 
 
         </div>

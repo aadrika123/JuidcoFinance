@@ -7,6 +7,8 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import { useQuery } from "react-query";
 import IncomeStatementHeaderComponent from "./TrialBalanceHeaderComponent";
 import Loader from "@/components/global/atoms/Loader";
+import { usePathname } from "next/navigation";
+
 
 
 /**
@@ -85,14 +87,24 @@ const processData = (data: AccountData[]) : ProcessedData => {
 
 
 export const IncomeStatementComponent = () => {
+  const pathName = usePathname();
+
   const [selectedYearData, setSelectedYearData] = useState<ProcessedData>();
   const [prevYearData, setPrevYearData] = useState<ProcessedData>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
 
 
   const fetchData = async (): Promise<IncomeStatementData> => {
+    
+    setIsLoading(true);
+
+    if(ulbID == 0 || finYear == 0)
+      return {selectedYear: [], prevYear: []};
+
+
     const res = await axios({
       url: "/balance-trackings/get-income-statement",
       method: "GET",
@@ -105,16 +117,19 @@ export const IncomeStatementComponent = () => {
   }
 
   const setUlb = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsLoading(true);
     const ele = event.target;
     setUlbID(parseInt(ele.value));
   }
 
 
   const finYearInitHandler = (value: number) => {
+    setIsLoading(true);
     setFinYear(value);
   }
 
   const ulbInitHandler = (value: number) => {
+    setIsLoading(true);
     setUlbID(value);
   }
 
@@ -122,20 +137,20 @@ export const IncomeStatementComponent = () => {
   const {
     data: ItemData,
     isError: dataError,
-    isLoading: isLoading,
-  } = useQuery([finYear, ulbID], fetchData);
+  } = useQuery([finYear, ulbID, pathName], fetchData, {cacheTime: 0});
 
   if (dataError) {
     console.log(dataError);
     throw new Error("Fatal Error!");
   }
 
-
-
   useEffect(() => {
-    if(ItemData?.selectedYear) setSelectedYearData(processData(ItemData.selectedYear));
-    if(ItemData?.prevYear) setPrevYearData(processData(ItemData.prevYear));
-  }, [ItemData]);
+    if(ItemData != null && ItemData.selectedYear.length > 0){
+      if(ItemData?.selectedYear) setSelectedYearData(processData(ItemData.selectedYear));
+      if(ItemData?.prevYear) setPrevYearData(processData(ItemData.prevYear));
+      setIsLoading(false);
+    }
+  }, [ItemData, pathName]);
 
   return (
     <>
@@ -173,6 +188,7 @@ export const IncomeStatementComponent = () => {
         </div>
 
         <div className="text-black mt-4">
+        {isLoading? <Loader /> :(
           <table
             width="100%"
             className="border-collapse border border-slate-400"
@@ -188,8 +204,7 @@ export const IncomeStatementComponent = () => {
             </thead>
 
             <tbody>
-              {isLoading ? <tr><td colSpan={4}><Loader /></td></tr> : (
-
+            
                 <>
                 <tr>
                   <td className="border border-slate-300 px-4"></td>
@@ -198,17 +213,17 @@ export const IncomeStatementComponent = () => {
                 {selectedYearData?.incomes?.map((item, index) => {
                   return (<tr key={`item${index}`}>
                     <td className="border border-slate-300 px-4">
-                      {item.code.substring(0, 3)}
+                      {item?.code?.substring(0, 3)}
                     </td>
                     <td className="border border-slate-300 px-4">
-                      {item.description}
+                      {item?.description}
                     </td>
                     <td className="border border-slate-300 px-4">
-                      {item.schedule_ref_no}
+                      {item?.schedule_ref_no}
                     </td>
 
                     <td className="border border-slate-300 px-4">
-                      {item.total_balance}
+                      {item?.total_balance}
                     </td>
                     <td className="border border-slate-300 px-4">
                       {prevYearData?.incomes[index].total_balance}
@@ -242,17 +257,17 @@ export const IncomeStatementComponent = () => {
                 {selectedYearData?.expenditures?.map((item, index) => {
                   return (<tr key={`item${index}`}>
                     <td className="border border-slate-300 px-4">
-                      {item.code.substring(0, 3)}
+                      {item?.code?.substring(0, 3)}
                     </td>
                     <td className="border border-slate-300 px-4">
-                      {item.description}
+                      {item?.description}
                     </td>
                     <td className="border border-slate-300 px-4">
-                    {item.schedule_ref_no}
+                    {item?.schedule_ref_no}
                     </td>
 
                     <td className="border border-slate-300 px-4">
-                      {item.total_balance}
+                      {item?.total_balance}
                     </td>
                     <td className="border border-slate-300 px-4">
                       {prevYearData?.expenditures[index].total_balance}
@@ -374,11 +389,11 @@ export const IncomeStatementComponent = () => {
 
                 </>
 
-              )}
+              
 
             </tbody>
 
-          </table>
+          </table>)}
 
         </div>
 

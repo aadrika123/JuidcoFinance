@@ -6,6 +6,8 @@ import { useQuery } from "react-query";
 import BalanceSheetHeaderComponent from "./BalanceSheetHeaderComponent";
 import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
+import Loader from "@/components/global/atoms/Loader";
+import { usePathname } from "next/navigation";
 
 
 /**
@@ -31,12 +33,12 @@ interface BalanceSheetData {
 
 const processData = (data: AccountData[]): any => {
     const processedData: any = {};
-    let b11Count=0;
-    data?.forEach((item)=>{
-        let key = item.schedule_ref_no.replace('-','');
-        if(key == "B11"){
-            key += String.fromCharCode(b11Count+97);
-            b11Count ++;
+    let b11Count = 0;
+    data?.forEach((item) => {
+        let key = item.schedule_ref_no.replace('-', '');
+        if (key == "B11") {
+            key += String.fromCharCode(b11Count + 97);
+            b11Count++;
         }
         processedData[key] = item;
     });
@@ -47,8 +49,13 @@ const processData = (data: AccountData[]): any => {
 
 
 export const BalanceSheetComponent = () => {
+    const pathName = usePathname();
+
+
     const [selectedYearData, setSelectedYearData] = useState<any>();
     const [prevYearData, setPrevYearData] = useState<any>();
+    const [isLoading, setIsLoading] = useState<any>(true);
+
 
 
     const [ulbID, setUlbID] = useState<number>(0);
@@ -56,6 +63,12 @@ export const BalanceSheetComponent = () => {
 
 
     const fetchData = async (): Promise<BalanceSheetData> => {
+
+        setIsLoading(true);
+
+        if (ulbID == 0 || finYear == 0)
+            return { selectedYear: [], prevYear: [] };
+
         const res = await axios({
             url: "/balance-trackings/get-balance-sheet",
             method: "GET",
@@ -63,7 +76,6 @@ export const BalanceSheetComponent = () => {
         });
 
         console.log(res.data?.data);
-
         return res.data?.data;
     }
 
@@ -94,9 +106,13 @@ export const BalanceSheetComponent = () => {
     }
 
     useEffect(() => {
-        if (ItemData?.selectedYear) setSelectedYearData(processData(ItemData.selectedYear));
-        if (ItemData?.prevYear) setPrevYearData(processData(ItemData.prevYear));
-    }, [ItemData]);
+        if (ItemData != null  && ItemData.selectedYear.length > 0) {
+            if (ItemData?.selectedYear) setSelectedYearData(processData(ItemData.selectedYear));
+            if (ItemData?.prevYear) setPrevYearData(processData(ItemData.prevYear));
+
+            setIsLoading(false);
+        }
+    }, [ItemData, pathName]);
 
     return (
         <>
@@ -134,7 +150,7 @@ export const BalanceSheetComponent = () => {
                 </div>
 
                 <div className="text-black mt-4">
-                    <table
+                    {isLoading ? <Loader /> : (<table
                         width="100%"
                         className="border-collapse border border-slate-400"
                     >
@@ -150,13 +166,21 @@ export const BalanceSheetComponent = () => {
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td className="px-4 border-x border-slate-300">LIABILITIES</td>
+                                <td className="px-4 border-x border-slate-300 underline font-bold">LIABILITIES</td>
                                 <td className="border-x border-slate-300"></td>
                                 <td className="border-x border-slate-300"></td>
-
                             </tr>
+
+
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.code.substring(0,3)}</td>
+                                <td></td>
+                                <td className="px-4 border-x border-slate-300">Reserve & Surplus</td>
+                                <td className="border-x border-slate-300"></td>
+                                <td className="border-x border-slate-300"></td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B1?.total_balance}</td>
@@ -164,7 +188,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B2?.total_balance}</td>
@@ -172,7 +196,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B3?.total_balance}</td>
@@ -182,12 +206,20 @@ export const BalanceSheetComponent = () => {
                                 <td className="border border-slate-300 px-4"></td>
                                 <td className="border border-slate-300 px-4">Total reserves & surplus</td>
                                 <td className="border border-slate-300 px-4"></td>
-                                <td className="border border-slate-300 px-4"></td>
-                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">{
+                                    selectedYearData?.B1?.total_balance +
+                                    selectedYearData?.B2?.total_balance +
+                                    selectedYearData?.B3?.total_balance
+                                }</td>
+                                <td className="border border-slate-300 px-4">
+                                    {
+                                        prevYearData?.B1?.total_balance + prevYearData?.B2?.total_balance + prevYearData?.B3?.total_balance
+                                    }
+                                </td>
                             </tr>
 
                             <tr>
-                                <td className="px-4 border border-slate-300">{selectedYearData?.B4?.code.substring(0,3)}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B4?.code.substring(0, 3)}</td>
                                 <td className="px-4 border border-slate-300">{selectedYearData?.B4?.description}</td>
                                 <td className="px-4 border border-slate-300">{selectedYearData?.B4?.schedule_ref_no}</td>
                                 <td className="px-4 border border-slate-300">{selectedYearData?.B4?.total_balance}</td>
@@ -203,7 +235,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B7?.total_balance}</td>
@@ -211,7 +243,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B8?.total_balance}</td>
@@ -219,7 +251,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B9?.total_balance}</td>
@@ -227,7 +259,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B10?.total_balance}</td>
@@ -239,8 +271,18 @@ export const BalanceSheetComponent = () => {
                                 <td className="border border-slate-300 px-4"></td>
                                 <td className="border border-slate-300 px-4">Total Current Liabilities and Provisions</td>
                                 <td className="border border-slate-300 px-4"></td>
-                                <td className="border border-slate-300 px-4"></td>
-                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">{
+                                    selectedYearData?.B7?.total_balance +
+                                    selectedYearData?.B8?.total_balance +
+                                    selectedYearData?.B9?.total_balance +
+                                    selectedYearData?.B10?.total_balance
+                                }</td>
+                                <td className="border border-slate-300 px-4">{
+                                    prevYearData?.B7?.total_balance +
+                                    prevYearData?.B8?.total_balance +
+                                    prevYearData?.B9?.total_balance +
+                                    prevYearData?.B10?.total_balance
+                                }</td>
                             </tr>
 
                             <tr>
@@ -254,13 +296,13 @@ export const BalanceSheetComponent = () => {
 
                             <tr>
                                 <td></td>
-                                <td className="px-4 border-x border-slate-300">ASSETS</td>
+                                <td className="px-4 border-x border-slate-300 underline font-bold">ASSETS</td>
                                 <td className="border-x border-slate-300"></td>
                                 <td className="border-x border-slate-300"></td>
 
                             </tr>
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B11a?.total_balance}</td>
@@ -275,8 +317,41 @@ export const BalanceSheetComponent = () => {
                                 <td className="px-4 border-x border-slate-300"></td>
                             </tr>
 
+
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.code.substring(0,3)}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B11b?.code.substring(0, 3)}</td>
+                                <td className="px-4 border border-slate-300">Less: {selectedYearData?.B11b?.description}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B11b?.schedule_ref_no}</td>
+                                <td className="px-4 border border-slate-300">{selectedYearData?.B11b?.total_balance}</td>
+                                <td className="px-4 border border-slate-300">{prevYearData?.B11b?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="border-x border-slate-300 px-4"></td>
+                                <td className="border-x border-slate-300 px-4">Net Block</td>
+                                <td className="border-x border-slate-300 px-4"></td>
+                                <td className="border-x border-slate-300 px-4"></td>
+                                <td className="border-x border-slate-300 px-4"></td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11c?.code.substring(0, 3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11c?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11c?.schedule_ref_no}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B11c?.total_balance}</td>
+                                <td className="px-4 border-x border-slate-300">{prevYearData?.B11c?.total_balance}</td>
+                            </tr>
+
+                            <tr>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Investments</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B12?.total_balance}</td>
@@ -284,15 +359,32 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B13?.total_balance}</td>
                                 <td className="px-4 border-x border-slate-300">{prevYearData?.B13?.total_balance}</td>
                             </tr>
 
+                            <tr className="font-bold">
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Total Investments</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
+
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300">Current Assets, Loans and Advances</td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                            </tr>
+
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B14?.total_balance}</td>
@@ -300,7 +392,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B15?.total_balance}</td>
@@ -308,35 +400,54 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.code.substring(0,3)}</td>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.description}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.code.substring(0, 3)}</td>
+                                <td className="px-4 border-x border-slate-300">Less: {selectedYearData?.B16?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B16?.total_balance}</td>
                                 <td className="px-4 border-x border-slate-300">{prevYearData?.B16?.total_balance}</td>
                             </tr>
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B17?.total_balance}</td>
                                 <td className="px-4 border-x border-slate-300">{prevYearData?.B17?.total_balance}</td>
                             </tr>
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B18?.total_balance}</td>
                                 <td className="px-4 border-x border-slate-300">{prevYearData?.B18?.total_balance}</td>
                             </tr>
+
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300">Net Amount Outstanding</td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                                <td className="px-4 border-x border-slate-300"></td>
+                            </tr>
+
+
+                            <tr className="font-bold">
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4">Total Current Assets, Loans & Advances</td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                                <td className="border border-slate-300 px-4"></td>
+                            </tr>
+
+
+                            <tr>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B19?.total_balance}</td>
                                 <td className="px-4 border-x border-slate-300">{prevYearData?.B19?.total_balance}</td>
                             </tr>
                             <tr>
-                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.code.substring(0,3)}</td>
+                                <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.code.substring(0, 3)}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.description}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.schedule_ref_no}</td>
                                 <td className="px-4 border-x border-slate-300">{selectedYearData?.B20?.total_balance}</td>
@@ -352,7 +463,7 @@ export const BalanceSheetComponent = () => {
                             </tr>
 
                         </tbody>
-                    </table>
+                    </table>)}
                 </div>
             </section>
 
