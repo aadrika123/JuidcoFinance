@@ -39,7 +39,7 @@ export const AddReceiptRegister = () => {
   });
   const initialValues: ReceiptRegisterDetailsData = {
     receipt_no: "",
-    ulb_id: "",
+    ulb_id: user?.ulb_id,
     primary_acc_code_id: "",
     revenue_accounted_type_id: "",
     revenue_module_id: "",

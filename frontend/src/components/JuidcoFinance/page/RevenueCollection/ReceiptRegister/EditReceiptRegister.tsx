@@ -12,13 +12,14 @@ const HeaderWidget = lazy(() =>
   }))
 );
 const FormikW = lazy(() => import("./ReceiptRegisterFormFields"));
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { ReceiptRegisterDetailsData } from "./receipt_register_types";
 import { receiptRegisterDetailsSchema } from "./receipt_register.validation";
 import Loader from "@/components/global/atoms/Loader";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
-import { ROLES } from "@/json/roles";
+import { useReactToPrint } from "react-to-print";
+// import { ROLES } from "@/json/roles";
 
 export const EditReceiptRegister = ({
   ReceiptRegisterID,
@@ -27,14 +28,14 @@ export const EditReceiptRegister = ({
 }) => {
   const searchParams = useSearchParams().get("mode");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [data, setData] = useState<any>();
-  const [user, setUser] = useState<any>();
-  const userData = useSelector((state: any) => state.user.user?.userDetails);
+  // const [data, setData] = useState<any>();
+  // const [user, setUser] = useState<any>();
+  // const userData = useSelector((state: any) => state.user.user?.userDetails);
   const [inEditMode, setInEditMode] = useState(false);
 
-  useEffect(() => {
-    setUser(userData);
-  }, []);
+  // useEffect(() => {
+  //   setUser(userData);
+  // }, []);
 
   const [initialData, setInitialData] = useState<ReceiptRegisterDetailsData>({
     receipt_no: "",
@@ -75,7 +76,7 @@ export const EditReceiptRegister = ({
         throw "Not Found";
       }
 
-      setData(res.data.data);
+      // setData(res.data.data);
       setInitialData((prev) => {
         return {
           ...prev,
@@ -91,20 +92,23 @@ export const EditReceiptRegister = ({
           bank_amount: res.data.data.bank_amount,
           cash_amount: res.data.data.cash_amount,
           bank_acc_no: res.data.data.bank_acc_no || "",
-          deposit_date:  DateFormatter(res.data.data.deposit_date) ,
+          deposit_date: DateFormatter(res.data.data.deposit_date),
           realisation_date: DateFormatter(res.data.data.realisation_date),
           wheather_returned: res.data.data.wheather_returned,
           remarks: res.data.data.remarks,
-          entered_by_id: res.data.data.entered_by.id,
-          entered_by_print_name: res.data.data.entered_by_print_name,
+          entered_by_id: res.data.data.entered_by?.id,
+          entered_by_print_name: res.data.data?.entered_by_print_name,
           checked_by_id: res.data.data.checked_by_id?.id,
           checked_by_print_name: res.data.data.checked_by_print_name,
           del_checked_by_name: res.data.data.checked_by?.name,
           del_checked_by_designation:
             res.data.data.checked_by?.wf_roleusermaps[0]?.wf_role?.role_name,
-          del_entered_by_name: res.data.data.entered_by.name,
+          del_entered_by_name:
+            res.data.data?.entered_by?.name ||
+            res.data.data?.revenue_module?.name,
           del_entered_by_designation:
-            res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name,
+            res.data.data.entered_by?.wf_roleusermaps[0]?.wf_role?.role_name ||
+            "null",
         };
       });
     } catch (error) {
@@ -154,12 +158,12 @@ export const EditReceiptRegister = ({
     Error,
     ReceiptRegisterDetailsData
   >(UpdateReceiptRegisterEntry, {
-    onSuccess:() =>{
+    onSuccess: () => {
       setIsSuccess(true);
-      setTimeout(()=>{
+      setTimeout(() => {
         setIsSuccess(false);
-        goBack()
-      },1000)
+        goBack();
+      }, 1000);
     },
     onError: () => {
       alert("Something went wrong!!!");
@@ -178,6 +182,15 @@ export const EditReceiptRegister = ({
     setInEditMode(!inEditMode);
   };
 
+  ///////////// Handling React print
+  const handlePrint = useReactToPrint({
+    content: () => document.getElementById("receipt-print"),
+    pageStyle: `
+    @page {
+        margin: 11mm 11mm 11mm 11mm;
+}`,
+  });
+
   return (
     <>
       {isSuccess && <SuccesfullConfirmPopup message="Updated Successfully" />}
@@ -185,12 +198,10 @@ export const EditReceiptRegister = ({
       <RandomWorkingPopup show={isLoading} />
       <HeaderWidget
         title="Receipt Register"
-        variant={searchParams == "view" ? "view" : "edit"}
-        editVisible={
-          data?.entered_by?.id === user?.id &&
-          user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT)
-        }
+        variant={searchParams == "view" ? "view" : "view"}
+        editVisible={false}
         handleEditMode={handleEditMode}
+        handlePrint={handlePrint}
       />
       {isFetching ? (
         <Loader />

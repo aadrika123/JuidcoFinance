@@ -4,7 +4,8 @@ const prisma = new PrismaClient();
 const receipt_modes_seeder = async () => {
   const data = [
     'cash',
-    'cheque'
+    'cheque',
+    'online'
   ]
   const number_of_records = 2;
   for (let i = 0; i < number_of_records; i++) {

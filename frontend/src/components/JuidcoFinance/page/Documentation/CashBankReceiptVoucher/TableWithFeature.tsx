@@ -10,6 +10,7 @@ import NextPrevPagination from "@/components/global/molecules/NextPrevPagination
 import DatePicker from "react-datepicker";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Select from "@/components/global/atoms/nonFormik/Select";
+import { useSelector } from "react-redux";
 
 /**
  * | Author- Sanjiv Kumar
@@ -51,6 +52,12 @@ const TableWithFeatures = <T,>({
   ...rest
 }: TableWithFeaturesProps) => {
   const [isSearching, setIsSearching] = useState(false);
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
+  const [user, setUser] = useState<any>();
+
+  useEffect(() => {
+    setUser(userData);
+  }, [user]);
   const [state, setState] = useState<stateTypes<T>>({
     page: 1,
     pageCount: 0,
@@ -62,6 +69,7 @@ const TableWithFeatures = <T,>({
   });
   const { page, pageCount, searchText, data, ulbId, date } = state;
 
+  ///////////////// Fetching List of Data //////////////
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
       url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${ulbId}&date=${date.toISOString().split("T")[0]}`,
@@ -152,8 +160,10 @@ const TableWithFeatures = <T,>({
             <Select
               label=""
               name="ulb_id"
-              className="w-48 text-primary_bg_indigo border-[#4338ca]"
+              className="w-56 text-primary_bg_indigo border-[#4338ca]"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+              value={user?.user_type === "Admin" ? undefined : user?.ulb_id}
+              readonly={user?.user_type === "Admin" ? false : true}
               onChange={handleUlb}
               initHandler={initUlbHandler}
             />

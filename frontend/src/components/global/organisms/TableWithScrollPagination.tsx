@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "../atoms/nonFormik/Select";
 import Loader from "../atoms/Loader";
+import { useSelector } from "react-redux";
 
 interface TableWithScrollPaginProp {
   footer?: React.ReactNode;
@@ -58,6 +59,13 @@ const TableWithScrollPagination = <T,>({
   });
   const { page, count, searchText, data, ulbId, date } = state;
   const [tempFetch, setTempFetch] = useState(false);
+  const userData = useSelector((state: any) => state.user.user?.userDetails);
+  const [user, setUser] = useState<any>();
+  // const [sidebarLinks, setSidebar] = useState<any>([]);
+
+  useEffect(() => {
+    setUser(userData);
+  }, [user]);
 
   ////// Checking is checked data available or not
 
@@ -72,8 +80,6 @@ const TableWithScrollPagination = <T,>({
       url: `${depApi}/${ulbId}/${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
-
-    console.log("first", res1.data)
 
     let data = res.data?.data;
     if (data == null) {
@@ -185,8 +191,10 @@ const TableWithScrollPagination = <T,>({
             <Select
               label=""
               name="ulb_id"
-              className="w-48 border-[#4338ca] text-primary_bg_indigo"
+              className="w-56 border-[#4338ca] text-primary_bg_indigo"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+              value={user?.user_type === "Admin" ? undefined : user?.ulb_id}
+              readonly={user?.user_type === "Admin" ? false : true}
               onChange={handleUlb}
               initHandler={initHandler}
             />

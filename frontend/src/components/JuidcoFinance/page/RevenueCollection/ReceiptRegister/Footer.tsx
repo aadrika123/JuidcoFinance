@@ -1,10 +1,10 @@
 import TotalCountTable from "@/components/JuidcoFinance/Partials/molecules/TotalCountTable";
 import Button from "@/components/global/atoms/Button";
 import Input from "@/components/global/atoms/Input";
-import { FINANCE_URL } from "@/utils/api/urls";
+// import { FINANCE_URL } from "@/utils/api/urls";
 import React, { ChangeEvent, useState } from "react";
-import axios from "@/lib/axiosConfig";
-import toast, { Toaster } from "react-hot-toast";
+// import axios from "@/lib/axiosConfig";
+// import toast, { Toaster } from "react-hot-toast";
 import { ROLES } from "@/json/roles";
 
 interface FooterProps {
@@ -18,29 +18,33 @@ const Footer: React.FC<FooterProps> = (props) => {
   const [printName, setPrintName] = useState("");
   const { user, receiptData, isThereData } = props;
 
-  const [openingBal, setOpeningBal] = useState(
-    receiptData?.balance?.opening_balance?.opening_balance
-  );
+  // const [openingBal, setOpeningBal] = useState(
+  //   receiptData?.balance?.opening_balance?.opening_balance
+  // );
 
   const tempUser = user?.role.includes(ROLES.ACC_DEP_MANAGER) && user;
 
   const footerData = [
+    // {
+    //   key: "Opening Balance",
+    //   value: user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? (
+    //     <Input
+    //       label=""
+    //       value={
+    //         openingBal || receiptData?.balance?.opening_balance?.opening_balance
+    //       }
+    //       name="opening_balance"
+    //       type="number"
+    //       className="bg-white"
+    //       onChange={(e) => setOpeningBal(e.target.value)}
+    //     />
+    //   ) : (
+    //     receiptData?.balance?.opening_balance?.opening_balance
+    //   ),
+    // },
     {
       key: "Opening Balance",
-      value: user?.role.includes(ROLES.ACC_DEP_ACCOUNTANT) ? (
-        <Input
-          label=""
-          value={
-            openingBal || receiptData?.balance?.opening_balance?.opening_balance
-          }
-          name="opening_balance"
-          type="number"
-          className="bg-white"
-          onChange={(e) => setOpeningBal(e.target.value)}
-        />
-      ) : (
-        receiptData?.balance?.opening_balance?.opening_balance
-      ),
+      value: receiptData?.balance?.opening_balance?.opening_balance || 0
     },
     {
       key: "Days Total",
@@ -60,48 +64,48 @@ const Footer: React.FC<FooterProps> = (props) => {
   };
 
   ////// Handle Add and Update Opening Balance
-  const handleOpeningBal = async () => {
-    let res: any = "";
-    try {
-      !receiptData?.balance?.opening_balance?.opening_balance
-        ? (res = await axios({
-            url: FINANCE_URL.OPENING_BALANCE.create,
-            method: "POST",
-            data: {
-              data: {
-                opening_balance: Number(openingBal),
-              },
-            },
-          }))
-        : (res = await axios({
-            url: FINANCE_URL.OPENING_BALANCE.update,
-            method: "POST",
-            data: {
-              data: {
-                id: receiptData?.balance?.opening_balance?.id,
-                opening_balance: Number(openingBal),
-              },
-            },
-          }));
+  // const handleOpeningBal = async () => {
+  //   let res: any = "";
+  //   try {
+  //     !receiptData?.balance?.opening_balance?.opening_balance
+  //       ? (res = await axios({
+  //           url: FINANCE_URL.OPENING_BALANCE.create,
+  //           method: "POST",
+  //           data: {
+  //             data: {
+  //               opening_balance: Number(openingBal),
+  //             },
+  //           },
+  //         }))
+  //       : (res = await axios({
+  //           url: FINANCE_URL.OPENING_BALANCE.update,
+  //           method: "POST",
+  //           data: {
+  //             data: {
+  //               id: receiptData?.balance?.opening_balance?.id,
+  //               opening_balance: Number(openingBal),
+  //             },
+  //           },
+  //         }));
 
-      if (!res.data.status) throw new Error("Something Went Wrong!!");
+  //     if (!res.data.status) throw new Error("Something Went Wrong!!");
 
-      toast.success("Done!!");
-    } catch (error: any) {
-      alert("Someting Went Wrong!!");
-      console.log(error);
-    }
-  };
+  //     toast.success("Done!!");
+  //   } catch (error: any) {
+  //     alert("Someting Went Wrong!!");
+  //     console.log(error);
+  //   }
+  // };
   return (
     <div>
-      <Toaster />
+      {/* <Toaster /> */}
       <TotalCountTable footerData={footerData} />
       {!receiptData?.isApproved ? (
         <>
           <div className="grid grid-cols-2 gap-4 mt-4">
             {isThereData && tempUser && (
               <div className="flex flex-col">
-                <h2 className="mt-6 text-secondary">Checked By</h2>
+                <h2 className="mt-6 text-secondary">Check By</h2>
                 <Input
                   readonly={true}
                   value={tempUser?.name}
@@ -128,7 +132,7 @@ const Footer: React.FC<FooterProps> = (props) => {
             )}
           </div>
           <aside className="flex items-center justify-end py-5 gap-5">
-            {tempUser ? (
+            {tempUser &&
               <Button
                 onClick={() => props.handleApprove(printName)}
                 disabled={!printName || printName === ""}
@@ -136,21 +140,22 @@ const Footer: React.FC<FooterProps> = (props) => {
                 buttontype="button"
                 variant="primary"
               >
-                Approved
+                Approve
               </Button>
-            ) : (
-              openingBal && (
-                <Button
-                  onClick={handleOpeningBal}
-                  buttontype="button"
-                  variant="primary"
-                >
-                  {!receiptData?.balance?.opening_balance?.opening_balance
-                    ? "Add Opening Balance"
-                    : "Updated Opening Balance"}
-                </Button>
-              )
-            )}
+}
+            {/* // ) : (
+            //   openingBal && (
+            //     <Button
+            //       onClick={handleOpeningBal}
+            //       buttontype="button"
+            //       variant="primary"
+            //     >
+            //       {!receiptData?.balance?.opening_balance?.opening_balance
+            //         ? "Add Opening Balance"
+            //         : "Updated Opening Balance"}
+            //     </Button>
+            //   )
+            // )} */}
           </aside>
         </>
       ) : (

@@ -2,7 +2,6 @@ import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
 import BalanceTrackingsDao from "../budgeting/BalanceTrackingsDao";
-import { generateUniquePaymentNo } from "../../../util/helper/generateUniqueNo";
 
 /**
  * | Author- Sanjiv Kumar
@@ -229,9 +228,7 @@ class CashBankReceiptVoucherDao {
     const idItems = ids.map((item: { id: number }) => item.id);
     const ulbId = Number(req.body.data.ulb_id);
     const date = req.body.data.date;
-    const lf_no = generateUniquePaymentNo(
-      `${new Date().getDate()}-${new Date().getMonth()}-`
-    );
+    const lf_no = `lf-${new Date().getDate()}-${new Date().getMonth()}-1`;
 
     return await prisma.$transaction(async (tx) => {
       const dr = (await tx.$queryRaw`
@@ -253,7 +250,7 @@ class CashBankReceiptVoucherDao {
         await this.balanceTrackingDao.updateBalances(
           ulbId,
           item.bank_type_id,
-          -item.amount
+          -1 * item.amount
         );
         await this.balanceTrackingDao.updateBalances(
           ulbId,

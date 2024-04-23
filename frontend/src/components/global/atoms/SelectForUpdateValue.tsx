@@ -27,6 +27,7 @@ interface SelectProps {
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
   setFieldValue?: (field: string, value: any) => void;
+  isNull?: any;
 }
 
 interface Select {
@@ -52,7 +53,7 @@ const SelectForUpdateValue: React.FC<SelectProps> = (props) => {
       url: props.api,
       method: "GET",
     });
-    
+
     return res.data?.data;
   };
 
@@ -67,25 +68,31 @@ const SelectForUpdateValue: React.FC<SelectProps> = (props) => {
 
   useEffect(() => {
     if (props.setFieldValue) {
-      props.setFieldValue(`${props.name}`, props.value);
+      if (props.isNull) {
+        props.setFieldValue(`${props.name}`, "");
+      } else {
+        props.setFieldValue(`${props.name}`, props.value);
+      }
     }
-  }, [props.value]);
+  }, [props.value, props.isNull]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (props.handler) {
-      props.handler(parseInt(e.target.value));
+    if (!props.readonly) {
+      if (props.handler) {
+        props.handler(parseInt(e.target.value));
+      }
+      setValue(parseInt(e.target.value));
+      const selectedOption = e.target.options[e.target.selectedIndex].dataset;
+      setValue1(selectedOption.name);
     }
-    setValue(parseInt(e.target.value));
-    const selectedOption = e.target.options[e.target.selectedIndex].dataset;
-    setValue1(selectedOption.name);
   };
 
   return (
     <>
-      <div className="flex flex-col gap-1">
+      <div className={`flex flex-col gap-1 ${props.readonly && 'dropdown-container'}`}>
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
-          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
+          {props.required ? <span className="text-red-600 pl-2">*</span> : ""}
         </label>
         <select
           disabled={props.readonly}

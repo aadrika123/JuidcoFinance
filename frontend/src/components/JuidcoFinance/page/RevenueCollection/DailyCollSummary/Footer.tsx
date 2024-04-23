@@ -46,7 +46,7 @@ const Footer: React.FC<FooterProps> = (props) => {
           <div className="grid grid-cols-2 gap-4 mt-4">
             {isThereData && tempUser && (
               <div className="flex flex-col">
-                <h2 className="mt-6 text-secondary">Checked By</h2>
+                <h2 className="mt-6 text-secondary">Check By</h2>
                 <Input
                   readonly={true}
                   value={tempUser?.name}
@@ -81,7 +81,7 @@ const Footer: React.FC<FooterProps> = (props) => {
                 buttontype="button"
                 variant="primary"
               >
-                Approved
+                Approve
               </Button>
             )}
           </aside>

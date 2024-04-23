@@ -37,7 +37,7 @@ export const sidebarLinks: SidebarLinksProps = {
             />
           ),
           path: "/revenue-collection",
-          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT],
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             {
               moduleName: "Receipt Register",
@@ -102,21 +102,21 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/transaction",
           subModules: [
-            { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
-            { moduleName: "Bills", path: "/transaction/bills" },
+            // { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
+            { moduleName: "Bill Register", path: "/transaction/bill-register" },
             
             {
               moduleName: "Direct Payment Entry",
               path: "/transaction/direct-payment-entry",
             },
-            {
-              moduleName: "Bills Payment Entry",
-              path: "/transaction/bills-payment-entry",
-            },
-            {
-              moduleName: "Bills Invoice Entry",
-              path: "/transaction/bills-invoice-entry",
-            },
+            // {
+            //   moduleName: "Bills Payment Entry",
+            //   path: "/transaction/bills-payment-entry",
+            // },
+            // {
+            //   moduleName: "Bills Invoice Entry",
+            //   path: "/transaction/bills-invoice-entry",
+            // },
             {
               moduleName: "Investments",
               path: "/transaction/investments",

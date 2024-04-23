@@ -43,3 +43,16 @@ input[type=number] {
 -moz-box-shadow: 8px 11px 5px 8px rgba(0,0,0,0.75);
 box-shadow: 8px 11px 5px 8px rgba(0,0,0,0.75);
 }
+
+/* Hiding the select default arrow icon */
+.dropdown-container select { 
+  /* for Firefox */ 
+  -moz-appearance: none; 
+  /* for Safari, Chrome, Opera */ 
+  -webkit-appearance: none; 
+} 
+
+/* for IE10 */ 
+.dropdown-container select::-ms-expand { 
+  display: none; 
+} 

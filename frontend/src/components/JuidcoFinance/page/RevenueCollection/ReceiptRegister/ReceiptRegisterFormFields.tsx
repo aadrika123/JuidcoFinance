@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Formik, FormikHelpers } from "formik";
 import goBack from "@/utils/helper";
 import Select from "@/components/global/atoms/Select";
@@ -42,6 +42,7 @@ type stateProps = {
   ulbId: number | string | null;
   accCodeId: number | string | null;
   revModId: number | string | null;
+  recMode: number | string;
 };
 
 const FormikW: React.FC<FormikWrapperProps> = (props) => {
@@ -51,6 +52,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     ulbId: null,
     accCodeId: null,
     revModId: null,
+    recMode: "",
   });
   const { ulbId, accCodeId } = state;
   /////////////// For Transforming in JSON
@@ -76,7 +78,6 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     setState({ ...state, revModId: e });
   };
 
-
   const fetchData = async (endpoint: string) => {
     try {
       if (accCodeId) {
@@ -99,24 +100,14 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
   };
 
   //// Get bank_acc_no
-  const { data: dataList, refetch: refetch } = useForApiCall(
+  const { data: dataList, isFetching: isBankFetching } = useForApiCall(
     `${FINANCE_URL.BANK_MASTER_URL.getByAccCodeAndUlbId}/${accCodeId}/${ulbId}`
   );
 
   //// Get revenue accounted type
-  const { data: raType, refetch: refetchRaType } = useForApiCall(
+  const { data: raType, isFetching: isRevFetching } = useForApiCall(
     `${FINANCE_URL.REVENUE_ACCOUNTED_TYPE.getByReveAndAccId}/${accCodeId}`
   );
-
-  useEffect(() => {
-    if (accCodeId) {
-      refetchRaType();
-    }
-    if (ulbId && accCodeId) {
-      refetch();
-    }
-  }, [ulbId, accCodeId]);
-
 
   return (
     <section
@@ -141,7 +132,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
             dirty,
           }) => (
             <form onSubmit={handleSubmit}>
-              <div className="flex flex-col">
+              <div id="receipt-print" className="flex flex-col">
                 <div className="grid grid-cols-2 gap-x-6 gap-4">
                   <Input
                     onChange={handleChange}
@@ -162,7 +153,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     value={values.ulb_id}
                     error={errors.ulb_id}
                     touched={touched.ulb_id}
-                    readonly={readonly}
+                    readonly={true}
                     required
                     label="ULBs"
                     name="ulb_id"
@@ -189,7 +180,9 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                   <SelectForUpdateValue
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={raType?.revenue_module?.id || values.revenue_module_id}
+                    value={
+                      raType?.revenue_module?.id || values.revenue_module_id
+                    }
                     error={errors.revenue_module_id}
                     touched={touched.revenue_module_id}
                     readonly={true}
@@ -200,6 +193,12 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     api={`${FINANCE_URL.REVENUE_MODULE.get}`}
                     handler={handleRevModule}
                     setFieldValue={setFieldValue}
+                    isNull={
+                      raType?.revenue_module?.id === undefined &&
+                      !isRevFetching &&
+                      accCodeId &&
+                      true
+                    }
                   />
 
                   <Input
@@ -243,17 +242,19 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="undefined"
                   />
 
-                  <Input
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.cheque_or_draft_no}
-                    error={errors.cheque_or_draft_no}
-                    touched={touched.cheque_or_draft_no}
-                    readonly={readonly}
-                    label="Cheque / Draft No"
-                    name="cheque_or_draft_no"
-                    placeholder="Enter Cheque / Draft No"
-                  />
+                  {values.receipt_mode_id_name === "cheque" && (
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.cheque_or_draft_no}
+                      error={errors.cheque_or_draft_no}
+                      touched={touched.cheque_or_draft_no}
+                      readonly={readonly}
+                      label="Cheque / Draft No"
+                      name="cheque_or_draft_no"
+                      placeholder="Enter Cheque / Draft No"
+                    />
+                  )}
 
                   {/* <Select
                     onChange={handleChange}
@@ -268,31 +269,36 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
                   /> */}
 
-                  <Input
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.bank_amount}
-                    error={errors.bank_amount}
-                    touched={touched.bank_amount}
-                    readonly={readonly || values.cheque_or_draft_no === ""}
-                    label="Bank Amount (amounts received through cheque / draft)"
-                    name="bank_amount"
-                    type="number"
-                    placeholder="Enter Bank Amount"
-                  />
+                  {(values.receipt_mode_id_name === "online" ||
+                    values.receipt_mode_id_name === "cheque") && (
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.bank_amount}
+                      error={errors.bank_amount}
+                      touched={touched.bank_amount}
+                      readonly={readonly || values.cheque_or_draft_no === ""}
+                      label="Bank Amount (amounts received through cheque / draft)"
+                      name="bank_amount"
+                      type="number"
+                      placeholder="Enter Bank Amount"
+                    />
+                  )}
 
-                  <Input
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.cash_amount}
-                    error={errors.cash_amount}
-                    touched={touched.cash_amount}
-                    readonly={readonly || values.cheque_or_draft_no !== ""}
-                    label="Cash Amount (amounts received by cash)"
-                    name="cash_amount"
-                    type="number"
-                    placeholder="Enter Cash Amount"
-                  />
+                  {values.receipt_mode_id_name === "cash" && (
+                    <Input
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.cash_amount}
+                      error={errors.cash_amount}
+                      touched={touched.cash_amount}
+                      readonly={readonly || values.cheque_or_draft_no !== ""}
+                      label="Cash Amount (amounts received by cash)"
+                      name="cash_amount"
+                      type="number"
+                      placeholder="Enter Cash Amount"
+                    />
+                  )}
 
                   <InputForUpdateField
                     onChange={handleChange}
@@ -306,12 +312,22 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     label="Deposited into Bank Account No"
                     name="bank_acc_no"
                     placeholder="Enter Bank Account No"
+                    isNull={
+                      dataList?.bank_acc_no === undefined &&
+                      !isBankFetching &&
+                      ulbId &&
+                      accCodeId &&
+                      true
+                    }
                   />
 
                   <SelectForUpdateValue
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={raType?.revenue_accounted_type?.id || values.revenue_accounted_type_id}
+                    value={
+                      raType?.revenue_accounted_type?.id ||
+                      values.revenue_accounted_type_id
+                    }
                     error={errors.revenue_accounted_type_id}
                     touched={touched.revenue_accounted_type_id}
                     readonly={true}
@@ -321,6 +337,12 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="Select Revenue Accounted By"
                     api={`${FINANCE_URL.REVENUE_ACCOUNTED_TYPE.get}`}
                     setFieldValue={setFieldValue}
+                    isNull={
+                      raType?.revenue_accounted_type?.id === undefined &&
+                      !isRevFetching &&
+                      accCodeId &&
+                      true
+                    }
                   />
 
                   <Input
@@ -394,32 +416,37 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       name="entered_by"
                       placeholder="Enter Name"
                     />
+                    {values.del_entered_by_name !== "null" && (
+                      <>
+                        <Input
+                          value={
+                            values.del_entered_by_designation || user?.role
+                          }
+                          readonly={true}
+                          label=""
+                          name="designation"
+                          placeholder="Enter Designation"
+                        />
 
-                    <Input
-                      value={values.del_entered_by_designation || user?.role}
-                      readonly={true}
-                      label=""
-                      name="designation"
-                      placeholder="Enter Designation"
-                    />
-
-                    <Input
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.entered_by_print_name}
-                      error={errors.entered_by_print_name}
-                      touched={touched.entered_by_print_name}
-                      readonly={readonly}
-                      label=""
-                      name="entered_by_print_name"
-                      placeholder="Enter Print Name"
-                    />
+                        <Input
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.entered_by_print_name}
+                          error={errors.entered_by_print_name}
+                          touched={touched.entered_by_print_name}
+                          readonly={readonly}
+                          label=""
+                          name="entered_by_print_name"
+                          placeholder="Enter Print Name"
+                        />
+                      </>
+                    )}
                   </div>
                   {readonly && (
                     <div className="flex flex-col">
                       <h2 className="mt-6 text-secondary">Checked By</h2>
                       <Input
-                        value={values.del_checked_by_name}
+                        value={values?.del_checked_by_name}
                         readonly={readonly}
                         label=""
                         name="checked_by"
@@ -427,7 +454,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       />
 
                       <Input
-                        value={values.del_checked_by_designation}
+                        value={values?.del_checked_by_designation}
                         readonly={readonly}
                         label=""
                         name="designation1"

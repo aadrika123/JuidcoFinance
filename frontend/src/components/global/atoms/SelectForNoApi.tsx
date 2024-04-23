@@ -9,14 +9,14 @@ import { useField } from "formik";
  */
 
 interface Option {
-    id: number;
-    value?: string | number;
-    name?: string;
-    type?: string;
-    code?: string;
-    ulbs?: string;
-    description?: string;
-  }
+  id: number;
+  value?: string | number;
+  name?: string;
+  type?: string;
+  code?: string;
+  ulbs?: string;
+  description?: string;
+}
 
 interface SelectProps {
   label: string;
@@ -36,34 +36,33 @@ interface SelectProps {
   onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
 }
 
-
-
 const SelectForNoApi: React.FC<SelectProps> = (props) => {
   const [, , helpers] = useField(props.name);
   const [, , helpers1] = useField(`${props.name}_name`);
- 
+
   const { setValue } = helpers;
   const { setValue: setValue1 } = helpers1;
 
-
   const fieldId = "id_" + props.name;
 
-  const handleChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    if(props.handler){
-      props.handler(parseInt(e.target.value));
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (!props.readonly) {
+      if (props.handler) {
+        props.handler(parseInt(e.target.value));
+      }
+
+      setValue(parseInt(e.target.value));
+      const selectedOption = e.target.options[e.target.selectedIndex].dataset;
+      setValue1(selectedOption.name);
     }
-   
-    setValue(parseInt(e.target.value))
-    const selectedOption = e.target.options[e.target.selectedIndex].dataset;
-    setValue1(selectedOption.name);
-  }
+  };
 
   return (
     <>
-      <div className="flex flex-col gap-1">
+      <div className={`flex flex-col gap-1 ${props.readonly && 'dropdown-container'}`}>
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
-          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
+          {props.required ? <span className="text-red-600 pl-2">*</span> : ""}
         </label>
         <select
           disabled={props.readonly}
@@ -74,10 +73,28 @@ const SelectForNoApi: React.FC<SelectProps> = (props) => {
           name={props.name}
           id={fieldId}
         >
-          <option selected value="">{props.placeholder}</option>
+          <option selected value="">
+            {props.placeholder}
+          </option>
           {props?.data.map((d: Option) => (
-            <option key={d?.id} value={d?.value ? d?.value : d?.id} data-name={d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}>
-              {d?.name || d?.type || (d?.code && d?.description ? `${d.code}-${d?.description}` : d?.code) || d?.ulbs}
+            <option
+              key={d?.id}
+              value={d?.value ? d?.value : d?.id}
+              data-name={
+                d?.name ||
+                d?.type ||
+                (d?.code && d?.description
+                  ? `${d.code}-${d?.description}`
+                  : d?.code) ||
+                d?.ulbs
+              }
+            >
+              {d?.name ||
+                d?.type ||
+                (d?.code && d?.description
+                  ? `${d.code}-${d?.description}`
+                  : d?.code) ||
+                d?.ulbs}
             </option>
           ))}
         </select>

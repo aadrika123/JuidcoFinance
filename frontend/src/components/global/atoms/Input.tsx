@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ChangeEvent, ReactNode } from "react";
 
 /**
  * | Author- Sanjiv Kumar
@@ -36,6 +36,12 @@ const Input: React.FC<InputProps> = (props) => {
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if(!props.readonly && props.onChange){
+      props.onChange(e)
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-1">
@@ -50,7 +56,7 @@ const Input: React.FC<InputProps> = (props) => {
             disabled={props.readonly}
             required={props.required}
             placeholder={props.placeholder}
-            onChange={props.onChange}
+            onChange={handleChange}
             onBlur={props.onBlur}
             onFocus={handleFocus}
             type={props.type}

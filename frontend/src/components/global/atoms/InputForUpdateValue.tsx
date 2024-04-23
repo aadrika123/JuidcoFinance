@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ChangeEvent, ReactNode, useEffect } from "react";
 
 /**
  * | Author- Sanjiv Kumar
@@ -23,15 +23,20 @@ interface InputProps {
   icon?: ReactNode;
   iconAlign?: "left" | "right";
   setFieldValue?: (field: string, value: any) => void;
+  isNull?: any;
 }
 
 const InputForUpdateField: React.FC<InputProps> = (props) => {
   const fieldId = "id_" + props.name;
   useEffect(() => {
     if (props.setFieldValue) {
-      props.setFieldValue(`${props.name}`, props.value);
+      if (props.isNull) {
+        props.setFieldValue(`${props.name}`, "");
+      } else {
+        props.setFieldValue(`${props.name}`, props.value);
+      }
     }
-  }, [props.value]);
+  }, [props.value, props.isNull]);
 
   ///// If the Input type will be number then MouseWheeler will be disabled ////////////
   const handleFocus = (e: any) => {
@@ -41,6 +46,12 @@ const InputForUpdateField: React.FC<InputProps> = (props) => {
       });
     }
   };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if(!props.readonly && props.onChange){
+      props.onChange(e)
+    }
+  }
 
   return (
     <>
@@ -56,7 +67,7 @@ const InputForUpdateField: React.FC<InputProps> = (props) => {
             disabled={props.readonly}
             required={props.required}
             placeholder={props.placeholder}
-            onChange={props.onChange}
+            onChange={handleChange}
             onBlur={props.onBlur}
             onFocus={handleFocus}
             type={props.type}

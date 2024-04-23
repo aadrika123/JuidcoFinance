@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import axios from "@/lib/axiosConfig";
 
 /**
@@ -33,23 +33,20 @@ interface Select {
 }
 
 const Select: React.FC<SelectProps> = (props) => {
-
   const fetchData = async (): Promise<Select[]> => {
     const res = await axios({
       url: props.api,
       method: "GET",
     });
-    
+
     const data = res.data?.data;
-    if(props.initHandler){
+    if (props.initHandler) {
       props.initHandler(data[0].id, data[0].name);
     }
     return data;
   };
 
-  const { data: dataList = [],
-    isError: dataError,
-  } = useQuery({
+  const { data: dataList = [], isError: dataError } = useQuery({
     queryKey: [props.name],
     queryFn: fetchData,
   });
@@ -58,28 +55,34 @@ const Select: React.FC<SelectProps> = (props) => {
     throw new Error("Fatal Error!");
   }
 
-
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (!props.readonly && props.onChange) {
+      props.onChange(e);
+    }
+  };
 
   return (
     <>
-      <div className="flex flex-col gap-1">
-        <label className="text-secondary text-sm">
-          {props.label}
-        </label>
+      <div className={`flex flex-col gap-1 ${props.readonly && 'dropdown-container'}`}>
+        <label className="text-secondary text-sm">{props.label}</label>
         <select
           disabled={props.readonly}
-          onChange={props.onChange}
+          onChange={handleChange}
           value={props.value}
           className={`text-primary h-[41px] pl-1 rounded border bg-transparent border-zinc-400 ${props.className}`}
           name={props.name}
         >
-          {props.placeholder && (<option selected value="">
-            {props.placeholder}
-          </option>)}
+          {props.placeholder && (
+            <option selected value="">
+              {props.placeholder}
+            </option>
+          )}
           {dataList.length > 0 &&
             dataList.map((d: Select, i) => (
               <option
-                selected={props.selectFirstItem?i==0?true:false:false}
+                selected={
+                  props.selectFirstItem ? (i == 0 ? true : false) : false
+                }
                 key={d?.id}
                 value={d?.id}
                 data-name={
@@ -90,7 +93,6 @@ const Select: React.FC<SelectProps> = (props) => {
                     : d?.code) ||
                   d?.ulbs
                 }
-
               >
                 {d?.name ||
                   d?.type ||

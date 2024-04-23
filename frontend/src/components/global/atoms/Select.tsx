@@ -51,7 +51,7 @@ const Select: React.FC<SelectProps> = (props) => {
       url: props.api,
       method: "GET",
     });
-    
+
     return res.data?.data;
   };
 
@@ -65,20 +65,22 @@ const Select: React.FC<SelectProps> = (props) => {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (props.handler) {
-      props.handler(parseInt(e.target.value));
+    if (!props.readonly) {
+      if (props.handler) {
+        props.handler(parseInt(e.target.value));
+      }
+      setValue(parseInt(e.target.value));
+      const selectedOption = e.target.options[e.target.selectedIndex].dataset;
+      setValue1(selectedOption.name);
     }
-    setValue(parseInt(e.target.value));
-    const selectedOption = e.target.options[e.target.selectedIndex].dataset;
-    setValue1(selectedOption.name);
   };
 
   return (
     <>
-      <div className="flex flex-col gap-1">
+      <div className={`flex flex-col gap-1 ${props.readonly && 'dropdown-container'}`}>
         <label className="text-secondary text-sm" htmlFor={fieldId}>
           {props.label}
-          {props.required? (<span className="text-red-600 pl-2">*</span>):("")}
+          {props.required ? <span className="text-red-600 pl-2">*</span> : ""}
         </label>
         <select
           disabled={props.readonly}

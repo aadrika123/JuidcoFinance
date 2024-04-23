@@ -1,10 +1,5 @@
 import { Request } from "express";
-import {
-  Prisma,
-  PrismaClient,
-  receipt_registers,
-  daily_receipt_balances,
-} from "@prisma/client";
+import { Prisma, PrismaClient, receipt_registers } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
 import {
   multiRequestData,
@@ -108,7 +103,15 @@ class ReceiptRegisterDao {
       a += ` AND DATE(rr.receipt_date) = '${date}'`;
     }
 
-    const opDate: string = date ? `AND DATE (drb.created_at) = '${date}'` : "";
+    ///////////// Culculating the date
+    const financialDate = "2023-03-01";
+
+    const currentDate = new Date();
+
+    // Subtract one day
+    currentDate.setDate(currentDate.getDate() - 1);
+    const cDate = `${currentDate.toISOString()}`.split("T")[0];
+    ///////////////////////////////////////
 
     const [result, count, opening_balance] = await prisma.$transaction([
       prisma.$queryRawUnsafe<receipt_registers[]>(`SELECT
@@ -171,12 +174,27 @@ class ReceiptRegisterDao {
     LEFT JOIN
     receipt_modes as rmode ON rr.receipt_mode_id = rmode.id
   WHERE (true ${a})`) as any,
-      prisma.$queryRawUnsafe<daily_receipt_balances[]>(`SELECT
-  drb.id,
-  drb.opening_balance
-  FROM
-  daily_receipt_balances as drb
-  WHERE (true ${opDate})`) as any,
+
+      // prisma.$queryRawUnsafe<daily_receipt_balances[]>(`SELECT
+      // SUM(rr.bank_amount + rr.cash_amount) as opening_balance
+      // FROM
+      // receipt_registers as rr
+      // WHERE (true ${opDate})`) as any,
+
+      prisma.$queryRaw`
+      SELECT
+      SUM(rr.bank_amount + rr.cash_amount) as opening_balance
+      FROM
+      receipt_registers as rr
+      WHERE is_checked = true AND rr.ulb_id = ${ulbId} AND DATE (rr.receipt_date) BETWEEN ${financialDate}::date AND ${cDate}::date
+      ` as any,
+
+      //     prisma.$queryRawUnsafe<daily_receipt_balances[]>(`SELECT
+      // drb.id,
+      // drb.opening_balance
+      // FROM
+      // daily_receipt_balances as drb
+      // WHERE (true ${opDate})`) as any,
     ]);
 
     count[0].opening_balance = opening_balance[0];
@@ -372,10 +390,8 @@ class ReceiptRegisterDao {
   //   return rR;
   // };
 
-
-
-   //Appropve or Check the receipt register direct into daily summary
-   approve = async (req: Request) => {
+  //Appropve or Check the receipt register direct into daily summary
+  approve = async (req: Request) => {
     const ids: IdItem[] = req.body.data.ids;
     const idItems = ids.map((item: { id: number }) => item.id);
     const ulbId = Number(req.body.data.ulb_id);
@@ -454,13 +470,13 @@ class ReceiptRegisterDao {
     const date: string = req.params.date;
     const ulbId: number = Number(req.params.ulbId);
 
-    const data:any = await prisma.$queryRaw`
+    const data: any = await prisma.$queryRaw`
     SELECT id
     FROM
     receipt_registers
     WHERE receipt_date::date = ${date}::date AND ulb_id = ${ulbId} AND is_checked = true
     LIMIT 1
-    `
+    `;
 
     return generateRes(data[0]);
   };

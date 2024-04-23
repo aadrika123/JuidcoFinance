@@ -11,10 +11,11 @@ import { useQuery } from "react-query";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import LoaderSkeleton from "@/components/global/atoms/LoaderSkeleton";
+import { useSelector } from "react-redux";
 
 type stateProps = {
   moduleId: number | null;
-}
+};
 
 const Home = () => {
   const router = useRouter();
@@ -22,10 +23,11 @@ const Home = () => {
     moduleId: null,
   });
   const { moduleId } = state;
+  const user = useSelector((state: any) => state.user.user?.userDetails);
 
   const fetchData = async (): Promise<[]> => {
     const res = await axios({
-      url: `${FINANCE_URL.RECEIPT_REGISTER.get}?limit=${10}&page=1&module=${moduleId}&date=${new Date().toISOString().split("T")[0]}`,
+      url: `${FINANCE_URL.RECEIPT_REGISTER.get}?limit=${10}&page=1&order=-1&date=${new Date().toISOString().split("T")[0]}&module=${moduleId}&ulb=${user?.user_type === "Admin" ? undefined : user?.ulb_id}`,
       method: "GET",
     });
 
@@ -43,7 +45,6 @@ const Home = () => {
   const {
     isError: fetchingError,
     isLoading: isFetching,
-    refetch: refetchIt,
     data: data,
   }: any = useQuery(["receipts", moduleId], fetchData);
 
@@ -51,9 +52,6 @@ const Home = () => {
     console.log(fetchingError);
   }
 
-  useEffect(() => {
-    refetchIt();
-  }, [moduleId]);
 
   //////// Table View Button Feature //////////
   const onViewButtonClick1 = (id: string) => {
@@ -62,7 +60,11 @@ const Home = () => {
 
   /////// Handling Module Click
   const handleClick = (id: number) => {
-    setState({ ...state, moduleId: id });
+    if (moduleId === id) {
+      setState({ ...state, moduleId: null });
+    } else {
+      setState({ ...state, moduleId: id });
+    }
   };
 
   const tButton = (id: string) => {
