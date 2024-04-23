@@ -3,7 +3,7 @@ import Button from "@/components/global/atoms/Button";
 import Table from "@/components/global/molecules/Table";
 // const Table = lazy(()=> import("@/components/global/molecules/Table"));
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import HomeHeader from "./Header";
 import HomeCard, { RactangleCard } from "./Card";
 import AllHomeButtons from "./AllButtons";
