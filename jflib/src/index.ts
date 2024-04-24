@@ -10,8 +10,22 @@ const escapeRegExp = (text:string):string => {
 }
 
 
+// format currency
+const fc = (n: number) => {
+  if(n == undefined || n == null)
+     return  "NaN";
+  return n.toLocaleString("en-IN", {
+    maximumFractionDigits: 2,
+    style: 'currency',
+    currency: 'INR'
+  });
+}
+
+
+
 export {
   escapeRegExp,
+  fc,
   AccountingCodeType,
   BankMasterValidation,
   BalanceTrackingsValidation

@@ -15,6 +15,7 @@ import Loader from "@/components/global/atoms/Loader";
 import TrialBalanceHeaderComponent from "./TrialBalanceHeaderComponent";
 import { usePathname } from "next/navigation";
 import { useReactToPrint } from "react-to-print";
+import {fc} from "jflib";
 
 
 
@@ -27,6 +28,8 @@ export const TrialBalanceComponent = () => {
   const [finYear, setFinYear] = useState<number>(0);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [totalTrialBalance, setTotalTrialBalance] = useState<number>(-1);
 
 
   const printableComponentRef = useRef(null);
@@ -83,6 +86,13 @@ export const TrialBalanceComponent = () => {
 
   useEffect(() => {
     if(ItemData != null && ItemData.length != 0){
+      let totalDebit = 0;
+      let totalCredit = 0;
+      ItemData.forEach((item)=>{
+        totalDebit += item.debit_balance;
+        totalCredit += item.credit_balance;
+      });
+      setTotalTrialBalance(totalCredit - totalDebit);
       setIsLoading(false);
     }
   }, [ItemData, pathName]);
@@ -95,7 +105,8 @@ export const TrialBalanceComponent = () => {
       <section className="border bg-white shadow-2xl p-6 px-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="text-primary_green rounded-md px-2 pb-1 bg-primary_green text-sub_head font-semibold flex items-center">
+          <div className="text-primary_bg_indigo rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
+
               <Select
                 label=""
                 name="fin_year"
@@ -107,11 +118,11 @@ export const TrialBalanceComponent = () => {
               />
             </div>
 
-            <div className="text-primary_green rounded-md px-2 pb-1 bg-primary_green text-sub_head font-semibold flex items-center">
+            <div className="text-primary_bg_indigo rounded-md px-2 pb-1 text-sub_head font-semibold flex items-center">
               <Select
                 label=""
                 name="ulb_id"
-                className="w-48 text-primary_green bg-white outline-none"
+                className="w-56 border-[#4338ca] text-primary_bg_indigo"
                 api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
                 onChange={setUlb}
                 value={ulbID}
@@ -151,14 +162,19 @@ export const TrialBalanceComponent = () => {
                     {item.description}
                     </td>
                     <td className="border border-slate-300 px-4">
-                    {item.debit_balance}
+                    {fc(item.debit_balance)}
                     </td>
                     <td className="border border-slate-300 px-4">
-                    {item.credit_balance}
+                    {fc(item.credit_balance)}
                     </td>
                     </tr>);
                 })}
 
+                <tr className="border border-slate-300 px-4 font-bold">
+                  <td className="border border-slate-300 px-4"></td>
+                  <td className="border border-slate-300 px-4">Trial Balance</td>
+                  <td colSpan={4} className="border border-slate-300 px-4">{fc(totalTrialBalance)}</td>
+                </tr>
               
 
             </tbody>

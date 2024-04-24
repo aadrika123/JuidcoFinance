@@ -77,6 +77,7 @@ type Urls = {
     getByAccCodeAndUlbId?: string;
     getCheckedData?: string;
     getByReveAndAccId?: string;
+    getLedgerCodesOld?: string;
   };
 };
 
@@ -242,7 +243,8 @@ export const FINANCE_URL: Urls = {
     getChildCodes: "/get-child-account-codes",
     getParentCodes: "/get-codes-with-parent-detail",
     create: "/request-new-acc-code",
-    getLedgerCodes: "get-ledger-codes",
+    getLedgerCodesOld: "get-ledger-codes",
+    getLedgerCodes: "get-ledger-codes-for-bank-entry",
   },
   REVENUE_ACCOUNTED_TYPE: {
     get: "/revenue-accounted-types/get",

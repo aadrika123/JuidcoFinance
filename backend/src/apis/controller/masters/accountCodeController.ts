@@ -342,6 +342,36 @@ class AccountCodeController {
       return CommonRes.SERVER_ERROR(error, resObj, req, res);
     }
   };
+
+
+  getLedgerCodesForBankEntry = async (
+    req: Request,
+    res: Response,
+    apiId: string
+  ): Promise<Response> => {
+    const resObj: resObj = { apiId, action: "GET", version: "1.0" };
+    try {
+      const data = await this.dao.getLedgerCodesForBankEntry();
+      if (!data)
+        return CommonRes.NOT_FOUND(
+          resMessage('Ledger').NOT_FOUND,
+          data,
+          resObj,
+          req,
+          res
+        );
+
+      return CommonRes.SUCCESS(
+        resMessage('Ledger').FOUND,
+        data,
+        resObj,
+        req,
+        res
+      );
+    } catch (error: any) {
+      return CommonRes.SERVER_ERROR(error, resObj, req, res);
+    }
+  };
 }
 
 export default AccountCodeController;
