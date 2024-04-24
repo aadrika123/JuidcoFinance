@@ -171,7 +171,8 @@ class AccountingCodeDao {
   getLedgerCodesForBankEntry = async () => {
 
     const codeList: number[] = [
-      1100101, 1100102,
+      1100101,
+1100102,
 1100103,
 1100104,
 1100105,
@@ -233,6 +234,7 @@ class AccountingCodeDao {
 1401112,
 1401113,
 1401114,
+1401115,
 1401116,
 1401302,
 1404006,
@@ -245,6 +247,8 @@ class AccountingCodeDao {
 1404010,
 1404011,
 1404012,
+1401503,
+
     ];
 
     const data = await prisma.$queryRaw<
