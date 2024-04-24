@@ -11,7 +11,7 @@ interface BalanceSheetHeaderComponentProps{
 const BalanceSheetHeaderComponent: React.FC<BalanceSheetHeaderComponentProps> = (props: BalanceSheetHeaderComponentProps) => {
   return (
     <>
-      <div className="overflow-x-auto flex justify-between px-4 border shadow-lg mb-4">
+      <div className="overflow-x-auto flex justify-between p-4 border shadow-lg mb-4">
         <div className="flex items-cente">
           <SubHeading className="text-2xl">Balance Sheet</SubHeading>
         </div>

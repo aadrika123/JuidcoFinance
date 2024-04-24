@@ -1,5 +1,5 @@
 import Button from "@/components/global/atoms/Button";
-import { fc } from "@/utils/helper";
+import { fc } from "jflib";
 import React, { ReactNode, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import parse from "html-react-parser";

@@ -10,7 +10,7 @@ interface TrialBalanceHeaderComponentProps{
 const TrialBalanceHeaderComponent = (props: TrialBalanceHeaderComponentProps) => {
   return (
     <>
-      <div className="overflow-x-auto flex justify-between px-4 border shadow-lg mb-4">
+      <div className="overflow-x-auto flex justify-between p-4 border shadow-lg mb-4">
         <div className="flex items-center">
           <SubHeading className="text-2xl">Trial Balance</SubHeading>
          
