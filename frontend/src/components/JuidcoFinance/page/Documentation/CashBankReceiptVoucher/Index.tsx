@@ -128,6 +128,7 @@ export const HeroCashBankRVoucher= () => {
       value: sButton,
     },
     { name: "id", caption: "Sr. No."},
+    { name: "crv_brv_no", caption: "Voucher No"},
     { name: "voucher_date", caption: "Voucher Date"},
     { name: "amount", caption: "Amount"},
     { name: "bank", caption: "Bank Account"},

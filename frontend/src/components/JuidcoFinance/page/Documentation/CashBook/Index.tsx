@@ -1,28 +1,36 @@
 "use client";
 
-// import Button from "@/components/global/atoms/Button";
+import Button from "@/components/global/atoms/Button";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import { FINANCE_URL } from "@/utils/api/urls";
-// import { usePathname } from "next/navigation";
-// import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 const HeroCashBook = () => {
-  // const router = useRouter();
-  // const pathName = usePathname();
-  // const onViewButtonClick = (id: string) => {
-  //   router.push(`${pathName}/view/${id}?mode=edit`);
-  // };
+  const router = useRouter();
+  const pathName = usePathname();
+  const [workingAnimation, activateWorkingAnimation] = useWorkingAnimation();
 
-  // const tButton = (id: string) => {
-  //   return (
-  //     <>
-  //       <Button variant="primary" onClick={() => onViewButtonClick(id)}>
-  //         View
-  //       </Button>
-  //     </>
-  //   );
-  // };
+  const onViewButtonClick = (id: string) => {
+    activateWorkingAnimation();
+    router.push(`${pathName}/view/${id}`);
+  };
+
+   ////////// View Button
+   const tButton = (id: string) => {
+    return (
+      <>
+        <Button
+          variant="primary"
+          className="py-2 px-4"
+          onClick={() => onViewButtonClick(id)}
+        >
+          View
+        </Button>
+      </>
+    );
+  };
 
   const column = [
     { name: "id", caption: "Sr. No." },
@@ -31,14 +39,15 @@ const HeroCashBook = () => {
     { name: "primary_acc_code", caption: "Code of Account" },
     { name: "lf_no", caption: "L/F" },
     { name: "amount", caption: "Amount" },
-    // {
-    //   name: "View / Edit",
-    //   caption: <span>View / Edit</span>,
-    //   value: tButton
-    // },
+    {
+      name: "View",
+      caption: <span>View</span>,
+      value: tButton
+    },
   ];
   return (
     <div>
+      {workingAnimation}
       <TableWithFeatures
         title="Cash Book"
         center

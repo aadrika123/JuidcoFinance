@@ -229,59 +229,59 @@ class CashBankReceiptVoucherDao {
     const date = req.body.data.date;
     const lf_no = `lf-${new Date().getDate()}-${new Date().getMonth()}-1`;
 
-    await prisma.$transaction(async (tx) => {
-      const dr = (await tx.$queryRaw`
-      SELECT bt.primary_acc_code_id as bank_type_id, cbrv.primary_acc_code_id,  cbrv.amount
-      FROM
-      cash_bank_receipt_vouchers as cbrv
-      LEFT JOIN
-      bank_masters as bm ON cbrv.bank_id = bm.id
-      LEFT JOIN
-      bank_types as bt ON bm.bank_type_id = bt.id
-      LEFT JOIN 
-      municipality_codes as mc ON cbrv.ulb_id = mc.id
-      WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
-        idItems
-      )}) AND is_approved = false)
-      `) as any;
+    // await prisma.$transaction(async (tx) => {
+    //   const dr = (await tx.$queryRaw`
+    //   SELECT bt.primary_acc_code_id as bank_type_id, cbrv.primary_acc_code_id,  cbrv.amount
+    //   FROM
+    //   cash_bank_receipt_vouchers as cbrv
+    //   LEFT JOIN
+    //   bank_masters as bm ON cbrv.bank_id = bm.id
+    //   LEFT JOIN
+    //   bank_types as bt ON bm.bank_type_id = bt.id
+    //   LEFT JOIN
+    //   municipality_codes as mc ON cbrv.ulb_id = mc.id
+    //   WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+    //     idItems
+    //   )}) AND is_approved = false)
+    //   `) as any;
 
-      for (const item of dr) {
-        await this.balanceTrackingDao.updateBalances(
-          ulbId,
-          item.bank_type_id,
-          -1 * item.amount
-        );
-        await this.balanceTrackingDao.updateBalances(
-          ulbId,
-          item.primary_acc_code_id,
-          item.amount
-        );
-      }
+    //   for (const item of dr) {
+    //     await this.balanceTrackingDao.updateBalances(
+    //       ulbId,
+    //       item.bank_type_id,
+    //       -1 * item.amount
+    //     );
+    //     await this.balanceTrackingDao.updateBalances(
+    //       ulbId,
+    //       item.primary_acc_code_id,
+    //       item.amount
+    //     );
+    //   }
 
-      await tx.$queryRaw`
-      INSERT INTO cash_books (receipt_voucher_no, lf_no, primary_acc_code_id, amount)
-      SELECT cbrv.crv_brv_no, ${lf_no}, cbrv.primary_acc_code_id, cbrv.amount
-      FROM 
-      cash_bank_receipt_vouchers as cbrv
-      LEFT JOIN 
-      municipality_codes as mc ON cbrv.ulb_id = mc.id
-      WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
-        idItems
-      )}) AND is_approved = false)
-      `;
+    //   await tx.$queryRaw`
+    //   INSERT INTO cash_books (receipt_voucher_no, lf_no, primary_acc_code_id, amount)
+    //   SELECT cbrv.crv_brv_no, ${lf_no}, cbrv.primary_acc_code_id, cbrv.amount
+    //   FROM
+    //   cash_bank_receipt_vouchers as cbrv
+    //   LEFT JOIN
+    //   municipality_codes as mc ON cbrv.ulb_id = mc.id
+    //   WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+    //     idItems
+    //   )}) AND is_approved = false)
+    //   `;
 
-      return await tx.cash_bank_receipt_vouchers.updateMany({
-        where: {
-          OR: ids,
-          is_approved: false,
-        },
-        data: {
-          is_approved: true,
-          checked_by_id: req.body.data.checked_by_id,
-          checked_by_print_name: req.body.data.checked_by_print_name,
-        },
-      });
-    });
+    //   return await tx.cash_bank_receipt_vouchers.updateMany({
+    //     where: {
+    //       OR: ids,
+    //       is_approved: false,
+    //     },
+    //     data: {
+    //       is_approved: true,
+    //       checked_by_id: req.body.data.checked_by_id,
+    //       checked_by_print_name: req.body.data.checked_by_print_name,
+    //     },
+    //   });
+    // });
 
     const [dr, , rR] = await prisma.$transaction([
       prisma.$queryRaw`
@@ -300,16 +300,16 @@ class CashBankReceiptVoucherDao {
       ` as any,
 
       prisma.$queryRaw`
-INSERT INTO cash_books (receipt_voucher_no, lf_no, primary_acc_code_id, amount)
-SELECT cbrv.crv_brv_no, ${lf_no}, cbrv.primary_acc_code_id, cbrv.amount
-FROM 
-cash_bank_receipt_vouchers as cbrv
-LEFT JOIN 
-municipality_codes as mc ON cbrv.ulb_id = mc.id
-WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
+      INSERT INTO cash_books (receipt_voucher_no, lf_no, primary_acc_code_id, amount)
+      SELECT cbrv.crv_brv_no, ${lf_no}, cbrv.primary_acc_code_id, cbrv.amount
+      FROM 
+      cash_bank_receipt_vouchers as cbrv
+      LEFT JOIN 
+      municipality_codes as mc ON cbrv.ulb_id = mc.id
+      WHERE (mc.id = ${ulbId} AND cbrv.voucher_date::date = ${date}::date AND cbrv.id IN (${Prisma.join(
         idItems
       )}) AND is_approved = false)
-`,
+      `,
       prisma.cash_bank_receipt_vouchers.updateMany({
         where: {
           OR: ids,

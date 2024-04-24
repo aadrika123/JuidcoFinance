@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
@@ -38,19 +38,15 @@ export const ViewCashBankRVoucher = ({
     content: () => cashBankRef.current,
   });
 
-  const { refetch: reloadData, data: initialData , isFetching} = useQuery(
+  const { data: initialData , isFetching} = useQuery(
     ["cash-bank-r-v-get-single", ReceiptVoucherID],
     fetchData
   );
 
-  useEffect(() => {
-    reloadData();
-  }, [ReceiptVoucherID]);
-
   return (
     <>
       <HeaderWidgetForPrintTemp
-        title="View Cash/Bank Receipt Voucher"
+        title="Cash/Bank Receipt Voucher"
         variant="view"
         handlePrint={handlePrint}
       />

@@ -322,5 +322,6 @@ export const FINANCE_URL: Urls = {
   },
   CASH_BOOK: {
     get: "/cash-book/get-all",
+    getById: "/cash-book/get-by-id",
   }
 };
