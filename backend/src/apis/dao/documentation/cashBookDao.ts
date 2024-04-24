@@ -41,8 +41,9 @@ class CashBookDao {
     let a = "";
     if (search) {
       a += ` AND(
-        mc.ulbs ILIKE ${searchCondition} OR
-        ac.code ILIKE ${searchCondition}
+        ac.code ILIKE ${searchCondition} OR
+        cb.receipt_voucher_no ILIKE ${searchCondition} OR
+        ac.description ILIKE ${searchCondition}
       )`;
     }
 

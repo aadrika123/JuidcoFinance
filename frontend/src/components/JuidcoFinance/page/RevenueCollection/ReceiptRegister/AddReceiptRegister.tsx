@@ -73,6 +73,19 @@ export const AddReceiptRegister = () => {
 
   ///////////////// Handling on Form Submit or on Form Edit ///////////////
   const onSubmit = (values: any) => {
+    if (
+      values.receipt_mode_id_name === "cash" ||
+      values.receipt_mode_id_name === "online"
+    ) {
+      values.cheque_or_draft_no = "";
+      if (values.receipt_mode_id_name !== "online") values.bank_amount = "";
+    } else if (
+      values.receipt_mode_id_name === "cheque" ||
+      values.receipt_mode_id_name === "online"
+    ) {
+      values.cash_amount = "";
+    }
+
     if (!isUpdateMode.isOnEdit) {
       setData((prev) => [
         ...prev,
@@ -110,7 +123,7 @@ export const AddReceiptRegister = () => {
                 values.receipt_mode_id_name || item.receipt_mode_id_name,
               receipt_date: values.receipt_date,
               cheque_or_draft_no: values.cheque_or_draft_no || "",
-              bank_amount: values.bank_amount || item.bank_amount,
+              bank_amount: values.bank_amount,
               cash_amount: values.cash_amount,
               bank_acc_no: values.bank_acc_no || "",
               deposit_date: values.deposit_date,
@@ -129,6 +142,7 @@ export const AddReceiptRegister = () => {
       });
     }
     dispatch(closePopup());
+    setIsUpdateMode({ id: "", isOnEdit: false });
     resetInitialValue();
   };
 
@@ -183,7 +197,7 @@ export const AddReceiptRegister = () => {
   const handleCount = () => {
     let sum = 0;
     data.forEach((item) => {
-      sum = sum + Number(item.cash_amount);
+      sum = sum + Number(item.cash_amount) + Number(item.bank_amount);
     });
     return sum;
   };

@@ -7,8 +7,8 @@ const receipt_modes_seeder = async () => {
     'cheque',
     'online'
   ]
-  const number_of_records = 2;
-  for (let i = 0; i < number_of_records; i++) {
+
+  for (let i = 0; i < data.length; i++) {
     const record = {
       name: data[i],
       created_at: faker.date.past(),

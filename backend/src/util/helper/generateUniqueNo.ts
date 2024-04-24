@@ -8,3 +8,12 @@ export const generateUniquePaymentNo = (initialString?: string): string => {
 
   return initialString ? initialString + unqId : unqId;
 };
+
+export function generateMultiUniqueNo(prefix:string, count:number) {
+  const uniqueId = uuidv4();
+  const uniqueNumbers = [];
+  for (let i = 0; i < count; i++) {
+      uniqueNumbers.push(`${prefix}-${uniqueId.substring(0, 6)}`);
+  }
+  return uniqueNumbers;
+}

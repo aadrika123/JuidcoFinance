@@ -87,7 +87,9 @@ class ReceiptRegisterDao {
         mc.ulbs ILIKE ${searchCondition} OR
         ac.code ILIKE ${searchCondition} OR
         rmodule.name ILIKE ${searchCondition} OR
-        rmode.name ILIKE ${searchCondition}
+        rmode.name ILIKE ${searchCondition} OR
+        rr.receipt_no ILIKE ${searchCondition} OR
+        rr.paid_by ILIKE ${searchCondition}
       )`;
     }
 

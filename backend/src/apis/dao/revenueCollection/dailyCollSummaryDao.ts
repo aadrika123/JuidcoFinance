@@ -1,7 +1,9 @@
 import { Request } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { generateRes } from "../../../util/generateRes";
-import { generateUniquePaymentNo } from "../../../util/helper/generateUniqueNo";
+import {
+  generateUniquePaymentNo,
+} from "../../../util/helper/generateUniqueNo";
 
 /**
  * | Author- Sanjiv Kumar
@@ -47,8 +49,8 @@ class DailyCollSummaryDao {
     let a = "";
     if (search) {
       a += ` AND(
-        mc.ulbs ILIKE ${searchCondition} OR
-        ac.code ILIKE ${searchCondition} OR
+        ac.description ILIKE ${searchCondition} OR
+        acg.description ILIKE ${searchCondition}
       )`;
     }
 
@@ -62,7 +64,7 @@ class DailyCollSummaryDao {
 
     // const opDate: string = date ? `AND DATE (drb.created_at) = '${date}'` : "";
     const b = a + ` AND rm.id = 1`;
-    const c = a + ` AND rm.id = 2`;
+    const c = a + ` AND rm.id = 2 OR rm.id = 3`;
 
     const d = ` (bm.ulb_id = ${ulbId} AND bm.primary_acc_code_id = ac.id)`;
 
@@ -273,31 +275,66 @@ WHERE (true ${c})
     const checked_by_id = Number(req.body.data.checked_by_id);
     const checked_by_print_name = req.body.data.checked_by_print_name;
 
-    const [, rR] = await prisma.$transaction([
-      prisma.$queryRaw`
-        INSERT INTO cash_bank_receipt_vouchers (crv_brv_no, ulb_id, bank_id, primary_acc_code_id, amount, checked_by_id, checked_by_print_name)
-        SELECT  ${generateUniquePaymentNo(
-          "crv-brv"
-        )}, ulb_id, bank_id, primary_acc_code_id, amount, ${checked_by_id}, ${checked_by_print_name}
-        FROM daily_coll_summaries
-        WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
-        ON CONFLICT DO NOTHING;
-      `,
+    // Call generateUniqueNos once to get unique numbers for all entries
+    // const uniqueNos = generateMultiUniqueNo("crv-brv", idItems.length);
 
-      prisma.daily_coll_summaries.updateMany({
-        where: {
-          OR: ids,
-          is_checked: false,
-        },
-        data: {
-          is_checked: true,
-          checked_by_id,
-          checked_by_print_name,
-        },
-      }),
-    ]);
+    // const [, rR] = await prisma.$transaction([
+    //   prisma.$queryRaw`
+    //     INSERT INTO cash_bank_receipt_vouchers (crv_brv_no, ulb_id, bank_id, primary_acc_code_id, amount, checked_by_id, checked_by_print_name)
+    //     SELECT ${Prisma.join(
+    //       uniqueNos
+    //     )}, ulb_id, bank_id, primary_acc_code_id, amount, ${checked_by_id}, ${checked_by_print_name}
+    //     FROM daily_coll_summaries
+    //     WHERE id IN (${Prisma.join(idItems)}) AND is_checked = false
+    //     ON CONFLICT DO NOTHING;
+    //   `,
 
-    return rR;
+    //   prisma.daily_coll_summaries.updateMany({
+    //     where: {
+    //       OR: ids,
+    //       is_checked: false,
+    //     },
+    //     data: {
+    //       is_checked: true,
+    //       checked_by_id,
+    //       checked_by_print_name,
+    //     },
+    //   }),
+    // ]);
+
+    // return rR;
+
+    const transactions = [];
+
+    for (let i = 0; i < idItems.length; i++) {
+      const uniqueNo = generateUniquePaymentNo("crv-brv");
+      const [, rR] = await prisma.$transaction([
+        prisma.$queryRaw`
+            INSERT INTO cash_bank_receipt_vouchers (crv_brv_no, ulb_id, bank_id, primary_acc_code_id, amount, checked_by_id, checked_by_print_name)
+            SELECT ${uniqueNo}, ulb_id, bank_id, primary_acc_code_id, amount, ${checked_by_id}, ${checked_by_print_name}
+            FROM daily_coll_summaries
+            WHERE id = ${idItems[i]} AND is_checked = false
+            ON CONFLICT DO NOTHING;
+        `,
+
+        prisma.daily_coll_summaries.updateMany({
+          where: {
+            id: idItems[i],
+            is_checked: false,
+          },
+          data: {
+            is_checked: true,
+            checked_by_id,
+            checked_by_print_name,
+          },
+        }),
+      ]);
+
+      transactions.push(rR);
+    }
+
+    // Execute all transactions together
+    return await Promise.all(transactions);
   };
 
   ///// Get One Checked Data
@@ -305,13 +342,13 @@ WHERE (true ${c})
     const date: string = req.params.date;
     const ulbId: number = Number(req.params.ulbId);
 
-    const data:any = await prisma.$queryRaw`
+    const data: any = await prisma.$queryRaw`
     SELECT id
     FROM
     daily_coll_summaries
     WHERE receipt_date::date = ${date}::date AND ulb_id = ${ulbId} AND is_checked = true
     LIMIT 1
-    `
+    `;
 
     return generateRes(data[0]);
   };

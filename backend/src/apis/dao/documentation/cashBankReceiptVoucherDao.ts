@@ -49,8 +49,7 @@ class CashBankReceiptVoucherDao {
     let a = "";
     if (search) {
       a += ` AND(
-        mc.ulbs ILIKE ${searchCondition} OR
-        ac.code ILIKE ${searchCondition}
+        bm.bank_acc_no ILIKE ${searchCondition}
       )`;
     }
 

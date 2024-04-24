@@ -15,6 +15,7 @@ import axios from "@/lib/axiosConfig";
 import InputForUpdateField from "@/components/global/atoms/InputForUpdateValue";
 import { useParams } from "next/navigation";
 import SelectForUpdateValue from "@/components/global/atoms/SelectForUpdateValue";
+import SelectForNoApi from "@/components/global/atoms/SelectForNoApi";
 
 /**
  * | Author- Sanjiv Kumar
@@ -78,9 +79,9 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     setState({ ...state, revModId: e });
   };
 
-  const fetchData = async (endpoint: string) => {
+  const fetchData = async (endpoint: string, isDependent?: boolean) => {
     try {
-      if (accCodeId) {
+      if (accCodeId || !isDependent) {
         const res = await axios({
           url: endpoint,
           method: "GET",
@@ -95,18 +96,23 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
     }
   };
 
-  const useForApiCall = (endpoint: string) => {
-    return useQuery([endpoint], () => fetchData(endpoint));
+  const useForApiCall = (endpoint: string, isDependent?: boolean) => {
+    return useQuery([endpoint], () => fetchData(endpoint, isDependent));
   };
 
   //// Get bank_acc_no
   const { data: dataList, isFetching: isBankFetching } = useForApiCall(
-    `${FINANCE_URL.BANK_MASTER_URL.getByAccCodeAndUlbId}/${accCodeId}/${ulbId}`
+    `${FINANCE_URL.BANK_MASTER_URL.getByAccCodeAndUlbId}/${accCodeId}/${ulbId}`, true
   );
 
   //// Get revenue accounted type
   const { data: raType, isFetching: isRevFetching } = useForApiCall(
-    `${FINANCE_URL.REVENUE_ACCOUNTED_TYPE.getByReveAndAccId}/${accCodeId}`
+    `${FINANCE_URL.REVENUE_ACCOUNTED_TYPE.getByReveAndAccId}/${accCodeId}`, true
+  );
+
+   //// Get revenue accounted type
+   const { data: mode = []} = useForApiCall(
+    `${FINANCE_URL.RECEIPT_MODE.get}`, false
   );
 
   return (
@@ -214,7 +220,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="Enter Paid By"
                   />
 
-                  <Select
+                  <SelectForNoApi
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.receipt_mode_id}
@@ -225,7 +231,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     label="Mode of Receipt"
                     name="receipt_mode_id"
                     placeholder="Select Mode of Receipt"
-                    api={`${FINANCE_URL.RECEIPT_MODE.get}`}
+                    data={mode}
                   />
 
                   <Input
@@ -242,7 +248,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     placeholder="undefined"
                   />
 
-                  {values.receipt_mode_id_name === "cheque" && (
+                  {mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "cheque" && (
                     <Input
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -250,49 +256,39 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       error={errors.cheque_or_draft_no}
                       touched={touched.cheque_or_draft_no}
                       readonly={readonly}
+                      required
                       label="Cheque / Draft No"
                       name="cheque_or_draft_no"
                       placeholder="Enter Cheque / Draft No"
                     />
                   )}
 
-                  {/* <Select
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.bank_id}
-                    error={errors.bank_id}
-                    touched={touched.bank_id}
-                    readonly={readonly}
-                    label="Bank"
-                    name="bank_id"
-                    placeholder="Select Bank"
-                    api={`${FINANCE_URL.ACCOUNTING_CODE_URL.get}`}
-                  /> */}
-
-                  {(values.receipt_mode_id_name === "online" ||
-                    values.receipt_mode_id_name === "cheque") && (
+                  {(mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "online" ||
+                    mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "cheque") && (
                       <Input
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.bank_amount}
                         error={errors.bank_amount}
                         touched={touched.bank_amount}
-                        readonly={readonly || values.cheque_or_draft_no === ""}
-                        label="Bank Amount (amounts received through cheque / draft)"
+                        readonly={readonly}
+                        required
+                        label="Bank Amount (amounts received through cheque / draft / online)"
                         name="bank_amount"
                         type="number"
                         placeholder="Enter Bank Amount"
                       />
                     )}
 
-                  {values.receipt_mode_id_name === "cash" && (
+                  {mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "cash" && (
                     <Input
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.cash_amount}
                       error={errors.cash_amount}
                       touched={touched.cash_amount}
-                      readonly={readonly || values.cheque_or_draft_no !== ""}
+                      readonly={readonly}
+                      required
                       label="Cash Amount (amounts received by cash)"
                       name="cash_amount"
                       type="number"
@@ -345,7 +341,7 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                     }
                   />
 
-                  {values.receipt_mode_id_name === "cheque" && (
+                  {mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "cheque" && (
                     <Input
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -353,13 +349,14 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       error={errors.deposit_date}
                       touched={touched.deposit_date}
                       readonly={readonly}
+                      required
                       label="Date of Deposit"
                       name="deposit_date"
                       type="date"
                       placeholder="undefined"
                     />)}
 
-                  {values.receipt_mode_id_name === "cheque" && (
+                  {mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "cheque" && (
                     <Input
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -367,13 +364,14 @@ const FormikW: React.FC<FormikWrapperProps> = (props) => {
                       error={errors.realisation_date}
                       touched={touched.realisation_date}
                       readonly={readonly}
+                      required
                       label="Date of Realisation"
                       name="realisation_date"
                       type="date"
                       placeholder="undefined"
                     />
                   )}
-                  {values.receipt_mode_id_name === "cheque" && (
+                  {mode.find((i: any)=> i.id === values.receipt_mode_id)?.name === "cheque" && (
                     <RadioButtons
                       onChange={handleChange}
                       onBlur={handleBlur}

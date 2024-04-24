@@ -102,7 +102,6 @@ export const ViewCashBankRVoucher = ({
                 <tr>
                   <th className="border">Code of Account</th>
                   <th className="border">Account Description</th>
-                  <th className="border">Challan for Remittance of Money No</th>
                   <th className="border">Amount (Rs.)</th>
                 </tr>
               </thead>
@@ -114,7 +113,6 @@ export const ViewCashBankRVoucher = ({
                   <td className="border">
                     {initialData?.primary_acc_code?.description}
                   </td>
-                  <td className="border">3</td>
                   <td className="border">{initialData?.amount}</td>
                 </tr>
               </tbody>

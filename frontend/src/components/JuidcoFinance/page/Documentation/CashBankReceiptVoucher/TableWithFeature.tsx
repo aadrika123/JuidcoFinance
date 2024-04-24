@@ -109,17 +109,17 @@ const TableWithFeatures = <T,>({
   const {
     isError: fetchingError,
     isFetching: isFetching,
-    refetch: refetchData,
   } = useQuery([page, searchText, ulbId, date], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
   }
 
-  useEffect(() => {
-    setIsSearching(true);
-    refetchData();
-  }, [page, searchText, ulbId, date]);
+  // useEffect(() => {
+  //   setIsSearching(true);
+  //   console.log("first", searchText)
+  //   refetchData();
+  // }, [page, searchText, ulbId, date]);
 
   const onSearchTextChange = (text: string) => {
     setState((prev) => ({ ...prev, searchText: text, page: 1 }));
