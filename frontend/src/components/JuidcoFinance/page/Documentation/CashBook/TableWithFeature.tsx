@@ -14,16 +14,14 @@ import { useSelector } from "react-redux";
 
 /**
  * | Author- Sanjiv Kumar
- * | Created On- 10-04-2024
- * | Created for- Reusable Record List With Search
+ * | Created On- 24-04-2024
+ * | Created for- Cash Book
  * | Status: open
  */
 
 interface TableWithFeaturesProps {
-  footer: React.ReactNode;
   columns: Array<ColumnProps>;
   api: string;
-  depApi: string;
   numberOfRowsPerPage: number;
   value?: () => void;
   center?: boolean;
@@ -39,17 +37,14 @@ interface stateTypes<T> {
   data: T[];
   ulbId: number | string;
   date: Date;
-  filtered: T[];
+  bankId: number | string;
 }
 
 const TableWithFeatures = <T,>({
-  footer,
   columns,
   api,
-  depApi,
   numberOfRowsPerPage,
   center = false,
-  ...rest
 }: TableWithFeaturesProps) => {
   const [isSearching, setIsSearching] = useState(false);
   const userData = useSelector((state: any) => state.user.user?.userDetails);
@@ -65,19 +60,14 @@ const TableWithFeatures = <T,>({
     data: [],
     ulbId: user?.ulb_id,
     date: new Date(),
-    filtered: [],
+    bankId: "",
   });
-  const { page, pageCount, searchText, data, ulbId, date } = state;
+  const { page, pageCount, searchText, data, ulbId, date, bankId } = state;
 
   ///////////////// Fetching List of Data //////////////
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
-      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}&date=${date.toISOString().split("T")[0]}`,
-      method: "GET",
-    });
-
-    const res1 = await axios({
-      url: `${depApi}/${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}/${date.toISOString().split("T")[0]}`,
+      url: `${api}?search=${searchText}&limit=${numberOfRowsPerPage}&page=${page}&order=-1&ulb=${(user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2}&bank=${bankId}&date=${date.toISOString().split("T")[0]}`,
       method: "GET",
     });
 
@@ -86,30 +76,20 @@ const TableWithFeatures = <T,>({
       data = { totalPage: 0, data: [] };
     }
 
-    const filteredData = data.data.map((item: any) => ({ id: item.id }));
     setState((prev) => ({
       ...prev,
       pageCount: data.totalPage,
       data: data.data,
-      filtered: filteredData,
     }));
-
-    rest.handleGet &&
-      rest.handleGet({
-        isApproved: res1.data.data ? true : false,
-        ulbId: (user?.user_type === "Admin" ? ulbId : user?.ulb_id) || 2,
-        date: date.toISOString().split("T")[0],
-        data: [...state.filtered, ...filteredData],
-      });
 
     setIsSearching(false);
     return data.data;
   };
 
-  const {
-    isError: fetchingError,
-    isFetching: isFetching,
-  } = useQuery([page, searchText, ulbId, date], fetchData);
+  const { isError: fetchingError, isFetching: isFetching } = useQuery(
+    [page, searchText, ulbId, date, bankId],
+    fetchData
+  );
 
   if (fetchingError) {
     console.log(fetchingError);
@@ -132,19 +112,23 @@ const TableWithFeatures = <T,>({
       ...prev,
       ulbId: e.target.value,
       data: [],
-      filtered: [],
     }));
   };
 
-  ////// Handl Selecting Date ///////////
+  ////// Handle Selecting Date ///////////
   const handleDate = (date: Date) => {
-    setState((prev) => ({ ...prev, date: date, data: [], filtered: [] }));
+    setState((prev) => ({ ...prev, date: date, data: [] }));
   };
 
-   ///// Getting the first selected value
-   const initUlbHandler = (value: number) =>{
-    setState({...state, ulbId: value})
-  }
+  ////// Handle Selecting Bank ///////////
+  const handleBank = (e: ChangeEvent<HTMLSelectElement>) => {
+    setState((prev) => ({ ...prev, bankId: e.target.value, data: [] }));
+  };
+
+  ///// Getting the first selected value
+  const initUlbHandler = (value: number) => {
+    setState({ ...state, ulbId: value });
+  };
 
   return (
     <>
@@ -154,12 +138,19 @@ const TableWithFeatures = <T,>({
             <Select
               label=""
               name="ulb_id"
-              className="w-56 text-primary_bg_indigo border-[#4338ca]"
+              className="w-56 text-primary_bg_indigo border-[#4338ca] mr-2"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
               value={user?.user_type === "Admin" ? undefined : user?.ulb_id}
               readonly={user?.user_type === "Admin" ? false : true}
               onChange={handleUlb}
               initHandler={initUlbHandler}
+            />
+            <Select
+              label=""
+              name="ulb_id"
+              className="w-56 text-primary_bg_indigo border-[#4338ca]"
+              api={`${FINANCE_URL.BANK_MASTER_URL.getByUlbId}/${ulbId}`}
+              onChange={handleBank}
             />
             <label
               htmlFor="date-pick"
@@ -195,8 +186,6 @@ const TableWithFeatures = <T,>({
             pageCount={pageCount}
             handlePageChange={handlePageChange}
           />
-
-          {footer}
         </div>
       </section>
     </>

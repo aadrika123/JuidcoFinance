@@ -27,6 +27,16 @@ class CashBookDao {
         : false;
     let order: number = Number(req.query.order);
 
+    const ulbId =
+      req.query.ulb !== undefined && req.query.ulb !== ""
+        ? Number(req.query.ulb)
+        : false;
+
+    const bankId =
+      req.query.bank !== undefined && req.query.bank !== ""
+        ? Number(req.query.bank)
+        : false;
+
     const date =
       req.query.date !== undefined && req.query.date !== ""
         ? String(req.query.date)
@@ -47,6 +57,14 @@ class CashBookDao {
       )`;
     }
 
+    if (ulbId) {
+      a += ` AND cbrv.ulb_id = ${ulbId}`;
+    }
+
+    if (bankId) {
+      a += ` AND cbrv.bank_id = '${bankId}'`;
+    }
+
     if (date) {
       a += ` AND DATE(cb.date) = '${date}'`;
     }
@@ -63,6 +81,8 @@ class CashBookDao {
     FROM
     cash_books as cb
     LEFT JOIN
+    cash_bank_receipt_vouchers as cbrv ON cb.receipt_voucher_no = cbrv.crv_brv_no
+    LEFT JOIN
     account_codes as ac ON cb.primary_acc_code_id = ac.id
     WHERE (true ${a})
     ORDER BY
@@ -74,8 +94,10 @@ class CashBookDao {
       COUNT(*) as total
       FROM
       cash_books as cb
-    LEFT JOIN
-    account_codes as ac ON cb.primary_acc_code_id = ac.id
+      LEFT JOIN
+      cash_bank_receipt_vouchers as cbrv ON cb.receipt_voucher_no = cbrv.crv_brv_no
+      LEFT JOIN
+      account_codes as ac ON cb.primary_acc_code_id = ac.id
     WHERE (true ${a})`) as any,
     ]);
 

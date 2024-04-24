@@ -2,10 +2,10 @@
 
 import Button from "@/components/global/atoms/Button";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
-import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
 import { FINANCE_URL } from "@/utils/api/urls";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import TableWithFeatures from "./TableWithFeature";
 
 const HeroCashBook = () => {
   const router = useRouter();
@@ -49,7 +49,6 @@ const HeroCashBook = () => {
     <div>
       {workingAnimation}
       <TableWithFeatures
-        title="Cash Book"
         center
         columns={column}
         api={FINANCE_URL.CASH_BOOK.get || ""}

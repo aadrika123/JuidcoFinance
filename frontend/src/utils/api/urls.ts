@@ -78,6 +78,7 @@ type Urls = {
     getCheckedData?: string;
     getByReveAndAccId?: string;
     getLedgerCodesOld?: string;
+    getByUlbId?: string;
   };
 };
 
@@ -94,6 +95,7 @@ export const FINANCE_URL: Urls = {
     update: "/bank-master/update",
     getById: "/bank-master/get-by-id",
     getByAccCodeAndUlbId: "/bank-master/get-by-acc-ulb",
+    getByUlbId: "/bank-master/get-by-ulb",
   },
 
   VENDOR_MASTER_URL: {
@@ -248,7 +250,7 @@ export const FINANCE_URL: Urls = {
   },
   REVENUE_ACCOUNTED_TYPE: {
     get: "/revenue-accounted-types/get",
-    getByReveAndAccId : "/revenue-accounted-types/get"
+    getByReveAndAccId: "/revenue-accounted-types/get",
   },
   MUNICIPILATY_CODE_URL: {
     get: "/get-all-munci-code",
@@ -292,19 +294,19 @@ export const FINANCE_URL: Urls = {
     update: "/receipt-register/update",
     getById: "/receipt-register/get-by-id",
     approve: "/receipt-register/approve",
-    getCheckedData: "/receipt-register/get-checked-data"
+    getCheckedData: "/receipt-register/get-checked-data",
   },
   COLLECTION_REGISTER: {
     get: "/collection-register/get-all",
     approve: "/collection-register/approve",
     getById: "/collection-register/get-by-id",
-    getCheckedData: "/collection-register/get-checked-data"
+    getCheckedData: "/collection-register/get-checked-data",
   },
   DAILY_COLL_SUMMARY: {
     get: "/daily-coll-summary/get-all",
     approve: "/daily-coll-summary/approve",
     getById: "/daily-coll-summary/get-by-id",
-    getCheckedData: "/daily-coll-summary/get-checked-data"
+    getCheckedData: "/daily-coll-summary/get-checked-data",
   },
   REVENUE_MODULE: {
     get: "/revenue-modules/get-all",
@@ -320,10 +322,10 @@ export const FINANCE_URL: Urls = {
     get: "/cash-bank-receipt-voucher/get-all",
     approve: "/cash-bank-receipt-voucher/approve",
     getById: "/cash-bank-receipt-voucher/get-by-id",
-    getCheckedData: "/cash-bank-receipt-voucher/get-checked-data"
+    getCheckedData: "/cash-bank-receipt-voucher/get-checked-data",
   },
   CASH_BOOK: {
     get: "/cash-book/get-all",
     getById: "/cash-book/get-by-id",
-  }
+  },
 };
