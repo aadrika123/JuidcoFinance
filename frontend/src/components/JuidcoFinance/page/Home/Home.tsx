@@ -15,43 +15,51 @@ import { useSelector } from "react-redux";
 
 type stateProps = {
   moduleId: number | null;
+  page: number;
+  limit: number;
 };
 
 const Home = () => {
   const router = useRouter();
   const [state, setState] = useState<stateProps>({
     moduleId: null,
+    page: 1,
+    limit: 10,
   });
-  const { moduleId } = state;
+  const { moduleId, page, limit } = state;
   const user = useSelector((state: any) => state.user.user?.userDetails);
 
-  const fetchData = async (): Promise<[]> => {
-    const res = await axios({
-      url: `${FINANCE_URL.RECEIPT_REGISTER.get}?limit=${10}&page=1&order=-1&date=${new Date().toISOString().split("T")[0]}&module=${moduleId}&ulb=${user?.user_type === "Admin" ? undefined : user?.ulb_id}`,
-      method: "GET",
-    });
+  const fetchData = async () => {
+    try {
+      const res = await axios({
+        url: `${FINANCE_URL.RECEIPT_REGISTER.get}?limit=${limit}&page=${page}&order=-1&date=${new Date().toISOString().split("T")[0]}&module=${moduleId}&ulb=${user?.user_type === "Admin" ? undefined : user?.ulb_id}`,
+        method: "GET",
+      });
 
-    if (res.data.status) {
+      if (!res.data.status) {
+        throw "Something Went Wrong!!";
+      }
+
       let data = res.data?.data;
       if (data == null) {
         data = { totalPage: 0, data: [] };
       }
 
       return data;
+    } catch (error) {
+      console.log("error");
     }
-    throw "Something Went Wrong!!";
   };
 
   const {
     isError: fetchingError,
-    isLoading: isFetching,
+    isFetching: isFetching,
     data: data,
-  }: any = useQuery(["receipts", moduleId], fetchData);
+  }: any = useQuery(["receipts", moduleId, page, limit], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
   }
-
 
   //////// Table View Button Feature //////////
   const onViewButtonClick1 = (id: string) => {
