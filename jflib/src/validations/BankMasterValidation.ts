@@ -117,7 +117,7 @@ const bankMasterValidation = Yup.object({
   branch_address: Yup.string().required(),
   branch_city: Yup.string().required(),
   branch_state: Yup.string().required(),
-  branch_district: Yup.string(),
+  branch_district: Yup.string().required(),
   email: Yup.string().email({ tlds: { allow: false } }),
   contact_no: Yup.string()
     .matches(/^\d{10}$/, "Invalid phone number")

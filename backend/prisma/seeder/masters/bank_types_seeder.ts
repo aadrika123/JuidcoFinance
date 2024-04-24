@@ -2,15 +2,15 @@ import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 const bank_types_seeder = async () => {
-  const items = [
-    "4502100 - Nationalized Banks - Municipal Fund",
-    "4502200 - Other Schedule Banks - Municipal Fund",
-    "4502300 - Schedule Co-operative Banks - Municipal Fund",
-  ];
+  // const items = [
+  //   "4502100 - Nationalized Banks - Municipal Fund",
+  //   "4502200 - Other Schedule Banks - Municipal Fund",
+  //   "4502300 - Schedule Co-operative Banks - Municipal Fund",
+  // ];
 
   const codeItems = ["4502100", "4502200", "4502300"];
 
-  items.forEach(async (item, i) => {
+  codeItems.forEach(async (item, i) => {
     const data: any = await prisma.account_codes.findFirst({
       where: {
         code: codeItems[i],

@@ -182,7 +182,6 @@ export const BalanceSheetComponent = () => {
                                     <td className="border-x border-slate-300"></td>
                                 </tr>
 
-
                                 <tr>
                                     <td></td>
                                     <td className="px-4 border-x border-slate-300">Reserve & Surplus</td>

@@ -11,7 +11,7 @@ const banks_seeder = async () => {
 
   const records : banks[]  = [];
 
-  const names = ["ICICI", "SBI", "BANK OF BARODA"];
+  const names = ["ICICI", "SBI", "BANK OF BARODA", "INDIAN OVERSEAS BANK", "BANK OF INDIA", "HDFC BANK", "PUNJAB NATIONAL BANK", "YES BANK", "AXIS BANK"];
   
   for(let i=0;i<names.length;i++){
     await prisma.banks.create({data: {
