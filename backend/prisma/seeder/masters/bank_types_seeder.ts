@@ -1,4 +1,4 @@
-import { PrismaClient, account_codes } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 const bank_types_seeder = async () => {
@@ -26,7 +26,7 @@ const bank_types_seeder = async () => {
     4506500
   ];
 
-  
+
 
 
   codeItems.forEach(async (item, i) => {
