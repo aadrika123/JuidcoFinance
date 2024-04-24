@@ -212,6 +212,7 @@ export default class BankAccountForm extends React.Component<BankAccountFormProp
                 label="Bank Branch District"
                 name="branch_district"
                 placeholder="Bank Branch District"
+                required
                 readonly={readOnly}
               />
               <Input

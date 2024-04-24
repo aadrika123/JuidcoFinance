@@ -105,6 +105,23 @@ class BankMasterController {
       return { status: false, code: 200, message: "Error", data: error };
     }
   };
+
+  // Get by Ulb
+  getByUlb = async (req: Request): Promise<APIv1Response> => {
+    try {
+
+      const { ulbId } = req.params;
+
+      const data = await this.bankMasterDao.getByUlb(Number(ulbId));
+
+      if(!data)
+       return { status: true, code: 200, message: ResMessage.NOT_FOUND, data: null };
+
+      return { status: true, code: 200, message: ResMessage.FOUND, data: data };
+    } catch (error: any) {
+      return { status: false, code: 200, message: "Error", data: error };
+    }
+  };
 }
 
 export default BankMasterController;

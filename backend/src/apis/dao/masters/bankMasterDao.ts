@@ -140,6 +140,22 @@ class BankMasterDao {
     const data = await prisma.bank_masters.findFirst(query);
     return generateRes(data);
   };
+
+  // Get By Ulb
+  getByUlb = async (ulbId: number) => {
+    const query: Prisma.bank_mastersFindManyArgs = {
+      where: {
+        ulb_id: ulbId,
+      },
+      select: {
+        id: true,
+        bank_acc_no: true,
+      },
+    };
+
+    const data = await prisma.bank_masters.findFirst(query);
+    return generateRes(data);
+  };
 }
 
 export default BankMasterDao;

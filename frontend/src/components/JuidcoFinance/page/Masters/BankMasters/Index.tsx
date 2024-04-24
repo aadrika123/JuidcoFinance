@@ -21,6 +21,7 @@ import BankAccountForm from "./molecules/BankAccountForm";
 import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
 import ErrorConfirmPopup from "@/components/global/molecules/general/ErrorConfirmPopup";
 import WorkingPopup from "@/components/global/molecules/general/WorkingPopup";
+import Button from "@/components/global/atoms/Button";
 // Imports //----------------------------------------------------------------
 
 // Main Functions //
@@ -117,7 +118,14 @@ export const HeroBankMasters = () => {
   const tButton = (id: string) => {
     return (
       <>
-        <ViewIconButton variant="view" onClick={() => onViewButtonClick(id)} />
+        <Button
+          variant="primary"
+          className="py-2 px-4"
+          onClick={() => onViewButtonClick(id)}
+        >
+          View
+        </Button>
+        {/* <ViewIconButton variant="view" onClick={() => onViewButtonClick(id)} /> */}
       </>
     );
   };
@@ -129,7 +137,7 @@ export const HeroBankMasters = () => {
     { name: "branch", caption: "Branch Name", width: "w-[5%]" },
     {
       name: "View / Edit",
-      caption: <span>View / Edit</span>,
+      caption: <span>View</span>,
       value: tButton,
       width: "w-[10%]",
     },

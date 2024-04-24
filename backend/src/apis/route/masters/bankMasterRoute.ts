@@ -18,6 +18,8 @@ class BankMasterRoute extends APIv1{
     
     this.addGetRoute(`get-by-id/:bankId`, this.controller.getById);
     this.addGetRoute(`get-by-acc-ulb/:accCodeId/:ulbId`, this.controller.getByAccCodeAndUlb);
+    this.addGetRoute(`get-by-ulb/:ulbId`, this.controller.getByUlb);
+
   }
 }
 

@@ -142,9 +142,9 @@ export const sidebarLinks: SidebarLinksProps = {
           ),
           path: "/master",
           subModules: [
-            { moduleName: "Bank Masters", path: "/masters/bank-master" },
+            { moduleName: "Bank Master", path: "/masters/bank-master" },
             {
-              moduleName: "Vendor Masters",
+              moduleName: "Vendor Master",
               path: "/masters/vendor-master",
             },
             {
