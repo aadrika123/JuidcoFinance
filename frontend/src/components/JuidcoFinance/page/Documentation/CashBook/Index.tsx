@@ -35,10 +35,12 @@ const HeroCashBook = () => {
   const column = [
     { name: "id", caption: "Sr. No." },
     { name: "date", caption: "Date" },
+    {name: "ulbs", caption: "Ulb Name"},
     { name: "receipt_voucher_no", caption: "Receipt Voucher No" },
     { name: "primary_acc_code", caption: "Code of Account" },
     { name: "lf_no", caption: "L/F" },
     { name: "amount", caption: "Amount" },
+    {name: "bank_acc_no", caption: "Account No"},
     {
       name: "View",
       caption: <span>View</span>,

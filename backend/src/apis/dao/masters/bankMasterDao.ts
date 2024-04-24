@@ -97,7 +97,7 @@ class BankMasterDao {
           select: {
             id: true,
             code: true,
-            description: true
+            description: true,
           },
         },
       },
@@ -143,17 +143,26 @@ class BankMasterDao {
 
   // Get By Ulb
   getByUlb = async (ulbId: number) => {
-    const query: Prisma.bank_mastersFindManyArgs = {
-      where: {
-        ulb_id: ulbId,
-      },
-      select: {
-        id: true,
-        bank_acc_no: true,
-      },
-    };
+    // const query: Prisma.bank_mastersFindManyArgs = {
+    //   where: {
+    //     ulb_id: ulbId,
+    //   },
+    //   select: {
+    //     id: true,
+    //     bank_acc_no: true,
+    //   },
+    // };
 
-    const data = await prisma.bank_masters.findFirst(query);
+    // const data = await prisma.bank_masters.findFirst(query);
+
+    const data = await prisma.$queryRaw`
+    SELECT id, CONCAT('Account No - ', bank_acc_no ) as name
+    FROM 
+    bank_masters
+    WHERE
+    ulb_id = ${ulbId}
+    `;
+
     return generateRes(data);
   };
 }

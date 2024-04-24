@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Select from "@/components/global/atoms/nonFormik/Select";
 import { useSelector } from "react-redux";
+import SelectForNoApi from "@/components/global/atoms/nonFormik/SelectForNoApi";
 
 /**
  * | Author- Sanjiv Kumar
@@ -38,6 +39,7 @@ interface stateTypes<T> {
   ulbId: number | string;
   date: Date;
   bankId: number | string;
+  bankList: []
 }
 
 const TableWithFeatures = <T,>({
@@ -58,9 +60,10 @@ const TableWithFeatures = <T,>({
     pageCount: 0,
     searchText: "",
     data: [],
-    ulbId: user?.ulb_id,
+    ulbId: userData?.ulb_id,
     date: new Date(),
     bankId: "",
+    bankList: []
   });
   const { page, pageCount, searchText, data, ulbId, date, bankId } = state;
 
@@ -86,14 +89,18 @@ const TableWithFeatures = <T,>({
     return data.data;
   };
 
-  const { isError: fetchingError, isFetching: isFetching } = useQuery(
-    [page, searchText, ulbId, date, bankId],
+  const { isError: fetchingError, isFetching: isFetching, refetch: refetch } = useQuery(
+    ['cash-book', page, searchText, ulbId, date, bankId],
     fetchData
   );
 
   if (fetchingError) {
     console.log(fetchingError);
   }
+
+  useEffect(() => {
+    refetch()
+  },[page, searchText, ulbId, date, bankId])
 
   const onSearchTextChange = (text: string) => {
     setState((prev) => ({ ...prev, searchText: text, page: 1 }));
@@ -111,6 +118,7 @@ const TableWithFeatures = <T,>({
     setState((prev) => ({
       ...prev,
       ulbId: e.target.value,
+      bankId: "",
       data: [],
     }));
   };
@@ -121,14 +129,32 @@ const TableWithFeatures = <T,>({
   };
 
   ////// Handle Selecting Bank ///////////
-  const handleBank = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState((prev) => ({ ...prev, bankId: e.target.value, data: [] }));
+  const handleBank = (id: number | string) => {
+    setState((prev) => ({ ...prev, data: [], bankId: id }));
   };
 
-  ///// Getting the first selected value
-  const initUlbHandler = (value: number) => {
-    setState({ ...state, ulbId: value });
+  // ///// Getting the first selected value
+  // const initUlbHandler = (value: number) => {
+  //   setState({ ...state, ulbId: value });
+  // };
+
+  ////// Fetching Bank List
+  const fetchBanks = async () => {
+    const res = await axios(
+      `${FINANCE_URL.BANK_MASTER_URL.getByUlbId}/${ulbId}`
+    );
+
+    if (!res.data.status) {
+      return null;
+    }
+    // setState({...state, bankList: res?.data?.data});
+    return res.data.data;
   };
+
+  const {data: banks = [] } = useQuery(
+    ["bank-list", ulbId],
+    fetchBanks
+  );
 
   return (
     <>
@@ -140,17 +166,25 @@ const TableWithFeatures = <T,>({
               name="ulb_id"
               className="w-56 text-primary_bg_indigo border-[#4338ca] mr-2"
               api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
-              value={user?.user_type === "Admin" ? undefined : user?.ulb_id}
+              value={ulbId}
               readonly={user?.user_type === "Admin" ? false : true}
               onChange={handleUlb}
-              initHandler={initUlbHandler}
+              // initHandler={initUlbHandler}
             />
-            <Select
+            {/* <Select
               label=""
-              name="ulb_id"
+              name="bank_id"
               className="w-56 text-primary_bg_indigo border-[#4338ca]"
-              api={`${FINANCE_URL.BANK_MASTER_URL.getByUlbId}/${ulbId}`}
+              api={`${FINANCE_URL.BANK_MASTER_URL.getByUlbId}/${ulbId || 2}`}
               onChange={handleBank}
+            /> */}
+            <SelectForNoApi
+              label=""
+              name="bank_id"
+              className="w-56 text-primary_bg_indigo border-[#4338ca]"
+              placeholder="Select Bank Account"
+              data={banks}
+              handler={handleBank}
             />
             <label
               htmlFor="date-pick"

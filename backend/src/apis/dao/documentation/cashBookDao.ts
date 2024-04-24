@@ -77,13 +77,19 @@ class CashBookDao {
       cb.lf_no,
       cb.amount,
       ac.id as primary_acc_code_id,
-      CONCAT(ac.code, '-', ac.description) as primary_acc_code_name
+      CONCAT(ac.code, '-', ac.description) as primary_acc_code_name,
+      mc.ulbs,
+      bm.bank_acc_no
     FROM
     cash_books as cb
     LEFT JOIN
     cash_bank_receipt_vouchers as cbrv ON cb.receipt_voucher_no = cbrv.crv_brv_no
     LEFT JOIN
     account_codes as ac ON cb.primary_acc_code_id = ac.id
+    LEFT JOIN
+    bank_masters as bm ON bm.id = cbrv.bank_id
+    LEFT JOIN 
+    municipality_codes as mc ON mc.id = cbrv.ulb_id
     WHERE (true ${a})
     ORDER BY
     cb.updated_at desc
@@ -98,6 +104,10 @@ class CashBookDao {
       cash_bank_receipt_vouchers as cbrv ON cb.receipt_voucher_no = cbrv.crv_brv_no
       LEFT JOIN
       account_codes as ac ON cb.primary_acc_code_id = ac.id
+      LEFT JOIN
+      bank_masters as bm ON bm.id = cbrv.bank_id
+      LEFT JOIN 
+      municipality_codes as mc ON mc.id = cbrv.ulb_id
     WHERE (true ${a})`) as any,
     ]);
 
