@@ -12,7 +12,6 @@ import type { AddBankDetailsData } from "jflib/src/validations/BankMasterValidat
 
 import { FINANCE_URL } from "@/utils/api/urls";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
-import ViewIconButton from "@/components/global/atoms/ViewIconButton";
 import { usePathname, useRouter } from "next/navigation";
 import LosingDataConfirmPopup from "@/components/global/molecules/general/LosingDataConfirmPopup";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
