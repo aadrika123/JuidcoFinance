@@ -36,6 +36,9 @@ class BillsDao {
 
   create = async (data: any) => {
     console.log(data);
+    return await prisma.bills.createMany({
+      data: data,
+    });
   }
 
 }

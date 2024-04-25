@@ -1184,6 +1184,7 @@ model vendor_masters {
 
   bill_invoices bill_invoices[]
   bill_payments bill_payment_entries[]
+  bills bills[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")
@@ -1313,10 +1314,20 @@ ulb                 municipality_codes     @relation(fields: [ulb_id], reference
 bill_no             String
 bill_date           DateTime @db.Date
 
-party_name          String
+party_id          Int
+party        vendor_masters @relation(fields: [party_id], references: [id])
 
 particulars         String
 amount              Float
+
+authorizing_officer_name String?
+
+sanction_date       DateTime  @db.Date
+voucher_no          String?
+reason_for_delay    String?
+outstanding_balance Float
+discount_allowed    String?
+sanctioned_amount    Float
 
 remarks             String
 

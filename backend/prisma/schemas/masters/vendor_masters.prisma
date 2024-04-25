@@ -28,6 +28,7 @@ model vendor_masters {
 
   bill_invoices bill_invoices[]
   bill_payments bill_payment_entries[]
+  bills bills[]
 
   created_at DateTime @default(now()) @map("created_at")
   updated_at DateTime @updatedAt @map("updated_at")

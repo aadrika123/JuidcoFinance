@@ -99,6 +99,9 @@ export class APIv1 {
 
       // extract the error message and send to frontend
       const error = err as Error;
+
+      console.log(error);
+      
       const finalResponse = {
         status: false,
         data: error.message,

@@ -2,6 +2,7 @@ import { Request } from "express";
 import { APIv1Response } from "../../APIv1";
 import BillsDao from "../../dao/payments/BillsDao";
 import * as Yup from "yup";
+import {multiBillEntryValidationSchema} from "jflib";
 
 /**
  * | Author- Bijoy Paitandi
@@ -9,9 +10,9 @@ import * as Yup from "yup";
  */
 
 class BillsController {
-  private billsDao: BillsDao;
+  private dao: BillsDao;
   constructor() {
-    this.billsDao = new BillsDao();
+    this.dao = new BillsDao();
   }
 
   get = async (req: Request): Promise<APIv1Response> => {
@@ -38,7 +39,7 @@ class BillsController {
  
       
        // call dao
-       const data = await this.billsDao.get(ulb, date, page, limit, search, order);
+       const data = await this.dao.get(ulb, date, page, limit, search, order);
        
        // return the result
        if (!data) return {status: true, code: 201, message: "Not Found", data: data};
@@ -46,14 +47,41 @@ class BillsController {
   };
 
 
+  generateUniqueRandomID = (existing: string[]) => {
+    const millis = new Date().getTime();
+    
+    let id;
+    do{
+      const randomNumber = Math.floor(Math.random()*1000000000);
+      id = `${millis}-${randomNumber}`;
+    }while(existing.includes(id));
+
+    existing.push(id);
+    return id;
+  }
+
   create = async (req: Request): Promise<APIv1Response> =>{
+    //validate
+    await multiBillEntryValidationSchema.validate(req.body.data);
 
-    console.log(req.body);
-    console.log(req.files);
-    console.log(req.body.data);
-    console.log(req.headers);
+    // collect the input
+    const data = req.body.data;
 
-    return {status: true, code: 200, message: "Created", data: {}}
+
+    const existingIDs: string[] = [];
+
+    // generate bill numbers
+    data.forEach((record: any) => {
+      record.bill_date = new Date(record.bill_date);
+      record.bill_no = 'BN-'+ this.generateUniqueRandomID(existingIDs);
+      console.log(record.bill_no);
+    });
+
+    // call dao
+    const result = await this.dao.create(data);
+
+
+    return {status: true, code: 200, message: "Created", data: result}
   }
 
 }

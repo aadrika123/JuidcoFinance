@@ -16,6 +16,7 @@ class BillsRoute extends APIv1{
       { name: 'payment_for_document', maxCount: 1 },
     ]);
 
+    
   }
 }
 
