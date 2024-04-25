@@ -27,7 +27,9 @@ const bank_types_seeder = async () => {
   ];
 
 
+  const bank_type_records: any[] = [];
 
+  
 
   codeItems.forEach(async (item, i) => {
     const data: any = await prisma.account_codes.findFirst({
@@ -45,7 +47,10 @@ const bank_types_seeder = async () => {
       created_at: faker.date.past(),
       updated_at: faker.date.recent(),
     };
-    await prisma.bank_types.create({ data: record });
+
+    bank_type_records.push(record);
   });
+
+  await prisma.bank_types.createMany({ data: bank_type_records });
 };
 export default bank_types_seeder;

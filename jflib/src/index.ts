@@ -3,6 +3,7 @@
 import BankMasterValidation from "./validations/BankMasterValidation";
 import { AccountingCodeType } from "./standard/accounting_code_types";
 import BalanceTrackingsValidation from "./validations/BalanceTrackingsValidation";
+import { multiBillEntryValidationSchema, billEntryValidationSchema } from "./validations/BillEntryValidation";
 import User from "./user/User";
 import {ROLES} from "./user";
 
@@ -24,7 +25,6 @@ const fc = (n: number) => {
 }
 
 
-
 export {
   escapeRegExp,
   fc,
@@ -32,5 +32,7 @@ export {
   BankMasterValidation,
   BalanceTrackingsValidation,
   User,
-  ROLES
+  ROLES,
+  multiBillEntryValidationSchema,
+  billEntryValidationSchema
 };

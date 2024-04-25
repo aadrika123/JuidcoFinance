@@ -1,37 +1,48 @@
 import { Formik } from 'formik';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Input from "@/components/global/atoms/Input";
 import DropDownList from '@/components/global/atoms/DropDownList';
 import { FINANCE_URL } from '@/utils/api/urls';
 import Button from '@/components/global/atoms/Button';
 import FileInputButton from '@/components/global/atoms/FileInputButton';
+import { billEntryValidationSchema } from 'jflib';
 
 
 
-interface AddNewBillProps {
-    onSubmit: (data: FormData, dataForDisplay: any) => void,
-    onClose: () => void
+
+export interface BillEntrySchema{
+    ulb_id: number;
+    bill_date: string;
+    party_id: number;
+    particulars: string;
+    amount: number;
+    authorizing_officer_name: string;
+    sanction_date: string;
+    voucher_no: string;
+    remarks: string;
+    reason_for_delay: string;
+    outstanding_balance: number;
+    discount_allowed: string;
+    sanctioned_amount: number;
 }
 
-
-const initialValues = {
-    ulb_id: 0,
-    bill_date: new Date().toISOString(),
-    party_id: 0,
-    particulars: "",
-    amount: 0,
-    authorizing_officer_name: '',
-    sanction_date: new Date().toISOString(),
-    voucher_no: "",
-
+interface AddNewBillProps {
+    mode: "add" | "edit",
+    
+    onSubmit: (data: any, dataForDisplay: any) => void,
+    onClose: () => void,
+    initialValues: BillEntrySchema,
+    recordIDtoUpdate: number;
+    onUpdate: (itemIndex: number, data: any, dataForDisplay: any) => void,
+    displayableDataOfRecordtoUpdate: any
 }
 
 
 export const BillEntryFormComponent = (props: AddNewBillProps) => {
     const formRef = useRef<HTMLFormElement>(null);
-    const dataForDisplay: any = {};
+    const [dataForDisplay, setDataForDisplay] = useState<any>({});
 
-    const onSubmit = () => {
+    const onSubmit = (values: any) => {
         if(formRef){
             const formData = new FormData(formRef.current as HTMLFormElement);
 
@@ -39,9 +50,23 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                 dataForDisplay[key] = value;
             }))
             
-            props.onSubmit(formData, dataForDisplay);
+            // props.onSubmit(formData, dataForDisplay);
+
+            if(props.mode == "edit"){
+                props.onUpdate(props.recordIDtoUpdate, values, dataForDisplay);
+            }else
+                props.onSubmit(values,dataForDisplay);
         }
     }
+
+
+    useEffect(()=>{
+        if(props.mode == "edit")
+            setDataForDisplay(props.displayableDataOfRecordtoUpdate);
+        else
+            setDataForDisplay({});
+        
+    },[props.mode]);
 
 
     // const setUlb = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -52,7 +77,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
     return (
         <>
 
-            <Formik initialValues={initialValues} onSubmit={onSubmit}>
+            <Formik initialValues={props.initialValues} validationSchema={billEntryValidationSchema} onSubmit={onSubmit} enableReinitialize>
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit, dirty, handleReset }) => (
                     <form ref={formRef} onSubmit={handleSubmit} encType="multipart/form-data">
                         <div className="grid grid-cols-2 gap-x-6 gap-4 ">
@@ -125,6 +150,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                                 touched={touched.amount}
                                 label="amount"
                                 name="amount"
+                                type='number'
                                 placeholder="Amount of the bill"
                                 required
                                 readonly={false}
@@ -138,7 +164,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                                 touched={touched.authorizing_officer_name}
                                 label="Initials of Authorized Officer"
                                 name="authorizing_officer_name"
-                                placeholder=""
+                                placeholder="authorizing officer name"
                                 readonly={true}
                             />
 
@@ -163,7 +189,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                                 touched={touched.voucher_no}
                                 label="Voucher No"
                                 name="voucher_no"
-                                placeholder="Input the voucher number"
+                                placeholder="enter the  voucher no"
                                 readonly={true}
                             />
 
@@ -175,7 +201,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                                 touched={touched.ulb_id}
                                 label="Amount Sanctioned (Rs)"
                                 name="sanctioned_amount"
-                                placeholder="Select the ulb id"
+                                placeholder="ulb id"
                                 required
                                 readonly={true}
                             />
@@ -183,37 +209,24 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                             <Input
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.ulb_id}
-                                error={errors.ulb_id}
-                                touched={touched.ulb_id}
-                                label="Date of payment or Issue of cheque"
-                                name="issue_date"
-                                placeholder="Select the ulb id"
-                                required
-                                readonly={true}
-                            />
-
-                            <Input
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.ulb_id}
-                                error={errors.ulb_id}
-                                touched={touched.ulb_id}
+                                value={values.discount_allowed}
+                                error={errors.discount_allowed}
+                                touched={touched.discount_allowed}
                                 label="Discount Allowed Amount"
                                 name="discount_allowed"
-                                placeholder="Select the ulb id"
+                                placeholder="discount allowed"
                                 required
                                 readonly={true}
                             />
                             <Input
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.ulb_id}
-                                error={errors.ulb_id}
-                                touched={touched.ulb_id}
+                                value={values.outstanding_balance}
+                                error={errors.outstanding_balance}
+                                touched={touched.outstanding_balance}
                                 label="Balance outstanding at the end of the year"
                                 name="outstanding_balance"
-                                placeholder="Select the ulb id"
+                                placeholder="Outstanding balance"
                                 required
                                 readonly={true}
                             />
@@ -221,12 +234,12 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                             <Input
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.ulb_id}
-                                error={errors.ulb_id}
-                                touched={touched.ulb_id}
+                                value={values.reason_for_delay}
+                                error={errors.reason_for_delay}
+                                touched={touched.reason_for_delay}
                                 label="Reason for delay in payment"
                                 name="reason_for_delay"
-                                placeholder="Select the ulb id"
+                                placeholder="reason for delay in payment"
                                 required
                                 readonly={true}
                             />
@@ -234,12 +247,12 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                             <Input
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.ulb_id}
-                                error={errors.ulb_id}
-                                touched={touched.ulb_id}
+                                value={values.remarks}
+                                error={errors.remarks}
+                                touched={touched.remarks}
                                 label="Remarks"
                                 name="remarks"
-                                placeholder="Select the ulb id"
+                                placeholder="type some remark"
                                 required
                                 readonly={false}
                             />

@@ -93,6 +93,7 @@ export const BillsHome = () => {
   }
 
   const onViewButtonClick = (id: number) => {
+    console.log("Hi");
     setViewBillID(id);
   }
 
