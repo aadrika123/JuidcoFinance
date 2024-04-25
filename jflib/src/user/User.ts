@@ -28,6 +28,10 @@ class User {
     return this.user?.role?.includes(ROLES.JUNIOR_ENGINEER);
   };
 
+  isAssistantEngineer = () => {
+    return this.user?.role?.includes(ROLES.ASSISTANT_ENGINEER);
+  }
+  
   getUserLevel = () => {
     if (this.user?.role?.includes(ROLES.JUNIOR_ENGINEER)) return 1;
     if (this.user?.role?.includes(ROLES.ASSISTANT_ENGINEER)) return 2;

@@ -11,7 +11,7 @@ import { useUser } from "@/components/global/molecules/general/useUser";
 
 const HeroBillsVerify = () => {
   const user = useUser(); 
-  const api = `${baseURL}/bill-verification/level-${user?.getUserLevel()}-${user?.getRole()?.toLowerCase().replaceAll(" ", "-")}/inbox`;
+  const api = `${baseURL}/bill-verification/inbox`;
   console.log("API: ", api);
 
   //// Columns
