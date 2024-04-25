@@ -10,6 +10,10 @@
   "files": [
     "/build"
   ],
+  "exports":{
+    ".": "./build/index.js",
+    "./user": "./build/user/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc"

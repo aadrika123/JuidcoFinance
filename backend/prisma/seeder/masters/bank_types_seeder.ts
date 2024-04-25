@@ -36,7 +36,7 @@ const bank_types_seeder = async () => {
       },
     });
 
-    console.log(data);
+    // console.log(data);
 
     const record = {
       id: i + 1,

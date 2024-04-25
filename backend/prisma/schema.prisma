@@ -585,7 +585,7 @@ model bank_masters {
   bank_type_id Int
   bank_type    bank_types @relation(fields: [bank_type_id], references: [id])
 
-  ulb_id Int             @default(2)
+  ulb_id Int      @default(2)
   ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
 
   micr_code                  String?
@@ -615,7 +615,7 @@ bank_id Int
 
 bank_type_id Int
 
-ulb_id Int
+ulb_id Int      @default(2)
 
 micr_code                  String?
 ifsc_code                  String
@@ -993,7 +993,7 @@ model receipt_registers {
   bank_acc_no               String
   deposit_date              DateTime?
   realisation_date          DateTime?
-  wheather_returned         Boolean?   
+  wheather_returned         Boolean?                @default(false)
   remarks                   String
   entered_by_id             Int?
   entered_by                users?                   @relation("entered_by", fields: [entered_by_id], references: [id])
@@ -1146,6 +1146,9 @@ model users {
   cash_bank_r_v_checked_by  cash_bank_receipt_vouchers[] @relation("cbrv_checked_by")
   cash_bank_r_v_approved_by cash_bank_receipt_vouchers[] @relation("cbrv_approved_by")
 
+
+  bill_checkings    bill_checkings[]
+
   daily_coll_summaries  daily_coll_summaries[]
   created_at                DateTime?                    @default(now()) @map("created_at")
   updated_at                DateTime                     @updatedAt @map("updated_at")
@@ -1275,6 +1278,34 @@ model wf_roleusermaps {
     created_at   DateTime? @default(now()) @map("created_at")
     updated_at   DateTime? @updatedAt @map("updated_at")
 }
+model bill_approval_stages {
+    id Int @id
+    name String
+
+    bill_checkings bill_checkings[]
+}
+
+
+model bill_checkings {
+id                  Int               @id @default(autoincrement())
+
+bill_id              Int
+bill                 bills     @relation(fields: [bill_id], references: [id])
+
+checker_id     Int
+checker        users              @relation(fields: [checker_id], references: [id])
+    
+comment             String
+
+
+approval_stage_id        Int    
+approval_stage          bill_approval_stages         @relation(fields: [approval_stage_id], references: [id])       
+
+
+created_at       DateTime          @default(now()) @map("created_at")
+updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
+}
+
 model bills {
 id                  Int               @id @default(autoincrement())
 
@@ -1290,6 +1321,8 @@ particulars         String
 amount              Float
 
 remarks             String
+
+bill_checkings      bill_checkings[]
 
 created_at       DateTime          @default(now()) @map("created_at")
 updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")

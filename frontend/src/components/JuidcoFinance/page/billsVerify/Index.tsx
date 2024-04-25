@@ -2,47 +2,35 @@
 import React from "react";
 import TableWithFeatures from "./TableWithFeatures";
 import ViewButton from "./ViewButton";
-import { FINANCE_URL } from "@/utils/api/urls";
 import BillLayout from "./BillLayout";
 import Image from "next/image";
 import list from "@/assets/svg/list.svg";
 import details from "@/assets/svg/details.svg";
+import { baseURL } from "@/lib/axiosConfig";
+import {ROLES} from "jflib";
 
 const HeroBillsVerify = () => {
+
+  const apiGetLevel0JuniorEngineerInbox = `${baseURL}/bill-verification/level-0-${ROLES.JUNIOR_ENGINEER.toLowerCase().replaceAll(' ',  '-')}/inbox`;
+  
   //// Columns
   const columns = [
     { name: "id", caption: "Sr. No." },
     {
-      name: "receipt_no",
-      caption: "Receipt Number",
+      name: "bill_no",
+      caption: "Bill Number",
     },
     {
-      name: "receipt_date",
-      caption: "Receipt Date",
+      name: "bill_date",
+      caption: "Bill Date",
     },
     {
-      name: "receipt_mode",
-      caption: "Mode of Receipt",
+      name: "amount",
+      caption: "Amount",
     },
     {
-      name: "paid_by",
-      caption: "Paid By",
-    },
-    {
-      name: "cheque_or_draft_no",
-      caption: "Cheque / Draft No",
-    },
-    {
-      name: "deposit_date",
-      caption: "Date of Deposit",
-    },
-    {
-      name: "realisation_date",
-      caption: "Date of Realisation",
-    },
-    {
-      name: "wheather_returned",
-      caption: "Wheather Re-turned",
+      name: "party_name",
+      caption: "Party Name",
     },
     {
       name: "view",
@@ -69,7 +57,7 @@ const HeroBillsVerify = () => {
         </div>
           <TableWithFeatures
             columns={columns}
-            api={FINANCE_URL.RECEIPT_REGISTER.get || ""}
+            api={apiGetLevel0JuniorEngineerInbox}
             numberOfRowsPerPage={10}
           />
       </section>

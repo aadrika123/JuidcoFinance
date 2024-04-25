@@ -14,7 +14,6 @@ class BillsController {
     this.billsDao = new BillsDao();
   }
 
-  // Get limited bank list
   get = async (req: Request): Promise<APIv1Response> => {
       const query = req.query;
 
@@ -40,7 +39,7 @@ class BillsController {
       
        // call dao
        const data = await this.billsDao.get(ulb, date, page, limit, search, order);
-
+       
        // return the result
        if (!data) return {status: true, code: 201, message: "Not Found", data: data};
        return {status: true, code: 200, message: "Found", data: data};

@@ -8,7 +8,8 @@ interface CountQueryResult {
 }
 
 class BillsDao {
-  // Get limited bank master
+
+
   get = async (ulb: number, date: string, page: number, limit: number, search: string, order: number) => {
 
     let searchCondition = `ulb_id = ${ulb} and bill_date='${date}'`;

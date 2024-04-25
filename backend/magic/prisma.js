@@ -32,7 +32,7 @@ const generateHistoryTable = async(d, outputFile) => {
 
     lines.forEach(line => {
         line = line.trim();
-        if(line.startsWith("}") || line.indexOf("has history") != -1){
+        if(line.startsWith("}") || line.indexOf("has history") != -1 || line.endsWith("[]")){
             const x = () => {};
             x();
         }

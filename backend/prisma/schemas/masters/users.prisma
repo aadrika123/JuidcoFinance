@@ -48,6 +48,9 @@ model users {
   cash_bank_r_v_checked_by  cash_bank_receipt_vouchers[] @relation("cbrv_checked_by")
   cash_bank_r_v_approved_by cash_bank_receipt_vouchers[] @relation("cbrv_approved_by")
 
+
+  bill_checkings    bill_checkings[]
+
   daily_coll_summaries  daily_coll_summaries[]
   created_at                DateTime?                    @default(now()) @map("created_at")
   updated_at                DateTime                     @updatedAt @map("updated_at")

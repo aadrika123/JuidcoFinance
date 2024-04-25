@@ -53,6 +53,7 @@ import revenue_accounted_types_seeder from "./seeder/masters/revenue_accounted_t
 import { chequebook_entries_seeder } from "./seeder/chequebook_entries_seeder";
 import bills_seeder from "./seeder/payments/bills_seeder";
 import revenue_accounted_type_maps_seeder from "./seeder/masters/revenue_accounted_type_maps_seeder";
+import bill_approval_stages_seeder from "./seeder/payments/bill_approval_stages_seeder";
 
 const prisma = new PrismaClient();
 
@@ -217,11 +218,16 @@ async function main() {
 
     await receipt_register_seeder();
     await bank_types_seeder();
+
+    await bill_approval_stages_seeder();
   }, 8000);
+
 
   setTimeout(async () => {
     await foreign_wrapper();
   }, 9000);
+
+
 }
 main()
   .then(async () => {

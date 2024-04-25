@@ -1,0 +1,27 @@
+model bill_approval_stages {
+    id Int @id
+    name String
+
+    bill_checkings bill_checkings[]
+}
+
+
+model bill_checkings {
+id                  Int               @id @default(autoincrement())
+
+bill_id              Int
+bill                 bills     @relation(fields: [bill_id], references: [id])
+
+checker_id     Int
+checker        users              @relation(fields: [checker_id], references: [id])
+    
+comment             String
+
+
+approval_stage_id        Int    
+approval_stage          bill_approval_stages         @relation(fields: [approval_stage_id], references: [id])       
+
+
+created_at       DateTime          @default(now()) @map("created_at")
+updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
+}

@@ -53,7 +53,8 @@ type FinanceUrlKeys =
   | "COLLECTION_REGISTER"
   | "DAILY_COLL_SUMMARY"
   | "CASH_BANK_R_VOUCHER"
-  | "CASH_BOOK";
+  | "CASH_BOOK"
+  | "BILLS";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -328,4 +329,7 @@ export const FINANCE_URL: Urls = {
     get: "/cash-book/get-all",
     getById: "/cash-book/get-by-id",
   },
+  BILLS: {
+    get: "/bills/get-all",
+  }
 };

@@ -57,7 +57,7 @@ const account_codes_seeder = async () => {
                     // }
                     // else
                     if (isSchedule(majorHead, minorHead, detailCode)) {
-                        console.log(`${majorHead} ${description} (${scheduleRefNo})`);
+                        // console.log(`${majorHead} ${description} (${scheduleRefNo})`);
                         const x = await prisma.account_codes.create({
                             data: {
                                 code: code,

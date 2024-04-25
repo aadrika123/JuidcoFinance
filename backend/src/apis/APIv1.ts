@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import multerUpload from "./middleware/_multer";
+import {User} from "jflib";
 
 
 /**
@@ -62,8 +63,13 @@ export class APIv1 {
   protected apiWrapper = async (req: Request, res: Response, apiId: string, handler: (req: Request) => Promise<APIv1Response>): Promise<Response> => {
     try{
 
+        
         console.log(`api call (${req.path})`);
+        // console.log(req.body);
 
+        const user = new User(req.body.auth);
+        req.body.user = user;
+        
         // invoke the before-middlewares if any
 
         const result: APIv1Response = await handler(req);
