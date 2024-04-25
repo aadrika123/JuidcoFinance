@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
 import Table, { ColumnProps } from "@/components/global/molecules/Table";
@@ -49,7 +49,7 @@ const TableWithFeatures = <T,>({
     pageCount: 0,
     searchText: "",
     ulbId: 1,
-    bill_no: "",
+    bill_no: ""
   });
   const { page, pageCount, searchText, ulbId, bill_no } = state;
 
@@ -78,18 +78,13 @@ const TableWithFeatures = <T,>({
   const {
     isError: fetchingError,
     isLoading: isFetching,
-    refetch: refetchData,
     data: data = [],
-  } = useQuery([page, searchText, ulbId, bill_no], fetchData);
+  } = useQuery([page, searchText, bill_no], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
   }
 
-  useEffect(() => {
-    setIsSearching(true);
-    refetchData();
-  }, [page, searchText]);
 
   const handlePageChange = (direction: "prev" | "next") => {
     const newPageNumber = direction === "prev" ? page - 1 : page + 1;

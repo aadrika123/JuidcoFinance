@@ -1,9 +1,9 @@
 import express from "express";
 import { APIv1 } from "../../APIv1";
 import BillVerificationController from "../../controller/payments/BillVerificationController";
-import { ROLES } from "jflib";
+import { BillStages, ROLES } from "jflib";
 
-class BillVerificationRoute extends APIv1{
+class BillVerificationRoute extends APIv1 {
   private controller: BillVerificationController;
 
   constructor(routeId: string, app: express.Application) {
@@ -12,7 +12,25 @@ class BillVerificationRoute extends APIv1{
   }
 
   configure(): void {
-    this.addGetRoute(`level-0-${ROLES.JUNIOR_ENGINEER.toLowerCase().replaceAll(' ', '-')}/inbox`, this.controller.getLevel0JuniorEngineerInbox);
+    this.addGetRoute(
+      `level-${BillStages.ApprovedByJuniorEngineer}-${ROLES.JUNIOR_ENGINEER.toLowerCase().replaceAll(
+        " ",
+        "-"
+      )}/inbox`,
+      this.controller.getLevel0JuniorEngineerInbox
+    );
+
+    this.addGetRoute(
+      `level-${BillStages.ApprovedByAssistantEngineer}-${ROLES.ASSISTANT_ENGINEER.toLowerCase().replaceAll(
+        " ",
+        "-"
+      )}/inbox`,
+      this.controller.getLevel1AssistantEngineerInbox
+    );
+
+    this.addGetRoute(`get/:billId`, this.controller.getBillById);
+
+    this.addPostRoute(`approve`, this.controller.approveBill);
   }
 }
 

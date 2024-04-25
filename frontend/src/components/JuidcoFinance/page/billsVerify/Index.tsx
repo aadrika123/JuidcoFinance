@@ -7,12 +7,13 @@ import Image from "next/image";
 import list from "@/assets/svg/list.svg";
 import details from "@/assets/svg/details.svg";
 import { baseURL } from "@/lib/axiosConfig";
-import {ROLES} from "jflib";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 const HeroBillsVerify = () => {
+  const user = useUser(); 
+  const api = `${baseURL}/bill-verification/level-${user?.getUserLevel()}-${user?.getRole()?.toLowerCase().replaceAll(" ", "-")}/inbox`;
+  console.log("API: ", api);
 
-  const apiGetLevel0JuniorEngineerInbox = `${baseURL}/bill-verification/level-0-${ROLES.JUNIOR_ENGINEER.toLowerCase().replaceAll(' ',  '-')}/inbox`;
-  
   //// Columns
   const columns = [
     { name: "id", caption: "Sr. No." },
@@ -48,18 +49,16 @@ const HeroBillsVerify = () => {
             <Image src={list} height={20} width={20} alt="pro-1" />
             <span className="ml-2 text-gray-500">List</span>
           </div>
-          <div
-            className={`flex items-center  pb-1 w-28 justify-center`}
-          >
+          <div className={`flex items-center  pb-1 w-28 justify-center`}>
             <Image src={details} height={20} width={20} alt="pro-1" />
             <span className="ml-2 text-gray-500">Details</span>
           </div>
         </div>
-          <TableWithFeatures
-            columns={columns}
-            api={apiGetLevel0JuniorEngineerInbox}
-            numberOfRowsPerPage={10}
-          />
+        <TableWithFeatures
+          columns={columns}
+          api={api}
+          numberOfRowsPerPage={10}
+        />
       </section>
     </BillLayout>
   );

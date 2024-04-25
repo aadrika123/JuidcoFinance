@@ -14,8 +14,6 @@ bill                 bills     @relation(fields: [bill_id], references: [id])
 
 checker_id     Int
 checker        users              @relation(fields: [checker_id], references: [id])
-    
-comment             String
 
 
 approval_stage_id        Int    

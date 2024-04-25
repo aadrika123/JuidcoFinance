@@ -54,7 +54,8 @@ type FinanceUrlKeys =
   | "DAILY_COLL_SUMMARY"
   | "CASH_BANK_R_VOUCHER"
   | "CASH_BOOK"
-  | "BILLS";
+  | "BILLS"
+  | "BILLS_VERIFICATION";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -330,6 +331,10 @@ export const FINANCE_URL: Urls = {
     getById: "/cash-book/get-by-id",
   },
   BILLS: {
-    get: "/bills/get-all",
+    get: "/bills/get-all"
+  },
+  BILLS_VERIFICATION: {
+    getById: "bill-verification/get",
+    approve: "bill-verification/approve"
   }
 };

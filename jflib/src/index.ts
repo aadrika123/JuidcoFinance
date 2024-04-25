@@ -5,6 +5,7 @@ import { AccountingCodeType } from "./standard/accounting_code_types";
 import BalanceTrackingsValidation from "./validations/BalanceTrackingsValidation";
 import User from "./user/User";
 import {ROLES} from "./user";
+import {BillStages} from "./standard/bill_stages"
 
 // escape input string for in regular expressions
 const escapeRegExp = (text:string):string => {
@@ -32,5 +33,6 @@ export {
   BankMasterValidation,
   BalanceTrackingsValidation,
   User,
-  ROLES
+  ROLES,
+  BillStages
 };
