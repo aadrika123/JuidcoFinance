@@ -1,0 +1,6 @@
+model bill_approval_stages {
+    id Int @id
+    name String
+
+    bill_checkings bill_checkings[]
+}

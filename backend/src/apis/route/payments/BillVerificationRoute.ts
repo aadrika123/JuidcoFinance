@@ -12,6 +12,7 @@ class BillVerificationRoute extends APIv1 {
 
   configure(): void {
     this.addGetRoute(`inbox`, this.controller.getInbox);
+    this.addGetRoute(`outbox`, this.controller.getOutbox);
 
     this.addGetRoute(`get/:billId`, this.controller.getBillById);
 

@@ -33,7 +33,7 @@ const BillLayout = ({ children }: { children: ReactNode }) => {
           Inbox
         </Button>
         </LinkWithLoader>
-        <LinkWithLoader href={`${pathname}/outbox`}>
+        <LinkWithLoader href={`${pathname.includes('bills-verify/view') ? '/bills-verify/outbox' : pathname+'/outbox'}`}>
           <Button
             variant="primary"
             className={`${!pathname.includes("outbox") && "bg-gray-200 text-gray-500"}`}

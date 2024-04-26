@@ -63,13 +63,7 @@ const TableWithFeatures = <T,>({
     if (data == null) {
       data = { totalPage: 0, data: [] };
     }
-
-    // data = data.data.sort(sortByCreatedAtDesc);
-    setState((prev) => ({
-      ...prev,
-      pageCount: data.totalPage,
-      data: data.data,
-    }));
+    setState({...state, pageCount: data.totalPage})
 
     setIsSearching(false);
     return data.data;
@@ -78,8 +72,8 @@ const TableWithFeatures = <T,>({
   const {
     isError: fetchingError,
     isLoading: isFetching,
-    data: data = [],
-  } = useQuery([page, searchText, bill_no], fetchData);
+    data: data,
+  } = useQuery([api, page, searchText, ulbId, bill_no], fetchData);
 
   if (fetchingError) {
     console.log(fetchingError);
@@ -89,32 +83,29 @@ const TableWithFeatures = <T,>({
   const handlePageChange = (direction: "prev" | "next") => {
     const newPageNumber = direction === "prev" ? page - 1 : page + 1;
     if (newPageNumber > 0 && newPageNumber <= pageCount) {
-      setState({ ...state, page: newPageNumber });
+      setState((prev) => ({...prev, page: newPageNumber}))
     }
   };
 
   const onSearchTextChange = (text: string) => {
-    setState({ ...state, searchText: text, page: 1 });
+    setState((prev) => ({...prev, searchText: text, page: 1}))
   };
 
   ////// Handl Selecting ULBs ///////////
   const handleUlb = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState({
-      ...state,
-      ulbId: e.target.value,
-    });
+    setState((prev) => ({...prev, ulbId: e.target.value}))
   };
 
   ////// Handl Selecting Date ///////////
   const handleBill = (e: ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, bill_no: e.target.value });
+    setState((prev) => ({...prev, bill_no: e.target.value}))
   };
 
   ///// Getting the first selected value
   const initUlbHandler = (value: number) => {
-    setState({ ...state, ulbId: value });
+    setState((prev) => ({...prev, ulbId: value}))
   };
-
+  
   return (
     <>
       <div className="flex justify-between items-end">

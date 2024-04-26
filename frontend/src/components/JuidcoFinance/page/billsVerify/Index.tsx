@@ -7,12 +7,11 @@ import Image from "next/image";
 import list from "@/assets/svg/list.svg";
 import details from "@/assets/svg/details.svg";
 import { baseURL } from "@/lib/axiosConfig";
-import { useUser } from "@/components/global/molecules/general/useUser";
+import { usePathname } from "next/navigation";
 
 const HeroBillsVerify = () => {
-  const user = useUser(); 
-  const api = `${baseURL}/bill-verification/inbox`;
-  console.log("API: ", api);
+  const pathname = usePathname();
+  const api = `${baseURL}/bill-verification/${pathname.includes("outbox") ? 'outbox' : 'inbox'}`;
 
   //// Columns
   const columns = [
@@ -29,10 +28,10 @@ const HeroBillsVerify = () => {
       name: "amount",
       caption: "Amount",
     },
-    {
-      name: "party_name",
-      caption: "Party Name",
-    },
+    // {
+    //   name: "party",
+    //   caption: "Party Name",
+    // },
     {
       name: "view",
       caption: "View",
@@ -57,6 +56,7 @@ const HeroBillsVerify = () => {
         <TableWithFeatures
           columns={columns}
           api={api}
+          center
           numberOfRowsPerPage={10}
         />
       </section>

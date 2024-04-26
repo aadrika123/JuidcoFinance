@@ -16,7 +16,7 @@ export const BillStages = Object.freeze({
   ApprovedByExecutiveEngineer: 3,
   ApprovedByExecutiveOfficerAmc1: 4,
   ApprovedByAccountDepartmentManager: 5,
-  InternalAuditor: 6,
+  ApprovedByInternalAuditor: 6,
   ApprovedByExecutiveOfficerAmc2: 7,
   ApprovedByAccountDepartmentPdf: 8,
   ApprovedByExecutiveOfficerAmc3: 9,

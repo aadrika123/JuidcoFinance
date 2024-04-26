@@ -99,7 +99,7 @@ const BillDetails: React.FC<BillDetailProps> = (props) => {
       caption: "Mode of Receipt",
     },
     {
-      name: "paid_by",
+      name: "party",
       caption: "Paid By",
     },
   ];
@@ -115,7 +115,7 @@ const BillDetails: React.FC<BillDetailProps> = (props) => {
         <Loader />
       ) : (
         <>
-          <Stepper items={items} activeStepper={userObj.getUserLevel()} />
+          <Stepper items={items} activeStepper={billData?.approval_stage_id + 1 || userObj.getUserLevel()} />
           <BoxContainer billDetails={billData} />
           <Steps
             handleClick={handleStepClick}

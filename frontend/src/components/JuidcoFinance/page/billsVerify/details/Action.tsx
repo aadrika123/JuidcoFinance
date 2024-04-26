@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 import admi from "@/assets/svg/admi.svg";
 import { BoldSpan } from "./BoxContainer";
-import { useMutation } from "react-query";
+import { QueryClient, useMutation } from "react-query";
 import axios from "@/lib/axiosConfig";
 import toast, { Toaster } from "react-hot-toast";
 import { FINANCE_URL } from "@/utils/api/urls";
@@ -17,6 +17,7 @@ type ActionPropsType = {
 };
 
 const Action: React.FC<ActionPropsType> = (props) => {
+  const queryClient = new QueryClient();
   const [state, setState] = useState<StateType>({
     comment: "",
   });
@@ -39,18 +40,21 @@ const Action: React.FC<ActionPropsType> = (props) => {
 
   const { mutate } = useMutation(handleApprove, {
     onSuccess: () => {
-      console.log("success");
       toast.success("Forwarded Successfully");
+      window.location.replace("/finance/bills-verify/outbox")
     },
     onError: () => {
       console.log("error");
+      toast.error("Something Went Wrong!!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries("");
     },
   });
 
   return (
     <>
       <Toaster />
-
       <div className="flex mt-4">
         <div className="w-1/3 bg-[#f9fafc]">
           <header className="bg-[#e1e8f0] p-2 flex items-center justify-center text-secondary_black">
