@@ -4,8 +4,8 @@ import Input from "@/components/global/atoms/Input";
 import DropDownList from "@/components/global/atoms/DropDownList";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Button from "@/components/global/atoms/Button";
-import FileInputButton from "@/components/global/atoms/FileInputButton";
 import { billEntryValidationSchema } from "jflib";
+import FileInputForm from "@/components/global/atoms/FileInputForm";
 
 export interface BillEntrySchema {
   ulb_id: number;
@@ -26,39 +26,37 @@ export interface BillEntrySchema {
 interface AddNewBillProps {
   mode: "add" | "edit";
 
-  onSubmit: (data: any, dataForDisplay: any) => void;
+  onSubmit: (data: any, fileTokens: any, dataForDisplay: any) => void;
   onClose: () => void;
   initialValues: BillEntrySchema;
   recordIDtoUpdate: number;
-  onUpdate: (itemIndex: number, data: any, dataForDisplay: any) => void;
+  onUpdate: (itemIndex: number, fileTokens: any, data: any, dataForDisplay: any) => void;
   displayableDataOfRecordtoUpdate: any;
+  fileTokensOfRecordToUpdate: any
 }
 
 export const BillEntryFormComponent = (props: AddNewBillProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [dataForDisplay, setDataForDisplay] = useState<any>({});
+  const [fileTokens, setFileTokens] = useState<any>({});
 
   const onSubmit = (values: any) => {
     if (formRef) {
-      const formData = new FormData(formRef.current as HTMLFormElement);
 
-      console.log(
-        formData.forEach((value, key) => {
-          dataForDisplay[key] = value;
-        })
-      );
+      console.log("values: ", values);
 
-      // props.onSubmit(formData, dataForDisplay);
 
       if (props.mode == "edit") {
-        props.onUpdate(props.recordIDtoUpdate, values, dataForDisplay);
-      } else props.onSubmit(values, dataForDisplay);
+        props.onUpdate(props.recordIDtoUpdate, values, fileTokens, dataForDisplay);
+      } else props.onSubmit(values, fileTokens, dataForDisplay);
     }
   };
 
   useEffect(() => {
-    if (props.mode == "edit")
+    if (props.mode == "edit"){
       setDataForDisplay(props.displayableDataOfRecordtoUpdate);
+      setFileTokens(props.fileTokensOfRecordToUpdate);
+    }
     else setDataForDisplay({});
   }, [props.mode]);
 
@@ -66,6 +64,14 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
   //     const ele = event.target;
   //     setUlbID(parseInt(ele.value));
   //   }
+
+  const onFileUploaded = (name: string, token: string) => {
+    const newFileTokens = {...fileTokens};
+    newFileTokens[name] = token;
+
+    console.log("New File tokens: ", newFileTokens);
+    setFileTokens(newFileTokens);
+  }
 
   return (
     <>
@@ -264,32 +270,6 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                 readonly={false}
               />
 
-              <div></div>
-
-              <div>
-                <div className="flex justify-between px-10 mt-5 text-blue-600">
-                  <div>Certified for payment document</div>
-                  <div>
-                    <FileInputButton name="payment_for_document" />
-                  </div>
-                </div>
-
-                <div className="flex justify-between px-10 mt-5 text-blue-600">
-                  <div>Work completion certificate</div>
-                  <div>
-                    <FileInputButton name="work_completion_certificate" />
-                  </div>
-                </div>
-
-                <div></div>
-
-                <div className="flex justify-between px-10 mt-5 text-blue-600">
-                  <div>Vendor Invoice</div>
-                  <div>
-                    <FileInputButton name="vendor_invoice" />
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="mt-4 flex items-center gap-5 justify-end">
@@ -323,6 +303,10 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
           </form>
         )}
       </Formik>
+
+      <FileInputForm name="certified_for_payment" onFileUploaded={onFileUploaded}/>
+      <FileInputForm name="work_completion_certificate" onFileUploaded={onFileUploaded}/>
+      <FileInputForm name="vendor_invoice" onFileUploaded={onFileUploaded}/>
     </>
   );
 };

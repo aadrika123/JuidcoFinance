@@ -12,7 +12,7 @@ class FileHandlerRoute extends APIv1{
 
     configure(): void{
         this.addFormDataPostRoute('upload-single-doc', this.controller.uploadSingleDocument, [
-            { name: 'doct', maxCount: 1 },
+            { name: 'doc', maxCount: 1 },
         ]);
     }
 }

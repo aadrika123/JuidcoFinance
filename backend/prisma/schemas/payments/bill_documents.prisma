@@ -1,0 +1,18 @@
+model bill_documents {
+id                  Int               @id @default(autoincrement())
+
+
+bill_id             Int
+bill                bills           @relation(fields: [bill_id], references: [id])
+
+description         String
+path                String
+approved            Boolean             @default(false)
+
+approved_by_id      Int?      
+approved_by         users?      @relation(fields: [approved_by_id], references: [id])
+approval_date       DateTime?
+
+created_at       DateTime          @default(now()) @map("created_at")
+updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
+}

@@ -47,8 +47,6 @@ export class APIv1 {
   addFormDataPostRoute(path: string, handler: (req: Request) => Promise<APIv1Response>, fields: any[]): void {
     this.app.route(`${this.baseUrl}/${path}`)
       .post(async (req: Request, res: Response) => {
-        console.log(req.rawHeaders);
-        console.log(req.body);
         multerUpload.fields(fields)(req, res, () => {
           this.apiWrapper(req, res, this.generateAPIId(), handler);
         });        

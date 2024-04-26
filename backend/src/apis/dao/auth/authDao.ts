@@ -3,7 +3,8 @@ import { generateRes } from "../../../util/generateRes";
 import Middleware from "../../middleware/middleware";
 import nodemailer from "nodemailer";
 import { generateOtp } from "../../../util/helper/generateOtp";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
+
 
 const prisma = new PrismaClient();
 

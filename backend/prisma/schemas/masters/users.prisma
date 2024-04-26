@@ -50,6 +50,7 @@ model users {
 
 
   bill_checkings    bill_checkings[]
+  verified_bills_documents bill_documents[]
 
   daily_coll_summaries  daily_coll_summaries[]
   created_at                DateTime?                    @default(now()) @map("created_at")
