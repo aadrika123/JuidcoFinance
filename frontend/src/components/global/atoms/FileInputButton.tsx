@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { baseURL, Authorization } from '@/lib/axiosConfig';
+import { baseURL, Authorization } from "@/lib/axiosConfig";
 import axios from "axios";
 
 /**
@@ -20,31 +20,32 @@ const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
   const axiosWithMultipartFormdata = axios.create({
     baseURL: baseURL,
     headers: {
-      Authorization: Authorization,
-      'Content-Type': 'multipart/form-data'
+      "Authorization": Authorization,
+      "Content-Type": "multipart/form-data",
     },
-    onUploadProgress: progressEvent => {
+    onUploadProgress: (progressEvent) => {
       console.log(progressEvent);
-      if (progressEvent.total) setProgressValue(progressEvent.loaded/progressEvent.total);
-    }
+      if (progressEvent.total)
+        setProgressValue(progressEvent.loaded / progressEvent.total);
+    },
   });
-
 
   const onChange = () => {
     // event.preventDefault();
 
     if (ref.current?.files) {
       const file = ref.current.files[0];
+      console.log(file);
 
       const formData = new FormData();
-      formData.append("pdf", file);
-
+      formData.append("name", "khkh");
+      formData.append("fdsfsfs", file);
 
       axiosWithMultipartFormdata({
-        method: 'post',
-        url: '/file-handler/upload-single-pdf',
-        data: formData
-      },)
+        method: "post",
+        url: "/file-handler/upload-single-doc",
+        data: formData,
+      })
         .then(function (response) {
           console.log(response);
         })
@@ -52,31 +53,37 @@ const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
           console.log(error);
         });
     }
-  }
-
-
-
+  };
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex">
         <div>
-          <button className='rounded-2xl bg-primary_bg_indigo hover:text-grey text-white p-2' onClick={(event) => {
-            if (ref) {
-              (ref.current as HTMLInputElement).click();
-            }
-            event.preventDefault();
-          }}>
+          <button
+            className="rounded-2xl bg-primary_bg_indigo hover:text-grey text-white p-2"
+            onClick={(event) => {
+              if (ref) {
+                (ref.current as HTMLInputElement).click();
+              }
+              event.preventDefault();
+            }}
+          >
             Upload
           </button>
-          <input type="file" name={props.name} className='hidden' ref={ref} onChange={onChange} />
-
+          <input
+            type="file"
+            name={props.name}
+            className="hidden"
+            ref={ref}
+            onChange={onChange}
+          />
         </div>
-        <div>
-          <progress value={progressValue} />
+        <div className="mx-2 flex items-center">
+          <div>
+            <progress value={progressValue} />
+          </div>
         </div>
       </div>
-
     </>
   );
 };

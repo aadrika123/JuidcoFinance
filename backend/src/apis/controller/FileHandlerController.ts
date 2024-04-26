@@ -7,13 +7,13 @@ class FileHandlerController {
 
     }
 
-    uploadSinglePDF = async (req: Request): Promise<APIv1Response> => {
+    uploadSingleDocument = async (req: Request): Promise<APIv1Response> => {
         // console.log(req.headers);
-        // console.log(req.files);
+        console.log(req.files);
         // validate
-        if(!req.files) throw new Error("a pdf is required.");
+        if(!req.files) throw new Error("a document is required.");
         const files: any = req.files as any;
-        if(!files['pdf' as keyof typeof files]) throw new Error("required file not found.");        
+        if(!files['doc' as keyof typeof files]) throw new Error("required file not found.");        
 
         // move to proper directory
         const pdfFile = files['pdf'][0];

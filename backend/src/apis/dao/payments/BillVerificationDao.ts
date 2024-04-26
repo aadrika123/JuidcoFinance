@@ -102,7 +102,12 @@ class BillVerificationDao {
         },
         bill_no: true,
         bill_date: true,
-        party_name: true,
+        party: {
+          select:{
+            id: true,
+            name: true
+          }
+        },
         particulars: true,
         amount: true,
         remarks: true,

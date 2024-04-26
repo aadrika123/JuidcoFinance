@@ -15,8 +15,6 @@ class BillsRoute extends APIv1{
     this.addFormDataPostRoute('create', this.controller.create, [
       { name: 'payment_for_document', maxCount: 1 },
     ]);
-
-    
   }
 }
 

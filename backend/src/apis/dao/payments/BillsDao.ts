@@ -20,7 +20,9 @@ class BillsDao {
 
     const offset = (page - 1) * limit;
 
-    const query = `select id, ulb_id, party_name, amount, bill_no, bill_date from bills 
+    const query = `select b.id, b.ulb_id, amount, bill_no, bill_date, vm.name as party_name from bills b 
+    left join 
+    vendor_masters vm on b.party_id = vm.id 
     where ${searchCondition} order by id ${ordering}
     limit ${limit} offset ${offset};`;
 

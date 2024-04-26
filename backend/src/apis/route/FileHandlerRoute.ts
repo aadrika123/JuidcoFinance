@@ -11,8 +11,8 @@ class FileHandlerRoute extends APIv1{
     }
 
     configure(): void{
-        this.addFormDataPostRoute('upload-single-pdf', this.controller.uploadSinglePDF, [
-            { name: 'pdf', maxCount: 1 },
+        this.addFormDataPostRoute('upload-single-doc', this.controller.uploadSingleDocument, [
+            { name: 'doct', maxCount: 1 },
         ]);
     }
 }
