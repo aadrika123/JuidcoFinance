@@ -25,6 +25,7 @@ sanctioned_amount    Float
 remarks             String
 
 bill_checkings      bill_checkings[]
+bill_documents      bill_documents[]
 
 created_at       DateTime          @default(now()) @map("created_at")
 updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")

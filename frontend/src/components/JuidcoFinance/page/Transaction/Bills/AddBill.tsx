@@ -7,6 +7,10 @@ import Popup from "@/components/global/molecules/general/Popup";
 import React, { useEffect, useState } from "react";
 import { BillEntryFormComponent, BillEntrySchema } from "./molecules/BillEntryFormComponent";
 import axios, { baseURL } from "@/lib/axiosConfig";
+import { useWorkingAnimation } from "@/components/global/molecules/general/useWorkingAnimation";
+import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
+import goBack from "@/utils/helper";
+
 
 
 const initialValues = {
@@ -22,15 +26,21 @@ const initialValues = {
   reason_for_delay: "",
   outstanding_balance: 0,
   discount_allowed: "",
-  sanctioned_amount: 0
+  sanctioned_amount: 0,
 }
 
 export const AddBill = () => {
+  const [workingAnimation, activateWorkingAnimation, hideWorkingAnimation] = useWorkingAnimation();
+
+  const [isSuccessNotificationOpen, setSuccessNotificationOpen] = useState<boolean>(false);
+
+
   const [showAddingForm, setShowAddingForm] = useState<boolean>(false);
 
   const [inputMode, setInputMode] = useState<"edit"|"add">("add");
 
   const [dataDict, setDataDict] = useState<any>({});
+  const [fileTokensDict, setFileTokensDict] = useState<any>({});
 
   const [displayableDataDict, setDisplayableDataDict] = useState<any>({});
   const [displayData, setDisplayData] = useState<BillEntrySchema[]>();
@@ -40,6 +50,7 @@ export const AddBill = () => {
   const [defaultValues, setDefaultValues] = useState<BillEntrySchema>(initialValues);
   const [recordIDtoUpdate, setRecordIDtoUpdate] = useState<number>(0);
   const [displayableDataOfRecordtoUpdate, setDisplayableDataOfRecordToUpdate] = useState<any[]>();
+  const [fileTokensOfRecordToUpdate, setFileTokensOfRecordToUpdate] = useState<any[]>();
 
   const onViewButtonClick = (id: number) => {
     console.log(dataDict);
@@ -50,6 +61,7 @@ export const AddBill = () => {
     setInputMode("edit");
     setDefaultValues(dataDict[id]);
     setDisplayableDataOfRecordToUpdate(displayableDataDict[id]);
+    setFileTokensOfRecordToUpdate(fileTokensDict[id]);
     setRecordIDtoUpdate(id);
   };
 
@@ -60,9 +72,10 @@ export const AddBill = () => {
     { name: "party_name", caption: "Name of Party", width: "w-[20%]" },
   ];
 
-  const addNewRecord = (frmData: any, dataForDisplay: any) => {
+  const addNewRecord = (frmData: any, fileTokens: any, dataForDisplay: any) => {
     console.log("New record received");
     console.log(frmData);
+    console.log(dataForDisplay);
 
     const id = (Object.keys(dataDict)).length + 1;
     dataForDisplay["id"] = id;
@@ -72,6 +85,10 @@ export const AddBill = () => {
     const newDataDict: any = {...dataDict};
     newDataDict[id] = frmData;
     setDataDict(newDataDict);
+
+    const newFileTokens: any = {...fileTokensDict};
+    newFileTokens[id] = fileTokens;
+    setFileTokensDict(newFileTokens);
     
     const newDisplayableData: any = {...displayableDataDict};
     newDisplayableData[id] = dataForDisplay;
@@ -81,46 +98,18 @@ export const AddBill = () => {
     setShowAddingForm(false);
   };
 
-  useEffect(() => {
-    console.log(displayableDataDict);
-    
-    const x: any = Object.values(displayableDataDict);
-    setDisplayData(x);
-    console.log("updated");
-  }, [displayableDataDict]);
 
-  const submitAll = async () => {
-    console.log("Submit all");
-
-    const submittableData = Object.values(dataDict);
-
-    console.log(submittableData);
-
-    try {
-      const res = await axios({
-        url: `${baseURL}/bills/create`,
-        method: "POST",
-        data: {
-          data: submittableData,
-        },
-      });
-      if (res.data.status) return res.data;
-
-      throw "Something Went Wrong!!";
-    } catch (error) {
-      console.log(error);
-      alert(error)
-      throw error;
-    }
-  };
-
-  const onUpdate = (id: number, frmData: any, dataForDisplay: any) => {
+  const onUpdate = (id: number, frmData: any, fileTokens: any, dataForDisplay: any) => {
     console.log("onUpdate");
     console.log(frmData);
     
     const newDataDict: any = {...dataDict};
     newDataDict[id] = frmData;
     setDataDict(newDataDict);
+
+    const newFileTokens: any = {...fileTokensDict};
+    newFileTokens[id] = fileTokens;
+    setFileTokensDict(newFileTokens);
     
     const newDisplayableData: any = {...displayableDataDict};
     newDisplayableData[id] = dataForDisplay;
@@ -131,10 +120,65 @@ export const AddBill = () => {
 
 
 
+  useEffect(() => {
+    console.log(displayableDataDict);
+    
+    const x: any = Object.values(displayableDataDict);
+    setDisplayData(x);
+    console.log("updated");
+  }, [displayableDataDict]);
+
+  const submitAll = async () => {
+    activateWorkingAnimation();
+
+    console.log("Submit all");
+
+    const submittableData: any[] = [];
+
+    for(const key in dataDict){
+      submittableData.push({...dataDict[key], files: fileTokensDict[key]});
+    }
+    
+    console.log("SubmittableData: ", submittableData);
+
+    try {
+      const res = await axios({
+        url: `${baseURL}/bills/create`,
+        method: "POST",
+        data: {
+          data: submittableData,
+        },
+      });
+
+      hideWorkingAnimation();
+      if (res.data.status) {
+        setSuccessNotificationOpen(true);
+
+        setTimeout(() => {
+          goBack();
+        }, 1000);
+        return res.data;
+      }
+      throw "Something Went Wrong!!";
+    } catch (error) {
+      console.log(error);
+      alert(error)
+      throw error;
+    }
+  };
+
+
+
 
 
   return (
     <>
+      {workingAnimation}
+
+      {isSuccessNotificationOpen && (
+        <SuccesfullConfirmPopup message="Recorded Successfully" />
+      )}
+
       {showAddingForm && (
         <Popup title="View Bill" zindex={10} width={60}>
           <BillEntryFormComponent
@@ -148,6 +192,7 @@ export const AddBill = () => {
             initialValues={defaultValues}
             recordIDtoUpdate={recordIDtoUpdate}
             displayableDataOfRecordtoUpdate={displayableDataOfRecordtoUpdate}
+            fileTokensOfRecordToUpdate={fileTokensOfRecordToUpdate}
           />
         </Popup>
       )}

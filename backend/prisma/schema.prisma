@@ -1148,6 +1148,7 @@ model users {
 
 
   bill_checkings    bill_checkings[]
+  verified_bills_documents bill_documents[]
 
   daily_coll_summaries  daily_coll_summaries[]
   created_at                DateTime?                    @default(now()) @map("created_at")
@@ -1305,6 +1306,25 @@ created_at       DateTime          @default(now()) @map("created_at")
 updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
 }
 
+model bill_documents {
+id                  Int               @id @default(autoincrement())
+
+
+bill_id             Int
+bill                bills           @relation(fields: [bill_id], references: [id])
+
+description         String
+path                String
+approved            Boolean             @default(false)
+
+approved_by_id      Int?      
+approved_by         users?      @relation(fields: [approved_by_id], references: [id])
+approval_date       DateTime?
+
+created_at       DateTime          @default(now()) @map("created_at")
+updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
+}
+
 model bills {
 id                  Int               @id @default(autoincrement())
 
@@ -1332,6 +1352,7 @@ sanctioned_amount    Float
 remarks             String
 
 bill_checkings      bill_checkings[]
+bill_documents      bill_documents[]
 
 created_at       DateTime          @default(now()) @map("created_at")
 updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")

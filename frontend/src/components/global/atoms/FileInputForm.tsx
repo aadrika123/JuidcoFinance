@@ -6,16 +6,18 @@ import axios from "axios";
  * | Author- Bijjoy Paitandi
  * | Created On- 18-04-2024
  * | Created for- File input button to be used in forms
- * | Status- under development, does not seem to work, backend is not able to read the file
+ * | Status- done
  */
 
-interface FileInputButtonProps {
+interface FileInputFormProps {
   name: string;
-  onFileUploaded: (name: string, token: string) => void
+  onFileUploaded: (name: string, token: string) => void,
 }
 
-const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
+const FileInputForm: React.FC<FileInputFormProps> = (props) => {
   const ref = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [progressValue, setProgressValue] = useState<number>(0);
 
   const axiosWithMultipartFormdata = axios.create({
@@ -34,12 +36,8 @@ const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
   const onChange = () => {
     // event.preventDefault();
 
-    if (ref.current?.files) {
-      const file = ref.current.files[0];
-      console.log(file);
-
-      const formData = new FormData();
-      formData.append("doc", file);
+    if (formRef?.current) {
+      const formData = new FormData(formRef.current);
 
       axiosWithMultipartFormdata({
         method: "post",
@@ -58,7 +56,7 @@ const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
   };
 
   return (
-    <>
+    <form ref={formRef}>
       <div className="flex">
         <div>
           <button
@@ -72,9 +70,9 @@ const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
           >
             Upload
           </button>
-
           <input
             type="file"
+            name='doc'
             className="hidden"
             ref={ref}
             onChange={onChange}
@@ -86,8 +84,9 @@ const FileInputButton: React.FC<FileInputButtonProps> = (props) => {
           </div>
         </div>
       </div>
-    </>
+    </form>
+
   );
 };
 
-export default FileInputButton;
+export default FileInputForm;

@@ -43,6 +43,27 @@ class BillsDao {
     });
   }
 
+  createOne = async (data: any, docRecords: any) => {
+
+    return prisma.$transaction(
+      async (tx) => {
+
+        const bill_record =  await tx.bills.create({data: data});
+        if(docRecords.length > 0){
+          docRecords.forEach((docRecord: any)=> {
+            docRecord.bill_id = bill_record.id
+          });
+
+          const doc_records = await tx.bill_documents.createMany({
+            data: docRecords
+          });
+        }
+        return bill_record;
+      }
+    );
+  }
+
+
 }
 
 export default BillsDao;
