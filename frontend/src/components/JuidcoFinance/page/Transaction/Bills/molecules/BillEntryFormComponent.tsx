@@ -53,7 +53,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
   };
 
   useEffect(() => {
-    if (props.mode == "edit"){
+    if (props.mode == "edit") {
       setDataForDisplay(props.displayableDataOfRecordtoUpdate);
       setFileTokens(props.fileTokensOfRecordToUpdate);
     }
@@ -66,7 +66,7 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
   //   }
 
   const onFileUploaded = (name: string, token: string) => {
-    const newFileTokens = {...fileTokens};
+    const newFileTokens = { ...fileTokens };
     newFileTokens[name] = token;
 
     console.log("New File tokens: ", newFileTokens);
@@ -183,15 +183,8 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
               />
 
               <Input
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.sanction_date}
-                error={errors.sanction_date}
-                touched={touched.sanction_date}
                 label="Sanction Date"
-                name="sanction_date"
-                placeholder=""
-                type="date"
+                type="text"
                 readonly={true}
               />
               <Input
@@ -202,33 +195,21 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                 touched={touched.voucher_no}
                 label="Voucher No"
                 name="voucher_no"
-                placeholder="enter the  voucher no"
+                placeholder=""
                 readonly={true}
               />
 
               <Input
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.ulb_id}
-                error={errors.ulb_id}
-                touched={touched.ulb_id}
                 label="Amount Sanctioned (Rs)"
                 name="sanctioned_amount"
-                placeholder="ulb id"
-                required
+                placeholder=""
                 readonly={true}
               />
 
               <Input
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.discount_allowed}
-                error={errors.discount_allowed}
-                touched={touched.discount_allowed}
                 label="Discount Allowed Amount"
                 name="discount_allowed"
-                placeholder="discount allowed"
-                required
+                placeholder=""
                 readonly={true}
               />
               <Input
@@ -240,7 +221,6 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                 label="Balance outstanding at the end of the year"
                 name="outstanding_balance"
                 placeholder="Outstanding balance"
-                required
                 readonly={true}
               />
 
@@ -269,6 +249,14 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
                 required
                 readonly={false}
               />
+
+              <div></div>
+              <div className="mt-10 flex flex-col gap-2">
+                <FileInputForm caption="Certified For Payment Document" name="certified_for_payment" onFileUploaded={onFileUploaded} />
+                <FileInputForm caption="Work Completion Certificate" name="work_completion_certificate" onFileUploaded={onFileUploaded} />
+                <FileInputForm caption="Vendor Invoice" name="vendor_invoice" onFileUploaded={onFileUploaded} />
+
+              </div>
 
             </div>
 
@@ -303,10 +291,6 @@ export const BillEntryFormComponent = (props: AddNewBillProps) => {
           </form>
         )}
       </Formik>
-
-      <FileInputForm name="certified_for_payment" onFileUploaded={onFileUploaded}/>
-      <FileInputForm name="work_completion_certificate" onFileUploaded={onFileUploaded}/>
-      <FileInputForm name="vendor_invoice" onFileUploaded={onFileUploaded}/>
     </>
   );
 };

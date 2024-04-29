@@ -12,11 +12,14 @@ import axios from "axios";
 interface FileInputFormProps {
   name: string;
   onFileUploaded: (name: string, token: string) => void,
+  caption: string;
 }
 
 const FileInputForm: React.FC<FileInputFormProps> = (props) => {
   const ref = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
 
   const [progressValue, setProgressValue] = useState<number>(0);
 
@@ -39,6 +42,8 @@ const FileInputForm: React.FC<FileInputFormProps> = (props) => {
     if (formRef?.current) {
       const formData = new FormData(formRef.current);
 
+      setIsUploading(true);
+      setIsUploaded(false);
       axiosWithMultipartFormdata({
         method: "post",
         url: "/file-handler/upload-single-doc",
@@ -48,6 +53,8 @@ const FileInputForm: React.FC<FileInputFormProps> = (props) => {
           console.log(response);
           const token = response.data?.data?.file_token;
           props.onFileUploaded(props.name, token);
+          setIsUploading(false);
+          setIsUploaded(true);
         })
         .catch(function (error) {
           console.log(error);
@@ -57,7 +64,24 @@ const FileInputForm: React.FC<FileInputFormProps> = (props) => {
 
   return (
     <form ref={formRef}>
-      <div className="flex">
+      <div className="flex justify-between">
+        <div className="mx-2 flex items-center text-blue-800">
+          {props.caption}
+        </div>
+
+        {isUploading && (
+          <div className="mx-2 flex items-center">
+            <div>
+              <progress value={progressValue} />
+            </div>
+          </div>
+        )}
+
+        {isUploaded && (
+          <div className="mx-2 flex items-center text-green-800">Uploaded</div>
+        )}
+
+
         <div>
           <button
             className="rounded-2xl bg-primary_bg_indigo hover:text-grey text-white p-2"
@@ -78,11 +102,7 @@ const FileInputForm: React.FC<FileInputFormProps> = (props) => {
             onChange={onChange}
           />
         </div>
-        <div className="mx-2 flex items-center">
-          <div>
-            <progress value={progressValue} />
-          </div>
-        </div>
+
       </div>
     </form>
 

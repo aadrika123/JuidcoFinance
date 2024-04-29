@@ -24,9 +24,9 @@ const initialValues = {
   voucher_no: "",
   remarks: "",
   reason_for_delay: "",
-  outstanding_balance: 0,
+  outstanding_balance: "",
   discount_allowed: "",
-  sanctioned_amount: 0,
+  sanctioned_amount: "",
 }
 
 export const AddBill = () => {
@@ -180,7 +180,7 @@ export const AddBill = () => {
       )}
 
       {showAddingForm && (
-        <Popup title="View Bill" zindex={10} width={60}>
+        <Popup title="Add/Edit Bill" zindex={10} width={60}>
           <BillEntryFormComponent
             mode={inputMode}
             
@@ -197,7 +197,7 @@ export const AddBill = () => {
         </Popup>
       )}
 
-      <section className="mt-8 border-b border-r border-l">
+      <section className="mt-8">
         <div className="flex items-center">
           <SubHeading className="text-2xl">Bills</SubHeading>
         </div>
@@ -208,7 +208,7 @@ export const AddBill = () => {
           onViewButtonClick={onViewButtonClick}
         />
 
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-2">
           <Button variant="cancel" onClick={() => {
             setInputMode("add");
             setDefaultValues(initialValues);
@@ -219,10 +219,13 @@ export const AddBill = () => {
         </div>
       </section>
 
-      <section className="mt-8 border-b border-r border-l">
+      <section>
+        <div className="flex justify-end">
         <Button variant="primary" onClick={submitAll}>
           Submit
         </Button>
+        </div>
+        
       </section>
     </>
   );

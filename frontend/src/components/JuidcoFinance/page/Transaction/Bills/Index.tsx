@@ -120,11 +120,11 @@ export const BillsHome = () => {
 
     {viewBillID && (
         <Popup title="View Bill" zindex={10} width={60}>
-          <ViewBill billID={viewBillID}/>
+          <ViewBill billID={viewBillID} onClose={() => {setViewBillID(0)}}/>
         </Popup>
       )}
 
-      <HeaderWidget variant="add" title={"Bill Register"} />
+      <HeaderWidget variant="add" title={"Bill"} />
 
       <section className="border rounded-lg border-zinc-300 p-6 px-10">
 
