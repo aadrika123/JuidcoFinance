@@ -64,6 +64,7 @@ export const sidebarLinks: SidebarLinksProps = {
             />
           ),
           path: "/revenue-receivable",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             {
               moduleName: "Demand Register",
@@ -79,6 +80,7 @@ export const sidebarLinks: SidebarLinksProps = {
           moduleName: "Documentation & Record Keeping",
           icon: <Image src={docLogo} alt="document" width={100} height={100} />,
           path: "/documentation",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             {
               moduleName: "Cash/Bank Receipt Voucher",
@@ -101,6 +103,7 @@ export const sidebarLinks: SidebarLinksProps = {
             <Image src={paymentLogo} alt="document" width={100} height={100} />
           ),
           path: "/transaction",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             // { moduleName: "Receipt Entry ", path: "/transaction/receipt-entry" },
             { moduleName: "Bill Register", path: "/transaction/bill-register" },
@@ -141,6 +144,7 @@ export const sidebarLinks: SidebarLinksProps = {
             <Image src={mastersLogo} alt="masters" width={100} height={100} />
           ),
           path: "/master",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             { moduleName: "Bank Master", path: "/masters/bank-master" },
             {
@@ -164,6 +168,7 @@ export const sidebarLinks: SidebarLinksProps = {
             />
           ),
           path: "/budgeting",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             { moduleName: "Receipt Budget", path: "/budgeting/receipt-budget" },
             {
@@ -190,6 +195,7 @@ export const sidebarLinks: SidebarLinksProps = {
             <Image src={mastersLogo} alt="payment" width={100} height={100} />
           ),
           path: "/financial-statements",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             { moduleName: "Trial Balance", path: "/financial-statements/trial-balance" },
             {
@@ -215,6 +221,7 @@ export const sidebarLinks: SidebarLinksProps = {
             <Image src={mastersLogo} alt="payment" width={100} height={100} />
           ),
           path: "/corrections-reversals",
+          roles: [ROLES.ACC_DEP_MANAGER, ROLES.ACC_DEP_ACCOUNTANT, ROLES.PROJECT_DIR_FINANCE],
           subModules: [
             {
               moduleName: "Stop Payment Order",

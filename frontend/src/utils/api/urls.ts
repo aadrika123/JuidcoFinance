@@ -90,6 +90,8 @@ type Urls = {
     getTopRevenueModules?: string;
     getTopUlb?: string;
     getTopPaymentMode?: string;
+    getTotalRevenue?: string;
+    getRevExpNetPosition?: string;
   };
 };
 
@@ -355,5 +357,8 @@ export const FINANCE_URL: Urls = {
     getTopRevenueModules: "dashboard/revenue-modules/get",
     getTopUlb: "dashboard/ulbs/get",
     getTopPaymentMode: "dashboard/payment-modes/get",
+    getTotalRevenue: "dashboard/total-revenue/get",
+    getRevExpNetPosition: "dashboard/revenue-expenditure-netPosition/get",
+    get: "dashboard/get"
   },
 };
