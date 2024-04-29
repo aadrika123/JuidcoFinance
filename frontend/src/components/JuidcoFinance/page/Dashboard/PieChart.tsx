@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import dynamic from "next/dynamic";
 import React from "react";
 const Chart = dynamic(() => import("react-apexcharts"), {
@@ -27,7 +27,7 @@ interface ChartOptions {
 
 const PieChart: React.FC<PieChartProps> = (props) => {
   const { title, subTitle1, subTitle2, current = 10, arrear = 20 } = props;
-  const options: {chartOptions: ChartOptions, series:number[]} = {
+  const options: { chartOptions: ChartOptions; series: number[] } = {
     series: [current, arrear],
     chartOptions: {
       labels: ["2024", "2023"],
@@ -64,13 +64,13 @@ const PieChart: React.FC<PieChartProps> = (props) => {
           </div>
         )}
       </div>
-        <Chart
-          options={options.chartOptions}
-          series={options.series}
-          type="pie"
-          width={280}
-          height={200}
-        />
+      <Chart
+        options={options.chartOptions}
+        series={options.series}
+        type="pie"
+        width={280}
+        height={200}
+      />
     </div>
   );
 };

@@ -17,16 +17,16 @@ import Loader from "../atoms/Loader";
  */
 
 
-interface TableWithSearchProps<T>{
+interface TableWithSearchProps{
     title: string;
     columns: Array<ColumnProps>;
-    onViewButtonClick: (id: T[keyof T]) => void;
+    onViewButtonClick: (id: number) => void;
     api: string;
     numberOfRowsPerPage: number;
 }
 
 
-const TableWithSearch = <T, >({title, columns, onViewButtonClick, api, numberOfRowsPerPage}: TableWithSearchProps<T>) => {
+const TableWithSearch = <T, >({title, columns, onViewButtonClick, api, numberOfRowsPerPage}: TableWithSearchProps) => {
     const [page, setPage] = useState<number>(1);
     const [pageCount, setPageCount] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>("");

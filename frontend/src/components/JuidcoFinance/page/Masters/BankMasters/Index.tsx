@@ -7,8 +7,8 @@ import AddBankHeader from "./molecules/AddBankHeader";
 import { useMutation, useQueryClient } from "react-query";
 import { Toaster } from "react-hot-toast";
 
-import { initialBankDetailsValues } from "jflib/src/validations/BankMasterValidation";
-import type { AddBankDetailsData } from "jflib/src/validations/BankMasterValidation";
+import { initialBankDetailsValues } from "jflib/build/validations/BankMasterValidation";
+import type { AddBankDetailsData } from "jflib/build/validations/BankMasterValidation";
 
 import { FINANCE_URL } from "@/utils/api/urls";
 import TableWithFeatures from "@/components/global/organisms/TableWithFeatures";
