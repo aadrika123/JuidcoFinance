@@ -1,3 +1,4 @@
+'use client'
 import dynamic from "next/dynamic";
 import React from "react";
 const Chart = dynamic(() => import("react-apexcharts"), {
@@ -8,6 +9,8 @@ interface PieChartProps {
   title: string;
   subTitle1?: string;
   subTitle2?: string;
+  arrear?: number;
+  current?: number;
 }
 
 interface ChartOptions {
@@ -23,11 +26,11 @@ interface ChartOptions {
 }
 
 const PieChart: React.FC<PieChartProps> = (props) => {
-  const { title, subTitle1, subTitle2 } = props;
+  const { title, subTitle1, subTitle2, current = 10, arrear = 20 } = props;
   const options: {chartOptions: ChartOptions, series:number[]} = {
-    series: [44, 60],
+    series: [current, arrear],
     chartOptions: {
-      labels: ["2021", "2022"],
+      labels: ["2024", "2023"],
       colors: ["#C7D2FE", "#377ACB"],
       dataLabels: {
         enabled: false,
@@ -48,11 +51,11 @@ const PieChart: React.FC<PieChartProps> = (props) => {
           <div className="flex items-center justify-between my-2">
             <div className="flex flex-col">
               <span className="text-secondary text-sm">{subTitle1}</span>
-              <span className="text-secondary text-sm">123456</span>
+              <span className="text-secondary text-sm">{arrear}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-secondary text-sm">{subTitle2}</span>
-              <span className="text-secondary text-sm">12345</span>
+              <span className="text-secondary text-sm">{current}</span>
             </div>
           </div>
         ) : (

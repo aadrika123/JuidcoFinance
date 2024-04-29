@@ -132,12 +132,18 @@ class BillVerificationDao {
   /////////// Get Bill By Id
   getBillById = async (id: number) => {
     const dd = (await prisma.$queryRawUnsafe(`
-    select  b.id, mc.id as ulb_id, mc.ulbs, b.bill_no, b.bill_date, vm.id as party_id, vm.name as party_name, b.particulars, b.amount, b.remarks, bl.approval_stage_id from
+    select  b.id, b.status, mc.id as ulb_id, mc.ulbs, b.bill_no, b.bill_date, vm.id as party_id, vm.name as party_name, b.particulars, b.amount, b.remarks, bl.approval_stage_id, comment,
+    vm.mobile_no, vm.email, vm.gst_no, vm.aadhar_no, vm.contact_address, vm.pan_no, vm.tin_no, bank.name as bank_name, bm.bank_acc_no, bm.ifsc_code, bm.branch
+    from
     bills as b
     left join 
     municipality_codes as mc on mc.id = b.ulb_id
     left join
     vendor_masters as vm on vm.id = b.party_id
+    left join
+    bank_masters as bm on bm.id = vm.bank_id
+    left join
+    banks as bank on bank.id = bm.id
     left join
     (
       select * from bill_checkings bc where bc.id in (
@@ -163,19 +169,75 @@ class BillVerificationDao {
     delete data.ulbs;
     delete data.party_id;
     delete data.party_name;
-    if(!data.approval_stage_id) delete data.approval_stage_id
-
+    if (!data.approval_stage_id) delete data.approval_stage_id;
 
     return generateRes(data);
   };
 
   ////////// Approving Bill
   approveBill = async (data: any) => {
+    await prisma.bills.update({
+      where: {
+        id: data.bill_id,
+      },
+      data: {
+        status: "pending",
+      },
+    });
     const res = await prisma.bill_checkings.create({
       data,
     });
 
     return generateRes(res);
+  };
+
+  ////////// Approving Bill
+  sendBackBill = async (data: any) => {
+    const { bill_id, approval_stage_id, comment } = data;
+    await prisma.bills.update({
+      where: {
+        id: bill_id,
+      },
+      data: {
+        status: "rejected",
+      },
+    });
+    if (approval_stage_id === 2) {
+      const res = await prisma.bill_checkings.deleteMany({
+        where: {
+          bill_id,
+          approval_stage_id: approval_stage_id - 1,
+        },
+      });
+
+      await prisma.bills.update({
+        where: {
+          id: bill_id,
+        },
+        data: {
+          remarks: comment,
+        },
+      });
+      return generateRes(res);
+    } else {
+      const biiCheck: any = await prisma.bill_checkings.findFirst({
+        where: {
+          bill_id,
+          approval_stage_id: approval_stage_id - 1,
+        },
+      });
+
+      const res = await prisma.bill_checkings.create({
+        data: {
+          bill_id,
+          checker_id: biiCheck.checker_id,
+          comment,
+          approval_stage_id: approval_stage_id - 2,
+        },
+      });
+
+      return generateRes(res);
+    }
   };
 
   ///////// Get Last Bill from bill_checkings by billId
@@ -188,6 +250,98 @@ class BillVerificationDao {
         id: true,
       },
     });
+
+    return generateRes(res);
+  };
+
+  ///////////////////////////////////  BILL DOCUMENTS FUNCTIONS ////////////////////////////////////////////
+  getDocumentsForLevel0 = async (billId: number, level?: number) => {
+    const data = await prisma.bill_documents.findMany({
+      where: {
+        bill_id: billId,
+        OR: [{ approved_by_id: level }, { approved_by_id: null }],
+      },
+    });
+
+    return generateRes(data);
+  };
+
+  getDocuments = async (billId: number, level: number) => {
+    const data = await prisma.bill_documents.findMany({
+      where: {
+        bill_id: billId,
+        approved_by_id: level,
+      },
+    });
+
+    return generateRes(data);
+  };
+
+  /////// Approving Documents for 0 or First Level User
+
+  approveDocumentForLevel0 = async (data: any) => {
+    await prisma.bill_documents.update({
+      where: {
+        id: data.docId,
+      },
+      data: {
+        approved: "verified",
+        remarks: data?.remarks,
+        approved_by_id: data.approved_by_id,
+      },
+    });
+
+    const res = await prisma.$queryRaw`
+  INSERT INTO bill_documents (bill_id, description, path, approved_by_id, ref_doc_id, remarks)
+  VALUES (${Number(data.bill_id)}, ${data.description}, ${data.path}, ${
+      data.approved_by_id + 1
+    }, ${data.docId},  ${data.remarks})
+  ON CONFLICT (bill_id, approved_by_id, ref_doc_id)
+  DO UPDATE SET approved = 'pending';
+`;
+
+    return generateRes(res);
+  };
+
+  ////// Approving Documents
+  approveDocumentForHigherLevel = async (data: any) => {
+    await prisma.bill_documents.update({
+      where: {
+        id: data.docId,
+      },
+      data: {
+        approved: "verified",
+        remarks: data?.remarks,
+      },
+    });
+
+    const res = await prisma.$queryRaw`
+  INSERT INTO bill_documents (bill_id, description, path, approved_by_id, ref_doc_id, remarks)
+  VALUES (${Number(data.bill_id)}, ${data.description}, ${data.path}, ${
+      data.approved_by_id + 1
+    }, ${data.docId}, ${data.remarks})
+  ON CONFLICT (bill_id, approved_by_id, ref_doc_id)
+  DO UPDATE SET approved = 'pending', remarks = ${data.remarks};
+`;
+
+    return generateRes(res);
+  };
+
+  ////// Rejecting Documents
+  rejectDocumentForHigherLevel = async (data: any) => {
+    const res = await prisma.bill_documents.update({
+      where: {
+        id: data.docId,
+      },
+      data: {
+        approved: "rejected",
+        remarks: data?.remarks,
+      },
+    });
+
+    await prisma.$queryRaw`
+    UPDATE bill_documents SET approved = 'rejected', remarks = ${data?.remarks} WHERE id = ${res?.ref_doc_id}
+    `;
 
     return generateRes(res);
   };

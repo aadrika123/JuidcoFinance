@@ -28,6 +28,10 @@ const HeroBillsVerify = () => {
       name: "amount",
       caption: "Amount",
     },
+    {
+      name: "status",
+      caption: "Status"
+    },
     // {
     //   name: "party",
     //   caption: "Party Name",

@@ -1,26 +1,31 @@
 import Button from "@/components/global/atoms/Button";
-import Image from "next/image";
+// import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
-import admi from "@/assets/svg/admi.svg";
-import { BoldSpan } from "./BoxContainer";
-import { QueryClient, useMutation } from "react-query";
+// import admi from "@/assets/svg/admi.svg";
+// import { BoldSpan } from "./BoxContainer";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "@/lib/axiosConfig";
 import toast, { Toaster } from "react-hot-toast";
 import { FINANCE_URL } from "@/utils/api/urls";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 type StateType = {
-  comment: string;
+  comment: string | null;
 };
 
 type ActionPropsType = {
   billId: number;
+  billData: any;
 };
 
 const Action: React.FC<ActionPropsType> = (props) => {
-  const queryClient = new QueryClient();
+  const { billId, billData } = props;
+  const queryClient = useQueryClient();
+  const user = useUser();
   const [state, setState] = useState<StateType>({
-    comment: "",
+    comment: null,
   });
+  const { comment } = state;
 
   const handleApprove = async () => {
     const res = await axios({
@@ -28,12 +33,13 @@ const Action: React.FC<ActionPropsType> = (props) => {
       method: "POST",
       data: {
         data: {
-          bill_id: props?.billId,
+          bill_id: billId,
+          comment,
         },
       },
     });
 
-    if(!res.data.status) throw "Something Went Wrong!!!"
+    if (!res.data.status) throw "Something Went Wrong!!!";
 
     return res.data.data;
   };
@@ -41,16 +47,46 @@ const Action: React.FC<ActionPropsType> = (props) => {
   const { mutate } = useMutation(handleApprove, {
     onSuccess: () => {
       toast.success("Forwarded Successfully");
-      window.location.replace("/finance/bills-verify/outbox")
+      window.location.replace("/finance/bills-verify/outbox");
     },
     onError: () => {
       console.log("error");
       toast.error("Something Went Wrong!!");
     },
     onSettled: () => {
-      queryClient.invalidateQueries("");
+      queryClient.invalidateQueries();
     },
   });
+
+  ////////// handle send back
+
+  const handleSendBack = async () => {
+    const res = await axios({
+      url: `${FINANCE_URL.BILLS_VERIFICATION.sendBack}`,
+      method: "POST",
+      data: {
+        data: {
+          bill_id: props?.billId,
+          comment,
+        },
+      },
+    });
+
+    if (!res.data.status) throw "Something Went Wrong!!!";
+
+    toast.success("Forwarded Successfully");
+    window.location.replace("/finance/bills-verify");
+    return res.data.data;
+  };
+
+  //// handling comming comment stage
+  const handleGetStage = (billData: any) => {
+    if (billData?.status === "rejected")
+      return billData?.approval_stage_id ? user?.getBillStage(billData?.approval_stage_id + 2) : user?.getBillStage(2);
+    if (!billData?.approval_stage_id) return "Vendor";
+    if(!user?.getBillStage(billData?.approval_stage_id)) return user?.getBillStage(billData?.approval_stage_id+1)
+    return user?.getBillStage(billData?.approval_stage_id)
+  };
 
   return (
     <>
@@ -67,21 +103,28 @@ const Action: React.FC<ActionPropsType> = (props) => {
               name="comments"
               cols={30}
               rows={5}
-              onBlur={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                 setState({ ...state, comment: e.target.value })
               }
             />
-            <Button
+            {/* <Button
               className="mt-2 bg-[#38bdf8] hover:bg-[#5bc8f7]"
               variant="primary"
             >
               Send Comment
-            </Button>
+            </Button> */}
             <div className="flex justify-between mt-8">
-              <Button className="hover:bg-[#f44646]" variant="danger">
-                Send Back
-              </Button>
-              <Button variant="primary" onClick={mutate}>
+              {!user?.isJuniorEngineer() && (
+                <Button
+                  onClick={handleSendBack}
+                  className="hover:bg-[#f44646]"
+                  variant="danger"
+                  disabled={!comment}
+                >
+                  Send Back
+                </Button>
+              )}
+              <Button variant="primary" onClick={mutate} disabled={!comment}>
                 Forward
               </Button>
             </div>
@@ -92,11 +135,15 @@ const Action: React.FC<ActionPropsType> = (props) => {
             Timeline
           </header>
           <div className="p-4 text-secondary_black">
-            <span>Junior Engineer&apos;s Comment</span> <br />
-            <span className="flex justify-center text-red-500">
-              No Comment Yet!
-            </span>
-            <hr className="mb-4" />
+            <span>{handleGetStage(billData)}&apos;s Comment</span> <br />
+            {billData?.comment || billData?.remarks ? (
+              <span className="mt-4">{billData?.comment || billData?.remarks}</span>
+            ) : (
+              <span className="flex justify-center text-red-500">
+                No Comment Yet!
+              </span>
+            )}
+            {/* <hr className="mb-4" />
             <span>Level Comment</span>
             <div className="bg-[#e0f2fe] p-4 mt-4 rounded-lg w-2/3 relative">
               <div className="h-5 w-5 bg-[#3abdf3] rounded-full text-white flex items-center justify-center absolute top-0 left-0">
@@ -124,7 +171,7 @@ const Action: React.FC<ActionPropsType> = (props) => {
               />{" "}
               <br />
               <BoldSpan label="Forward Date:" content="NA NA" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

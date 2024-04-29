@@ -228,12 +228,196 @@ class BillVerificationController {
     const reqData = {
       bill_id: data?.bill_id,
       checker_id: user?.getUserId(),
+      comment: data?.comment,
       approval_stage_id: approval_stage_id,
     };
 
     const resData = await this.dao.approveBill(reqData);
 
     return { status: true, code: 200, message: "Approved", data: resData };
+  };
+
+  ///// Approving Bill
+  sendBackBill = async (req: Request) => {
+    const { data, user } = req.body;
+    let approval_stage_id: number = BillStages.ApprovedByJuniorEngineer;
+    await Yup.object({
+      bill_id: Yup.number().required("billId is required"),
+    }).validate(data);
+
+    ////// Getting Last Bill From Bill Checking By Bill Id
+    const lastBill = await this.dao.getLastBillFromBillCheckingByBillId(
+      data?.bill_id
+    );
+
+    if (!lastBill) if (!user.isJuniorEngineer()) throw "You are not allowed.";
+
+    if (user.isAssistantEngineer())
+      approval_stage_id = BillStages.ApprovedByAssistantEngineer;
+    else if (user.isExecutiveEngineer())
+      approval_stage_id = BillStages.ApprovedByExecutiveEngineer;
+    else if (user.isExecutiveOfficer1())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc1;
+    else if (user.isAccDepManager())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentManager;
+    else if (user.isInternalAuditor())
+      approval_stage_id = BillStages.ApprovedByInternalAuditor;
+    else if (user.isExecutiveOfficer2())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc2;
+    else if (user.isAccDepPdf())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentPdf;
+    else if (user.isExecutiveOfficer3())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc3;
+
+    const reqData = {
+      bill_id: data?.bill_id,
+      checker_id: user?.getUserId(),
+      comment: data?.comment,
+      approval_stage_id: approval_stage_id,
+    };
+
+    const resData = await this.dao.sendBackBill(reqData);
+
+    return { status: true, code: 200, message: "Approved", data: resData };
+  };
+
+  //////////////////// BILL DOCUMENTS VERIFICATION /////////////////////////////////
+
+  getDocuments = async (req: Request) => {
+    const { user } = req.body;
+    const billId = Number(req.params.billId);
+    let approval_stage_id: number = BillStages.ApprovedByJuniorEngineer;
+
+    if (user.isAssistantEngineer())
+      approval_stage_id = BillStages.ApprovedByAssistantEngineer;
+    else if (user.isExecutiveEngineer())
+      approval_stage_id = BillStages.ApprovedByExecutiveEngineer;
+    else if (user.isExecutiveOfficer1())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc1;
+    else if (user.isAccDepManager())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentManager;
+    else if (user.isInternalAuditor())
+      approval_stage_id = BillStages.ApprovedByInternalAuditor;
+    else if (user.isExecutiveOfficer2())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc2;
+    else if (user.isAccDepPdf())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentPdf;
+    else if (user.isExecutiveOfficer3())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc3;
+
+    const resData = await this.dao.getDocumentsForLevel0(billId, approval_stage_id);
+
+    return {
+      status: true,
+      code: 200,
+      message: "Document Found",
+      data: resData,
+    };
+  };
+
+  ////////////////// Approve Document
+  approveDocument = async (req: Request) => {
+    const { data, user } = req.body;
+    await Yup.object({
+      billId: Yup.number().required("billId is required"),
+      docId: Yup.number().required("docId is required"), 
+      description: Yup.string().required("description is required."),
+      path: Yup.string().required("path is required."),
+      remarks: Yup.string().required("remarks is required.")
+    }).validate(data);
+
+    let approval_stage_id: number = BillStages.ApprovedByJuniorEngineer;
+
+    if (user.isAssistantEngineer())
+      approval_stage_id = BillStages.ApprovedByAssistantEngineer;
+    else if (user.isExecutiveEngineer())
+      approval_stage_id = BillStages.ApprovedByExecutiveEngineer;
+    else if (user.isExecutiveOfficer1())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc1;
+    else if (user.isAccDepManager())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentManager;
+    else if (user.isInternalAuditor())
+      approval_stage_id = BillStages.ApprovedByInternalAuditor;
+    else if (user.isExecutiveOfficer2())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc2;
+    else if (user.isAccDepPdf())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentPdf;
+    else if (user.isExecutiveOfficer3())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc3;
+
+      const record = {
+        bill_id: Number(data.billId),
+        docId: Number(data.docId),
+        description: data.description,
+        path: data.path,
+        approved: true,
+        approved_by_id: approval_stage_id,
+        approval_date: new Date().toISOString(),
+        remarks: data.remarks
+      }
+
+    let resData = null
+    
+    if(user.isJuniorEngineer()) resData = await this.dao.approveDocumentForLevel0(record);
+    else resData = await this.dao.approveDocumentForHigherLevel(record)
+
+    return {
+      status: true,
+      code: 200,
+      message: "Approved Document",
+      data: resData,
+    };
+  };
+
+   ////////////////// Approve Document
+   rejectDocument = async (req: Request) => {
+    const { data, user } = req.body;
+    await Yup.object({
+      billId: Yup.number().required("billId is required"),
+      docId: Yup.number().required("docId is required"), 
+      description: Yup.string().required("description is required."),
+      path: Yup.string().required("path is required."),
+      remarks: Yup.string().required("remarks is required.")
+    }).validate(data);
+
+    let approval_stage_id: number = BillStages.ApprovedByJuniorEngineer;
+
+    if (user.isAssistantEngineer())
+      approval_stage_id = BillStages.ApprovedByAssistantEngineer;
+    else if (user.isExecutiveEngineer())
+      approval_stage_id = BillStages.ApprovedByExecutiveEngineer;
+    else if (user.isExecutiveOfficer1())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc1;
+    else if (user.isAccDepManager())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentManager;
+    else if (user.isInternalAuditor())
+      approval_stage_id = BillStages.ApprovedByInternalAuditor;
+    else if (user.isExecutiveOfficer2())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc2;
+    else if (user.isAccDepPdf())
+      approval_stage_id = BillStages.ApprovedByAccountDepartmentPdf;
+    else if (user.isExecutiveOfficer3())
+      approval_stage_id = BillStages.ApprovedByExecutiveOfficerAmc3;
+
+      const record = {
+        bill_id: Number(data.billId),
+        docId: Number(data.docId),
+        description: data.description,
+        path: data.path,
+        approved: true,
+        approved_by_id: approval_stage_id,
+        approval_date: new Date().toISOString(),
+        remarks: data.remarks
+      }
+
+    const resData = await this.dao.rejectDocumentForHigherLevel(record)
+
+    return {
+      status: true,
+      code: 200,
+      message: "Rejected Document",
+      data: resData,
+    };
   };
 }
 

@@ -17,6 +17,16 @@ class BillVerificationRoute extends APIv1 {
     this.addGetRoute(`get/:billId`, this.controller.getBillById);
 
     this.addPostRoute(`approve`, this.controller.approveBill);
+
+    this.addPostRoute(`send-back`, this.controller.sendBackBill);
+
+    ///////////////////////////// BILL DOCUMENTS VERIFICATION ///////////////////
+
+    this.addGetRoute(`document/get/:billId`, this.controller.getDocuments)
+    this.addPostRoute(`document/approve`, this.controller.approveDocument)
+    this.addPostRoute(`document/reject`, this.controller.rejectDocument)
+
+    
   }
 }
 

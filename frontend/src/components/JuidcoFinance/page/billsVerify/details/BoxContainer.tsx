@@ -56,7 +56,7 @@ const BoxContainer:React.FC<BoxContainerPropsType> = (props) => {
             <BoldSpan label="Bill Date:" content={DateFormatter(billDetails?.bill_date)} />
           </div>
           <div className="flex flex-col">
-            <BoldSpan label="Name Of Pary:" content="ASHLEY" />
+            <BoldSpan label="Name Of Pary:" content={billDetails?.party?.name} />
             <BoldSpan label="Bill Amount:" content={billDetails?.amount} />
             <BoldSpan label="Remarks:" content={billDetails?.remarks} />
           </div>

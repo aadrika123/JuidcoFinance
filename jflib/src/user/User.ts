@@ -1,3 +1,9 @@
+import { BillStages } from "../standard/bill_stages";
+
+function formatString(inputString: string) {
+  return inputString?.replace(/([A-Z])/g, ' $1').trim();
+}
+
 export const ROLES = Object.freeze({
   JUNIOR_ENGINEER: "Junior Engineer",
   ASSISTANT_ENGINEER: "Assistant Engineer",
@@ -71,6 +77,18 @@ class User {
 
   getRole = () => {
     return this.user?.role; 
+  }
+
+  getBillStage = (stageId: number) => {
+    return formatString(Object.keys(BillStages).find(key => BillStages[key] === stageId))?.split("By ")[1]
+  }
+
+  getUlbId = () => {
+    return this.user.ulb_id
+  }
+
+  isUserAdmin = () => {
+    return this.user?.user_type === "Admin"
   }
 }
 

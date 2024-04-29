@@ -56,6 +56,7 @@ import CashBankRVoucherRoute from "./route/documentation/cashBankRVoucherRoute";
 import FileHandlerRoute from "./route/FileHandlerRoute";
 import CashBookRoute from "./route/documentation/cashBookRoute";
 import BillVerificationRoute from "./route/payments/BillVerificationRoute";
+import DashboardRoute from "./route/dashboard/dashboardRoute";
 
 /*
 |--------------------------------------------------------------------------
@@ -239,6 +240,8 @@ class FinanceRoute {
     (new CashBookRoute().configure(app, "53"));
 
     (new BillVerificationRoute("54", app).configure());
+
+    (new DashboardRoute("55", app).configure());
   }
 }
 

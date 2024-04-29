@@ -10,8 +10,8 @@ const bill_stages_seeder = async () => {
   const records: bill_stages[] = [];
 
   function formatString(inputString: string) {
-    return inputString.replace(/([A-Z])/g, ' $1').trim();
-}
+    return inputString.replace(/([A-Z])/g, " $1").trim();
+  }
 
   Object.keys(BillStages).forEach((item) => {
     records.push({
@@ -26,7 +26,7 @@ const bill_stages_seeder = async () => {
   for (const item of records) {
     await prisma.bill_stages.create({
       data: {
-        id: item.id, 
+        id: item.id,
         name: item.name,
         remark: item.remark,
         created_at: item.created_at,

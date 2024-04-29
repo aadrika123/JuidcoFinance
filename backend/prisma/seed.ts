@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
+// import bill_payment_entry_seed from "./seeder/bill_payment_entry_seed";
 import receipt_types_seeder from "./seeder/receipt_types_seeder";
 import modules_seeder from "./seeder/modules_seeder";
 import receipts_seeder from "./seeder/receipts_seeder";
@@ -175,8 +175,6 @@ async function main() {
     await revenue_accounted_type_maps_seeder();
 
     await voucher_entries_seed();
-
-    await bill_payment_entry_seed();
 
     await balance_trackings_seeder();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
 import Table, { ColumnProps } from "@/components/global/molecules/Table";
@@ -10,6 +10,7 @@ import NextPrevPagination from "@/components/global/molecules/NextPrevPagination
 import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import Input from "@/components/global/atoms/Input";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 /**
  * | Author- Sanjiv Kumar
@@ -43,15 +44,21 @@ const TableWithFeatures = <T,>({
   numberOfRowsPerPage,
   center = false,
 }: TableWithFeaturesProps) => {
+  const user = useUser()
   const [isSearching, setIsSearching] = useState(false);
   const [state, setState] = useState<stateTypes>({
     page: 1,
     pageCount: 0,
     searchText: "",
-    ulbId: 1,
+    ulbId: 0,
     bill_no: ""
   });
   const { page, pageCount, searchText, ulbId, bill_no } = state;
+
+  ///////// Setting ULB Id 
+  useEffect(() => {
+    setState((prev) => ({...prev, ulbId: user?.getUlbId()}))
+  },[user])
 
   const fetchData = async (): Promise<T[]> => {
     const res = await axios({
@@ -101,10 +108,10 @@ const TableWithFeatures = <T,>({
     setState((prev) => ({...prev, bill_no: e.target.value}))
   };
 
-  ///// Getting the first selected value
-  const initUlbHandler = (value: number) => {
-    setState((prev) => ({...prev, ulbId: value}))
-  };
+  // ///// Getting the first selected value
+  // const initUlbHandler = (value: number) => {
+  //   setState((prev) => ({...prev, ulbId: value}))
+  // };
   
   return (
     <>
@@ -115,8 +122,10 @@ const TableWithFeatures = <T,>({
             name="ulb_id"
             className="w-48 text-primary_bg_indigo border-[#4338ca] mr-4"
             api={`${FINANCE_URL.MUNICIPILATY_CODE_URL.get}`}
+            value={ulbId}
             onChange={handleUlb}
-            initHandler={initUlbHandler}
+            readonly={!user?.isUserAdmin()}
+            // initHandler={initUlbHandler}
           />
           <Input
             label="Bill number"

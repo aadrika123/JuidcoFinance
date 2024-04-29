@@ -55,7 +55,8 @@ type FinanceUrlKeys =
   | "CASH_BANK_R_VOUCHER"
   | "CASH_BOOK"
   | "BILLS"
-  | "BILLS_VERIFICATION";
+  | "BILLS_VERIFICATION"
+  | "DASHBOARD";
 
 type Urls = {
   [key in FinanceUrlKeys]: {
@@ -81,6 +82,14 @@ type Urls = {
     getByReveAndAccId?: string;
     getLedgerCodesOld?: string;
     getByUlbId?: string;
+    sendBack?: string;
+    getDoc?: string;
+    approveDoc?: string;
+    rejectDoc?: string;
+    getCollection?: string;
+    getTopRevenueModules?: string;
+    getTopUlb?: string;
+    getTopPaymentMode?: string;
   };
 };
 
@@ -331,10 +340,20 @@ export const FINANCE_URL: Urls = {
     getById: "/cash-book/get-by-id",
   },
   BILLS: {
-    get: "/bills/get-all"
+    get: "/bills/get-all",
   },
   BILLS_VERIFICATION: {
     getById: "bill-verification/get",
-    approve: "bill-verification/approve"
-  }
+    approve: "bill-verification/approve",
+    sendBack: "bill-verification/send-back",
+    getDoc: "bill-verification/document/get",
+    approveDoc: "bill-verification/document/approve",
+    rejectDoc: "bill-verification/document/reject",
+  },
+  DASHBOARD: {
+    getCollection: "dashboard/collection/get",
+    getTopRevenueModules: "dashboard/revenue-modules/get",
+    getTopUlb: "dashboard/ulbs/get",
+    getTopPaymentMode: "dashboard/payment-modes/get",
+  },
 };

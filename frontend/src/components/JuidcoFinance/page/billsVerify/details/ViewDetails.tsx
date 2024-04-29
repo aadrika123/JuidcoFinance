@@ -11,6 +11,10 @@ type VendorCardsProps = {
   vendorDetails: vendorDetail[];
 };
 
+type ViewDetailsProps = {
+  billDetails: any
+}
+
 export const VendorCards: React.FC<VendorCardsProps> = (props) => {
   const { title, vendorDetails } = props;
   return (
@@ -31,58 +35,59 @@ export const VendorCards: React.FC<VendorCardsProps> = (props) => {
   );
 };
 
-const ViewDetails = () => {
+const ViewDetails:React.FC<ViewDetailsProps> = (props) => {
+  const {billDetails} = props
   const vendorDetails = [
     {
       label: "Vendor Name",
-      content: "Ashely",
+      content: billDetails?.party?.name,
     },
     {
       label: "Contact Number",
-      content: "8097865643",
+      content: billDetails?.mobile_no,
     },
     {
       label: "Email",
-      content: "finance@gmail.com",
+      content: billDetails?.email,
     },
     {
       label: "Contact Address",
-      content: "Ashok Nagar, Ranchi",
+      content: billDetails?.contact_address,
     },
     {
       label: "GST No",
-      content: "12x68dnhc89973n",
+      content: billDetails?.gst_no,
     },
     {
       label: "Aadhaar No",
-      content: "123456789012",
+      content: billDetails?.aadhar_no,
     },
   ];
 
   const vendorBankDetails = [
     {
       label: "Name of the Bank",
-      content: "Ashely",
+      content: billDetails?.bank_name,
     },
     {
       label: "Bank Account No",
-      content: "8097865643",
+      content: billDetails?.bank_acc_no,
     },
     {
       label: "IFSC Code",
-      content: "12x68dnh",
+      content: billDetails?.ifsc_code,
     },
     {
       label: "Bank Branch",
-      content: "Ashok Nagar, Ranchi",
+      content: billDetails?.branch,
     },
     {
       label: "PAN No",
-      content: "12x68dnhc89973n",
+      content: billDetails?.pan_no,
     },
     {
       label: "TIN No",
-      content: "123456789012",
+      content: billDetails?.tin_no,
     },
   ];
 

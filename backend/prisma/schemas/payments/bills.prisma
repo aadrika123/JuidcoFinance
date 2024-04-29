@@ -1,32 +1,32 @@
 model bills {
-id                  Int               @id @default(autoincrement())
+    id Int @id @default(autoincrement())
 
-ulb_id              Int
-ulb                 municipality_codes     @relation(fields: [ulb_id], references: [id])
+    ulb_id Int
+    ulb    municipality_codes @relation(fields: [ulb_id], references: [id])
 
-bill_no             String
-bill_date           DateTime @db.Date
+    bill_no   String
+    bill_date DateTime @db.Date
 
-party_id          Int
-party        vendor_masters @relation(fields: [party_id], references: [id])
+    party_id Int
+    party    vendor_masters @relation(fields: [party_id], references: [id])
 
-particulars         String
-amount              Float
+    particulars String
+    amount      Float
 
-authorizing_officer_name String?
+    authorizing_officer_name String?
 
-sanction_date       DateTime  @db.Date
-voucher_no          String?
-reason_for_delay    String?
-outstanding_balance Float
-discount_allowed    String?
-sanctioned_amount    Float
+    sanction_date       DateTime @db.Date
+    voucher_no          String?
+    reason_for_delay    String?
+    outstanding_balance Float
+    discount_allowed    String?
+    sanctioned_amount   Float
+    status              String   @default("pending")
+    remarks             String
 
-remarks             String
+    bill_checkings bill_checkings[]
+    bill_documents bill_documents[]
 
-bill_checkings      bill_checkings[]
-bill_documents      bill_documents[]
-
-created_at       DateTime          @default(now()) @map("created_at")
-updated_at       DateTime          @default(now()) @updatedAt @map("updated_at")
+    created_at DateTime @default(now()) @map("created_at")
+    updated_at DateTime @default(now()) @updatedAt @map("updated_at")
 }

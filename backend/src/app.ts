@@ -7,6 +7,7 @@ import {
 } from "./apis/middleware/responseTime";
 
 const app = express();
+app.use("/public/", express.static('public'));
 app.use(express.json());
 app.use(cors());
 // { origin: "http://localhost:5000" }
