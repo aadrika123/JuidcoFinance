@@ -9,6 +9,7 @@ import { FINANCE_URL } from "@/utils/api/urls";
 import Loader from "@/components/global/atoms/Loader";
 import { usePathname } from "next/navigation";
 import { useReactToPrint } from "react-to-print";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 
 /**
@@ -57,6 +58,7 @@ export const BalanceSheetComponent = () => {
     const [prevYearData, setPrevYearData] = useState<any>();
     const [isLoading, setIsLoading] = useState<any>(true);
 
+    const loggedInUser = useUser();
 
 
     const [ulbID, setUlbID] = useState<number>(0);
@@ -67,6 +69,14 @@ export const BalanceSheetComponent = () => {
     const printIt = useReactToPrint({
         content: () => printableComponentRef.current,
     });
+
+
+    useEffect(() => {
+        if(loggedInUser){
+          console.log("Logged in user: ", loggedInUser);
+          setUlbID(loggedInUser.getUlbId());
+        }
+      }, [loggedInUser]);
 
 
     const fetchData = async (): Promise<BalanceSheetData> => {
@@ -98,7 +108,8 @@ export const BalanceSheetComponent = () => {
     }
 
     const ulbInitHandler = (value: number) => {
-        setUlbID(value);
+        if (loggedInUser?.isUserAdmin())
+            setUlbID(value);
     }
 
 
@@ -152,6 +163,7 @@ export const BalanceSheetComponent = () => {
                                     onChange={setUlb}
                                     value={ulbID}
                                     initHandler={ulbInitHandler}
+                                    readonly={loggedInUser?.isUserAdmin() ? false : true}
                                 />
                             </div>
 

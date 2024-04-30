@@ -9,6 +9,7 @@ import IncomeStatementHeaderComponent from "./TrialBalanceHeaderComponent";
 import Loader from "@/components/global/atoms/Loader";
 import { usePathname } from "next/navigation";
 import { useReactToPrint } from "react-to-print";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 
 
@@ -97,6 +98,15 @@ export const IncomeStatementComponent = () => {
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
 
+  const loggedInUser = useUser();
+
+
+  useEffect(() => {
+    if(loggedInUser){
+      console.log("Logged in user: ", loggedInUser);
+      setUlbID(loggedInUser.getUlbId());
+    }
+  }, [loggedInUser]);
 
   const printableComponentRef = useRef(null);
   const printIt = useReactToPrint({
@@ -135,8 +145,10 @@ export const IncomeStatementComponent = () => {
   }
 
   const ulbInitHandler = (value: number) => {
-    setIsLoading(true);
-    setUlbID(value);
+    if (loggedInUser?.isUserAdmin()){
+      setIsLoading(true);
+      setUlbID(value);  
+    }
   }
 
 
@@ -190,6 +202,8 @@ export const IncomeStatementComponent = () => {
                   onChange={setUlb}
                   value={ulbID}
                   initHandler={ulbInitHandler}
+                  readonly={loggedInUser?.isUserAdmin() ? false : true}
+
                 />
               </div>
 
