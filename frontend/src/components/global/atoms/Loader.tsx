@@ -3,7 +3,7 @@ import React from "react";
 /**
  * | Author- Sanjiv Kumar
  * | Created On- 03-02-2024
- * | Created for- Loader
+* | Created for- Loader
  * | Status- done
  */
 
