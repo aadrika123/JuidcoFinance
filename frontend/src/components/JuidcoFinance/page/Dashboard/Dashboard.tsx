@@ -28,7 +28,6 @@ const Dashboard = () => {
 
   
   const { data } = useQuery(["dashboard"], fetchData);
-  console.log("first", data)
   // const data: any = {};
 
   //////////////////// Line Chart options /////////////

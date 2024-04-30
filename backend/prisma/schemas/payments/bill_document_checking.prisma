@@ -1,0 +1,16 @@
+model bill_document_checkings {
+  id Int @id @default(autoincrement())
+
+  bill_document_id Int 
+  bill_documents    bill_documents  @relation(fields: [bill_document_id], references: [id])
+
+  checker_id Int?
+  checker    users?    @relation(fields: [checker_id], references: [id])
+  approved   String @default("pending")
+
+  remarks        String?
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @default(now()) @updatedAt @map("updated_at")
+  @@unique([bill_document_id, checker_id])
+}
