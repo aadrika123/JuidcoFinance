@@ -125,6 +125,31 @@ class BillsController {
     return { status: true, code: 200, message: "Created", data: "OK" }
   }
 
+
+  getById = async (req: Request): Promise<APIv1Response> => {
+
+    //validate the input
+    await Yup.object({
+      id: Yup.number().required("id is required"),
+    }).validate(req.params);
+
+    //collect data
+
+    const id: number = Number(req.params.id);
+
+
+    //call daos
+    const result: any[] = await this.dao.getById(id);
+
+    //reaturn the result
+
+    if (!result || result.length == 0)
+        return {status: false, code: 200, message: "NOT FOUND", data: {}};
+      
+    return {status: true, code: 200, message: "OK", data: result[0]};
+  
+  }
+
 }
 
 export default BillsController;

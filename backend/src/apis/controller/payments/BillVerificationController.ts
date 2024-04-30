@@ -419,6 +419,7 @@ class BillVerificationController {
       data: resData,
     };
   };
+  
 }
 
 export default BillVerificationController;

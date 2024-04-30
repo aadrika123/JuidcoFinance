@@ -15,14 +15,15 @@ model bills {
 
     authorizing_officer_name String?
 
-    sanction_date       DateTime @db.Date
-    voucher_no          String?
-    reason_for_delay    String?
-    outstanding_balance Float
-    discount_allowed    String?
-    sanctioned_amount   Float
-    status              String   @default("pending")
-    remarks             String
+    sanction_date                   DateTime  @db.Date
+    voucher_no                      String?
+    reason_for_delay                String?
+    outstanding_balance             Float
+    discount_allowed         Float?
+    date_of_payment_or_cheque_issue DateTime? @db.Date
+    sanctioned_amount               Float
+    status                          String    @default("pending")
+    remarks                         String
 
     bill_checkings bill_checkings[]
     bill_documents bill_documents[]
