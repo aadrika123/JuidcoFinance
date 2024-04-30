@@ -270,7 +270,7 @@ const BillDetails: React.FC<BillDetailProps> = (props) => {
         <Popup padding="0">
           <iframe
             className=""
-            src={`http://localhost:5001/public/pdfs/${docData?.path}`}
+            src={`${process.env.backend}/public/pdfs/${docData?.path}`}
             width="1000"
             height="720"
           ></iframe>

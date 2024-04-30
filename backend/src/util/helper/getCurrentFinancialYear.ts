@@ -1,6 +1,6 @@
 /////////// Getting Current Financial Year
 export const getCurrFinancialYear = () => {
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth()+1;
   let currentYear = new Date().getFullYear();
 
   if (currentMonth < 4) currentYear = currentYear - 1;
@@ -15,7 +15,7 @@ export const getCurrFinancialYear = () => {
 
 ///// Getting the previous Financial Year
 export const getPrevFinancialYear = () => {
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth()+1;
   let prevYear = new Date().getFullYear() - 1; // 2023
 
   if (currentMonth < 4) prevYear = prevYear - 1;
@@ -30,7 +30,7 @@ export const getPrevFinancialYear = () => {
 
 /////// Getting the previous 8 Financial Year including Current Finanacial Year
 export const getFinancialYears = async () => {
-  const currentMonth = new Date().getMonth();
+  const currentMonth = new Date().getMonth()+1;
   const currentYear = new Date().getFullYear();
   const number = 8;
   const allYears = [];

@@ -13,14 +13,14 @@ class DashboardDao {
 
     const collectionData: any[] = await prisma.$queryRaw`
     SELECT
-    SUM(CASE WHEN cbrv.voucher_date::date BETWEEN ${startDate}::date AND ${endDate}::date then cbrv.amount else 0 end) as currentAmount,
-    SUM(CASE WHEN cbrv.voucher_date::date < ${startDate}::date then cbrv.amount else 0 end) as arrearAmount
+    SUM(CASE WHEN cbrv.voucher_date::date BETWEEN ${startDate}::date AND ${endDate}::date then cbrv.amount else 0 end) as current_amount,
+    SUM(CASE WHEN cbrv.voucher_date::date < ${startDate}::date then cbrv.amount else 0 end) as arrear_amount
     FROM
         cash_bank_receipt_vouchers AS cbrv`;
 
     const data = {
-      currentAmount: collectionData[0]?.currentAmount || 0,
-      arrearAmount: collectionData[0]?.arrearAmount || 0,
+      currentAmount: collectionData[0]?.current_amount || 0,
+      arrearAmount: collectionData[0]?.arrear_amount || 0,
     };
 
     return generateRes(data);
