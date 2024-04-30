@@ -14,10 +14,10 @@ const Dashboard = () => {
     try {
       const res = await axios({
         url: `${FINANCE_URL.DASHBOARD.get}`,
-        method: "GET"
-      })
+        method: "GET",
+      });
 
-      if(!res.data.status) throw "Something went wrong!!"
+      if (!res.data.status) throw "Something went wrong!!";
 
       return res.data.data;
     } catch (error) {
@@ -25,8 +25,6 @@ const Dashboard = () => {
     }
   };
 
-
-  
   const { data } = useQuery(["dashboard"], fetchData);
   // const data: any = {};
 
@@ -53,8 +51,8 @@ const Dashboard = () => {
       },
     ],
     xaxis: {
-      categories: [2021, 2022, 2023, 2024] || [
-        2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016,
+      categories: [2024, 2023, 2022, 2021] || [
+        2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009,
       ],
     },
     chart: {
@@ -125,8 +123,13 @@ const Dashboard = () => {
                   subTitle2="Current"
                 />
                 <PieChart
-                  arrear={data?.collection?.arrearAmount + data?.demand?.arrear_amount}
-                  current={data?.collection?.currentAmount + data?.demand?.current_amount}
+                  arrear={
+                    data?.collection?.arrearAmount + data?.demand?.arrear_amount
+                  }
+                  current={
+                    data?.collection?.currentAmount +
+                    data?.demand?.current_amount
+                  }
                   title="Total Revenue"
                   subTitle1="Arrear"
                   subTitle2="Current"
