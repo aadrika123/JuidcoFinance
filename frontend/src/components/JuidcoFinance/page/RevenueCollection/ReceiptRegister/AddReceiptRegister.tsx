@@ -12,12 +12,12 @@ import { QueryClient, useMutation } from "react-query";
 import goBack, { DateFormatter, filterValBefStoring } from "@/utils/helper";
 import toast from "react-hot-toast";
 import FormikW from "./ReceiptRegisterFormFields";
-import { useSelector } from "react-redux";
 import { ReceiptRegisterDetailsData } from "./receipt_register_types";
 import { receiptRegisterDetailsSchema } from "./receipt_register.validation";
 import RandomWorkingPopup from "@/components/global/molecules/general/RandomWorkingPopup";
 import SuccesfullConfirmPopup from "@/components/global/molecules/general/SuccesfullConfirmPopup";
 import ErrorConfirmPopup from "@/components/global/molecules/general/ErrorConfirmPopup";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 interface UpdatedModeType {
   id: number | string;
@@ -28,7 +28,7 @@ const Hoc = PopupFormikHOC(FormikW);
 
 export const AddReceiptRegister = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.user?.userDetails);
+  const user = useUser()
   const [errorMsg, setErrorMsg] = useState("");
   /////////////// For Transforming in JSON
 
@@ -39,7 +39,7 @@ export const AddReceiptRegister = () => {
   });
   const initialValues: ReceiptRegisterDetailsData = {
     receipt_no: "",
-    ulb_id: user?.ulb_id,
+    ulb_id: user?.getUlbId(),
     primary_acc_code_id: "",
     revenue_accounted_type_id: "",
     revenue_module_id: "",
@@ -54,7 +54,7 @@ export const AddReceiptRegister = () => {
     realisation_date: "",
     wheather_returned: false,
     remarks: "",
-    entered_by_id: user?.id,
+    entered_by_id: user?.getUserId(),
     entered_by_print_name: "",
   };
 
@@ -92,7 +92,7 @@ export const AddReceiptRegister = () => {
         {
           id: prev.length + 1,
           ...values,
-          entered_by_id: user.id,
+          entered_by_id: user?.getUserId(),
           wheather_returned:
             String(values.wheather_returned) === "false" ? false : true,
         },
@@ -131,7 +131,7 @@ export const AddReceiptRegister = () => {
               wheather_returned:
                 String(values.wheather_returned) === "false" ? false : true,
               remarks: values.remarks,
-              entered_by_id: user.id,
+              entered_by_id: user?.getUserId(),
               entered_by_print_name: values.entered_by_print_name,
             };
           } else {

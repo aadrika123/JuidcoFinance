@@ -1,4 +1,3 @@
-import { getFinancialYears } from "../../../util/helper/getCurrentFinancialYear";
 import { APIv1Response } from "../../APIv1";
 import DashboardDao from "../../dao/dashboard/dashboardDao";
 
@@ -104,7 +103,6 @@ class DashboardController {
     };
 
   getDashboardData = async (): Promise<APIv1Response> => {
-    console.log("first", getFinancialYears())
     const revExpNetPosition =
       await this.dao.getRevenueExpenditureNetPositionYearlyFor8Year();
     const collection = await this.dao.getCollection();
@@ -113,10 +111,13 @@ class DashboardController {
     const paymentModes = await this.dao.getTopPaymentMode();
     const totalRevenue = await this.dao.getTotalRevenueForCurrentPrevYear();
 
-    const expenditure = {
-      current_amount: 400,
-      previous_amount: 650,
-    };
+    const expenditure = this.dao.getExpenditureForCurrAndPrev();
+    const demand = await this.dao.getDemandForCurrAndArrear();
+
+    const netPosition = {
+      current_amount: totalRevenue?.current_amount - expenditure.current_amount,
+      previous_amount: totalRevenue?.previous_amount - expenditure.previous_amount,
+    }
 
     const data = {
       collection,
@@ -126,6 +127,8 @@ class DashboardController {
       ulbs,
       revExpNetPosition,
       expenditure,
+      netPosition,
+      demand
     };
 
     if (
@@ -134,7 +137,9 @@ class DashboardController {
       !revenueModules &&
       !ulbs &&
       !paymentModes &&
-      !totalRevenue
+      !totalRevenue &&
+      !netPosition &&
+      !demand
     )
       return {
         status: true,

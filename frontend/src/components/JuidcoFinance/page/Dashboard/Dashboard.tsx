@@ -91,8 +91,8 @@ const Dashboard = () => {
                   subTitle2="Current Year"
                 />
                 <PieChart
-                  arrear={data?.totalRevenue?.previous_amount - 10000}
-                  current={data?.totalRevenue?.current_amount - 2000}
+                  arrear={data?.netPosition?.previous_amount}
+                  current={data?.netPosition?.current_amount}
                   title="Net Position"
                   subTitle1="Previous Year"
                   subTitle2="Current Year"
@@ -111,8 +111,8 @@ const Dashboard = () => {
               </header>
               <div className="flex items-center justify-between flex-wrap m-4 gap-3">
                 <PieChart
-                  arrear={10000}
-                  current={2000}
+                  arrear={data?.demand?.arrear_amount}
+                  current={data?.demand?.current_amount}
                   title="Demand"
                   subTitle1="Arrear"
                   subTitle2="Current"
@@ -125,8 +125,8 @@ const Dashboard = () => {
                   subTitle2="Current"
                 />
                 <PieChart
-                  arrear={data?.collection?.arrearAmount + 10000}
-                  current={data?.collection?.currentAmount + 2000}
+                  arrear={data?.collection?.arrearAmount + data?.demand?.arrear_amount}
+                  current={data?.collection?.currentAmount + data?.demand?.current_amount}
                   title="Total Revenue"
                   subTitle1="Arrear"
                   subTitle2="Current"
