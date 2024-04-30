@@ -16,6 +16,7 @@ import TrialBalanceHeaderComponent from "./TrialBalanceHeaderComponent";
 import { usePathname } from "next/navigation";
 import { useReactToPrint } from "react-to-print";
 import {fc} from "jflib";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 
 
@@ -31,6 +32,14 @@ export const TrialBalanceComponent = () => {
 
   const [totalTrialBalance, setTotalTrialBalance] = useState<number>(-1);
 
+  const loggedInUser = useUser();
+
+  useEffect(() => {
+    if(loggedInUser){
+      console.log("Logged in user: ", loggedInUser);
+      setUlbID(loggedInUser.getUlbId());
+    }
+  }, [loggedInUser]);
 
   const printableComponentRef = useRef(null);
     const printIt = useReactToPrint({
@@ -68,8 +77,10 @@ export const TrialBalanceComponent = () => {
   }
 
   const ulbInitHandler = (value: number) => {
-    setIsLoading(true);
-    setUlbID(value);
+    if(loggedInUser?.isUserAdmin()){
+      setIsLoading(true);
+      setUlbID(value);  
+    }
   }
 
 
@@ -127,6 +138,7 @@ export const TrialBalanceComponent = () => {
                 onChange={setUlb}
                 value={ulbID}
                 initHandler={ulbInitHandler}
+                readonly={loggedInUser?.isUserAdmin() ? false : true}
               />
             </div>
 

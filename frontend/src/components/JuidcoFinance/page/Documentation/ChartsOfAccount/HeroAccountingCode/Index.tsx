@@ -12,11 +12,11 @@ import Select from "@/components/global/atoms/nonFormik/Select";
 import { FINANCE_URL } from "@/utils/api/urls";
 import axios from "@/lib/axiosConfig";
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
-
+import { AccountingCodeType } from "jflib";
+import { useUser } from "@/components/global/molecules/general/useUser";
 
 const PrimaryAccountingCode: React.FC = () => {
-  enum CodeType { Schedule = 1, GeneralLedger = 2, Ledger = 3 }
+  
   const [account, setAccount] = useState<AccountingTableData | null>();
   const [loading, setLoading] = useState<boolean>(true);
   const [searching, setSearching] = useState<boolean>(false);
@@ -27,12 +27,16 @@ const PrimaryAccountingCode: React.FC = () => {
   const [ulbID, setUlbID] = useState<number>(0);
   const [finYear, setFinYear] = useState<number>(0);
   const [ulbName, setUlbName] = useState<string>("");
-  const [user, setUser] = useState<any>();
-  const userData = useSelector((state: any) => state.user.user?.userDetails);
+  const loggedInUser = useUser();
+
 
   useEffect(() => {
-    setUser(userData);
-  }, []);
+    if(loggedInUser){
+      console.log("Logged in user: ", loggedInUser);
+      setUlbID(loggedInUser.getUlbId());
+    }
+  }, [loggedInUser]);
+
   const onViewButtonClick = (d: AccountingTableData) => {
     setAccount(d);
   }
@@ -129,17 +133,16 @@ const PrimaryAccountingCode: React.FC = () => {
   }
 
   const ulbInitHandler = (value: number, text: string) => {
-    setUlbID(value);
-    setUlbName(text);
-    if (user?.user_type !== "Admin") {
-      setUlbID(2);
+    if (loggedInUser?.isUserAdmin()) {
+      setUlbID(value);
+      setUlbName(text);
     }
   }
 
   return (
     <>
 
-      {account != null && account.code_type == CodeType.Ledger && (
+      {account != null && account.code_type == AccountingCodeType.Ledger && (
         <>
           <Popup zindex={50} width={90}>
             <LedgerDetailsComponent data={account} onClose={closePopup} ulbName={ulbName} />
@@ -147,7 +150,7 @@ const PrimaryAccountingCode: React.FC = () => {
         </>
       )}
 
-      {account != null && account.code_type == CodeType.GeneralLedger && (
+      {account != null && account.code_type == AccountingCodeType.GeneralLedger && (
         <>
           <Popup zindex={50} width={80}>
             <GeneralLedgerDetailsComponent generalLedgerId={account.id} ulbId={ulbID} year={finYear} onClose={closePopup} />
@@ -155,7 +158,7 @@ const PrimaryAccountingCode: React.FC = () => {
         </>
       )}
 
-      {account != null && account.code_type == CodeType.Schedule && (
+      {account != null && account.code_type == AccountingCodeType.Schedule && (
         <>
           <Popup zindex={50} width={80}>
             <ScheduleDetailsComponent scheduleId={account.id} ulbId={ulbID} year={finYear} onClose={closePopup} />
@@ -207,7 +210,7 @@ const PrimaryAccountingCode: React.FC = () => {
                 onChange={setUlb}
                 value={ulbID}
                 initHandler={ulbInitHandler}
-                readonly={user?.user_type === "Admin" ? false : true}
+                readonly={loggedInUser?.isUserAdmin() ? false : true}
               />
             </div>
 

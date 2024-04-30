@@ -17,7 +17,7 @@ const balance_trackings_seeder = async () => {
     }
 
 
-    const finYears = [2020, 2021, 2022, 2023, 2024];
+    const finYears = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
 
     
     const dummyBalances = [0, 100000.50, -10000.34];
