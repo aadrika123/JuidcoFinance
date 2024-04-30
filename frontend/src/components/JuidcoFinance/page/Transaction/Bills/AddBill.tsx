@@ -24,9 +24,9 @@ const initialValues = {
   voucher_no: "",
   remarks: "",
   reason_for_delay: "",
-  outstanding_balance: "",
+  outstanding_balance: 0,
   discount_allowed: "",
-  sanctioned_amount: "",
+  sanctioned_amount: 0,
 }
 
 export const AddBill = () => {
