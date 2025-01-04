@@ -73,7 +73,7 @@ type Urls = {
 
 export const FINANCE_URL: Urls = {
   AUTH_URL:{
-    login: "/auth/login",
+    login: "/api/login",
     getUDHD: "/udhd/get-all",
     getDesig: "/udhd/designations/get-all"
   },
